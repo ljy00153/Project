@@ -11,6 +11,7 @@ using namespace std;
 #define IFMAP_SIZE 3   // 3 個輸入 (12 bytes)
 #define NUM_WEIGHT 4   // 4 組 filter
 #define TOTAL_WEIGHT (IFMAP_SIZE * NUM_WEIGHT)  // 12 個 int32_t
+#define MODE 1
 
 
 int32_t make_int32_from_bytes(uint8_t b0, uint8_t b1, uint8_t b2, uint8_t b3);
@@ -29,15 +30,15 @@ int main()
     // reset all PEs
     pe_array.reset();
 
-    for(int i = 0; i < PE_Array::NUM_PE; i++)
-        pe_array.set_tag(i, i % 8); // set same tag for PE[0]~PE[7]
+    pe_array.mode = MODE;
+    pe_array.set_tag();
 
 
     array<int32_t, IFMAP_SIZE> in_feature_spad;
     array<int32_t, TOTAL_WEIGHT> weight_spad;
     array<int64_t, NUM_WEIGHT> golden_output;
-    array<array<int64_t, NUM_WEIGHT>, 8> golden_output_all = {0};
-    // 48 PEs, 每 6 個 PE 計算同一組輸出
+    array<array<int64_t, NUM_WEIGHT>, 8 * MODE> golden_output_all = {0};
+    // 48 PEs, 根據不同mode輸出
     for(int i = 0; i < PE_Array::NUM_PE; i++)
     {
         // === 產生 Input Feature ===
@@ -48,7 +49,10 @@ int main()
         golden_output = generate_golden_output(in_feature_spad, weight_spad);
         // === 計算最後的 Golden Output (6 PEs accumulation) ===
         for(int j = 0; j < NUM_WEIGHT; j++)
-            golden_output_all[i % 8][j] += golden_output[j];
+        {
+            golden_output_all[pe_array.pe[i].tag][j] += golden_output[j];
+        }
+            
         // === 將 Input Feature 與 Weight 載入 PE Array ===
         pe_array.set_input_feature(i, in_feature_spad);
         pe_array.set_weights(i, weight_spad);
@@ -63,9 +67,41 @@ int main()
     //check results
     int errors = 0;
     cout << "\n=== Checking Results ===\n";
-    for(int i = 0; i < 8; i++)
+    array<int, 6> base = {0};
+    switch (MODE)
     {
-        int num = 40 + i;
+        case 1:
+        {
+            base[0] = 40;
+            break;
+        }
+        case 2:
+        {
+            base[0] = 16;
+            base[1] = 40;
+            break;
+        }
+        case 3:
+        {
+            base[0] = 8;
+            base[1] = 24;
+            base[2] = 40;
+            break;
+        }
+        case 6:
+        {
+            base[0] = 0;
+            base[1] = 8;
+            base[2] = 16;
+            base[3] = 24;
+            base[4] = 32;
+            base[5] = 40;
+        }
+    
+    }
+    for(int i = 0; i < 8 * MODE; i++)
+    {
+        int num = base[i / 8] + i % 8;
         cout << "\n=== PE[" << num << "] Output ===\n";
         bool match = true;
         for (int j = 0; j < NUM_WEIGHT; j++)
@@ -182,7 +218,7 @@ array<int64_t, NUM_WEIGHT> generate_golden_output(const array<int32_t, IFMAP_SIZ
 }
 
 array<uint8_t, 4> get_bytes(int32_t value) 
-{
+{                                   
     array<uint8_t, 4> bytes{};
     for (int i = 0; i < 4; ++i)
         bytes[i] = (value >> (8 * i)) & 0xFF;

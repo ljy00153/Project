@@ -11,6 +11,12 @@ class PE_Array
 {
     public:
         static constexpr int NUM_PE = 48;
+        int mode;
+        //1: 6個PE累加，共一組
+        //2: 3個PE累加，共兩組
+        //3: 2個PE累加，共三組
+        //4: 1個PE累加，共六組
+
         PE pe[NUM_PE];
 
         PE_Array() 
@@ -28,14 +34,48 @@ class PE_Array
             }
         }
         //set tag for a specific PE
-        void set_tag(int pe_index, int t) 
+        void set_tag() 
         {
-            if (!check_valid_pe(pe_index)) 
+            //pe[pe_index].set_tag(t);
+            switch (mode)
             {
-                cerr << "Invalid PE index\n";
-                return;
+                case 1:
+                {   //1: 6個PE累加，共一組
+                    for(int i = 0; i < PE_Array::NUM_PE; i++)
+                        pe[i].tag = i % 8; // set same tag for PE[0]~PE[7]
+                    break;
+                }
+                case 2:
+                {   //2: 3個PE累加，共兩組
+                    for(int i = 0; i < PE_Array::NUM_PE; i++)
+                    {
+                        if(i < 24)
+                            pe[i].tag = i % 8;
+                        else
+                            pe[i].tag = i % 8 + 8;
+                    }
+                    break;
+                }
+                case 3:
+                {   //3: 2個PE累加，共三組
+                    for(int i = 0; i < PE_Array::NUM_PE; i++)
+                    {
+                        if(i < 16)
+                            pe[i].tag = i % 8;
+                        else if(i >= 16 && i < 32)
+                            pe[i].tag = i % 8 + 8;
+                        else
+                            pe[i].tag = i % 8 + 16;
+                    }
+                    break;
+                }
+                case 6:
+                {   //4: 1個PE累加，共六組
+                    for(int i = 0; i < PE_Array::NUM_PE; i++)
+                        pe[i].tag = i;
+                    break;
+                }
             }
-            pe[pe_index].set_tag(t);
         }
 
         // dump all PEs
@@ -116,7 +156,7 @@ class PE_Array
                 {
                     if(pe[i].tag == pe[i-8].tag)
                     {
-                        //cout << "PE[" << i << "] accumulates from PE[" << i-8 << "]\n";
+                        cout << "PE[" << i << "] accumulates from PE[" << i-8 << "]\n";
                         for(int j = 0; j < PE::PSUM_SIZE; j++)
                         {
                             if(pe[i-8].out_valid)
