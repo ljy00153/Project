@@ -3,7 +3,7 @@
 #include <string>
 #include <cmath>
 
-//#include "data_type.h"
+#include "data_type.h"
 using namespace std;
 
 #define DATA_SIZE 1

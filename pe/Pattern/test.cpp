@@ -20,7 +20,7 @@ array<uint8_t, 4> get_bytes(int32_t value);
 
 int main() 
 {
-    int pattern_id = 3;
+    int pattern_id = 2;
     int m = 1;
     int n = 2048;
     int p = 256;

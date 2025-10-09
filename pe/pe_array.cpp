@@ -183,11 +183,19 @@ class PE_Array
         }
 
         // step all PEs by one cycle
+        void start_step()
+        {
+            for(int i = 0; i < NUM_PE; i++)
+                pe[i].start_cycle_compute();
+        }
         void step_all() 
         {
             for (int i = 0; i < NUM_PE; i++) 
             {
+                //cout << "PE[" << i <<"]: ";
                 pe[i].step_cycle();
+                //cout <<endl;
+                
             }
         }
 

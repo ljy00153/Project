@@ -125,12 +125,11 @@ class PE
         // start cycle-based compute
         void start_cycle_compute() 
         {
-            weight_idx = 0;
+            //weight_idx = 0;
             busy = true;
         }
 
         // do one MAC per cycle
-        // mode=0: use input psum, mode=1: accumulate
         void step_cycle()
         {
             if (!busy) return;
@@ -143,20 +142,24 @@ class PE
 
             array<uint8_t, 4> weight_byte = get_bytes(weight_spad[i * PSUM_SIZE + j]);
 
-            int prod = in_feature_byte[k] * weight_byte[k];
+            psum_spad[weight_idx] += in_feature_byte[k] * weight_byte[k];
+            //cout<<"cal_idx "<<cal_idx<<endl;
+            //cout<<"weight_idx "<<i * PSUM_SIZE + j<<endl;
 
-            psum_spad[weight_idx] += prod;
+            //cout<<"if_idx "<<if_idx<<endl;
 
             cal_idx++;
             if (cal_idx == 4) 
             {
                 cal_idx = 0;
                 weight_idx++;
+                //cout<<"weight_idx "<<weight_idx<<endl;
             }
             if (weight_idx == 4)
             {
                 weight_idx = 0;
                 if_idx++;
+                //cout<<"if_idx "<<if_idx<<endl;
             }
             if (if_idx == IFMAP_SIZE) 
             {
@@ -177,6 +180,7 @@ class PE
 
         int32_t output_psum(int op_idx)  
         {
+            //out_valid = false;
             return psum_spad[op_idx];
         }
 

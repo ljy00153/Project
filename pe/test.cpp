@@ -65,9 +65,19 @@ int main()
     }
 
     // full compute
-    pe_array.compute_full_all();
-    pe_array.add_ipsum_all();
+    pe_array.start_step();
+    while (pe_array.is_any_busy())
+    {
+        pe_array.step_all();
+    }
+    
+        
+    
+    
+    //pe_array.compute_full_all();
     //pe_array.dump(0);
+    pe_array.add_ipsum_all();
+    
 
     //check results
     int errors = 0;
@@ -121,7 +131,7 @@ int main()
                 errors++;
                 cout << " <-- MISMATCH!";
             }
-            cout << " (Golden: " << golden_output_all[i][j] << ")";
+            cout << " (Golden: " << golden_output_all[i][j] << ")\n";
         }
         cout << "\n";
         if(match)

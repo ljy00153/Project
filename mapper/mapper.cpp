@@ -4,7 +4,7 @@
 #include <cmath>
 #include <algorithm>
 
-#include "data_type.h"
+//#include "data_type.h"
 #include "eyeriss.cpp"
 
 using namespace std;

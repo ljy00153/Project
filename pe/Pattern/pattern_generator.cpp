@@ -34,7 +34,7 @@ uniform_int_distribution<int32_t> dist_byte(0, 16);//數字隨機範圍
 int main()
 {
     int pattern_id = 2;//放在第幾個資料夾
-    int m = 1;
+    int m = 1; //GEMV
     int n = 2048;
     int p = 256;
     // A: m * n
@@ -73,7 +73,7 @@ int main()
         }
     }
 
-    // ===== 寫入檔案 (binary) =====
+    // ===== 寫入檔案 (txt) =====
 
     string pathA = folder + "/A.txt";
     string pathB = folder + "/B.txt";
