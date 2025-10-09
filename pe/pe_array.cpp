@@ -156,7 +156,7 @@ class PE_Array
                 {
                     if(pe[i].tag == pe[i-8].tag)
                     {
-                        cout << "PE[" << i << "] accumulates from PE[" << i-8 << "]\n";
+                        //cout << "PE[" << i << "] accumulates from PE[" << i-8 << "]\n";
                         for(int j = 0; j < PE::PSUM_SIZE; j++)
                         {
                             if(pe[i-8].out_valid)

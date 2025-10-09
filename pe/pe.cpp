@@ -141,7 +141,7 @@ class PE
             
             array<uint8_t, 4> in_feature_byte = get_bytes(in_feature_spad[i]);
 
-            array<uint8_t, 4> weight_byte = get_bytes(weight_spad[i + j * 3]);
+            array<uint8_t, 4> weight_byte = get_bytes(weight_spad[i * PSUM_SIZE + j]);
 
             int prod = in_feature_byte[k] * weight_byte[k];
 

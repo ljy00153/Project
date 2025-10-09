@@ -12,16 +12,21 @@ using namespace std;
 #define NUM_WEIGHT 4   // 4 組 filter
 #define TOTAL_WEIGHT (IFMAP_SIZE * NUM_WEIGHT)  // 12 個 int32_t
 #define MODE 1
+//1: 6個PE累加，共一組
+//2: 3個PE累加，共兩組
+//3: 2個PE累加，共三組
+//4: 1個PE累加，共六組
 
 
 int32_t make_int32_from_bytes(uint8_t b0, uint8_t b1, uint8_t b2, uint8_t b3);
 array<int32_t, IFMAP_SIZE> generate_in_feature();
 array<int32_t, TOTAL_WEIGHT> generate_weight();
-array<int64_t, NUM_WEIGHT> generate_golden_output
+array<int32_t, NUM_WEIGHT> generate_golden_output
 (const array<int32_t, IFMAP_SIZE>& in_feature_spad, const array<int32_t, TOTAL_WEIGHT>& weight_spad);
 array<uint8_t, 4> get_bytes(int32_t value);
 
-mt19937 rng(42);  // 固定種子方便重現結果
+random_device rd;  
+mt19937 rng(rd());  // random seed
 uniform_int_distribution<int32_t> dist_byte(0, 255);
 
 int main() 
@@ -36,8 +41,8 @@ int main()
 
     array<int32_t, IFMAP_SIZE> in_feature_spad;
     array<int32_t, TOTAL_WEIGHT> weight_spad;
-    array<int64_t, NUM_WEIGHT> golden_output;
-    array<array<int64_t, NUM_WEIGHT>, 8 * MODE> golden_output_all = {0};
+    array<int32_t, NUM_WEIGHT> golden_output;
+    array<array<int32_t, NUM_WEIGHT>, 8 * MODE> golden_output_all = {0};
     // 48 PEs, 根據不同mode輸出
     for(int i = 0; i < PE_Array::NUM_PE; i++)
     {
@@ -97,8 +102,8 @@ int main()
             base[4] = 32;
             base[5] = 40;
         }
-    
     }
+
     for(int i = 0; i < 8 * MODE; i++)
     {
         int num = base[i / 8] + i % 8;
@@ -163,7 +168,7 @@ array<int32_t, IFMAP_SIZE> generate_in_feature()
         in_feature_spad[i] = make_int32_from_bytes(
             in_feature_bytes[i][0], in_feature_bytes[i][1],
             in_feature_bytes[i][2], in_feature_bytes[i][3]
-    );
+        );
     }
     return in_feature_spad;
 }
@@ -186,7 +191,7 @@ array<int32_t, TOTAL_WEIGHT> generate_weight()
     return weight_spad;
 }
 
-array<int64_t, NUM_WEIGHT> generate_golden_output(const array<int32_t, IFMAP_SIZE>& in_feature_spad, const array<int32_t, TOTAL_WEIGHT>& weight_spad)
+array<int32_t, NUM_WEIGHT> generate_golden_output(const array<int32_t, IFMAP_SIZE>& in_feature_spad, const array<int32_t, TOTAL_WEIGHT>& weight_spad)
 {
     array<array<uint8_t, 4>, IFMAP_SIZE> in_feature_bytes = {get_bytes(in_feature_spad[0]),
                                                              get_bytes(in_feature_spad[1]),
@@ -198,7 +203,7 @@ array<int64_t, NUM_WEIGHT> generate_golden_output(const array<int32_t, IFMAP_SIZ
                                                             get_bytes(weight_spad[8]),  get_bytes(weight_spad[9]),
                                                             get_bytes(weight_spad[10]), get_bytes(weight_spad[11])};
     
-    array<int64_t, NUM_WEIGHT> golden_output = {0};
+    array<int32_t, NUM_WEIGHT> golden_output = {0};
     for (int j = 0; j < NUM_WEIGHT; j++) 
     {
         for (int i = 0; i < IFMAP_SIZE; i++) 

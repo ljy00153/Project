@@ -53,6 +53,8 @@
         "xutility": "cpp",
         "algorithm": "cpp",
         "optional": "cpp",
-        "random": "cpp"
+        "random": "cpp",
+        "string": "cpp",
+        "chrono": "cpp"
     }
 }
