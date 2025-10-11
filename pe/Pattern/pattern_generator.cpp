@@ -29,13 +29,13 @@ array<uint8_t, 4> get_bytes(int32_t value);
 
 random_device rd;  
 mt19937 rng(rd());  // random seed
-uniform_int_distribution<int32_t> dist_byte(0, 16);//數字隨機範圍
+uniform_int_distribution<int32_t> dist_byte(0, 32);//數字隨機範圍
 
 int main()
 {
-    int pattern_id = 2;//放在第幾個資料夾
+    int pattern_id = 3;//放在第幾個資料夾
     int m = 1; //GEMV
-    int n = 2048;
+    int n = 128 * 8 * 8;
     int p = 256;
     // A: m * n
     // B: n * p

@@ -20,9 +20,9 @@ array<uint8_t, 4> get_bytes(int32_t value);
 
 int main() 
 {
-    int pattern_id = 2;
+    int pattern_id = 3;
     int m = 1;
-    int n = 2048;
+    int n = 128 * 8 * 8;
     int p = 256;
 
     string folder = "Pattern" + to_string(pattern_id);

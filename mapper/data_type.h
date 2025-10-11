@@ -28,17 +28,17 @@ struct EyerissMappingParam
 struct AnalysisResult
 {
     int glb_usage;
-    int glb_access;
-    int dram_access;
-    int macs;
-    int latency;
-    int glb_read;
-    int glb_write;
-    int dram_read;
-    int dram_write;
-    float energy_total;
-    float power_total;
-    float intensity;
-    float peak_performance;
-    float peak_bandwidth;
+    long long int glb_access;
+    long long int dram_access;
+    long long int macs;
+    long long int latency;
+    long long int glb_read;
+    long long int glb_write;
+    long long int dram_read;
+    long long int dram_write;
+    double energy_total;
+    double power_total;
+    double intensity;
+    double peak_performance;
+    double peak_bandwidth;
 };

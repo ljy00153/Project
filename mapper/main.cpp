@@ -11,7 +11,7 @@ int main()
     EyerissMapper mapper;
     LinearShapeParam linear;
     linear.N = 1;
-    linear.in_features = 2048;
+    linear.in_features = 128 * 8 * 8;
     linear.out_features = 256;
     cout << "in_features : " << linear.in_features << endl;
     cout << "out_features : " << linear.out_features << endl;

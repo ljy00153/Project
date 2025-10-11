@@ -71,13 +71,9 @@ int main()
         pe_array.step_all();
     }
     
-        
-    
-    
     //pe_array.compute_full_all();
     //pe_array.dump(0);
     pe_array.add_ipsum_all();
-    
 
     //check results
     int errors = 0;

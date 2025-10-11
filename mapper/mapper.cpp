@@ -41,7 +41,8 @@ class EyerissMapper
             for (int i = 0; i < (int)results.size(); i++)
             {
                 double score = evaluate(results[i]);
-                scored_results.push_back({score, i});
+                if(score > 0)
+                    scored_results.push_back({score, i});
             }
             
 
@@ -68,12 +69,12 @@ class EyerissMapper
                 auto &p = scored_results[i];
                 cout << i + 1 << ". Score = " << p.first << endl;
 
-                cout << "glb_usage: " << results[p.second].glb_usage << endl;
-                cout << "glb_access: " << results[p.second].glb_access << endl;
-                cout << "dram_access: " << results[p.second].dram_access << endl;
-                //cout << "latency: " << results[p.second].latency << endl;
-                //cout << "energy_glb: " << results[p.second].glb_access * 10 << endl;
-                //cout << "energy_dram: " << double(results[p.second].dram_access) * 200 << endl;
+                cout << "glb_usage: " << results[p.second].glb_usage << " bytes" << endl;
+                cout << "glb_access: " << results[p.second].glb_access << " bytes" << endl;
+                cout << "dram_access: " << results[p.second].dram_access << " bytes" << endl;
+                cout << "latency: " << double(results[p.second].latency) / (200 * 1e6) << " sec" << endl;
+                cout << "energy_glb: " << results[p.second].glb_access * 10 * ENERGY_UNIT << " J" << endl;
+                cout << "energy_dram: " << double(results[p.second].dram_access) * 200 * ENERGY_UNIT << " J" << endl;
                 cout << "N : " << mappings[p.second].N << endl;
                 cout << "K : " << mappings[p.second].K << endl;
                 
@@ -89,30 +90,12 @@ class EyerissMapper
             int dram_access = metrics.dram_access;
             int glb_access = metrics.glb_access;
 
-            int glb_usage = metrics.glb_usage;
-
-            float peak_performance = metrics.peak_performance;
-            float intensity = metrics.intensity;
-
-            float machine_blance_point = metrics.peak_performance / metrics.peak_bandwidth;
             //print(intensity - machine_blance_point)
 
             // 記憶體訪問能耗估算 (Memory Energy)
-            double energy_dram = double(dram_access) * 200;  // DRAM access energy
-            double energy_glb = double(glb_access) * 10;
+            double energy_dram = double(dram_access) * 200 * ENERGY_UNIT;  // DRAM access energy
+            double energy_glb = double(glb_access) * 10 * ENERGY_UNIT;
 
-            int total_pe = 48;
-            int total_passes = (
-                ceil(float (analyzer.linear_shape.in_features) / float (analyzer.mapping.tk))
-                * ceil(float (analyzer.linear_shape.out_features) / float (analyzer.mapping.tn))
-            );
-
-            // 運算吞吐量 (Compute Utilization)
-            int total_computation = metrics.macs;
-
-
-            int max_computation = total_pe * total_passes;
-            float compute_utilization = (max_computation > 0)? float (total_computation) / float (max_computation) : 0;
             long long int latency = metrics.latency;  // 運算延遲（週期數）
 
             // 綜合評分（目標是越小越好）
@@ -134,9 +117,9 @@ class EyerissMapper
 
             int tk = 6; //for GEMV
             int tn = 8; //for GEMV
-            for (int K = 1; K <= 512; K++) 
+            for (int K = tk; K <= 512; K++) 
             { 
-                for (int N = 1; N <= 512; N++) 
+                for (int N = tn; N <= 512; N++) 
                 {
                     int used_bytes = K * 1 * IFMAP_PER_PE + K * N * WEIGHT_PER_PE;
                     if (used_bytes < GLB_LIMIT) 

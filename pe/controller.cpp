@@ -2,7 +2,7 @@
 
 using namespace std;
 
-int main()
+class controller
 {
     
-}
+};
