@@ -110,7 +110,7 @@ class EyerissAnalyzer
 
             long long int num_o_linear_read= ceil(double(linear_shape.in_features) / double(mapping.K * 3) - 1);
 
-            res.push_back({"i_linear_read", int_f_div_K * K_div_tk * mapping.tk * 12});
+            res.push_back({"i_linear_read", int_f_div_K * K_div_tk * N_div_tn * mapping.tk * 12});
             res.push_back({"weight_linear_read", out_f_div_N * int_f_div_K * K_div_tk * N_div_tn * mapping.tk * mapping.tn * 48});
             res.push_back({"o_linear_write", int_f_div_K * linear_shape.out_features * 4});
             res.push_back({"o_linear_read", num_o_linear_read * int_f_div_K * 4}); 
