@@ -36,6 +36,19 @@ def plot_roofline(
         color = "black" if i == len(rooflines) - 1 else "#aaaaaa"
         plt.plot(oi, perf, color=color, linewidth=2, label=label)
 
+
+        # 找出水平段的起始位置（性能達到peak_perf的第一個oi）
+        idx_flat = np.argmax(perf >= peak_perf * 0.999)
+        oi_flat = oi[idx_flat]
+        plt.text(
+            1,               # 稍微右移
+            peak_perf * 0.8,            # 稍微上移
+            f"Peak = {peak_perf}",   # 顯示峰值
+            fontsize=14,
+            color=color,
+            ha="left",
+            va="bottom"
+        )
         xmin = min(xmin, oi.min())
         xmax = max(xmax, oi.max())
         ymin = min(ymin, perf.min())

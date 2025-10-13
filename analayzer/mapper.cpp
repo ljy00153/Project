@@ -64,7 +64,9 @@ class EyerissMapper
                     [](auto &a, auto &b) { return a.first < b.first; });
             }
 
+            cout << "Total valid configurations: " << scored_results.size() << endl;
             cout << endl << "Top " << top_k << " configurations:\n";
+            
             for (int i = 0; i < min(top_k, (int)scored_results.size()); i++)
             {
                 auto &p = scored_results[i];
@@ -76,6 +78,10 @@ class EyerissMapper
                 cout << "latency: " << results[p.second].latency << " sec" << endl;
                 cout << "energy_glb: " << results[p.second].glb_access * 10 * ENERGY_UNIT << " J" << endl;
                 cout << "energy_dram: " << double(results[p.second].dram_access) * 200 * ENERGY_UNIT << " J" << endl;
+                cout << "mode: " << mappings[p.second].mode << endl;
+                cout << "tk : " << mappings[p.second].tk << endl;
+                cout << "tn : " << mappings[p.second].tn << endl;
+                cout << "M : " << mappings[p.second].M << endl;
                 cout << "N : " << mappings[p.second].N << endl;
                 cout << "K : " << mappings[p.second].K << endl;
                 
@@ -96,7 +102,8 @@ class EyerissMapper
                     // 寫入欄位名稱
                     csv << "layer,glb_usage,glb_read,glb_write,glb_access,dram_read,"
                         "dram_write,dram_access,"
-                        "macs,intensity,peak_performance,peak_bandwidth,latency,energy_total,power_total,tk,tn,K,N\n";
+                        "macs,intensity,peak_performance,peak_bandwidth,latency,energy_total,power_total,"
+                        "tk,tn,mode,M,K,N\n";
 
                     // 寫入資料
                     csv << "linear,"
@@ -116,16 +123,18 @@ class EyerissMapper
                         << results[idx].power_total << ","
                         << mappings[idx].tk << ","
                         << mappings[idx].tn << ","
+                        << mappings[idx].mode << ","
+                        << mappings[idx].M << ","
                         << mappings[idx].N << ","
                         << mappings[idx].K
                         << "\n";
 
                     csv.close();
-                    cout << "✅ Top-1 result saved to /build/result.csv\n";
+                    cout << "✅ Top-1 result saved to log/result.csv\n";
                 }
                 else
                 {
-                    cerr << "❌ Failed to open top1_result.csv for writing\n";
+                    cerr << "❌ Failed to open log/result.csv for writing\n";
                 }
             }
         }
@@ -134,14 +143,7 @@ class EyerissMapper
         {
             double score = 0;
             //記憶體訪問次數 (Memory Access)
-            int dram_access = metrics.dram_access;
-            int glb_access = metrics.glb_access;
-
-            //print(intensity - machine_blance_point)
-
-            // 記憶體訪問能耗估算 (Memory Energy)
-            double energy_dram = double(dram_access) * ENERGY_PER_DRAM_ACCESS;  // DRAM access energy
-            double energy_glb = double(glb_access) * ENERGY_PER_GLB_ACCESS;
+            double energy_dram = metrics.dram_access;  // DRAM access energy
 
             long long int latency = metrics.latency * CLOCK_RATE;  // 運算延遲（週期數）
             /*
@@ -151,8 +153,7 @@ class EyerissMapper
                  << endl;
             */
             // 綜合評分（目標是越小越好）
-            score +=  energy_glb
-                    + energy_dram
+            score +=  metrics.energy_total
                     + (latency * 10);
                     
             return score;
@@ -166,19 +167,33 @@ class EyerissMapper
 
             vector<EyerissMappingParam> results;
 
-            int tk = 6; //for GEMV
-            int tn = 8; //for GEMV
-            for (int K = tk; K <= 512; K++) 
-            { 
-                for (int N = tn; N <= 512; N++) 
+            int tk[4] = {6, 3, 2, 1}; //for GEMM now
+            int tn = 8; //for GEMM and GEMV
+            int mode[4] = {1, 2, 3, 6};
+            for (int i = 0; i < 4; i++)
+            {
+                cout << "trying mode= " << mode[i]<<endl;
+                for(int M = mode[i]; M <= 512; M++)
                 {
-                    int used_bytes = K * 1 * IFMAP_PER_PE + K * N * WEIGHT_PER_PE;
-                    if (used_bytes < GLB_LIMIT) 
-                        results.push_back({tk, tn, K, N});
-                    else 
-                        break; // N 再增大只會超出限制，可提早中斷
+                    if(M > analyzer.linear_shape.B)
+                        break;// M 不應該大於 batch size
+                    for (int K = tk[i]; K <= 512; K++) 
+                    { 
+                        for (int N = tn; N <= 512; N++) 
+                        {
+                            int used_bytes = mode[i] * K * IFMAP_PER_PE * 4 
+                                            + K * IFMAP_PER_PE * N * WEIGHT_PER_PE * 4
+                                            + M * analyzer.linear_shape.out_features * 4;
+
+                            if (used_bytes < GLB_LIMIT) 
+                                results.push_back({tk[i], tn, mode[i], M, K, N});
+                            else 
+                                break; // N 再增大只會超出限制，可提早中斷
+                        }
+                    }
                 }
             }
+
 
             return results;
         }

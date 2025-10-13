@@ -68,10 +68,9 @@ class EyerissAnalyzer
         {
             vector<pair<string, int>> usage;
 
-            usage.push_back({"i_linear", mapping.K * 3 * DATA_SIZE});
-            usage.push_back({"weight_linear", mapping.K 
-                                            * mapping.N * 12 * DATA_SIZE});
-            usage.push_back({"o_linear", linear_shape.out_features * PSUM_DATA_SIZE});
+            usage.push_back({"in_feature", mapping.mode * mapping.K * 3 * DATA_SIZE});
+            usage.push_back({"weight", mapping.K * mapping.N * 12 * DATA_SIZE});
+            usage.push_back({"psum", mapping.M * linear_shape.out_features * PSUM_DATA_SIZE});
             usage.push_back({"total", usage[0].second + usage[1].second + usage[2].second});//3
             return usage;
         }
@@ -86,13 +85,14 @@ class EyerissAnalyzer
             vector<pair<string, long long int>> res;
             //cout << "in_features" << linear_shape.in_features << endl;
             //cout << "mapping.K" << mapping.K << endl;
-            long long int int_f_div_K = ceil(double(linear_shape.in_features) / double(mapping.K * 3));
-            long long int num_weight_linear = int_f_div_K * ceil(double(linear_shape.out_features) / double(mapping.N * 4));
+            long long int B_div_M = ceil(double(linear_shape.B) / double(mapping.M));
+            long long int in_f_div_K = ceil(double(linear_shape.in_features) / double(mapping.K * 3));
+            long long int num_weight_linear = in_f_div_K * ceil(double(linear_shape.out_features) / double(mapping.N * 4));
 
-            res.push_back({"i_linear_read",  int_f_div_K * glb_usage_per_pass()[0].second});
+            res.push_back({"i_linear_read",  B_div_M * in_f_div_K * glb_usage_per_pass()[0].second});
             res.push_back({"weight_linear_read", num_weight_linear * glb_usage_per_pass()[1].second});
             res.push_back({"o_linear_read", 0}); // No read for output
-            res.push_back({"o_linear_write", linear_shape.out_features * PSUM_DATA_SIZE});
+            res.push_back({"o_linear_write", linear_shape.B * linear_shape.out_features * PSUM_DATA_SIZE});
             res.push_back({"read", res[0].second + res[1].second + res[2].second});
             res.push_back({"write", res[3].second});
             res.push_back({"total", res[4].second + res[5].second});//6
@@ -103,17 +103,18 @@ class EyerissAnalyzer
         {
             vector<pair<string, long long int>> res;
 
-            long long int int_f_div_K = ceil(double(linear_shape.in_features) / double(mapping.K * 3));
+            long long int M_div_mode = ceil(double(mapping.M) / double(mapping.mode));
+            long long int in_f_div_K = ceil(double(linear_shape.in_features) / double(mapping.K * 3));
             long long int out_f_div_N = ceil(double(linear_shape.out_features) / double(mapping.N * 4));
             long long int K_div_tk = ceil(double(mapping.K) / double(mapping.tk));
             long long int N_div_tn = ceil(double(mapping.N) / double(mapping.tn));
 
             long long int num_o_linear_read= ceil(double(linear_shape.in_features) / double(mapping.K * 3) - 1);
 
-            res.push_back({"i_linear_read", int_f_div_K * K_div_tk * N_div_tn * mapping.tk * 12});
-            res.push_back({"weight_linear_read", out_f_div_N * int_f_div_K * K_div_tk * N_div_tn * mapping.tk * mapping.tn * 48});
-            res.push_back({"o_linear_write", int_f_div_K * linear_shape.out_features * 4});
-            res.push_back({"o_linear_read", num_o_linear_read * int_f_div_K * 4}); 
+            res.push_back({"i_linear_read", M_div_mode * in_f_div_K * K_div_tk * N_div_tn * mapping.tk * 12});
+            res.push_back({"weight_linear_read", out_f_div_N * in_f_div_K * K_div_tk * N_div_tn * mapping.tk * mapping.tn * 48});
+            res.push_back({"o_linear_write", M_div_mode * in_f_div_K * linear_shape.out_features * 4});
+            res.push_back({"o_linear_read", M_div_mode * num_o_linear_read * in_f_div_K * 4}); 
             res.push_back({"read", res[0].second + res[1].second+ res[3].second});
             res.push_back({"write", res[2].second});
             res.push_back({"total", res[4].second + res[5].second});//6
@@ -128,7 +129,7 @@ class EyerissAnalyzer
 
         int macs_per_layer()
         {
-            return linear_shape.in_features * linear_shape.out_features;
+            return linear_shape.B * linear_shape.in_features * linear_shape.out_features;
         }
 
         vector<pair<string, double>> energy_per_layer()
@@ -212,8 +213,11 @@ class EyerissAnalyzer
             AnalysisResult result;
             result.pe_array_h = hardware_param.pe_array_h;
             result.pe_array_w = hardware_param.pe_array_w;
+            
             result.tk = mapping.tk;
             result.tn = mapping.tn;
+            result.mode = mapping.mode;
+            result.M = mapping.M;
             result.K = mapping.K;
             result.N = mapping.N;
 

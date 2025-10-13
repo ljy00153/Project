@@ -1,6 +1,6 @@
 struct LinearShapeParam
 {
-    int N;  // batch size
+    int B;  // batch size
     int in_features;
     int out_features;
 };
@@ -21,6 +21,12 @@ struct EyerissMappingParam
 {
     int tk; //1~6
     int tn; //1~8
+    int mode;
+    //1: 6個PE累加，共一組
+    //2: 3個PE累加，共兩組
+    //3: 2個PE累加，共三組
+    //4: 1個PE累加，共六組
+    int M;
     int K; 
     int N; // K * 1 * 3 + K * N * 12 < 64kb
 };
@@ -31,6 +37,8 @@ struct AnalysisResult
     int pe_array_w;
     int tk; //1~6
     int tn; //1~8
+    int mode;
+    int M;
     int K; 
     int N; // K * 1 * 3 + K * N * 12 < 64kb
 
