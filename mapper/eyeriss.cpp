@@ -12,7 +12,7 @@ using namespace std;
 
 // Time
 #define CLOCK_RATE 200 * 1e6  // 200 MHz
-#define TIME_UNIT 1  // cycle
+#define TIME_UNIT 1 / (CLOCK_RATE)  // sec
 #define SPAD_ACCESS_TIME 1 * TIME_UNIT
 #define GLB_ACCESS_TIME 2 * TIME_UNIT
 #define DRAM_ACCESS_TIME 5 * TIME_UNIT
@@ -22,7 +22,7 @@ using namespace std;
 #define ENERGY_PER_MAC 2 * ENERGY_UNIT
 #define ENERGY_PER_GLB_ACCESS 10 * ENERGY_UNIT
 #define ENERGY_PER_DRAM_ACCESS 200 * ENERGY_UNIT
-#define POWER_UNIT 1  // 1 uW
+#define POWER_UNIT 1e-6  // 1 uW
 #define POWER_LEAKAGE 50 * POWER_UNIT
 
 
@@ -120,10 +120,10 @@ class EyerissAnalyzer
             return res;
         }
 
-        int latency_per_layer()
+        double latency_per_layer()
         {
-            return (glb_access_per_layer()[6].second * GLB_ACCESS_TIME / hardware_param.noc_bw
-                    + dram_access_per_layer()[6].second * DRAM_ACCESS_TIME / hardware_param.bus_bw);
+            return (double(glb_access_per_layer()[6].second) * GLB_ACCESS_TIME / hardware_param.noc_bw
+                    + double(dram_access_per_layer()[6].second) * DRAM_ACCESS_TIME / hardware_param.bus_bw);
         }
 
         int macs_per_layer()
@@ -139,7 +139,7 @@ class EyerissAnalyzer
                 glb_access_per_layer()[6].second * ENERGY_PER_GLB_ACCESS
                 + dram_access_per_layer()[6].second * ENERGY_PER_DRAM_ACCESS
             );
-            double leakage_energy = POWER_LEAKAGE * double(latency_per_layer()) / CLOCK_RATE;
+            double leakage_energy = POWER_LEAKAGE * latency_per_layer();
             double total_energy = compute_energy + memory_energy + leakage_energy;
 
             res.push_back({"compute", compute_energy});
@@ -153,8 +153,8 @@ class EyerissAnalyzer
         vector<pair<string, double>> power_per_layer()
         {
             vector<pair<string, double>> res;
-            double compute_power = energy_per_layer()[0].second / latency_per_layer() * CLOCK_RATE;
-            double memory_power = energy_per_layer()[1].second / latency_per_layer() * CLOCK_RATE;
+            double compute_power = energy_per_layer()[0].second / latency_per_layer();
+            double memory_power = energy_per_layer()[1].second / latency_per_layer();
             double leakage_power = POWER_LEAKAGE;
             double total_power = compute_power + memory_power + leakage_power;
 
@@ -168,7 +168,7 @@ class EyerissAnalyzer
 
         double operational_intensity()
         {
-            return macs_per_layer() / dram_access_per_layer()[6].second;
+            return double(macs_per_layer()) / double(dram_access_per_layer()[6].second);
         }
 
         int peak_performance()
@@ -210,6 +210,13 @@ class EyerissAnalyzer
         AnalysisResult summary()
         {
             AnalysisResult result;
+            result.pe_array_h = hardware_param.pe_array_h;
+            result.pe_array_w = hardware_param.pe_array_w;
+            result.tk = mapping.tk;
+            result.tn = mapping.tn;
+            result.K = mapping.K;
+            result.N = mapping.N;
+
             result.glb_usage = glb_usage_per_pass()[3].second;
             result.glb_access = glb_access_per_layer()[6].second;
 
