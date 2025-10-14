@@ -148,6 +148,12 @@ class PE_Array
                 pe[i].compute_full();
         }
 
+        void add_ipsum(int idx, int ipsum)
+        {
+            for(int i = 0; i < PE::PSUM_SIZE; i++)
+                pe_array.pe[idx].add_ipsum(ipsum, i);
+        }
+
         void add_ipsum_all() 
         {
             for (int i = 0; i < NUM_PE; i++) 

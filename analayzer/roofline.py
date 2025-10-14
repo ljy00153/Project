@@ -57,12 +57,9 @@ def plot_roofline(
     # 畫 workloads
     if workloads is not None:
         colors = [plt.get_cmap("tab10")(i) for i in range(len(workloads))]
-        for (name, oi), color in zip(workloads.items(), colors):
-            # 假設 performance 由 bandwidth * oi 決定（簡化點）
-            perf = min(list(rooflines.values())[-1][0], list(rooflines.values())[-1][1] * oi)
-            plt.scatter(oi, perf, color=color, s=60, label=f"{name} (OI={oi:.2f})", zorder=5)
-            plt.text(oi * 1.05, perf, name, fontsize=9, color=color)
-            oi_max = max(oi_max, oi)
+        for (k, v), color in zip(workloads.items(), colors):
+            plt.axvline(x=v, color=color, linestyle="--", label=f"{k} (OI = {v:.2f})")
+            oi_max = max(oi_max, v)
 
     # 軸範圍
     plt.xscale("log")

@@ -14,6 +14,7 @@ class EyerissMapper
 {
     public:
         EyerissAnalyzer analyzer;
+        AnalysisResult best_result;
         EyerissMapper()
         {
 
@@ -94,6 +95,7 @@ class EyerissMapper
                 // 取出 top 1
                 auto &best = scored_results[0];
                 int idx = best.second;
+                best_result = results[idx];
 
                 ofstream csv("log/result.csv");  // 輸出到build資料夾
 

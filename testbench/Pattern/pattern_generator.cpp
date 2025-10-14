@@ -53,10 +53,10 @@ int main()
     vector<int32_t> C(m * p);
 
     // ===== 產生 A 和 B =====
-    for(int i =0; i < m *n / 4; i++)
+    for(int i = 0; i < m * n / 4; i++)
         A[i] = generate_in_data();
 
-    for(int i=0; i< n * p / 4; i++)
+    for(int i= 0; i< n * p / 4; i++)
         B[i] = generate_in_data();
 
     // ===== 計算 C = A × B =====
