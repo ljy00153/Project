@@ -13,6 +13,8 @@ using namespace std;
 #define TOTAL_WEIGHT (IFMAP_SIZE * NUM_WEIGHT)  // 12 個 int32_t
 #define MODE 1
 
+
+
 vector<int32_t> read_hex_file(const string& filename);
 array<int32_t, NUM_WEIGHT> generate_golden_output
 (const array<int32_t, IFMAP_SIZE>& in_feature_spad, const array<int32_t, TOTAL_WEIGHT>& weight_spad);
@@ -20,10 +22,19 @@ array<uint8_t, 4> get_bytes(int32_t value);
 
 int main() 
 {
-    int pattern_id = 3;
-    int m = 1;
+    int pattern_id = 2;
+    int m = 64;
     int n = 128 * 8 * 8;
     int p = 256;
+    int n_div4 = n / 4;
+
+    cout << "--- GEMM Verification using test.cpp structure ---" << endl;
+    cout << "Matrix Dimensions (int32_t elements):" << endl;
+    cout << "  A: " << m << " x " << n_div4 << endl;
+    cout << "  B: " << n_div4 << " x " << p << endl;
+    cout << "  C: " << m << " x " << p << endl;
+    cout << "----------------------------------------------------" << endl;
+
 
     string folder = "Pattern" + to_string(pattern_id);
 
@@ -37,6 +48,11 @@ int main()
     auto B = read_hex_file(fileB);
     auto golden = read_hex_file(fileGolden);
 
+    if (A.empty() || B.empty() || golden.empty()) 
+    {
+        cerr << "Error reading pattern files. Please generate them first." << endl;
+        return 1;
+    }
     //cout << "A[0]: "<< golden.size()<<endl;
     //cout << "golden[" << 1 * 4 << "]: "<< golden[1 * 4]<<endl;
 
@@ -44,40 +60,29 @@ int main()
     array<int32_t, TOTAL_WEIGHT> weight_spad;
 
     bool all_pass = true;
+    cout << "✅ Starting verification..." << endl;
 
     for (int i = 0; i < m; i++) 
     {
-        for (int j = 0; j < p / 4; j++) 
+        for (int j = 0; j < p; j+=NUM_WEIGHT) 
         {
             array<int32_t, NUM_WEIGHT> C;
             array<int32_t, NUM_WEIGHT> sum = {0};
-            for (int k = 0; k < n / 4; k++) 
+            for (int k = 0; k < n_div4; k+=IFMAP_SIZE) 
             {
-                for(int l = 0; l < 3; l++)
+                for(int l = 0; l < IFMAP_SIZE; l++)
                 {
-                    int idxA = i * n + 3 * k + l;
-                    if(idxA >= A.size()) 
-                    { 
-                        //cerr << "A index out of range\n"; 
-                        in_feature_spad[l] = 0;
-                    }
-                    else
-                        in_feature_spad[l] = A[idxA];
+                    int idxA = i * n_div4 + k + l;
+                    in_feature_spad[l] = A[idxA];
                 }
                     
                 //cout << "in_feature_spad[0]: "<< in_feature_spad[0]<<endl;
                 //連續取A3筆資料
-                for(int l = 0; l < 3; l++)
-                    for(int o=0; o < 4; o++)
+                for(int l = 0; l < IFMAP_SIZE; l++)
+                    for(int o = 0; o < NUM_WEIGHT; o++)
                     {
-                        int idxB = (3*k+l) * p + 4*j + o;
-                        if(idxB >= B.size()) 
-                        { 
-                            //cerr << "B index out of range\n"; 
-                            weight_spad[l*4+o] = 0;
-                        }
-                        else
-                            weight_spad[l*4+o] = B[idxB];
+                        int idxB = (k + l) * p + j + o;
+                        weight_spad[l * NUM_WEIGHT + o] = B[idxB];
                     }
                 //cout << "weight_spad[0]: "<< weight_spad[0]<<endl;
                 //取B12筆，為3*4
@@ -87,20 +92,24 @@ int main()
                     sum[l] += C[l];
             }
 
-            for(int l = 0; l < 4; l++)
+            for(int l = 0; l < NUM_WEIGHT; l++)
             {
                 //cout <<"sum[" << l <<"]: " << sum[l]<< endl;
-                //cout <<"golden[" << j * 4 + l <<"]: " << golden[j * 4 + l]<< endl;
-                if (sum[l] != golden[j * 4 + l]) 
+                //cout <<"Checking index " << i * n / 32 << " ... ";
+                //cout << j * 4 + l << "\n";
+                //cout <<"golden[" << i * n / 32 + j * 4 + l <<"]: " << golden[i * n / 32 + j * 4 + l]<< endl;
+                int golden_idx = i * p + (j + l);
+                if (sum[l] != golden[golden_idx]) 
                 {
-                    cout << "❌ Mismatch at index " << j * 4 + l << endl;
+                    cout << "❌ Mismatch at index " << golden_idx << endl;
                     cout << "Got=" << sum[l] << " "
-                    << "Expected=" << golden[j * 4 + l] << endl;
+                    << "Expected=" << golden[golden_idx] << endl;
                     all_pass = false;
                 }
             }
         }
     }
+    cout << "\n✅ Verification completed." << endl;
 
     if (all_pass)
         cout << "✅ All results match golden!" << endl;

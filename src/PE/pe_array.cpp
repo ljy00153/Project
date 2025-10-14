@@ -151,7 +151,7 @@ class PE_Array
         void add_ipsum(int idx, int ipsum)
         {
             for(int i = 0; i < PE::PSUM_SIZE; i++)
-                pe_array.pe[idx].add_ipsum(ipsum, i);
+                pe[idx].add_ipsum(ipsum, i);
         }
 
         void add_ipsum_all() 

@@ -29,12 +29,12 @@ array<uint8_t, 4> get_bytes(int32_t value);
 
 random_device rd;  
 mt19937 rng(rd());  // random seed
-uniform_int_distribution<int32_t> dist_byte(0, 32);//數字隨機範圍
+uniform_int_distribution<int32_t> dist_byte(0, 8);//數字隨機範圍
 
 int main()
 {
-    int pattern_id = 3;//放在第幾個資料夾
-    int m = 1; //GEMV
+    int pattern_id = 1;//放在第幾個資料夾
+    int m = 64; //GEMV
     int n = 128 * 8 * 8;
     int p = 256;
     // A: m * n
@@ -53,12 +53,13 @@ int main()
     vector<int32_t> C(m * p);
 
     // ===== 產生 A 和 B =====
+    cout << "✅ Generating random matrices A and B..." << endl;
     for(int i = 0; i < m * n / 4; i++)
         A[i] = generate_in_data();
 
     for(int i= 0; i< n * p / 4; i++)
         B[i] = generate_in_data();
-
+    cout << "✅ Random matrices A and B generated." << endl;
     // ===== 計算 C = A × B =====
     for (int i = 0; i < m; i++) 
     {
@@ -66,12 +67,14 @@ int main()
         {
             int32_t sum = 0;
             for (int k = 0; k < n / 4; k++) 
-                sum += generate_golden_output((A[i * n + k]), B[k * p + j]);
+                sum += generate_golden_output((A[i * n / 4 + k]), B[k * p + j]);
     
             C[i * p + j] = sum;
-            //cout << "C = " << C[i * p + j]<< endl;
+            //cout << "C = " << i * p + j<< endl;
         }
     }
+
+    cout << "✅ Matrix Multiplication Done!" << endl;
 
     // ===== 寫入檔案 (txt) =====
 
@@ -82,13 +85,20 @@ int main()
     ofstream fa(pathA);
     ofstream fb(pathB);
     ofstream fc(pathC);
+    if(!fa.is_open() || !fb.is_open() || !fc.is_open()) 
+    {
+        cerr << "❌ Cannot open output file.\n";
+        return -1;
+    }
+    else
+        cout << "✅ Output file opened: " << pathA << ", " << pathB << ", " << pathC << endl;
 
     fa << hex << uppercase << setfill('0');
     fb << hex << uppercase << setfill('0');
     fc << hex << uppercase << setfill('0');
     for (int i = 0; i < m; i++) 
         for (int j = 0; j < n / 4; j++)
-            fa << setw(8) << A[i * n + j] << "\n";
+            fa << setw(8) << A[i * n / 4 + j] << "\n";
 
     for (int i = 0; i < n / 4; i++) 
         for (int j = 0; j < p; j++)
@@ -103,10 +113,15 @@ int main()
     fb.close();
     fc.close();
 
-    cout << "✅ Done: A.bin, B.bin, C_golden.bin generated!" << endl;
-    cout << "A size = " << A.size() << " int32_t (" << A.size()*4 << " bytes)" << endl;
-    cout << "B size = " << B.size() << " int32_t (" << B.size()*4 << " bytes)" << endl;
-    cout << "C size = " << C.size() << " int32_t (" << C.size()*4 << " bytes)" << endl;
+    cout << "✅ Done: A.txt, B.txt, and C_golden.txt generated in '" << folder << "/'" << endl;
+    cout << "\n--- Matrix Dimensions (at uint8_t level) ---" << endl;
+    cout << "  A: " << m << " x " << n << endl;
+    cout << "  B: " << n << " x " << p << endl;
+    cout << "  C: " << m << " x " << p << endl;
+    cout << "\n--- Vector Sizes (element count of int32_t) ---" << endl;
+    cout << "  A size: " << A.size() << " (" << A.size() * 4 << " bytes)" << endl;
+    cout << "  B size: " << B.size() << " (" << B.size() * 4 << " bytes)" << endl;
+    cout << "  C size: " << C.size() << " (" << C.size() * 4 << " bytes)" << endl;
 
     return 0;
 }
