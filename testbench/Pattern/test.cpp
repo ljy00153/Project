@@ -22,7 +22,7 @@ array<uint8_t, 4> get_bytes(int32_t value);
 
 int main() 
 {
-    int pattern_id = 2;
+    int pattern_id = 3;
     int m = 64;
     int n = 128 * 8 * 8;
     int p = 256;
@@ -30,8 +30,8 @@ int main()
 
     cout << "--- GEMM Verification using test.cpp structure ---" << endl;
     cout << "Matrix Dimensions (int32_t elements):" << endl;
-    cout << "  A: " << m << " x " << n_div4 << endl;
-    cout << "  B: " << n_div4 << " x " << p << endl;
+    cout << "  A: " << m << " x " << n << endl;
+    cout << "  B: " << n << " x " << p << endl;
     cout << "  C: " << m << " x " << p << endl;
     cout << "----------------------------------------------------" << endl;
 

@@ -56,7 +56,12 @@
         "random": "cpp",
         "string": "cpp",
         "chrono": "cpp",
-        "filesystem": "cpp"
+        "filesystem": "cpp",
+        "sstream": "cpp",
+        "fstream": "cpp",
+        "forward_list": "cpp",
+        "numeric": "cpp",
+        "ratio": "cpp"
     },
     "python-envs.defaultEnvManager": "ms-python.python:system",
     "python-envs.pythonProjects": []

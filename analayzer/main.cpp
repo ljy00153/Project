@@ -10,7 +10,7 @@ int main()
 {
     EyerissMapper mapper;
     LinearShapeParam linear;
-    linear.B = 256;
+    linear.B = 64;
     linear.in_features = 128 * 8 * 8;
     linear.out_features = 256;
     cout << "Batch : " << linear.B << endl;

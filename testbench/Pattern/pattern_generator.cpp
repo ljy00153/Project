@@ -29,14 +29,15 @@ array<uint8_t, 4> get_bytes(int32_t value);
 
 random_device rd;  
 mt19937 rng(rd());  // random seed
-uniform_int_distribution<int32_t> dist_byte(0, 8);//數字隨機範圍
+uniform_int_distribution<int32_t> dist_byte(0, 32);//數字隨機範圍
 
 int main()
 {
-    int pattern_id = 1;//放在第幾個資料夾
-    int m = 64; //GEMV
+    int pattern_id = 3;//放在第幾個資料夾
+    int m = 64; //GEMM now
     int n = 128 * 8 * 8;
     int p = 256;
+    int n_div4 = n / 4;
     // A: m * n
     // B: n * p
     // C: m * p
@@ -48,16 +49,16 @@ int main()
     array<int32_t, NUM_WEIGHT> golden_output;
     array<array<int32_t, NUM_WEIGHT>, 8 * MODE> golden_output_all = {0};
 
-    vector<int32_t> A(m * n / 4);
-    vector<int32_t> B(n * p / 4);
+    vector<int32_t> A(m * n_div4);
+    vector<int32_t> B(n_div4 * p);
     vector<int32_t> C(m * p);
 
     // ===== 產生 A 和 B =====
     cout << "✅ Generating random matrices A and B..." << endl;
-    for(int i = 0; i < m * n / 4; i++)
+    for(int i = 0; i < m * n_div4; i++)
         A[i] = generate_in_data();
 
-    for(int i= 0; i< n * p / 4; i++)
+    for(int i= 0; i < n_div4 * p; i++)
         B[i] = generate_in_data();
     cout << "✅ Random matrices A and B generated." << endl;
     // ===== 計算 C = A × B =====
@@ -66,8 +67,8 @@ int main()
         for (int j = 0; j < p; j++) 
         {
             int32_t sum = 0;
-            for (int k = 0; k < n / 4; k++) 
-                sum += generate_golden_output((A[i * n / 4 + k]), B[k * p + j]);
+            for (int k = 0; k < n_div4; k++) 
+                sum += generate_golden_output((A[i * n_div4 + k]), B[k * p + j]);
     
             C[i * p + j] = sum;
             //cout << "C = " << i * p + j<< endl;
@@ -97,10 +98,10 @@ int main()
     fb << hex << uppercase << setfill('0');
     fc << hex << uppercase << setfill('0');
     for (int i = 0; i < m; i++) 
-        for (int j = 0; j < n / 4; j++)
-            fa << setw(8) << A[i * n / 4 + j] << "\n";
+        for (int j = 0; j < n_div4; j++)
+            fa << setw(8) << A[i * n_div4 + j] << "\n";
 
-    for (int i = 0; i < n / 4; i++) 
+    for (int i = 0; i < n_div4; i++) 
         for (int j = 0; j < p; j++)
             fb << setw(8) << B[i * p + j] << "\n";
 
@@ -126,14 +127,14 @@ int main()
     return 0;
 }
 
-int32_t make_int32_from_bytes(uint8_t b0, uint8_t b1, uint8_t b2, uint8_t b3) 
+int32_t make_int32_from_bytes(const std::array<uint8_t, 4>& bytes) 
 {
     // 小端序組合成 int32_t
     return static_cast<int32_t>(
-        (static_cast<uint32_t>(b3) << 24) |
-        (static_cast<uint32_t>(b2) << 16) |
-        (static_cast<uint32_t>(b1) << 8)  |
-        static_cast<uint32_t>(b0)
+        (bytes[3] << 24) |
+        (bytes[2] << 16) |
+        (bytes[1] << 8)  |
+        (bytes[0])
     );
 }
 
@@ -145,10 +146,7 @@ int32_t generate_in_data()
     for (int b = 0; b < 4; b++)
         in_data_bytes[b] = uint8_t(dist_byte(rng));
 
-    in_data = make_int32_from_bytes(
-        in_data_bytes[0], in_data_bytes[1],
-        in_data_bytes[2], in_data_bytes[3]
-    );
+    in_data = make_int32_from_bytes(in_data_bytes);
     return in_data;
 }
 
