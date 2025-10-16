@@ -10,7 +10,9 @@ using namespace std;
 class PE_Array 
 {
     public:
-        static constexpr int NUM_PE = 48;
+        static constexpr int PE_H = 8;
+        static constexpr int PE_V = 6;
+        static constexpr int NUM_PE = PE_H * PE_V;
         int mode;
         //1: 6個PE累加，共一組
         //2: 3個PE累加，共兩組

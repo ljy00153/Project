@@ -1,206 +1,109 @@
 #include <iostream>
 #include <vector>
-#include <cmath>
-#include <cstdlib>
-#include <ctime>
-#include <numeric>
-#include <algorithm>
-#include <array>
+#include <cstdint>
 #include <iomanip>
-#include <fstream>
-#include <string>
 #include <sstream>
+#include <string>
+#include <cmath>
 
-// 引入您確定功能正確的 PE Array 硬體模型
 #include "../../src/PE/pe_array.cpp"
 #include "../analayzer/mapper.cpp"
 
-// 定義模擬所使用的資料型態
-using DataType = int32_t;
 using namespace std;
-void load_data(vector<DataType> &mem, const string &filename);//directly load data into memory
+using DataType = int32_t;
 
-struct index
+
+
+class TileBasedSimulator 
 {
-    int count_if_col;
-    int count_if_row;
-    int count_weight_col;
-    int count_weight_row;
-    int count_of_col;
-    int count_of_row;
-};
-
-struct EyerissMappingParam
-{
-    int tk; //1~6
-    int tn; //1~8
-    int mode;
-    //1: 6個PE累加，共一組
-    //2: 3個PE累加，共兩組
-    //3: 2個PE累加，共三組
-    //4: 1個PE累加，共六組
-    int M;
-    int K; 
-    int N; // K * 1 * 3 + K * N * 12 < 64kb
-};
-
-// ===================================================================
-// 組件 1: 高精度控制器 (Cycle-Accurate Controller)
-// ===================================================================
-enum class State 
-{
-    IDLE,
-    LOADING_IF,
-    LOADING_W,
-    LOADING_PSUM,
-    COMPUTING,
-    ACUMULATING_PSUM,
-    STORING_PSUM,
-    FINISH
-};
-
-
-
-class CycleAccurateController 
-{
-    public:
-        struct GEMV { int B, IN_F, OUT_F; };
-
     private:
-        GEMV linear;
-        index idx;
-        EyerissMappingParam mapping;
+        EyerissMappingParam map;
+        LinearShapeParam shape;
         PE_Array& pe_array;
 
-        // 狀態變數
-        State current_state;
-        long long total_cycles;
-        
-        int k_tile_idx;
-        int n_tile_idx;
+        // latency 模型 (可微調)
+        static constexpr int IF_LOAD_LAT     = 3;
+        static constexpr int W_LOAD_LAT      = 12;
+        static constexpr int COMPUTE_LAT     = 48;  // 每個K step
+        static constexpr int PSUM_ACC_LAT    = 6;
+        static constexpr int PSUM_STORE_LAT  = 4;
 
-        int if_counter = 0;
-        int weight_counter = 0;
-
-        int data_load_progress;
+        long long total_cycles = 0;
 
     public:
-        CycleAccurateController(const GEMV& g, const EyerissMappingParam& m, PE_Array& pe_arr)
-            : linear(g), mapping(m), pe_array(pe_arr) 
+        TileBasedSimulator(const LinearShapeParam& s, const EyerissMappingParam& m, PE_Array& pe_arr)
+            : map(m), shape(s), pe_array(pe_arr) {}
+
+        void run_simulation(const vector<DataType>& all_in_features,
+                            const vector<DataType>& all_weights,
+                            vector<DataType>& final_psums)
         {
-            current_state = State::IDLE;
             total_cycles = 0;
-            k_tile_idx = 0;
-            n_tile_idx = 0;
-            data_load_progress = 0;
-            idx = {0, 0, 0, 0, 0, 0};
-        }
+            cout << "=== Start GEMM Tile Simulation ===" << endl;
 
-        bool step(
-            const vector<DataType>& all_in_features, 
-            const vector<DataType>& all_weights,
-            vector<DataType>& final_psums
-        ) 
-        {
-            //state transition and control PE Array
-            switch (current_state) 
+            // 外層 tiling 順序依據 PDF：K → N → M → B → in_feature → out_feature
+            int in_div4 = ceil(double(shape.in_features) / double(4));
+            int n_div4  = ceil(double(shape.out_features) / double(4));
+            for (int outf = 0; outf < shape.out_features; outf++) 
             {
-                case State::IDLE:
+                for (int inf = 0; inf < shape.in_features; inf++) 
                 {
-                    current_state = State::LOADING_IF;
-                    data_load_progress = 0;
-                    total_cycles++;
-                    break;
-                }
-                case State::LOADING_IF:
-                {
-                    data_load_progress++;
-                    if (data_load_progress >= PE::IFMAP_SIZE) 
+                    for (int b = 0; b < shape.B; b++) 
                     {
-                        //load if_data to a PE in PE array
-                        if_counter++;
-                        data_load_progress = 0;
-                    }
-                    if(if_counter >= PE_Array::NUM_PE)
-                    {
-                        if_counter = 0;
-                        current_state = State::LOADING_W;
-                    }
-                    total_cycles++;
-                    break;
-                }
-                
-                case State::LOADING_W:
-                {
-                    data_load_progress++;
-                    if (data_load_progress >= PE::WEIGHT_SIZE) 
-                    {
-                        //load weight_data to a PE in PE array
-                        //if one PE weight load finish, start compute
-                        pe_array.pe[weight_counter++].start_cycle_compute();
-                        data_load_progress = 0;
-                    }
-                    if(weight_counter >= PE_Array::NUM_PE)
-                    {
-                        weight_counter = 0;
-                        current_state = State::COMPUTING;
-                    }
-                    pe_array.step_all(); // allow PE to compute during weight loading
-                    total_cycles++;
-                    break;
-                }
-                case State::COMPUTING: 
-                {
-                    pe_array.step_all();
-                    if (!pe_array.is_any_busy()) 
-                    {
-                        current_state = State::STORING_PSUM;
-                    }
-                    total_cycles++;
-                    break;
-                }
+                        for (int m = 0; m < map.M; m += map.mode) 
+                        {
+                            for (int n = 0; n < map.N * 4; n += map.tn) 
+                            {
+                                for (int k = 0; k < map.K * 3; k += map.tk * 3) 
+                                {
+                                    // 模擬 tile loading
+                                    total_cycles += map.tk * IF_LOAD_LAT;
+                                    total_cycles += map.tk * W_LOAD_LAT;
 
-                case State::STORING_PSUM: 
-                {
-                    // ... 累加 psum ...
-                    
-                    // ===================================================================
-                    // >> COMPUTATION ORDER: for k in K, for n in N <<
-                    // ===================================================================
-                    // 這段邏輯完全對應了您圖片中的 k 和 n 迴圈的推進方式。
-                    // 內層的 n 迴圈先推進。
-                    n_tile_idx++;
-                    if (n_tile_idx >= shape.OUT_F / tile.N) {
-                        // n 迴圈結束，重置 n，並推進外層的 k 迴圈。
-                        n_tile_idx = 0;
-                        k_tile_idx++;
-                    }
+                                    // 模擬 tile compute (乘加)
+                                    total_cycles += COMPUTE_LAT;
 
-                    if (k_tile_idx >= shape.IN_F / tile.K) {
-                        // k 迴圈也結束了，代表所有運算完成。
-                        total_cycles++;
-                        return true; 
-                    } else {
-                        // 還有 Tile 要處理，回到 IDLE 狀態，開始下一個 computation order
-                        current_state = State::IDLE;
+                                    //呼叫 PE 模型做實際運算
+                                    //set input feature
+                                    for(int l = 0; l < PE::IFMAP_SIZE * map.tk * map.mode; l++)
+                                    {
+                                        int idx_f = (b * in_div4 + m * in_div4 + inf * map.K * 3) + k;
+                                        for(int i = 0; i < map.tn; i++)
+                                            pe_array.pe[i + (l / PE::IFMAP_SIZE) * PE_Array::PE_H].in_feature_spad[l % PE::IFMAP_SIZE] = 
+                                            all_in_features[idx_f + (l / map.tk / PE::IFMAP_SIZE * in_div4) + l % (map.tk * 3)];
+                                    }
+
+                                    //set weight
+                                    for(int l = 0; l < PE::WEIGHT_SIZE * map.tn * map.tk * map.mode; l++)
+                                    {
+                                        int idx_w = (inf * n_div4 + outf * map.N * 4) + k * n_div4 + n * map.N * 4;
+                                        pe_array.pe[(l / 12) * 8 + (l / 12 / 6)].weight_spad[l % PE::WEIGHT_SIZE] = 
+                                        all_weights[idx_w + l % 4 + (l / 4) % 18 * n_div4 + (l / 72) * 4];
+                                    }
+
+                                    //compute
+                                    pe_array.compute_full_all();
+
+                                }
+                                // write psum
+                                total_cycles += PSUM_ACC_LAT;
+                                total_cycles += PSUM_STORE_LAT * map.mode * map.tn;
+                            }
+                        }
                     }
-                    // ===================================================================
-                    break;
+                    //load pusm
+                    total_cycles += PSUM_STORE_LAT * map.mode * map.tn;
                 }
             }
 
-            total_cycles++;
-            return false;
+            cout << "=== Simulation Finished ===" << endl;
+            cout << "Total cycles: " << total_cycles << endl;
         }
-        
+
         long long get_total_cycles() const { return total_cycles; }
 };
 
 
-// ===================================================================
-// 組件 2: 主測試平台 (Main Testbench)
-// (main 函式與之前相同，此處省略以保持簡潔)
-// ===================================================================
 int main() 
 {
     EyerissMapper mapper;
@@ -211,7 +114,6 @@ int main()
 
     mapper.run(linear, 1);
 
-    CycleAccurateController::GEMV shape = {linear.B, linear.in_features, linear.out_features}; // B, IN_F, OUT_F
     EyerissMappingParam mapping = {mapper.best_result.tk, mapper.best_result.tn, mapper.best_result.mode, 
                                    mapper.best_result.M, mapper.best_result.K, mapper.best_result.N};
 
@@ -219,13 +121,13 @@ int main()
     PE_Array dut_pe_array;
     dut_pe_array.mode = mapper.best_result.mode;
     dut_pe_array.set_tag();
-    CycleAccurateController dut_controller(shape, mapping, dut_pe_array);
+    TileBasedSimulator dut_controller(linear, mapping, dut_pe_array);
 
     // 3. 準備測試資料
-    vector<DataType> in_features(shape.IN_F);
-    vector<DataType> weights(shape.IN_F * shape.OUT_F);
-    vector<DataType> psum_dut(shape.OUT_F, 0);
-    vector<DataType> golden(shape.OUT_F, 0);
+    vector<DataType> in_features;
+    vector<DataType> weights;
+    vector<DataType> psum_dut(linear.out_features, 0);
+    vector<DataType> golden(linear.out_features, 0);
 
     load_data(in_features, "../Pattern/Pattern1/A.txt");
     load_data(weights, "../Pattern/Pattern1/B.txt");
@@ -233,12 +135,8 @@ int main()
 
     // 4. 執行 DUT 模擬 (Cycle-Accurate)
     cout << "[Testbench] Starting DUT (PE_Array) Simulation..." << endl;
-    CycleAccurateController dut_controller(shape, tile, dut_pe_array);
-    bool done = false;
-    while (!done) 
-    {
-        done = dut_controller.step(in_features, weights, psum_dut);
-    }
+
+    dut_controller.run_simulation(in_features, weights, psum_dut);
 
 
     // 6. 報告與驗證
@@ -253,7 +151,8 @@ int main()
     pass = equal(psum_dut.begin(), psum_dut.end(), golden.begin());
     
     cout << "Functional Verification: " << (pass ? "PASSED" : "FAILED") << endl;
-    if (!pass) {
+    if (!pass) 
+    {
         for(size_t i=0; i < psum_dut.size(); i++) 
         {
             if (psum_dut[i] != golden[i]) 
