@@ -53,6 +53,7 @@ struct AnalysisResult
 
     long long int macs;
     double latency;
+    long long int cycles;
 
 
     double energy_total;

@@ -15,6 +15,7 @@ class EyerissMapper
     public:
         EyerissAnalyzer analyzer;
         AnalysisResult best_result;
+        EyerissMappingParam best_mapping;
         EyerissMapper()
         {
 
@@ -27,11 +28,9 @@ class EyerissMapper
             vector<AnalysisResult> results;
 
             generate_hardware();
-
+            cout << "Starting design space exploration..." << endl;
             auto mappings = generate_mappings();
-
-            //cout << "建立 mappings  " << (int)mappings.size() << endl;
-
+            cout << "Total configurations to evaluate: " << mappings.size() << endl;
             for (int i = 0; i < (int)mappings.size(); i++)
             {
                 analyzer.mapping = mappings[i];
@@ -64,7 +63,8 @@ class EyerissMapper
                     scored_results.end(),
                     [](auto &a, auto &b) { return a.first < b.first; });
             }
-
+            cout << "Design space exploration completed." << endl;
+            cout << "---------------------------------------" << endl;
             cout << "Total valid configurations: " << scored_results.size() << endl;
             cout << endl << "Top " << top_k << " configurations:\n";
             
@@ -93,51 +93,13 @@ class EyerissMapper
             if (!scored_results.empty())
             {
                 // 取出 top 1
+                cout << "---------------------------------------" << endl;
+                cout << "Top-1 configuration details saved to log/result.csv" << endl;
                 auto &best = scored_results[0];
                 int idx = best.second;
                 best_result = results[idx];
-
-                ofstream csv("log/result.csv");  // 輸出到build資料夾
-
-                if (csv.is_open())
-                {
-                    // 寫入欄位名稱
-                    csv << "layer,glb_usage,glb_read,glb_write,glb_access,dram_read,"
-                        "dram_write,dram_access,"
-                        "macs,intensity,peak_performance,peak_bandwidth,latency,energy_total,power_total,"
-                        "tk,tn,mode,M,K,N\n";
-
-                    // 寫入資料
-                    csv << "linear,"
-                        << results[idx].glb_usage << ","
-                        << results[idx].glb_read << ","
-                        << results[idx].glb_write << ","
-                        << results[idx].glb_access << ","
-                        << results[idx].dram_read << ","
-                        << results[idx].dram_write << ","
-                        << results[idx].dram_access << ","
-                        << results[idx].macs << ","
-                        << results[idx].intensity << ","
-                        << results[idx].peak_performance << ","
-                        << results[idx].peak_bandwidth << ","
-                        << results[idx].latency << ","
-                        << results[idx].energy_total << ","
-                        << results[idx].power_total << ","
-                        << mappings[idx].tk << ","
-                        << mappings[idx].tn << ","
-                        << mappings[idx].mode << ","
-                        << mappings[idx].M << ","
-                        << mappings[idx].N << ","
-                        << mappings[idx].K
-                        << "\n";
-
-                    csv.close();
-                    cout << "✅ Top-1 result saved to log/result.csv\n";
-                }
-                else
-                {
-                    cerr << "❌ Failed to open log/result.csv for writing\n";
-                }
+                best_mapping = mappings[idx];
+                mapping_to_csv_no_cycle(results[idx], mappings[idx], "log/result.csv");
             }
         }
 
@@ -174,7 +136,7 @@ class EyerissMapper
             int mode[4] = {1, 2, 3, 6};
             for (int i = 0; i < 4; i++)
             {
-                cout << "trying mode= " << mode[i]<<endl;
+                cout << "   trying mode= " << mode[i]<<endl;
                 for(int M = mode[i]; M <= 512; M++)
                 {
                     if(M > analyzer.linear_shape.B)
@@ -213,6 +175,97 @@ class EyerissMapper
             hardware.noc_bw = 4;
 
             analyzer.hardware_param = hardware;
+        }
+
+        void mapping_to_csv_no_cycle(const AnalysisResult& results, const EyerissMappingParam mappings, const string& filename)
+        {
+                ofstream csv(filename);  // 輸出到build資料夾
+
+                if (csv.is_open())
+                {
+                    // 寫入欄位名稱
+                    csv << "layer,glb_usage,glb_read,glb_write,glb_access,dram_read,"
+                        "dram_write,dram_access,"
+                        "macs,intensity,peak_performance,peak_bandwidth,latency,energy_total,power_total,"
+                        "tk,tn,mode,M,K,N\n";
+
+                    // 寫入資料
+                    csv << "linear,"
+                        << results.glb_usage << ","
+                        << results.glb_read << ","
+                        << results.glb_write << ","
+                        << results.glb_access << ","
+                        << results.dram_read << ","
+                        << results.dram_write << ","
+                        << results.dram_access << ","
+                        << results.macs << ","
+                        << results.intensity << ","
+                        << results.peak_performance << ","
+                        << results.peak_bandwidth << ","
+                        << results.latency << ","
+                        << results.energy_total << ","
+                        << results.power_total << ","
+                        << mappings.tk << ","
+                        << mappings.tn << ","
+                        << mappings.mode << ","
+                        << mappings.M << ","
+                        << mappings.N << ","
+                        << mappings.K
+                        << "\n";
+
+                    csv.close();
+                    cout << "✅ Top-1 result saved to" << filename << "\n";
+                }
+                else
+                {
+                    cout << "❌ Unable to open file: " << filename << endl;
+                }
+        }
+
+        void mapping_to_csv_with_cycle(const string& filename)
+        {
+                ofstream csv(filename);  // 輸出到build資料夾
+
+                if (csv.is_open())
+                {
+                    // 寫入欄位名稱
+                    csv << "layer,glb_usage,glb_read,glb_write,glb_access,dram_read,"
+                        "dram_write,dram_access,"
+                        "macs,intensity,peak_performance,peak_bandwidth,cycles,latency,energy_total,power_total,"
+                        "tk,tn,mode,M,K,N\n";
+
+                    // 寫入資料
+                    csv << "linear,"
+                        << best_result.glb_usage << ","
+                        << best_result.glb_read << ","
+                        << best_result.glb_write << ","
+                        << best_result.glb_access << ","
+                        << best_result.dram_read << ","
+                        << best_result.dram_write << ","
+                        << best_result.dram_access << ","
+                        << best_result.macs << ","
+                        << best_result.intensity << ","
+                        << best_result.peak_performance << ","
+                        << best_result.peak_bandwidth << ","
+                        << best_result.cycles << ","
+                        << best_result.latency << ","
+                        << best_result.energy_total << ","
+                        << best_result.power_total << ","
+                        << best_mapping.tk << ","
+                        << best_mapping.tn << ","
+                        << best_mapping.mode << ","
+                        << best_mapping.M << ","
+                        << best_mapping.N << ","
+                        << best_mapping.K
+                        << "\n";
+
+                    csv.close();
+                    cout << "✅ Top-1 result saved to" << filename << "\n";
+                }
+                else
+                {
+                    cout << "❌ Unable to open file: " << filename << endl;
+                }
         }
 };
 
