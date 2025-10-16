@@ -1,20 +1,19 @@
-#include <fstream>
-#include <iomanip>
 #include <iostream>
-#include <sstream>
-#include <string>
-#include <vector>
+
+#include "tb_pe_array/GEMM_no_mem.cpp"
+//#include "tb_pe_array/GEMM_with_mem.cpp"
+
 
 using namespace std;
 
-struct index
+int main()
 {
-    int count_if_col;
-    int count_if_row;
-    int count_weight_col;
-    int count_weight_row;
-    int count_of_col;
-    int count_of_row;
-};
-
-void load_data();
+    TileBasedSimulator simulator;
+    //GEMM_no_mem
+    LinearShapeParam linear;
+    linear.B = 256;
+    linear.in_features = 128 * 8 * 8;
+    linear.out_features = 256;
+    simulator.run(linear, "Pattern3");
+    return 0;
+}

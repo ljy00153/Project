@@ -20,23 +20,23 @@ class TileBasedSimulator
     private:
         EyerissMappingParam map;
         LinearShapeParam shape;
-        PE_Array& pe_array;
+        PE_Array pe_array;
 
         // latency 模型 (可微調)
         static constexpr int IF_LOAD_LAT     = 3;
         static constexpr int W_LOAD_LAT      = 12;
-        static constexpr int COMPUTE_LAT     = 48;  // 每個K step
+        static constexpr int COMPUTE_LAT     = 48;  
         static constexpr int PSUM_ACC_LAT    = 6;
         static constexpr int PSUM_STORE_LAT  = 4;
         long long int total_cycles = 0;
         array<int, 6> w_base = {0};
         array<int, 6> r_base = {0};
 
-        
-
     public:
-        TileBasedSimulator(const LinearShapeParam& s, const EyerissMappingParam& m, PE_Array& pe_arr)
-            : map(m), shape(s), pe_array(pe_arr) {}
+        TileBasedSimulator()
+        {
+            
+        }
 
         void run_simulation(const vector<DataType>& all_in_features,
                             const vector<DataType>& all_weights,
@@ -228,108 +228,110 @@ class TileBasedSimulator
         { 
             return total_cycles; 
         }
+
+
+        void run(const LinearShapeParam& linear, const string& pattern) 
+        {
+            EyerissMapper mapper;
+            //linear.B = 256;
+            //linear.in_features = 128 * 8 * 8;
+            //linear.out_features = 256;
+            shape = linear;
+
+            mapper.run(linear, 1);
+
+            map = {mapper.best_result.tk, mapper.best_result.tn, mapper.best_result.mode, 
+                                        mapper.best_result.M, mapper.best_result.K, mapper.best_result.N};
+
+            // 2. 初始化 DUT
+            cout << "[Testbench] Initializing DUT (PE_Array)..." << endl;
+            PE_Array dut_pe_array;
+            dut_pe_array.mode = mapper.best_result.mode;
+            dut_pe_array.set_tag();
+            
+            pe_array = dut_pe_array;
+            // 3. 準備測試資料
+            vector<DataType> in_features;
+            vector<DataType> weights;
+            vector<DataType> psum_dut(linear.B * linear.out_features, 0);
+            vector<DataType> golden;
+
+            cout << "[Testbench] Loading Test Data..." << endl;
+            
+            string base_path = "Pattern/" + pattern + "/";
+            load_data(in_features, base_path + "A.txt");
+            load_data(weights, base_path + "B.txt");
+            load_data(golden, base_path + "C_golden.txt");
+
+            int padded_in_size = ((linear.in_features / 4 + 17) / 18) * 18;
+            vector<DataType> padded_in_features(linear.B * padded_in_size, 0);
+
+            if (in_features.size() > padded_in_features.size()) 
+            {
+                cerr << "ERROR: padded_in_features too small (" << padded_in_features.size()
+                    << " < " << in_features.size() << ")" << endl;
+                exit(1);
+            }
+            cout << "\nlinear.in_features: " << linear.in_features / 4 << ", padded_in_size: " << linear.B * padded_in_size << endl;
+            copy(in_features.begin(), in_features.end(), padded_in_features.begin());
+
+            int padded_w_size = linear.out_features * padded_in_size;
+            vector<DataType> padded_weights(padded_w_size, 0);
+
+            if (weights.size() > padded_w_size) 
+            {
+                cerr << "ERROR: padded_w_size too small (" << padded_weights.size()
+                    << " < " << weights.size() << ")" << endl;
+                exit(1);
+            }
+            cout << "linear.out_features: " << linear.out_features << ", padded_w_size: " << padded_w_size << endl;
+            copy(weights.begin(), weights.end(), padded_weights.begin());
+
+
+            // 4. 執行 DUT 模擬 (Cycle-Accurate)
+            cout << "[Testbench] Starting DUT (PE_Array) Simulation..." << endl;
+
+            run_simulation(padded_in_features, padded_weights, psum_dut);
+
+
+            // 5. 報告與驗證
+            cout << "=======================================" << endl;
+            cout << "=          SIMULATION REPORT          =" << endl;
+            cout << "=======================================" << endl;
+            
+            long long final_cycles = get_total_cycles();
+            cout << "Total cycles simulated: " << final_cycles << endl;
+            
+            bool pass;
+            pass = equal(psum_dut.begin(), psum_dut.end(), golden.begin());
+            
+            cout << "Result Verification: " << (pass ? "PASSED" : "FAILED") << endl;
+            
+            /*for(size_t i=0; i < 100; i++) 
+            {
+                cout << "index[" << i << "]:  DUT=" << psum_dut[i] << ", Golden=" << golden[i] << endl;
+            }*/
+            if (!pass) 
+            {
+                for(size_t i=0; i < psum_dut.size(); i++) 
+                {
+                    if (psum_dut[i] != golden[i]) 
+                    {
+                        cout << "First Mismatch at index " << i << ": DUT=" << psum_dut[i] << ", Golden=" << golden[i] << endl;
+                        break;
+                    }
+                }
+            }
+            cout << "=======================================\n" << endl;
+
+            mapper.best_result.cycles = final_cycles;
+            mapper.mapping_to_csv_with_cycle("../log/GEMM_no_mem_results.csv");
+
+        }
 };
 
 
-int main() 
-{
-    EyerissMapper mapper;
-    LinearShapeParam linear;
-    linear.B = 64;
-    linear.in_features = 128 * 8 * 8;
-    linear.out_features = 256;
 
-    mapper.run(linear, 1);
-
-    EyerissMappingParam mapping = {mapper.best_result.tk, mapper.best_result.tn, mapper.best_result.mode, 
-                                   mapper.best_result.M, mapper.best_result.K, mapper.best_result.N};
-
-    // 2. 初始化 DUT
-    cout << "[Testbench] Initializing DUT (PE_Array)..." << endl;
-    PE_Array dut_pe_array;
-    dut_pe_array.mode = mapper.best_result.mode;
-    dut_pe_array.set_tag();
-    TileBasedSimulator dut_controller(linear, mapping, dut_pe_array);
-
-    // 3. 準備測試資料
-    vector<DataType> in_features;
-    vector<DataType> weights;
-    vector<DataType> psum_dut(linear.B * linear.out_features, 0);
-    vector<DataType> golden;
-
-    cout << "[Testbench] Loading Test Data..." << endl;
-    string pattern = "Pattern3";
-    string base_path = "../Pattern/" + pattern + "/";
-    load_data(in_features, base_path + "A.txt");
-    load_data(weights, base_path + "B.txt");
-    load_data(golden, base_path + "C_golden.txt");
-
-    int padded_in_size = ((linear.in_features / 4 + 17) / 18) * 18;
-    vector<DataType> padded_in_features(linear.B * padded_in_size, 0);
-
-    if (in_features.size() > padded_in_features.size()) 
-    {
-        cerr << "ERROR: padded_in_features too small (" << padded_in_features.size()
-            << " < " << in_features.size() << ")" << endl;
-        exit(1);
-    }
-    cout << "\nlinear.in_features: " << linear.in_features / 4 << ", padded_in_size: " << linear.B * padded_in_size << endl;
-    copy(in_features.begin(), in_features.end(), padded_in_features.begin());
-
-    int padded_w_size = linear.out_features * padded_in_size;
-    vector<DataType> padded_weights(padded_w_size, 0);
-
-    if (weights.size() > padded_w_size) 
-    {
-        cerr << "ERROR: padded_w_size too small (" << padded_weights.size()
-            << " < " << weights.size() << ")" << endl;
-        exit(1);
-    }
-    cout << "linear.out_features: " << linear.out_features << ", padded_w_size: " << padded_w_size << endl;
-    copy(weights.begin(), weights.end(), padded_weights.begin());
-
-
-    // 4. 執行 DUT 模擬 (Cycle-Accurate)
-    cout << "[Testbench] Starting DUT (PE_Array) Simulation..." << endl;
-
-    dut_controller.run_simulation(padded_in_features, padded_weights, psum_dut);
-
-
-    // 5. 報告與驗證
-    cout << "=======================================" << endl;
-    cout << "=          SIMULATION REPORT          =" << endl;
-    cout << "=======================================" << endl;
-    
-    long long final_cycles = dut_controller.get_total_cycles();
-    cout << "Total cycles simulated: " << final_cycles << endl;
-    
-    bool pass;
-    pass = equal(psum_dut.begin(), psum_dut.end(), golden.begin());
-    
-    cout << "Result Verification: " << (pass ? "PASSED" : "FAILED") << endl;
-    
-    /*for(size_t i=0; i < 100; i++) 
-    {
-        cout << "index[" << i << "]:  DUT=" << psum_dut[i] << ", Golden=" << golden[i] << endl;
-    }*/
-    if (!pass) 
-    {
-        for(size_t i=0; i < psum_dut.size(); i++) 
-        {
-            if (psum_dut[i] != golden[i]) 
-            {
-                cout << "First Mismatch at index " << i << ": DUT=" << psum_dut[i] << ", Golden=" << golden[i] << endl;
-                break;
-            }
-        }
-    }
-    cout << "=======================================\n" << endl;
-
-    mapper.best_result.cycles = final_cycles;
-    mapper.mapping_to_csv_with_cycle("../../log/GEMM_no_mem_results.csv");
-
-    return 0;
-}
 
 
 
