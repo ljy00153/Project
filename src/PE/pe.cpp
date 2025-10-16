@@ -10,6 +10,8 @@ class PE
 {
     public:
         static constexpr int IFMAP_SIZE  = 3;  // 4 bytes
+        static constexpr int WEIGHT_H  = 4;  // 4 bytes
+        static constexpr int WEIGHT_V  = IFMAP_SIZE;  // 4 bytes
         static constexpr int WEIGHT_SIZE = 12;  // 4 bytes
         static constexpr int PSUM_SIZE   = 4;  // 4 bytes (store 4x int32)
 
@@ -85,12 +87,6 @@ class PE
         // compute in one shot (mode=0 use input psum, mode=1 accumulate into psum_spad)
         void compute_full() 
         {
-            if(out_valid)
-            {
-                cerr << "Warning: PE compute_full() called but output not read yet!\n";
-                return;
-            }
-                
             for(int i = 0; i < IFMAP_SIZE; i++) 
             {
                 array<uint8_t, 4> in_feature_byte = get_bytes(in_feature_spad[i]);
@@ -115,7 +111,6 @@ class PE
                     }
                 }
             }
-            out_valid = true;
         }
         int get_cycle() const 
         {

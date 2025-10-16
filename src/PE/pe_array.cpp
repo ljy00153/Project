@@ -150,6 +150,12 @@ class PE_Array
                 pe[i].compute_full();
         }
 
+        void out_valid_all() 
+        {
+            for (int i = 0; i < NUM_PE; i++) 
+                pe[i].out_valid = true;
+        }
+
         void add_ipsum(int idx, int ipsum)
         {
             for(int i = 0; i < PE::PSUM_SIZE; i++)

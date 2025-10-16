@@ -95,11 +95,11 @@ class EyerissMapper
                 // 取出 top 1
                 cout << "---------------------------------------" << endl;
                 cout << "Top-1 configuration details saved to log/result.csv" << endl;
-                auto &best = scored_results[0];
+                auto &best = scored_results[2];
                 int idx = best.second;
                 best_result = results[idx];
                 best_mapping = mappings[idx];
-                mapping_to_csv_no_cycle(results[idx], mappings[idx], "log/result.csv");
+                mapping_to_csv_no_cycle(results[idx], mappings[idx], "../log/result_no_cycle.csv");
             }
         }
 
