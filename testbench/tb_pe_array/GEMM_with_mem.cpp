@@ -93,6 +93,8 @@ class TileBasedSimulator
             for (int outf = 0; outf < shape.out_features; outf += map.N * PE::WEIGHT_H) 
             {
                 //cout << "\n--- Processing out_feature tile starting at " << outf << " ---\n";
+                total_cycles += DRAM_ACCESS * shape.B * map.N * PE::WEIGHT_H; // DRAM access for weight
+                total_cycles += DRAM_ACCESS * map.K * PE::IFMAP_SIZE * map.M; // DRAM access for input feature
                 for (int inf = 0; inf < in_div4; inf += map.K * PE::IFMAP_SIZE) 
                 {
                     for (int b = 0; b < shape.B; b += map.M) 
@@ -253,7 +255,6 @@ class TileBasedSimulator
                     total_cycles += DRAM_ACCESS * map.K * PE::IFMAP_SIZE * map.M; // DRAM access for input feature
                     total_cycles += DRAM_ACCESS * map.K * PE::IFMAP_SIZE * map.N * PE::WEIGHT_H; // DRAM access for weight
                 }
-                total_cycles += DRAM_ACCESS * shape.B * map.N * PE::WEIGHT_H; // DRAM access for weight
             }
 
             cout << "=== Simulation Finished ===" << endl << endl;
