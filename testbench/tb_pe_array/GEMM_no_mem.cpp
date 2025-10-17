@@ -87,9 +87,9 @@ class TileBasedSimulator
 
             // 外層 tiling 順序依據 PDF：K → N → M → B → in_feature → out_feature
             int in_div4 = ceil(double(shape.in_features) / double(PE::WEIGHT_H));
-            int n_div4  = ceil(double(shape.out_features) / double(PE::WEIGHT_H));
+            
             cout << "in_div4: " << in_div4 << ", out_features: " << shape.out_features << endl;
-            for (int outf = 0; outf < n_div4; outf+= map.N * PE::WEIGHT_H) 
+            for (int outf = 0; outf < shape.out_features; outf += map.N * PE::WEIGHT_H) 
             {
                 //cout << "\n--- Processing out_feature tile starting at " << outf << " ---\n";
                 for (int inf = 0; inf < in_div4; inf += map.K * PE::IFMAP_SIZE) 
@@ -110,16 +110,21 @@ class TileBasedSimulator
                                     for (int j = 0; j < 4; j++)
                                     {
                                         //in_idx need to be checked
-                                        int in_idx = (b * shape.out_features + outf * map.N * PE::WEIGHT_H ) 
+                                        int in_idx = (b * shape.out_features + outf) 
                                                         + (n) + m * shape.out_features + i / map.tn * shape.out_features + (i % map.tn) * PE::WEIGHT_H + j;
+                                        int32_t pe_input;
                                         if (in_idx < 0 || in_idx >= final_psums.size()) 
                                         {
-                                            cerr << "ERROR: in_idx out of range: " << in_idx << endl;
-                                            cerr << "b: " << b << ", outf: " << outf << ", n: " << n << ", m: " << m << ", i: " << i << ", j: " << j << endl;
-                                            exit(1);
+                                            pe_input = 0;
+                                            //cout << "ERROR: in_idx out of range: " << in_idx << endl;
+                                            //cerr << "b: " << b << ", outf: " << outf << ", n: " << n << ", m: " << m << ", i: " << i << ", j: " << j << endl;
+                                            //exit(1);
+                                        }
+                                        else
+                                        {
+                                            pe_input = final_psums[in_idx];
                                         }
                                         //cout <<"at index["<< in_idx << "], " ;
-                                        int32_t pe_input = final_psums[in_idx];
                                         pe_array.pe[num].add_ipsum(pe_input, j);
                                     }
                                     //cout << endl;
@@ -145,6 +150,7 @@ class TileBasedSimulator
                                         {
                                             int pe_index = i + (l / PE::IFMAP_SIZE) * PE_Array::PE_H;
                                             int inf_index = idx_f + (l / map.tk / PE::IFMAP_SIZE * in_div4) + l % (map.tk * PE::IFMAP_SIZE);
+                                            int in_data;
                                             if (pe_index >= PE_Array::NUM_PE) 
                                             {
                                                 cerr << "pe_index out of range: " << pe_index << endl;
@@ -152,13 +158,18 @@ class TileBasedSimulator
                                             }
                                             if (inf_index >= all_in_features.size()) 
                                             {
-                                                cerr << "inf_index out of range: " << inf_index << endl;
-                                                cerr << "b: " << b << ", m: " << m << ", inf: " << inf << ", k: " << k << ", l: " << l << ", i: " << i << endl;
-                                                exit(1);
+                                                in_data = 0;
+                                                //cout << "inf_index out of range: " << inf_index << endl;
+                                                //cerr << "b: " << b << ", m: " << m << ", inf: " << inf << ", k: " << k << ", l: " << l << ", i: " << i << endl;
+                                                //exit(1);
+                                            }
+                                            else
+                                            {
+                                                in_data = all_in_features[inf_index];
                                             }
                                             
                                             //cout << "PE[" << pe_index << "]" <<".[" << l % PE::IFMAP_SIZE << "] " << "load in_feature from index[" << inf_index << "]\n";
-                                            pe_array.pe[pe_index].in_feature_spad[l % PE::IFMAP_SIZE] = all_in_features[inf_index];                                            
+                                            pe_array.pe[pe_index].in_feature_spad[l % PE::IFMAP_SIZE] = in_data;                                            
                                         }
 
                                     }
@@ -168,11 +179,11 @@ class TileBasedSimulator
                                     {
                                         int pe_index = (l / PE::WEIGHT_SIZE) % PE_Array::PE_V * PE_Array::PE_H 
                                                         + (l / PE::WEIGHT_SIZE / PE_Array::PE_V);
-                                        int idx_w = (inf * shape.out_features + outf * map.N * PE::WEIGHT_H) + k * shape.out_features + n;
+                                        int idx_w = (inf * shape.out_features + outf) + k * shape.out_features + n;
                                         int weight_index = idx_w + l % PE::WEIGHT_H 
                                                             + ((l / PE::WEIGHT_H) % (map.tk * PE::IFMAP_SIZE)) * shape.out_features 
                                                             + (l / PE::WEIGHT_SIZE / PE_Array::PE_V) * PE::WEIGHT_H;
-
+                                        int weight_data;
                                         if (pe_index >= PE_Array::NUM_PE) 
                                         {
                                             cerr << "pe_index out of range: " << pe_index << endl;
@@ -180,12 +191,17 @@ class TileBasedSimulator
                                         }
                                         if (weight_index >= all_weights.size()) 
                                         {
-                                            cerr << "weight_index out of range: " << weight_index << endl;
-                                            cerr << "inf: " << inf << ", outf: " << outf << ", k: " << k << ", n: " << n << ", l: " << l << endl;
-                                            exit(1);
+                                            weight_data = 0;
+                                            //cout << "weight_index out of range: " << weight_index << endl;
+                                            //cerr << "inf: " << inf << ", outf: " << outf << ", k: " << k << ", n: " << n << ", l: " << l << endl;
+                                            //exit(1);
+                                        }
+                                        else
+                                        {
+                                            weight_data = all_weights[weight_index];
                                         }
                                         //cout << "PE[" << pe_index << "] load weight from index[" << weight_index << "]\n";
-                                        pe_array.pe[pe_index].weight_spad[l % PE::WEIGHT_SIZE] = all_weights[weight_index];
+                                        pe_array.pe[pe_index].weight_spad[l % PE::WEIGHT_SIZE] = weight_data;
                                     }
 
                                     //compute
@@ -209,13 +225,18 @@ class TileBasedSimulator
                                     {
                                         int32_t pe_output = pe_array.pe[num].output_psum(j);
                                         //out_idx need to be checked
-                                        int out_idx = (b * shape.out_features + outf * map.N * 4 ) + (n) + m * shape.out_features + i / map.tn * shape.out_features + (i % map.tn) * 4 + j;
-                                        if (out_idx < 0 || out_idx >= final_psums.size()) 
+                                        int out_idx = (b * shape.out_features + outf) + (n) + m * shape.out_features + i / map.tn * shape.out_features + (i % map.tn) * 4 + j;
+    
+                                        if (out_idx < final_psums.size()) 
                                         {
-                                            cerr << "ERROR: out_idx out of range: " << out_idx << endl;
-                                            exit(1);
+                                            final_psums[out_idx] = pe_output;
                                         }
-                                        final_psums[out_idx] = pe_output;
+                                        else
+                                        {
+                                            //cout << "ERROR: out_idx out of range: " << out_idx << endl;
+                                            //exit(1);
+                                        }
+                                        
                                     }
                                     pe_array.pe[num].out_valid = false; // reset out_valid after reading
                                     pe_array.pe[num].reset_psum();
@@ -244,13 +265,13 @@ class TileBasedSimulator
             //linear.out_features = 256;
             shape = linear;
 
-            mapper.run(linear, 3);
+            mapper.run(linear, 10);
 
             map = {mapper.best_result.tk, mapper.best_result.tn, mapper.best_result.mode, 
                                         mapper.best_result.M, mapper.best_result.K, mapper.best_result.N};
 
             // 2. 初始化 DUT
-            cout << "[Testbench] Initializing DUT (PE_Array)..." << endl;
+            cout << "\n[Testbench] Initializing DUT (PE_Array)..." << endl;
             PE_Array dut_pe_array;
             dut_pe_array.reset();
             dut_pe_array.mode = mapper.best_result.mode;
@@ -270,7 +291,8 @@ class TileBasedSimulator
             load_data(weights, base_path + "B.txt");
             load_data(golden, base_path + "C_golden.txt");
 
-            int padded_in_size = ((linear.in_features / 4 + 17) / 18) * 18;
+            /*
+            int padded_in_size = ((linear.in_features / 4 + 17 * mapper.best_result.mode) / 18) * 18;
             vector<DataType> padded_in_features(linear.B * padded_in_size, 0);
 
             if (in_features.size() > padded_in_features.size()) 
@@ -293,12 +315,20 @@ class TileBasedSimulator
             }
             cout << "linear.out_features: " << linear.out_features << ", padded_w_size: " << padded_w_size << endl;
             copy(weights.begin(), weights.end(), padded_weights.begin());
-
+            */
 
             // 4. 執行 DUT 模擬 (Cycle-Accurate)
-            cout << "[Testbench] Starting DUT (PE_Array) Simulation..." << endl;
+            cout << "\n[Testbench] Starting DUT (PE_Array) Simulation..." << endl;
 
-            run_simulation(padded_in_features, padded_weights, psum_dut);
+            cout << "   Mapping Parameters: " << endl;
+            cout << "    mode: " << map.mode << endl;
+            cout << "    tk: " << map.tk << endl;
+            cout << "    tn: " << map.tn << endl;
+            cout << "    M: " << map.M << endl;
+            cout << "    K: " << map.K << endl;
+            cout << "    N: " << map.N << endl;
+
+            run_simulation(in_features, weights, psum_dut);
 
 
             // 5. 報告與驗證
@@ -320,7 +350,7 @@ class TileBasedSimulator
             }*/
             if (!pass) 
             {
-                for(size_t i=0; i < psum_dut.size(); i++) 
+                for(size_t i=0; i < 200; i++) 
                 {
                     if (psum_dut[i] != golden[i]) 
                     {

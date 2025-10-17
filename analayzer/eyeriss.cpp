@@ -70,7 +70,7 @@ class EyerissAnalyzer
 
             usage.push_back({"in_feature", mapping.M * mapping.K * 3 * DATA_SIZE});
             usage.push_back({"weight", mapping.K * mapping.N * 12 * DATA_SIZE});
-            usage.push_back({"psum", linear_shape.B * mapping.N * 3 * PSUM_DATA_SIZE});
+            usage.push_back({"psum", linear_shape.B * mapping.N * 4 * PSUM_DATA_SIZE});
             usage.push_back({"total", usage[0].second + usage[1].second + usage[2].second});//3
             return usage;
         }

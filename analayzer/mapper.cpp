@@ -95,7 +95,7 @@ class EyerissMapper
                 // 取出 top 1
                 cout << "---------------------------------------" << endl;
                 cout << "Top-1 configuration details saved to log/result.csv" << endl;
-                auto &best = scored_results[2];
+                auto &best = scored_results[0];
                 int idx = best.second;
                 best_result = results[idx];
                 best_mapping = mappings[idx];
@@ -127,7 +127,7 @@ class EyerissMapper
         {
             const int GLB_LIMIT = 64 * 1024; // 64 KB = 65536 bytes
             const int IFMAP_PER_PE = 3;
-            const int WEIGHT_PER_PE = 12;
+            const int WEIGHT_PER_PE = 4;
 
             vector<EyerissMappingParam> results;
 
@@ -145,9 +145,9 @@ class EyerissMapper
                     { 
                         for (int N = tn; N <= 512; N++) 
                         {
-                            int used_bytes = mode[i] * K * IFMAP_PER_PE * 4 
+                            int used_bytes =  M * K * IFMAP_PER_PE * 4 
                                             + K * IFMAP_PER_PE * N * WEIGHT_PER_PE * 4
-                                            + M * analyzer.linear_shape.out_features * 4;
+                                            + analyzer.linear_shape.B * N * 4 * 4;
 
                             if (used_bytes < GLB_LIMIT) 
                                 results.push_back({tk[i], tn, mode[i], M, K, N});
