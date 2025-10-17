@@ -93,7 +93,7 @@ class EyerissAnalyzer
             res.push_back({"i_linear_read",  out_f_div_N * in_f_div_K * B_div_M * mapping.M * mapping.K * 3 * DATA_SIZE});
             res.push_back({"weight_linear_read", out_f_div_N * in_f_div_K * mapping.K * mapping.N * 12 * DATA_SIZE});
             res.push_back({"o_linear_read", 0}); // No read for output
-            res.push_back({"o_linear_write", out_f_div_N * linear_shape.B * mapping.N * 3 * PSUM_DATA_SIZE});
+            res.push_back({"o_linear_write", out_f_div_N * linear_shape.B * mapping.N * 4 * PSUM_DATA_SIZE});
             res.push_back({"read", res[0].second + res[1].second + res[2].second});
             res.push_back({"write", res[3].second});
             res.push_back({"total", res[4].second + res[5].second});//6

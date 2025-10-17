@@ -1,2 +1,2 @@
 layer,glb_usage,glb_read,glb_write,glb_access,dram_read,dram_write,dram_access,macs,intensity,peak_performance,peak_bandwidth,cycles,latency,energy_total,power_total,tk,tn,mode,M,K,N
-linear,60632,25369600,155648,25525248,12607488,65536,12673024,134217728,10.5908,48,4,38817792,0.14302,3058.29,21383.7,6,8,1,1,32,18
+linear,60632,25369600,155648,25525248,12607488,65536,12673024,134217728,10.5908,48,4,78759464,0.14302,3058.29,21383.7,6,8,1,1,32,18

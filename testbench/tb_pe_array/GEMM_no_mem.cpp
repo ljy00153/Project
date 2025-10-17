@@ -1,10 +1,7 @@
 #include <iostream>
 #include <vector>
-#include <cstdint>
-#include <iomanip>
 #include <sstream>
 #include <string>
-#include <cmath>
 #include <array>
 
 #include "../../src/PE/pe_array.cpp"
@@ -101,41 +98,45 @@ class TileBasedSimulator
                             for (int n = 0; n < map.N * PE::WEIGHT_H; n += map.tn * PE::WEIGHT_H) 
                             {
                                 //load pusm
-                                total_cycles += PSUM_STORE_LAT * map.mode * map.tn;
-                                //cout << "load psum to PE array\n";
-                                for(int i = 0; i < map.tn * map.mode; i++)
+                                if(inf != 0)
                                 {
-                                    int num = r_base[i / PE_Array::PE_H] + i % PE_Array::PE_H;
-                                    //cout << "\n=== PE[" << num << "] add psum ";
-                                    for (int j = 0; j < 4; j++)
+                                    total_cycles += PSUM_STORE_LAT * map.mode * map.tn;
+                                    //cout << "load psum to PE array\n";
+                                    for(int i = 0; i < map.tn * map.mode; i++)
                                     {
-                                        //in_idx need to be checked
-                                        int in_idx = (b * shape.out_features + outf) 
-                                                        + (n) + m * shape.out_features + i / map.tn * shape.out_features + (i % map.tn) * PE::WEIGHT_H + j;
-                                        int32_t pe_input;
-                                        if (in_idx < 0 || in_idx >= final_psums.size()) 
+                                        int num = r_base[i / PE_Array::PE_H] + i % PE_Array::PE_H;
+                                        //cout << "\n=== PE[" << num << "] add psum ";
+                                        for (int j = 0; j < PE::WEIGHT_H; j++)
                                         {
-                                            pe_input = 0;
-                                            //cout << "ERROR: in_idx out of range: " << in_idx << endl;
-                                            //cerr << "b: " << b << ", outf: " << outf << ", n: " << n << ", m: " << m << ", i: " << i << ", j: " << j << endl;
-                                            //exit(1);
+                                            //in_idx need to be checked
+                                            int in_idx = (b * shape.out_features + outf) 
+                                                            + (n) + m * shape.out_features + i / map.tn * shape.out_features + (i % map.tn) * PE::WEIGHT_H + j;
+                                            int32_t pe_input;
+                                            if (in_idx < 0 || in_idx >= final_psums.size()) 
+                                            {
+                                                pe_input = 0;
+                                                //cout << "ERROR: in_idx out of range: " << in_idx << endl;
+                                                //cerr << "b: " << b << ", outf: " << outf << ", n: " << n << ", m: " << m << ", i: " << i << ", j: " << j << endl;
+                                                //exit(1);
+                                            }
+                                            else
+                                            {
+                                                pe_input = final_psums[in_idx];
+                                            }
+                                            //cout <<"at index["<< in_idx << "], " ;
+                                            pe_array.pe[num].add_ipsum(pe_input, j);
                                         }
-                                        else
-                                        {
-                                            pe_input = final_psums[in_idx];
-                                        }
-                                        //cout <<"at index["<< in_idx << "], " ;
-                                        pe_array.pe[num].add_ipsum(pe_input, j);
-                                    }
-                                    //cout << endl;
+                                        //cout << endl;
+                                    } 
                                 }
+                                
                                 //cout << "read input feature\n";
                                 // read input feature & weight & compute
                                 for (int k = 0; k < map.K * PE::IFMAP_SIZE; k += map.tk * PE::IFMAP_SIZE) 
                                 {
                                     // 模擬 tile loading
-                                    total_cycles += map.tk * IF_LOAD_LAT;
-                                    total_cycles += map.tk * W_LOAD_LAT;
+                                    total_cycles += map.mode * map.tk * IF_LOAD_LAT;
+                                    total_cycles += PE_Array::NUM_PE * W_LOAD_LAT;
 
                                     // 模擬 tile compute (乘加)
                                     total_cycles += COMPUTE_LAT;
@@ -219,13 +220,13 @@ class TileBasedSimulator
                                 // read psum from PE and write back to final_psums
                                 for(int i = 0; i < map.tn * map.mode; i++)
                                 {
-                                    int num = w_base[i / 8] + i % 8;
+                                    int num = w_base[i / PE_Array::PE_H] + i % PE_Array::PE_H;
                                     //cout << "\n=== PE[" << num << "] Output ===\n";
-                                    for (int j = 0; j < 4; j++)
+                                    for (int j = 0; j < PE::WEIGHT_H; j++)
                                     {
                                         int32_t pe_output = pe_array.pe[num].output_psum(j);
                                         //out_idx need to be checked
-                                        int out_idx = (b * shape.out_features + outf) + (n) + m * shape.out_features + i / map.tn * shape.out_features + (i % map.tn) * 4 + j;
+                                        int out_idx = (b * shape.out_features + outf) + (n) + m * shape.out_features + i / map.tn * shape.out_features + (i % map.tn) * PE::WEIGHT_H + j;
     
                                         if (out_idx < final_psums.size()) 
                                         {
@@ -265,7 +266,7 @@ class TileBasedSimulator
             //linear.out_features = 256;
             shape = linear;
 
-            mapper.run(linear, 10);
+            mapper.run(linear, 1);
 
             map = {mapper.best_result.tk, mapper.best_result.tn, mapper.best_result.mode, 
                                         mapper.best_result.M, mapper.best_result.K, mapper.best_result.N};

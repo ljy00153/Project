@@ -153,7 +153,7 @@ def main():
         "--out",
         type=str,
         default="log/roofline.png",
-        help="Path to output PNG file (default: log/roofline.png)",
+        help="Path to output PNG file (default: log/roofline_no_mem.png)",
     )
     args = parser.parse_args()
 
