@@ -3,7 +3,7 @@
 #include <string>
 #include <cmath>
 
-#include "data_type.h"
+#include "../data_type.h"
 using namespace std;
 
 #define DATA_SIZE 4
@@ -27,14 +27,14 @@ using namespace std;
 
 
 
-class EyerissAnalyzer
+class EyerissAnalyzer_WS
 {
     public:
         EyerissHardwareParam hardware_param;
         EyerissMappingParam mapping;
         LinearShapeParam linear_shape;
 
-        EyerissAnalyzer()
+        EyerissAnalyzer_WS()
         {
             // Constructor implementation
         }
@@ -113,10 +113,10 @@ class EyerissAnalyzer
 
             long long int num_o_linear_read= ceil(double(linear_shape.in_features) / double(mapping.K * 3) - 1);
 
-            res.push_back({"i_linear_read", out_f_div_N * in_f_div_K * B_div_M * M_div_mode * K_div_tk * N_div_tn * mapping.mode * mapping.tk * 12});
-            res.push_back({"weight_linear_read", out_f_div_N * in_f_div_K * B_div_M * M_div_mode * K_div_tk * N_div_tn * mapping.tk * mapping.tn * 48});
-            res.push_back({"o_linear_read", num_o_linear_read * out_f_div_N * B_div_M * M_div_mode * N_div_tn * mapping.mode * mapping.tn * 16}); 
-            res.push_back({"o_linear_write", in_f_div_K * out_f_div_N * B_div_M * M_div_mode * N_div_tn * mapping.mode * mapping.tn * 16});
+            res.push_back({"i_linear_read", out_f_div_N * in_f_div_K * B_div_M * M_div_mode * K_div_tk * N_div_tn * K_div_tk * mapping.mode * mapping.tk * 12});
+            res.push_back({"weight_linear_read", out_f_div_N * in_f_div_K * B_div_M * K_div_tk * N_div_tn * mapping.tk * mapping.tn * 48});
+            res.push_back({"o_linear_read", num_o_linear_read * out_f_div_N * B_div_M * M_div_mode * N_div_tn * K_div_tk * mapping.mode * mapping.tn * 16}); 
+            res.push_back({"o_linear_write", in_f_div_K * out_f_div_N * B_div_M * M_div_mode * N_div_tn * K_div_tk * mapping.mode * mapping.tn * 16});
             res.push_back({"read", res[0].second + res[1].second+ res[2].second});
             res.push_back({"write", res[3].second});
             res.push_back({"total", res[4].second + res[5].second});//6

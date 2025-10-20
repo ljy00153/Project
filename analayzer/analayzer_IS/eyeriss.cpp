@@ -3,7 +3,7 @@
 #include <string>
 #include <cmath>
 
-#include "data_type.h"
+#include "../data_type.h"
 using namespace std;
 
 #define DATA_SIZE 4
@@ -27,14 +27,14 @@ using namespace std;
 
 
 
-class EyerissAnalyzer
+class EyerissAnalyzer_IS
 {
     public:
         EyerissHardwareParam hardware_param;
         EyerissMappingParam mapping;
         LinearShapeParam linear_shape;
 
-        EyerissAnalyzer()
+        EyerissAnalyzer_IS()
         {
             // Constructor implementation
         }

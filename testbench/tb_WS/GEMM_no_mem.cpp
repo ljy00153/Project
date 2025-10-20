@@ -5,10 +5,10 @@
 #include <array>
 
 #include "../../src/PE/pe_array.cpp"
-#include "../../analayzer_WS/mapper.cpp"
-
+#include "../../analayzer/analayzer_WS/mapper.cpp"
+#include "../Load_data.cpp"
 using namespace std;
-using DataType = int32_t;
+
 
 void load_data(vector<DataType> &mem, const string &filename);
 
@@ -258,9 +258,9 @@ class WS_Based_Simulator
         }
 
 
-        void run(const LinearShapeParam& linear, const string& pattern) 
+        void run(const LinearShapeParam& linear, const string& pattern, string log_path = "") 
         {
-            EyerissMapper mapper;
+            EyerissMapper_WS mapper;
             //linear.B = 256;
             //linear.in_features = 128 * 8 * 8;
             //linear.out_features = 256;
@@ -362,36 +362,8 @@ class WS_Based_Simulator
             cout << "=======================================\n" << endl;
 
             mapper.best_result.cycles = final_cycles;
-            mapper.mapping_to_csv_with_cycle("../log/GEMM_no_mem_results.csv");
+            mapper.mapping_to_csv_with_cycle(log_path);
 
         }
 };
 
-void load_data(vector<DataType> &mem, const string &filename)
-{
-    ifstream file(filename);
-    if (!file.is_open()) 
-    {
-        cerr << "   Error opening file: " << filename << endl;
-        return;
-    }
-    else
-        cout << "   Successfully open file: " << filename << endl;
-    string line;
-    while (getline(file, line)) 
-    {
-        if (line.empty()) continue;
-        int32_t val;
-        stringstream ss(line);
-        ss >> hex >> val;
-        if (ss.fail()) 
-        {
-            cerr << "⚠️  Invalid line in " << filename << ": " << line << endl;
-            continue;
-        }
-        //cout << "load value: " << val << endl;
-        mem.push_back(val);
-    }
-
-    file.close();
-}

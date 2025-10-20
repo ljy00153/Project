@@ -8,7 +8,7 @@ using namespace std;
 
 int main()
 {
-    EyerissMapper mapper;
+    EyerissMapper_OS mapper;
     LinearShapeParam linear;
     linear.B = 1;
     linear.in_features = 128 * 8 * 8;
@@ -18,7 +18,7 @@ int main()
     cout << "out_features : " << linear.out_features << endl;
 
 
-    mapper.run(linear, 1);
+    mapper.run(linear, 1, "log/result_no_cycle.csv");
 
     return 0;
 }

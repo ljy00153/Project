@@ -1,3 +1,6 @@
+#ifndef PE_ARRAY_CPP
+#define PE_ARRAY_CPP
+
 #include <iostream>
 #include <vector>
 #include <cstdint>
@@ -219,3 +222,5 @@ class PE_Array
         }
 
 };
+
+#endif

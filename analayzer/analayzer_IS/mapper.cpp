@@ -4,24 +4,25 @@
 #include <cmath>
 #include <algorithm>
 #include <fstream>
+#include <filesystem>
 
 //#include "data_type.h"
 #include "eyeriss.cpp"
 
 using namespace std;
 
-class EyerissMapper
+class EyerissMapper_IS
 {
     public:
-        EyerissAnalyzer analyzer;
+        EyerissAnalyzer_IS analyzer;
         AnalysisResult best_result;
         EyerissMappingParam best_mapping;
-        EyerissMapper()
+        EyerissMapper_IS()
         {
 
         }
 
-        void run(LinearShapeParam linear, int top_k)
+        void run(LinearShapeParam linear, int top_k, string log_path = "")
         {
             analyzer.linear_shape = linear;
 
@@ -94,12 +95,13 @@ class EyerissMapper
             {
                 // 取出 top 1
                 cout << "---------------------------------------" << endl;
-                cout << "Top-1 configuration details saved to log/result.csv" << endl;
+                cout << "Top-1 configuration details saved to "<< log_path << endl;
                 auto &best = scored_results[0];
                 int idx = best.second;
                 best_result = results[idx];
                 best_mapping = mappings[idx];
-                mapping_to_csv_no_cycle(results[idx], mappings[idx], "../log/result_no_cycle.csv");
+                if(log_path != "")
+                    mapping_to_csv_no_cycle(results[idx], mappings[idx], log_path);
             }
         }
 
@@ -179,18 +181,31 @@ class EyerissMapper
 
         void mapping_to_csv_no_cycle(const AnalysisResult& results, const EyerissMappingParam mappings, const string& filename)
         {
-                ofstream csv(filename);  // 輸出到build資料夾
+                bool file_exists = std::filesystem::exists(filename);
+                bool is_empty = true;
+                if (file_exists) 
+                {
+                    std::ifstream check(filename, ios::ate | ios::binary);
+                    is_empty = (check.tellg() == 0);
+                    check.close();
+                }
+
+                ofstream csv(filename, ios::app);  // ✅ append 模式
 
                 if (csv.is_open())
                 {
                     // 寫入欄位名稱
-                    csv << "layer,glb_usage,glb_read,glb_write,glb_access,dram_read,"
-                        "dram_write,dram_access,"
-                        "macs,intensity,peak_performance,peak_bandwidth,latency,energy_total,power_total,"
-                        "tk,tn,mode,M,K,N\n";
+                    if (is_empty)
+                    {
+                        csv << "layer,glb_usage,glb_read,glb_write,glb_access,dram_read,"
+                            "dram_write,dram_access,"
+                            "macs,intensity,peak_performance,peak_bandwidth,latency,energy_total,power_total,"
+                            "tk,tn,mode,M,K,N\n";    
+                    }
+                    
 
                     // 寫入資料
-                    csv << "linear,"
+                    csv << "linear_IS,"
                         << results.glb_usage << ","
                         << results.glb_read << ","
                         << results.glb_write << ","
@@ -224,18 +239,30 @@ class EyerissMapper
 
         void mapping_to_csv_with_cycle(const string& filename)
         {
-                ofstream csv(filename);  // 輸出到build資料夾
+                bool file_exists = std::filesystem::exists(filename);
+                bool is_empty = true;
+                if (file_exists) 
+                {
+                    std::ifstream check(filename, ios::ate | ios::binary);
+                    is_empty = (check.tellg() == 0);
+                    check.close();
+                }
+
+                ofstream csv(filename, ios::app);  // ✅ append 模式
 
                 if (csv.is_open())
                 {
                     // 寫入欄位名稱
-                    csv << "layer,glb_usage,glb_read,glb_write,glb_access,dram_read,"
-                        "dram_write,dram_access,"
-                        "macs,intensity,peak_performance,peak_bandwidth,cycles,latency,energy_total,power_total,"
-                        "tk,tn,mode,M,K,N\n";
-
+                    if (is_empty)
+                    {
+                        csv << "layer,glb_usage,glb_read,glb_write,glb_access,dram_read,"
+                            "dram_write,dram_access,"
+                            "macs,intensity,peak_performance,peak_bandwidth,cycles,latency,energy_total,power_total,"
+                            "tk,tn,mode,M,K,N\n";    
+                    }
+                    
                     // 寫入資料
-                    csv << "linear,"
+                    csv << "linear_IS,"
                         << best_result.glb_usage << ","
                         << best_result.glb_read << ","
                         << best_result.glb_write << ","

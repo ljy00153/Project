@@ -1,3 +1,6 @@
+#ifndef DATA_TYPE_H
+#define DATA_TYPE_H
+
 struct LinearShapeParam
 {
     int B;  // batch size
@@ -63,3 +66,5 @@ struct AnalysisResult
     double peak_performance;
     double peak_bandwidth;
 };
+
+#endif
