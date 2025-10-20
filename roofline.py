@@ -54,49 +54,43 @@ def plot_roofline(
     # ---------------------------------------------------------------
     # 畫 workload 實測點
     # ---------------------------------------------------------------
+    offsets = [
+    (50, 50),   # 右上
+    (-50, 50),  # 左上
+    (50, -50),  # 右下
+    (-50, -50), # 左下
+    (70, 0),    # 右
+    (-70, 0),   # 左
+    (0, 70),    # 上
+    (0, -70),   # 下
+    ]
     if workloads is not None and not workloads.empty:
         required_cols = {"layer", "macs", "dram_access", "cycles"}
-        if not required_cols.issubset(workloads.columns):
-            raise ValueError(f"❌ CSV 檔缺少欄位: {required_cols}")
+    if not required_cols.issubset(workloads.columns):
+        raise ValueError(f"❌ CSV 檔缺少欄位: {required_cols}")
 
-        # 計算 OI 和 Performance
-        workloads["OI"] = workloads["macs"] / workloads["dram_access"]
-        workloads["Perf"] = workloads["macs"] / workloads["cycles"]
+    # 計算 OI 和 Performance
+    workloads["OI"] = workloads["macs"] / workloads["dram_access"]
+    workloads["Perf"] = workloads["macs"] / workloads["cycles"]
 
-        colors = plt.get_cmap("tab10")(np.linspace(0, 1, len(workloads)))
+    colors = plt.get_cmap("tab20")(np.linspace(0, 1, len(workloads)))
 
-        for (_, row), color in zip(workloads.iterrows(), colors):
-            plt.scatter(
-                row["OI"],
-                row["Perf"],
-                color=color,
-                s=60,
-                edgecolors="black",
-                zorder=5,
-            )
-            plt.text(
-                row["OI"] * 1.05,
-                row["Perf"] * 1.05,
-                f"{row['layer']}",
-                fontsize=8,
-                ha="left",
-                va="bottom",
-            )
-            if "linear" in row["layer"].lower():
-                plt.text(
-                    row["OI"] * 1.05,
-                    row["Perf"] * 1.25,  # 往上避開原 layer 名稱
-                    f"OI={row['OI']:.2f}\nPerf={row['Perf']:.2f}",
-                    fontsize=8,
-                    color="red",
-                    ha="left",
-                    va="bottom",
-                )
+    for idx, ((_, row), color) in enumerate(zip(workloads.iterrows(), colors)):
+        plt.scatter(row["OI"], row["Perf"], color=color, s=60, edgecolors="black", zorder=5)
+        xytext = offsets[idx % len(offsets)]
 
-            xmin = min(xmin, row["OI"])
-            xmax = max(xmax, row["OI"])
-            ymin = min(ymin, row["Perf"])
-            ymax = max(ymax, row["Perf"])
+        plt.annotate(
+            f"{row['layer']}\nOI={row['OI']:.2f}\nPerf={row['Perf']:.2f}",
+            xy=(row["OI"], row["Perf"]),
+            xytext=xytext,
+            textcoords='offset points',
+            fontsize=8,
+            arrowprops=dict(arrowstyle='->', color=color, lw=0.5)
+        )
+        xmin = min(xmin, row["OI"])
+        xmax = max(xmax, row["OI"])
+        ymin = min(ymin, row["Perf"])
+        ymax = max(ymax, row["Perf"])
 
     # ---------------------------------------------------------------
     # 軸設定與輸出
