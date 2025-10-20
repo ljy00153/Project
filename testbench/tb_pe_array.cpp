@@ -1,7 +1,7 @@
 #include <iostream>
 
-//#include "tb_OS/GEMM_no_mem.cpp"
-#include "tb_OS/GEMM_with_mem.cpp"
+#include "tb_OS/GEMM_no_mem.cpp"
+//#include "tb_OS/GEMM_with_mem.cpp"
 
 //#include "tb_WS/GEMM_no_mem.cpp"
 #include "tb_WS/GEMM_with_mem.cpp"
@@ -17,11 +17,11 @@ int main()
     WS_Based_Simulator WS_simulator;
     IS_Based_Simulator IS_simulator;
     LinearShapeParam linear;
-    linear.B = 1;
+    linear.B = 64;
     linear.in_features = 128 * 8 * 8;
     linear.out_features = 256;
     string pattern = "Pattern3";
-    string log_path = "../log/GEMM_with_mem.csv";
+    string log_path = "../log/GEMM_no_mem.csv";
 
     cout << "=======================================" << endl;
     cout << "=     Output Stationary SIMULATION    =" << endl;
@@ -32,12 +32,12 @@ int main()
     cout << "=======================================" << endl;
     cout << "=     Weight Stationary SIMULATION    =" << endl;
     cout << "=======================================" << endl;
-    WS_simulator.run(linear, pattern, log_path);
+    //WS_simulator.run(linear, pattern, log_path);
     cout << "=======================================" << endl << endl;
 
     cout << "=======================================" << endl;
     cout << "=     Input Stationary SIMULATION     =" << endl;
     cout << "=======================================" << endl;
-    IS_simulator.run(linear, pattern, log_path);
+    //IS_simulator.run(linear, pattern, log_path);
     return 0;
 }

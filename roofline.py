@@ -55,14 +55,14 @@ def plot_roofline(
     # 畫 workload 實測點
     # ---------------------------------------------------------------
     offsets = [
-    (50, 50),   # 右上
-    (-50, 50),  # 左上
-    (50, -50),  # 右下
-    (-50, -50), # 左下
-    (70, 0),    # 右
-    (-70, 0),   # 左
-    (0, 70),    # 上
-    (0, -70),   # 下
+    (-75, 0), #左
+    (0, 75),  #右
+    (75, 0),  #上
+    (0, -75), #下
+    (-50, 50),    # 右
+    (50, 50),   # 左
+    (50, -50),    # 上
+    (-50, -50),   # 下
     ]
     if workloads is not None and not workloads.empty:
         required_cols = {"layer", "macs", "dram_access", "cycles"}
@@ -71,7 +71,14 @@ def plot_roofline(
 
     # 計算 OI 和 Performance
     workloads["OI"] = workloads["macs"] / workloads["dram_access"]
-    workloads["Perf"] = workloads["macs"] / workloads["cycles"]
+    workloads["Perf_raw"] = workloads["macs"] / workloads["cycles"]
+    # 取得最上層 roofline (最高的 peak perf)
+    max_roof = max(rooflines.values(), key=lambda x: x[0])
+    peak_perf, bandwidth = max_roof
+    # 根據 roofline 限制 Perf
+    workloads["Perf"] = workloads.apply(
+        lambda r: min(r["Perf_raw"], bandwidth * r["OI"], peak_perf), axis=1
+    )
 
     colors = plt.get_cmap("tab20")(np.linspace(0, 1, len(workloads)))
 
@@ -85,7 +92,7 @@ def plot_roofline(
             xytext=xytext,
             textcoords='offset points',
             fontsize=8,
-            arrowprops=dict(arrowstyle='->', color=color, lw=0.5)
+            arrowprops=dict(arrowstyle='->', color=color, lw=1)
         )
         xmin = min(xmin, row["OI"])
         xmax = max(xmax, row["OI"])
