@@ -5,14 +5,14 @@
 #include <array>
 
 #include "../../src/PE/pe_array.cpp"
-#include "../../analayzer/mapper.cpp"
+#include "../../analayzer_OS/mapper.cpp"
 
 using namespace std;
 using DataType = int32_t;
 
 void load_data(vector<DataType> &mem, const string &filename);
 
-class TileBasedSimulator 
+class OS_Based_Simulator 
 {
     private:
         EyerissMappingParam map;
@@ -25,12 +25,16 @@ class TileBasedSimulator
         static constexpr int COMPUTE_LAT     = 48;  
         static constexpr int PSUM_ACC_LAT    = 6;
         static constexpr int PSUM_STORE_LAT  = 4;
+
+        static constexpr int GLB_ACCESS  = 2;
+        static constexpr int DRAM_ACCESS  = 5;
+
         long long int total_cycles = 0;
         array<int, 6> w_base = {0};
         array<int, 6> r_base = {0};
 
     public:
-        TileBasedSimulator()
+        OS_Based_Simulator()
         {
             
         }
@@ -89,6 +93,8 @@ class TileBasedSimulator
             for (int outf = 0; outf < shape.out_features; outf += map.N * PE::WEIGHT_H) 
             {
                 //cout << "\n--- Processing out_feature tile starting at " << outf << " ---\n";
+                total_cycles += DRAM_ACCESS * shape.B * map.N * PE::WEIGHT_H; // DRAM access for weight
+                total_cycles += DRAM_ACCESS * map.K * PE::IFMAP_SIZE * map.M; // DRAM access for input feature
                 for (int inf = 0; inf < in_div4; inf += map.K * PE::IFMAP_SIZE) 
                 {
                     for (int b = 0; b < shape.B; b += map.M) 
@@ -100,7 +106,7 @@ class TileBasedSimulator
                                 //load pusm
                                 if(inf != 0)
                                 {
-                                    total_cycles += PSUM_STORE_LAT * map.mode * map.tn;
+                                    total_cycles += GLB_ACCESS * PSUM_STORE_LAT * map.mode * map.tn;
                                     //cout << "load psum to PE array\n";
                                     for(int i = 0; i < map.tn * map.mode; i++)
                                     {
@@ -129,14 +135,13 @@ class TileBasedSimulator
                                         //cout << endl;
                                     } 
                                 }
-                                
                                 //cout << "read input feature\n";
                                 // read input feature & weight & compute
                                 for (int k = 0; k < map.K * PE::IFMAP_SIZE; k += map.tk * PE::IFMAP_SIZE) 
                                 {
                                     // 模擬 tile loading
-                                    total_cycles += map.mode * map.tk * IF_LOAD_LAT;
-                                    total_cycles += PE_Array::NUM_PE * W_LOAD_LAT;
+                                    total_cycles += GLB_ACCESS * map.mode * map.tk * IF_LOAD_LAT;//read in_feature
+                                    total_cycles += GLB_ACCESS * PE_Array::NUM_PE * W_LOAD_LAT;//read weight
 
                                     // 模擬 tile compute (乘加)
                                     total_cycles += COMPUTE_LAT;
@@ -213,7 +218,8 @@ class TileBasedSimulator
                                 //cout << "write back psum\n";
                                 // write psum(acc and store)
                                 total_cycles += PSUM_ACC_LAT;
-                                total_cycles += PSUM_STORE_LAT * map.mode * map.tn;
+                                //write back psum to GLB
+                                total_cycles += GLB_ACCESS * PSUM_STORE_LAT * map.mode * map.tn;
                                 // accumulate psum
                                 pe_array.out_valid_all();
                                 pe_array.add_ipsum_all();
@@ -244,7 +250,10 @@ class TileBasedSimulator
                                 }
                             }
                         }
+                        total_cycles += DRAM_ACCESS * map.K * PE::IFMAP_SIZE * map.M; // DRAM access for input feature
                     }
+                    total_cycles += DRAM_ACCESS * map.K * PE::IFMAP_SIZE * map.M; // DRAM access for input feature
+                    total_cycles += DRAM_ACCESS * map.K * PE::IFMAP_SIZE * map.N * PE::WEIGHT_H; // DRAM access for weight
                 }
             }
 
@@ -362,7 +371,7 @@ class TileBasedSimulator
             cout << "=======================================\n" << endl;
 
             mapper.best_result.cycles = final_cycles;
-            mapper.mapping_to_csv_with_cycle("../log/GEMM_no_mem_results.csv");
+            mapper.mapping_to_csv_with_cycle("../log/GEMM_with_mem_results.csv");
 
         }
 };
