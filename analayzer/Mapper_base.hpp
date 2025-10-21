@@ -19,7 +19,8 @@ class EyerissMapper_base
         AnalysisResult best_result;
         EyerissMappingParam best_mapping;
 
-    
+        virtual ~EyerissMapper_base() = default;
+
         virtual void create_analyzer()
         {
             analyzer = make_unique<EyerissAnalyzer_base>();// 預設使用 base 版本

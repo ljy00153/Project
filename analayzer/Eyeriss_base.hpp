@@ -36,6 +36,8 @@ class EyerissAnalyzer_base
         EyerissMappingParam mapping;
         LinearShapeParam linear_shape;
 
+        virtual ~EyerissAnalyzer_base() = default;
+        
         EyerissHardwareParam hardware() const
         {
             return hardware_param;
