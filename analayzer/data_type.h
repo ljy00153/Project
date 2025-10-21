@@ -1,5 +1,6 @@
 #ifndef DATA_TYPE_H
 #define DATA_TYPE_H
+#include <string>
 
 struct LinearShapeParam
 {
@@ -36,6 +37,8 @@ struct EyerissMappingParam
 
 struct AnalysisResult
 {
+    std::string name;
+
     int pe_array_h;
     int pe_array_w;
     int tk; //1~6

@@ -1,89 +1,33 @@
-#include <iostream>
-#include <vector>
-#include <sstream>
-#include <string>
-#include <array>
-
-#include "../../src/PE/pe_array.cpp"
+#include "../GEMM_base.hpp"
 #include "../../analayzer/analayzer_WS/mapper.cpp"
-#include "../Load_data.cpp"
-using namespace std;
 
-
-//void load_data(vector<DataType> &mem, const string &filename);
-
-class WS_Based_Simulator 
+class WS_Based_with_mem_Simulator : public GEMM_base 
 {
-    private:
-        EyerissMappingParam map;
-        LinearShapeParam shape;
-        PE_Array pe_array;
+    public:
+        void create_mapper() override 
+        {
+            mapper = make_unique<EyerissMapper_WS>();  // ✅ 改成 WS 版本
+        }
+        
+        void run(const LinearShapeParam& linear, const string& pattern, string log_path = "") override
+        {
+            cout << "\n=======================================" << endl;
+            cout << "=Weight Stationary With Mem SIMULATION=" << endl;
+            cout << "=======================================" << endl;
+            cout << "\n[Testbench] Initializing DUT (PE_Array)..." << endl;
+            GEMM_base::run(linear, pattern, log_path);
+        }
 
-        // latency 模型 (可微調)
-        static constexpr int IF_LOAD_LAT     = 3;
-        static constexpr int W_LOAD_LAT      = 12;
-        static constexpr int COMPUTE_LAT     = 48;  
-        static constexpr int PSUM_ACC_LAT    = 6;
-        static constexpr int PSUM_STORE_LAT  = 4;
-
+    protected:
         static constexpr int GLB_ACCESS  = 2;
         static constexpr int DRAM_ACCESS  = 5;
 
-        long long int total_cycles = 0;
-        array<int, 6> w_base = {0};
-        array<int, 6> r_base = {0};
-
-    public:
-        WS_Based_Simulator()
-        {
-            
-        }
-
         void run_simulation(const vector<DataType>& all_in_features,
                             const vector<DataType>& all_weights,
-                            vector<DataType>& final_psums)
+                            vector<DataType>& final_psums) override
         {
             total_cycles = 0;
-            switch (map.mode)
-            {
-                case 1:
-                {
-                    w_base[0] = 40;
-
-                    r_base[0] = 0;
-                    break;
-                }
-                case 2:
-                {
-                    w_base[0] = 16;
-                    w_base[1] = 40;
-
-                    r_base[0] = 0;
-                    r_base[1] = 24;
-                    break;
-                }
-                case 3:
-                {
-                    w_base[0] = 8;
-                    w_base[1] = 24;
-                    w_base[2] = 40;
-
-                    r_base[0] = 0;
-                    r_base[1] = 16;
-                    r_base[2] = 32;
-                    break;
-                }
-                case 6:
-                {
-                    r_base[0] = w_base[0] = 0;
-                    r_base[1] = w_base[1] = 8;
-                    r_base[2] = w_base[2] = 16;
-                    r_base[3] = w_base[3] = 24;
-                    r_base[4] = w_base[4] = 32;
-                    r_base[5] = w_base[5] = 40;
-                    break;
-                }
-            }
+            setup_pe_bases();
             cout << "\n=== Start GEMM Tile Simulation ===" << endl;
 
             // 外層 tiling 順序依據 PDF：K → N → M → B → in_feature → out_feature
@@ -260,118 +204,5 @@ class WS_Based_Simulator
             cout << "=== Simulation Finished ===" << endl << endl;
             //cout << "Total cycles: " << total_cycles << endl;
         }
-
-        long long get_total_cycles() 
-        { 
-            return total_cycles; 
-        }
-
-
-        void run(const LinearShapeParam& linear, const string& pattern, string log_path = "") 
-        {
-            EyerissMapper_WS mapper;
-            //linear.B = 256;
-            //linear.in_features = 128 * 8 * 8;
-            //linear.out_features = 256;
-            shape = linear;
-
-            mapper.run(linear, 1);
-
-            map = {mapper.best_result.tk, mapper.best_result.tn, mapper.best_result.mode, 
-                                        mapper.best_result.M, mapper.best_result.K, mapper.best_result.N};
-
-            // 2. 初始化 DUT
-            cout << "\n[Testbench] Initializing DUT (PE_Array)..." << endl;
-            PE_Array dut_pe_array;
-            dut_pe_array.reset();
-            dut_pe_array.mode = mapper.best_result.mode;
-            dut_pe_array.set_tag();
-            
-            pe_array = dut_pe_array;
-            // 3. 準備測試資料
-            vector<DataType> in_features;
-            vector<DataType> weights;
-            vector<DataType> psum_dut(linear.B * linear.out_features, 0);
-            vector<DataType> golden;
-
-            cout << "[Testbench] Loading Test Data..." << endl;
-            
-            string base_path = "Pattern/" + pattern + "/";
-            load_data(in_features, base_path + "A.txt");
-            load_data(weights, base_path + "B.txt");
-            load_data(golden, base_path + "C_golden.txt");
-
-            /*
-            int padded_in_size = ((linear.in_features / 4 + 17 * mapper.best_result.mode) / 18) * 18;
-            vector<DataType> padded_in_features(linear.B * padded_in_size, 0);
-
-            if (in_features.size() > padded_in_features.size()) 
-            {
-                cerr << "ERROR: padded_in_features too small (" << padded_in_features.size()
-                    << " < " << in_features.size() << ")" << endl;
-                exit(1);
-            }
-            cout << "\nlinear.in_features: " << linear.in_features / 4 << ", padded_in_size: " << linear.B * padded_in_size << endl;
-            copy(in_features.begin(), in_features.end(), padded_in_features.begin());
-
-            int padded_w_size = linear.out_features * padded_in_size;
-            vector<DataType> padded_weights(padded_w_size, 0);
-
-            if (weights.size() > padded_w_size) 
-            {
-                cerr << "ERROR: padded_w_size too small (" << padded_weights.size()
-                    << " < " << weights.size() << ")" << endl;
-                exit(1);
-            }
-            cout << "linear.out_features: " << linear.out_features << ", padded_w_size: " << padded_w_size << endl;
-            copy(weights.begin(), weights.end(), padded_weights.begin());
-            */
-
-            // 4. 執行 DUT 模擬 (Cycle-Accurate)
-            cout << "\n[Testbench] Starting DUT (PE_Array) Simulation..." << endl;
-
-            cout << "   Mapping Parameters: " << endl;
-            cout << "    mode: " << map.mode << endl;
-            cout << "    tk: " << map.tk << endl;
-            cout << "    tn: " << map.tn << endl;
-            cout << "    M: " << map.M << endl;
-            cout << "    K: " << map.K << endl;
-            cout << "    N: " << map.N << endl;
-
-            run_simulation(in_features, weights, psum_dut);
-
-
-            // 5. 報告與驗證
-            cout << "=======================================" << endl;
-            cout << "=          SIMULATION REPORT          =" << endl;
-            cout << "=======================================" << endl;
-            
-            long long final_cycles = get_total_cycles();
-            cout << "Total cycles simulated: " << final_cycles << endl;
-            
-            bool pass;
-            pass = equal(psum_dut.begin(), psum_dut.end(), golden.begin());
-            
-            cout << "Result Verification: " << (pass ? "PASSED" : "FAILED") << endl;
-            
-            /*for(size_t i=0; i < 100; i++) 
-            {
-                cout << "index[" << i << "]:  DUT=" << psum_dut[i] << ", Golden=" << golden[i] << endl;
-            }*/
-            if (!pass) 
-            {
-                for(size_t i=0; i < 200; i++) 
-                {
-                    if (psum_dut[i] != golden[i]) 
-                    {
-                        cout << "Mismatch at index " << i << ": DUT=" << psum_dut[i] << ", Golden=" << golden[i] << endl;
-                    }
-                }
-            }
-            cout << "=======================================\n" << endl;
-
-            mapper.best_result.cycles = final_cycles;
-            mapper.mapping_to_csv_with_cycle(log_path);
-
-        }
 };
+
