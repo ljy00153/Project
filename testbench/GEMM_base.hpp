@@ -144,7 +144,7 @@ class GEMM_base
             }*/
             if (!pass) 
             {
-                for(size_t i=0; i < 200; i++) 
+                for(size_t i=0; i < psum_dut.size(); i++) 
                 {
                     if (psum_dut[i] != golden[i]) 
                     {

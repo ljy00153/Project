@@ -177,8 +177,8 @@ class OS_Based_with_mem_Simulator : public GEMM_base
                                         int32_t pe_output = pe_array.pe[num].output_psum(j);
                                         //out_idx need to be checked
                                         int out_idx = (b * shape.out_features + outf) + (n) + m * shape.out_features + i / map.tn * shape.out_features + (i % map.tn) * PE::WEIGHT_H + j;
-    
-                                        if (out_idx < final_psums.size()) 
+                                        bool overlap_check = ((m + i / map.tn) >= ((b + 1) * map.M) )? 1 : 0;
+                                        if (out_idx < final_psums.size() && !overlap_check) 
                                         {
                                             final_psums[out_idx] = pe_output;
                                         }

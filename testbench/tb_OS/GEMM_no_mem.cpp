@@ -31,6 +31,7 @@ class OS_Based_no_mem_Simulator : public GEMM_base
             int in_div4 = ceil(double(shape.in_features) / double(PE::WEIGHT_H));
             
             cout << "in_div4: " << in_div4 << ", out_features: " << shape.out_features << endl;
+            int batch_add = ceil(double(map.M) / double(map.mode)) * map.M;//防止縱向overlap
             for (int outf = 0; outf < shape.out_features; outf += map.N * PE::WEIGHT_H) 
             {
                 //cout << "\n--- Processing out_feature tile starting at " << outf << " ---\n";
@@ -172,8 +173,13 @@ class OS_Based_no_mem_Simulator : public GEMM_base
                                         int32_t pe_output = pe_array.pe[num].output_psum(j);
                                         //out_idx need to be checked
                                         int out_idx = (b * shape.out_features + outf) + (n) + m * shape.out_features + i / map.tn * shape.out_features + (i % map.tn) * PE::WEIGHT_H + j;
-    
-                                        if (out_idx < final_psums.size()) 
+                                        bool overlap_check = ((m + i / map.tn) >= ((b + 1) * map.M) )? 1 : 0;
+                                        if(out_idx == 4352)
+                                        {
+                                            //cout << "debug here\n";
+                                            //cout << "b: " << b << ", outf: " << outf << ", n: " << n << ", m: " << m << ", i: " << i << ", j: " << j << endl;
+                                        }
+                                        if (out_idx < final_psums.size() && !overlap_check) 
                                         {
                                             final_psums[out_idx] = pe_output;
                                         }
