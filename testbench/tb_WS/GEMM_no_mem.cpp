@@ -38,13 +38,45 @@ class WS_Based_no_mem_Simulator : public GEMM_base
                 {
                     for (int b = 0; b < shape.B; b += map.M) 
                     {
-                        for (int m = 0; m < map.M; m += map.mode) 
+                        for (int k = 0; k < map.K * PE::IFMAP_SIZE; k += map.tk * PE::IFMAP_SIZE) 
                         {
                             for (int n = 0; n < map.N * PE::WEIGHT_H; n += map.tn * PE::WEIGHT_H) 
                             {
-                                //load pusm
-                                if(inf != 0)
+                                //cout << "read weight\n";
+                                //set weight
+                                total_cycles += PE_Array::NUM_PE * W_LOAD_LAT;
+                                for(int l = 0; l < PE::WEIGHT_SIZE * map.tn * map.tk * map.mode; l++)
                                 {
+                                    int pe_index = (l / PE::WEIGHT_SIZE) % PE_Array::PE_V * PE_Array::PE_H 
+                                                    + (l / PE::WEIGHT_SIZE / PE_Array::PE_V);
+                                    int idx_w = (inf * shape.out_features + outf) + k * shape.out_features + n;
+                                    int weight_index = idx_w + l % PE::WEIGHT_H 
+                                                        + ((l / PE::WEIGHT_H) % (map.tk * PE::IFMAP_SIZE)) * shape.out_features 
+                                                        + (l / PE::WEIGHT_SIZE / PE_Array::PE_V) * PE::WEIGHT_H;
+                                    int weight_data;
+                                    if (pe_index >= PE_Array::NUM_PE) 
+                                    {
+                                        cerr << "pe_index out of range: " << pe_index << endl;
+                                        exit(1);
+                                    }
+                                    if (weight_index >= all_weights.size()) 
+                                    {
+                                        weight_data = 0;
+                                        //cout << "weight_index out of range: " << weight_index << endl;
+                                        //cerr << "inf: " << inf << ", outf: " << outf << ", k: " << k << ", n: " << n << ", l: " << l << endl;
+                                        //exit(1);
+                                    }
+                                    else
+                                    {
+                                        weight_data = all_weights[weight_index];
+                                    }
+                                    //cout << "PE[" << pe_index << "] load weight from index[" << weight_index << "]\n";
+                                    pe_array.pe[pe_index].weight_spad[l % PE::WEIGHT_SIZE] = weight_data;
+                                }
+                                // load pusm and read input feature & weight & compute
+                                for (int m = 0; m < map.M; m += map.mode) 
+                                {
+                                    //load pusm
                                     total_cycles += PSUM_STORE_LAT * map.mode * map.tn;
                                     //cout << "load psum to PE array\n";
                                     for(int i = 0; i < map.tn * map.mode; i++)
@@ -72,17 +104,13 @@ class WS_Based_no_mem_Simulator : public GEMM_base
                                             pe_array.pe[num].add_ipsum(pe_input, j);
                                         }
                                         //cout << endl;
-                                    } 
-                                }
-                                
-                                //cout << "read input feature\n";
-                                // read input feature & weight & compute
-                                for (int k = 0; k < map.K * PE::IFMAP_SIZE; k += map.tk * PE::IFMAP_SIZE) 
-                                {
+
+                                    }
+                                    
+                                    //cout << "read input feature\n";
                                     // 模擬 tile loading
                                     total_cycles += map.mode * map.tk * IF_LOAD_LAT;
-                                    total_cycles += PE_Array::NUM_PE * W_LOAD_LAT;
-
+                        
                                     // 模擬 tile compute (乘加)
                                     total_cycles += COMPUTE_LAT;
 
@@ -119,73 +147,45 @@ class WS_Based_no_mem_Simulator : public GEMM_base
                                         }
 
                                     }
-                                    //cout << "read weight\n";
-                                    //set weight
-                                    for(int l = 0; l < PE::WEIGHT_SIZE * map.tn * map.tk * map.mode; l++)
-                                    {
-                                        int pe_index = (l / PE::WEIGHT_SIZE) % PE_Array::PE_V * PE_Array::PE_H 
-                                                        + (l / PE::WEIGHT_SIZE / PE_Array::PE_V);
-                                        int idx_w = (inf * shape.out_features + outf) + k * shape.out_features + n;
-                                        int weight_index = idx_w + l % PE::WEIGHT_H 
-                                                            + ((l / PE::WEIGHT_H) % (map.tk * PE::IFMAP_SIZE)) * shape.out_features 
-                                                            + (l / PE::WEIGHT_SIZE / PE_Array::PE_V) * PE::WEIGHT_H;
-                                        int weight_data;
-                                        if (pe_index >= PE_Array::NUM_PE) 
-                                        {
-                                            cerr << "pe_index out of range: " << pe_index << endl;
-                                            exit(1);
-                                        }
-                                        if (weight_index >= all_weights.size()) 
-                                        {
-                                            weight_data = 0;
-                                            //cout << "weight_index out of range: " << weight_index << endl;
-                                            //cerr << "inf: " << inf << ", outf: " << outf << ", k: " << k << ", n: " << n << ", l: " << l << endl;
-                                            //exit(1);
-                                        }
-                                        else
-                                        {
-                                            weight_data = all_weights[weight_index];
-                                        }
-                                        //cout << "PE[" << pe_index << "] load weight from index[" << weight_index << "]\n";
-                                        pe_array.pe[pe_index].weight_spad[l % PE::WEIGHT_SIZE] = weight_data;
-                                    }
+
 
                                     //compute
                                     //cout << "start compute\n";
                                     pe_array.compute_full_all();
 
-                                }
-                                //cout << "write back psum\n";
-                                // write psum(acc and store)
-                                total_cycles += PSUM_ACC_LAT;
-                                total_cycles += PSUM_STORE_LAT * map.mode * map.tn;
-                                // accumulate psum
-                                pe_array.out_valid_all();
-                                pe_array.add_ipsum_all();
-                                // read psum from PE and write back to final_psums
-                                for(int i = 0; i < map.tn * map.mode; i++)
-                                {
-                                    int num = w_base[i / PE_Array::PE_H] + i % PE_Array::PE_H;
-                                    //cout << "\n=== PE[" << num << "] Output ===\n";
-                                    for (int j = 0; j < PE::WEIGHT_H; j++)
+
+                                    //cout << "write back psum\n";
+                                    // write psum(acc and store)
+                                    total_cycles += PSUM_ACC_LAT;
+                                    total_cycles += PSUM_STORE_LAT * map.mode * map.tn;
+                                    // accumulate psum
+                                    pe_array.out_valid_all();
+                                    pe_array.add_ipsum_all();
+                                    // read psum from PE and write back to final_psums
+                                    for(int i = 0; i < map.tn * map.mode; i++)
                                     {
-                                        int32_t pe_output = pe_array.pe[num].output_psum(j);
-                                        //out_idx need to be checked
-                                        int out_idx = (b * shape.out_features + outf) + (n) + m * shape.out_features + i / map.tn * shape.out_features + (i % map.tn) * PE::WEIGHT_H + j;
-    
-                                        if (out_idx < final_psums.size()) 
+                                        int num = w_base[i / PE_Array::PE_H] + i % PE_Array::PE_H;
+                                        //cout << "\n=== PE[" << num << "] Output ===\n";
+                                        for (int j = 0; j < PE::WEIGHT_H; j++)
                                         {
-                                            final_psums[out_idx] = pe_output;
+                                            int32_t pe_output = pe_array.pe[num].output_psum(j);
+                                            //out_idx need to be checked
+                                            int out_idx = (b * shape.out_features + outf) + (n) + m * shape.out_features + i / map.tn * shape.out_features + (i % map.tn) * PE::WEIGHT_H + j;
+        
+                                            if (out_idx < final_psums.size()) 
+                                            {
+                                                final_psums[out_idx] = pe_output;
+                                            }
+                                            else
+                                            {
+                                                //cout << "ERROR: out_idx out of range: " << out_idx << endl;
+                                                //exit(1);
+                                            }
+                                            
                                         }
-                                        else
-                                        {
-                                            //cout << "ERROR: out_idx out of range: " << out_idx << endl;
-                                            //exit(1);
-                                        }
-                                        
+                                        pe_array.pe[num].out_valid = false; // reset out_valid after reading
+                                        pe_array.pe[num].reset_psum();
                                     }
-                                    pe_array.pe[num].out_valid = false; // reset out_valid after reading
-                                    pe_array.pe[num].reset_psum();
                                 }
                             }
                         }

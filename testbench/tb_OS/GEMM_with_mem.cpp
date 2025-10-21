@@ -37,8 +37,6 @@ class OS_Based_with_mem_Simulator : public GEMM_base
             for (int outf = 0; outf < shape.out_features; outf += map.N * PE::WEIGHT_H) 
             {
                 //cout << "\n--- Processing out_feature tile starting at " << outf << " ---\n";
-                total_cycles += DRAM_ACCESS * shape.B * map.N * PE::WEIGHT_H; // DRAM access for weight
-                total_cycles += DRAM_ACCESS * map.K * PE::IFMAP_SIZE * map.M; // DRAM access for input feature
                 for (int inf = 0; inf < in_div4; inf += map.K * PE::IFMAP_SIZE) 
                 {
                     for (int b = 0; b < shape.B; b += map.M) 
@@ -199,6 +197,9 @@ class OS_Based_with_mem_Simulator : public GEMM_base
                     total_cycles += DRAM_ACCESS * map.K * PE::IFMAP_SIZE * map.M; // DRAM access for input feature
                     total_cycles += DRAM_ACCESS * map.K * PE::IFMAP_SIZE * map.N * PE::WEIGHT_H; // DRAM access for weight
                 }
+                total_cycles += DRAM_ACCESS * shape.B * map.N * PE::WEIGHT_H; // DRAM access for weight
+                total_cycles += DRAM_ACCESS * map.K * PE::IFMAP_SIZE * map.M; // DRAM access for input feature
+                total_cycles += 2 * DRAM_ACCESS * shape.B * map.N * PE::WEIGHT_H; // DRAM access for psum
             }
 
             cout << "=== Simulation Finished ===" << endl << endl;
