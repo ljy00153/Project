@@ -13,13 +13,15 @@ class EyerissMapper_OS : public EyerissMapper_base
     void mapping_to_csv_no_cycle(AnalysisResult& results, 
                                 const EyerissMappingParam mappings, const string& filename) override
     {
-        results.name = "linear_OS";
+        results.name = "\"" + string("OS");
+        
         EyerissMapper_base::mapping_to_csv_no_cycle(results, mappings, filename);
     }
 
     void mapping_to_csv_with_cycle(const string& filename) override
     {
-        best_result.name = "linear_OS";
+        best_result.name = "\"" + string("OS");
+
         EyerissMapper_base::mapping_to_csv_with_cycle(filename);
     }
 };

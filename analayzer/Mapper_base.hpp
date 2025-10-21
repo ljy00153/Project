@@ -186,118 +186,126 @@ class EyerissMapper_base
 
         virtual void mapping_to_csv_no_cycle(AnalysisResult& results, const EyerissMappingParam mappings, const string& filename)
         {
-                bool file_exists = std::filesystem::exists(filename);
-                bool is_empty = true;
-                if (file_exists) 
+            string batch = to_string(analyzer->linear_shape.B);
+            string in_f = to_string(analyzer->linear_shape.in_features);
+            string out_f = to_string(analyzer->linear_shape.out_features);
+            results.name = results.name + "(" + batch + "," + in_f + "," + out_f + ")" + "\"";
+            bool file_exists = std::filesystem::exists(filename);
+            bool is_empty = true;
+            if (file_exists) 
+            {
+                std::ifstream check(filename, ios::ate | ios::binary);
+                is_empty = (check.tellg() == 0);
+                check.close();
+            }
+
+            ofstream csv(filename, ios::app);  // ✅ append 模式
+
+            if (csv.is_open())
+            {
+                // 寫入欄位名稱
+                if (is_empty)
                 {
-                    std::ifstream check(filename, ios::ate | ios::binary);
-                    is_empty = (check.tellg() == 0);
-                    check.close();
+                    csv << "layer,glb_usage,glb_read,glb_write,glb_access,dram_read,"
+                        "dram_write,dram_access,"
+                        "macs,intensity,peak_performance,peak_bandwidth,latency,energy_total,power_total,"
+                        "tk,tn,mode,M,K,N\n";    
                 }
+                
 
-                ofstream csv(filename, ios::app);  // ✅ append 模式
+                // 寫入資料
+                csv << results.name << ","
+                    << results.glb_usage << ","
+                    << results.glb_read << ","
+                    << results.glb_write << ","
+                    << results.glb_access << ","
+                    << results.dram_read << ","
+                    << results.dram_write << ","
+                    << results.dram_access << ","
+                    << results.macs << ","
+                    << results.intensity << ","
+                    << results.peak_performance << ","
+                    << results.peak_bandwidth << ","
+                    << results.latency << ","
+                    << results.energy_total << ","
+                    << results.power_total << ","
+                    << mappings.tk << ","
+                    << mappings.tn << ","
+                    << mappings.mode << ","
+                    << mappings.M << ","
+                    << mappings.N << ","
+                    << mappings.K
+                    << "\n";
 
-                if (csv.is_open())
-                {
-                    // 寫入欄位名稱
-                    if (is_empty)
-                    {
-                        csv << "layer,glb_usage,glb_read,glb_write,glb_access,dram_read,"
-                            "dram_write,dram_access,"
-                            "macs,intensity,peak_performance,peak_bandwidth,latency,energy_total,power_total,"
-                            "tk,tn,mode,M,K,N\n";    
-                    }
-                    
-
-                    // 寫入資料
-                    csv << results.name << ","
-                        << results.glb_usage << ","
-                        << results.glb_read << ","
-                        << results.glb_write << ","
-                        << results.glb_access << ","
-                        << results.dram_read << ","
-                        << results.dram_write << ","
-                        << results.dram_access << ","
-                        << results.macs << ","
-                        << results.intensity << ","
-                        << results.peak_performance << ","
-                        << results.peak_bandwidth << ","
-                        << results.latency << ","
-                        << results.energy_total << ","
-                        << results.power_total << ","
-                        << mappings.tk << ","
-                        << mappings.tn << ","
-                        << mappings.mode << ","
-                        << mappings.M << ","
-                        << mappings.N << ","
-                        << mappings.K
-                        << "\n";
-
-                    csv.close();
-                    cout << "✅ Top-1 result saved to" << filename << "\n";
-                }
-                else
-                {
-                    cout << "❌ Unable to open file: " << filename << endl;
-                }
+                csv.close();
+                cout << "✅ Top-1 result saved to" << filename << "\n";
+            }
+            else
+            {
+                cout << "❌ Unable to open file: " << filename << endl;
+            }
         }
 
         virtual void mapping_to_csv_with_cycle(const string& filename)
         {
-                bool file_exists = std::filesystem::exists(filename);
-                bool is_empty = true;
-                if (file_exists) 
-                {
-                    std::ifstream check(filename, ios::ate | ios::binary);
-                    is_empty = (check.tellg() == 0);
-                    check.close();
-                }
+            string batch = to_string(analyzer->linear_shape.B);
+            string in_f = to_string(analyzer->linear_shape.in_features);
+            string out_f = to_string(analyzer->linear_shape.out_features);
+            best_result.name = best_result.name + "(" + batch + "," + in_f + "," + out_f + ")" + '"';
+            bool file_exists = std::filesystem::exists(filename);
+            bool is_empty = true;
+            if (file_exists) 
+            {
+                std::ifstream check(filename, ios::ate | ios::binary);
+                is_empty = (check.tellg() == 0);
+                check.close();
+            }
 
-                ofstream csv(filename, ios::app);  // ✅ append 模式
+            ofstream csv(filename, ios::app);  // ✅ append 模式
 
-                if (csv.is_open())
+            if (csv.is_open())
+            {
+                // 寫入欄位名稱
+                if (is_empty)
                 {
-                    // 寫入欄位名稱
-                    if (is_empty)
-                    {
-                        csv << "layer,glb_usage,glb_read,glb_write,glb_access,dram_read,"
-                            "dram_write,dram_access,"
-                            "macs,intensity,peak_performance,peak_bandwidth,cycles,latency,energy_total,power_total,"
-                            "tk,tn,mode,M,K,N\n";    
-                    }
-                    
-                    // 寫入資料
-                    csv << best_result.name << ","
-                        << best_result.glb_usage << ","
-                        << best_result.glb_read << ","
-                        << best_result.glb_write << ","
-                        << best_result.glb_access << ","
-                        << best_result.dram_read << ","
-                        << best_result.dram_write << ","
-                        << best_result.dram_access << ","
-                        << best_result.macs << ","
-                        << best_result.intensity << ","
-                        << best_result.peak_performance << ","
-                        << best_result.peak_bandwidth << ","
-                        << best_result.cycles << ","
-                        << best_result.latency << ","
-                        << best_result.energy_total << ","
-                        << best_result.power_total << ","
-                        << best_mapping.tk << ","
-                        << best_mapping.tn << ","
-                        << best_mapping.mode << ","
-                        << best_mapping.M << ","
-                        << best_mapping.N << ","
-                        << best_mapping.K
-                        << "\n";
+                    csv << "layer,glb_usage,glb_read,glb_write,glb_access,dram_read,"
+                        "dram_write,dram_access,"
+                        "macs,intensity,peak_performance,peak_bandwidth,cycles,latency,energy_total,power_total,"
+                        "tk,tn,mode,M,K,N\n";    
+                }
+                
+                // 寫入資料
+                csv << best_result.name << ","
+                    << best_result.glb_usage << ","
+                    << best_result.glb_read << ","
+                    << best_result.glb_write << ","
+                    << best_result.glb_access << ","
+                    << best_result.dram_read << ","
+                    << best_result.dram_write << ","
+                    << best_result.dram_access << ","
+                    << best_result.macs << ","
+                    << best_result.intensity << ","
+                    << best_result.peak_performance << ","
+                    << best_result.peak_bandwidth << ","
+                    << best_result.cycles << ","
+                    << best_result.latency << ","
+                    << best_result.energy_total << ","
+                    << best_result.power_total << ","
+                    << best_mapping.tk << ","
+                    << best_mapping.tn << ","
+                    << best_mapping.mode << ","
+                    << best_mapping.M << ","
+                    << best_mapping.N << ","
+                    << best_mapping.K
+                    << "\n";
 
-                    csv.close();
-                    cout << "✅ Top-1 result saved to" << filename << "\n";
-                }
-                else
-                {
-                    cout << "❌ Unable to open file: " << filename << endl;
-                }
+                csv.close();
+                cout << "✅ Top-1 result saved to" << filename << "\n";
+            }
+            else
+            {
+                cout << "❌ Unable to open file: " << filename << endl;
+            }
         }
 };
 

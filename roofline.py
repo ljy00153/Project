@@ -4,6 +4,7 @@ from typing import Optional, Dict, Union
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
+import re
 
 
 RooflineParam = tuple[float, float]  # (peak_perf, bandwidth)
@@ -55,14 +56,14 @@ def plot_roofline(
     # 畫 workload 實測點
     # ---------------------------------------------------------------
     offsets = [
-    (-75, 0), #左
-    (0, 75),  #右
-    (75, 0),  #上
-    (0, -75), #下
-    (-50, 50),    # 右
-    (50, 50),   # 左
-    (50, -50),    # 上
-    (-50, -50),   # 下
+    (-50, 0), #左
+    (50, 0),  #右
+    (0, 50),  #上
+    (0, -50), #下
+    (-120, 80),    # 右
+    (120, 80),   # 左
+    (120, -80),    # 上
+    (-120, -80),   # 下
     ]
     if workloads is not None and not workloads.empty:
         required_cols = {"layer", "macs", "dram_access", "cycles"}
@@ -85,9 +86,16 @@ def plot_roofline(
     for idx, ((_, row), color) in enumerate(zip(workloads.iterrows(), colors)):
         plt.scatter(row["OI"], row["Perf"], color=color, s=60, edgecolors="black", zorder=5)
         xytext = offsets[idx % len(offsets)]
+        
+        match = re.match(r"(\w+)\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*\)", str(row["layer"]))
+        if match:
+            name, b, ifm, ofm = match.groups()
+            label = f"{name}\nB={b}, IFM={ifm}, OFM={ofm}"
+        else:
+            label = str(row["layer"])
 
         plt.annotate(
-            f"{row['layer']}\nOI={row['OI']:.2f}\nPerf={row['Perf']:.2f}",
+            f"{label}\nOI={row['OI']:.2f}\nPerf={row['Perf']:.2f}",
             xy=(row["OI"], row["Perf"]),
             xytext=xytext,
             textcoords='offset points',

@@ -27,15 +27,18 @@ int main()
     GEMV.in_features = 128 * 8 * 8;
     GEMV.out_features = 256;
 
-    GEMM.B = 32;
+    GEMM.B = 64;
     GEMM.in_features = 128 * 8 * 8;
     GEMM.out_features = 256;
     string pattern = "Pattern3";
     string GEMV_log_path = "../log/GEMV.csv";
     string GEMM_log_path = "../log/GEMM.csv";
-
+    int a[4] = {1, 32, 64, 256};
     //OS_no_mem_simulator.run(GEMV, pattern, GEMV_log_path);
     //OS_mem_simulator.run(GEMV, pattern, GEMV_log_path);
+
+    //IS_no_mem_simulator.run(GEMM, pattern, GEMM_log_path);
+    //IS_mem_simulator.run(GEMM, pattern, GEMM_log_path);
 
     OS_no_mem_simulator.run(GEMM, pattern, GEMM_log_path);
     OS_mem_simulator.run(GEMM, pattern, GEMM_log_path);
