@@ -144,13 +144,13 @@ class EyerissMapper_base
             for (int i = 0; i < 4; i++)
             {
                 cout << "   trying mode= " << mode[i]<<endl;
-                for(int M = mode[i]; M <= 512; M++)
+                for(int M = mode[i]; M <= 1024; M++)
                 {
                     if(M > analyzer->linear_shape.B)
                         break;// M 不應該大於 batch size
-                    for (int K = tk[i]; K <= 512; K++) 
+                    for (int K = tk[i]; K <= 1024; K++) 
                     { 
-                        for (int N = tn; N <= 512; N++) 
+                        for (int N = tn; N <= 1024; N++) 
                         {
                             int used_bytes =  M * K * IFMAP_PER_PE * 4 
                                             + K * IFMAP_PER_PE * N * WEIGHT_PER_PE * 4

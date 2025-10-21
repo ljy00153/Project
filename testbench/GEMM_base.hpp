@@ -59,7 +59,7 @@ class GEMM_base
         {
             create_mapper();
             shape = linear;
-
+            total_cycles = 0;
             mapper->run(linear, 1);
 
             map = {mapper->best_result.tk, mapper->best_result.tn, mapper->best_result.mode, 

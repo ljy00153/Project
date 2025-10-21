@@ -33,23 +33,58 @@ class IS_Based_with_mem_Simulator : public GEMM_base
             // 外層 tiling 順序依據 PDF：K → N → M → B → in_feature → out_feature
             int in_div4 = ceil(double(shape.in_features) / double(PE::WEIGHT_H));
             
-            cout << "in_div4: " << in_div4 << ", out_features: " << shape.out_features << endl;
+            cout << "batch: " << shape.B << ", in_div4: " << in_div4 << ", out_features: " << shape.out_features << endl;
+            int batch_add = ceil(double(map.M) / double(map.mode)) * map.M;//防止縱向overlap
             for (int outf = 0; outf < shape.out_features; outf += map.N * PE::WEIGHT_H) 
             {
                 //cout << "\n--- Processing out_feature tile starting at " << outf << " ---\n";
-                total_cycles += DRAM_ACCESS * shape.B * map.N * PE::WEIGHT_H; // DRAM access for weight
-                total_cycles += DRAM_ACCESS * map.K * PE::IFMAP_SIZE * map.M; // DRAM access for input feature
                 for (int inf = 0; inf < in_div4; inf += map.K * PE::IFMAP_SIZE) 
                 {
                     for (int b = 0; b < shape.B; b += map.M) 
                     {
-                        for (int m = 0; m < map.M; m += map.mode) 
+                        for (int k = 0; k < map.K * PE::IFMAP_SIZE; k += map.tk * PE::IFMAP_SIZE) 
                         {
-                            for (int n = 0; n < map.N * PE::WEIGHT_H; n += map.tn * PE::WEIGHT_H) 
+                            for (int m = 0; m < map.M; m += map.mode) 
                             {
-                                //load pusm
-                                if(inf != 0)
+                                //set input feature
+                                //cout << "read in_feature\n";
+                                total_cycles += GLB_ACCESS * map.mode * map.tk * IF_LOAD_LAT;
+                                for(int l = 0; l < PE::IFMAP_SIZE * map.tk * map.mode; l++)
                                 {
+                                    int idx_f = (b * in_div4 + m * in_div4 + inf) + k;
+                                    for(int i = 0; i < map.tn; i++)
+                                    {
+                                        int pe_index = i + (l / PE::IFMAP_SIZE) * PE_Array::PE_H;
+                                        int inf_index = idx_f + (l / map.tk / PE::IFMAP_SIZE * in_div4) + l % (map.tk * PE::IFMAP_SIZE);
+                                        int in_data;
+                                        if (pe_index >= PE_Array::NUM_PE) 
+                                        {
+                                            cerr << "pe_index out of range: " << pe_index << endl;
+                                            exit(1);
+                                        }
+                                        if (inf_index >= all_in_features.size()) 
+                                        {
+                                            in_data = 0;
+                                            //cout << "inf_index out of range: " << inf_index << endl;
+                                            //cerr << "b: " << b << ", m: " << m << ", inf: " << inf << ", k: " << k << ", l: " << l << ", i: " << i << endl;
+                                            //exit(1);
+                                        }
+                                        else
+                                        {
+                                            in_data = all_in_features[inf_index];
+                                        }
+                                        
+                                        //cout << "PE[" << pe_index << "]" <<".[" << l % PE::IFMAP_SIZE << "] " << "load in_feature from index[" << inf_index << "]\n";
+                                        pe_array.pe[pe_index].in_feature_spad[l % PE::IFMAP_SIZE] = in_data;                                            
+                                    }
+
+                                }
+                                
+                                //cout << "read input feature\n";
+                                // read input feature & weight & compute
+                                for (int n = 0; n < map.N * PE::WEIGHT_H; n += map.tn * PE::WEIGHT_H) 
+                                {
+                                    //load pusm
                                     total_cycles += GLB_ACCESS * PSUM_STORE_LAT * map.mode * map.tn;
                                     //cout << "load psum to PE array\n";
                                     for(int i = 0; i < map.tn * map.mode; i++)
@@ -73,56 +108,21 @@ class IS_Based_with_mem_Simulator : public GEMM_base
                                             {
                                                 pe_input = final_psums[in_idx];
                                             }
-                                            //cout <<"at index["<< in_idx << "], " ;
+                                            //cout << "PE[" << num << "]" <<".[" << j << "] " << "load psum from index[" << in_idx << "]\n";
                                             pe_array.pe[num].add_ipsum(pe_input, j);
                                         }
                                         //cout << endl;
                                     } 
-                                }
-                                //cout << "read input feature\n";
-                                // read input feature & weight & compute
-                                for (int k = 0; k < map.K * PE::IFMAP_SIZE; k += map.tk * PE::IFMAP_SIZE) 
-                                {
+
                                     // 模擬 tile loading
-                                    total_cycles += GLB_ACCESS * map.mode * map.tk * IF_LOAD_LAT;//read in_feature
-                                    total_cycles += GLB_ACCESS * PE_Array::NUM_PE * W_LOAD_LAT;//read weight
+                                    
+                                    total_cycles += GLB_ACCESS * PE_Array::NUM_PE * W_LOAD_LAT;
 
                                     // 模擬 tile compute (乘加)
                                     total_cycles += COMPUTE_LAT;
 
                                     //呼叫 PE 模型做實際運算
-                                    //set input feature
-                                    //cout << "read in_feature\n";
-                                    for(int l = 0; l < PE::IFMAP_SIZE * map.tk * map.mode; l++)
-                                    {
-                                        int idx_f = (b * in_div4 + m * in_div4 + inf) + k;
-                                        for(int i = 0; i < map.tn; i++)
-                                        {
-                                            int pe_index = i + (l / PE::IFMAP_SIZE) * PE_Array::PE_H;
-                                            int inf_index = idx_f + (l / map.tk / PE::IFMAP_SIZE * in_div4) + l % (map.tk * PE::IFMAP_SIZE);
-                                            int in_data;
-                                            if (pe_index >= PE_Array::NUM_PE) 
-                                            {
-                                                cerr << "pe_index out of range: " << pe_index << endl;
-                                                exit(1);
-                                            }
-                                            if (inf_index >= all_in_features.size()) 
-                                            {
-                                                in_data = 0;
-                                                //cout << "inf_index out of range: " << inf_index << endl;
-                                                //cerr << "b: " << b << ", m: " << m << ", inf: " << inf << ", k: " << k << ", l: " << l << ", i: " << i << endl;
-                                                //exit(1);
-                                            }
-                                            else
-                                            {
-                                                in_data = all_in_features[inf_index];
-                                            }
-                                            
-                                            //cout << "PE[" << pe_index << "]" <<".[" << l % PE::IFMAP_SIZE << "] " << "load in_feature from index[" << inf_index << "]\n";
-                                            pe_array.pe[pe_index].in_feature_spad[l % PE::IFMAP_SIZE] = in_data;                                            
-                                        }
-
-                                    }
+                                    
                                     //cout << "read weight\n";
                                     //set weight
                                     for(int l = 0; l < PE::WEIGHT_SIZE * map.tn * map.tk * map.mode; l++)
@@ -157,40 +157,43 @@ class IS_Based_with_mem_Simulator : public GEMM_base
                                     //compute
                                     //cout << "start compute\n";
                                     pe_array.compute_full_all();
-
-                                }
-                                //cout << "write back psum\n";
-                                // write psum(acc and store)
-                                total_cycles += PSUM_ACC_LAT;
-                                //write back psum to GLB
-                                total_cycles += GLB_ACCESS * PSUM_STORE_LAT * map.mode * map.tn;
-                                // accumulate psum
-                                pe_array.out_valid_all();
-                                pe_array.add_ipsum_all();
-                                // read psum from PE and write back to final_psums
-                                for(int i = 0; i < map.tn * map.mode; i++)
-                                {
-                                    int num = w_base[i / PE_Array::PE_H] + i % PE_Array::PE_H;
-                                    //cout << "\n=== PE[" << num << "] Output ===\n";
-                                    for (int j = 0; j < PE::WEIGHT_H; j++)
+                                    //cout << "write back psum\n";
+                                    // write psum(acc and store)
+                                    total_cycles += PSUM_ACC_LAT;
+                                    total_cycles += GLB_ACCESS * PSUM_STORE_LAT * map.mode * map.tn;
+                                    // accumulate psum
+                                    pe_array.out_valid_all();
+                                    pe_array.add_ipsum_all();
+                                    // read psum from PE and write back to final_psums
+                                    for(int i = 0; i < map.tn * map.mode; i++)
                                     {
-                                        int32_t pe_output = pe_array.pe[num].output_psum(j);
-                                        //out_idx need to be checked
-                                        int out_idx = (b * shape.out_features + outf) + (n) + m * shape.out_features + i / map.tn * shape.out_features + (i % map.tn) * PE::WEIGHT_H + j;
-    
-                                        if (out_idx < final_psums.size()) 
+                                        int num = w_base[i / PE_Array::PE_H] + i % PE_Array::PE_H;
+                                        //cout << "\n=== PE[" << num << "] Output ===\n";
+                                        for (int j = 0; j < PE::WEIGHT_H; j++)
                                         {
-                                            final_psums[out_idx] = pe_output;
+                                            int32_t pe_output = pe_array.pe[num].output_psum(j);
+                                            //out_idx need to be checked
+                                            int out_idx = (b * shape.out_features + outf) + (n) + m * shape.out_features + i / map.tn * shape.out_features + (i % map.tn) * PE::WEIGHT_H + j;
+                                            bool overlap_check = ((m + i / map.tn) >= ((b + 1) * map.M) )? 1 : 0;
+                                            if(out_idx == 4352)
+                                            {
+                                                //cout << "debug here\n";
+                                                //cout << "b: " << b << ", outf: " << outf << ", n: " << n << ", m: " << m << ", i: " << i << ", j: " << j << endl;
+                                            }
+                                            if (out_idx < final_psums.size() && !overlap_check) 
+                                            {
+                                                final_psums[out_idx] = pe_output;
+                                            }
+                                            else
+                                            {
+                                                //cout << "ERROR: out_idx out of range: " << out_idx << endl;
+                                                //exit(1);
+                                            }
+                                            //cout << "PE[" << num << "]" <<".[" << j << "] " << "write psum to index[" << out_idx << "] by "<< pe_output << "\n";
                                         }
-                                        else
-                                        {
-                                            //cout << "ERROR: out_idx out of range: " << out_idx << endl;
-                                            //exit(1);
-                                        }
-                                        
+                                        pe_array.pe[num].out_valid = false; // reset out_valid after reading
+                                        pe_array.pe[num].reset_psum();
                                     }
-                                    pe_array.pe[num].out_valid = false; // reset out_valid after reading
-                                    pe_array.pe[num].reset_psum();
                                 }
                             }
                         }
@@ -199,6 +202,9 @@ class IS_Based_with_mem_Simulator : public GEMM_base
                     total_cycles += DRAM_ACCESS * map.K * PE::IFMAP_SIZE * map.M; // DRAM access for input feature
                     total_cycles += DRAM_ACCESS * map.K * PE::IFMAP_SIZE * map.N * PE::WEIGHT_H; // DRAM access for weight
                 }
+                total_cycles += DRAM_ACCESS * shape.B * map.N * PE::WEIGHT_H; // DRAM access for weight
+                total_cycles += DRAM_ACCESS * map.K * PE::IFMAP_SIZE * map.M; // DRAM access for input feature
+                total_cycles += 2 * DRAM_ACCESS * shape.B * map.N * PE::WEIGHT_H; // DRAM access for psum
             }
 
             cout << "=== Simulation Finished ===" << endl << endl;
