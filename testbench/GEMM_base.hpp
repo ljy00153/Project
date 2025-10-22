@@ -152,11 +152,12 @@ class GEMM_base
                     }
                 }
             }
+            else
+            {
+                mapper->best_result.cycles = final_cycles;
+                mapper->mapping_to_csv_with_cycle(log_path);
+            }
             cout << "=======================================\n" << endl;
-
-            mapper->best_result.cycles = final_cycles;
-            mapper->mapping_to_csv_with_cycle(log_path);
-
         }
 
         //costmized simulation function
