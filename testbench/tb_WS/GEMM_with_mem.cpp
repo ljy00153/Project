@@ -81,7 +81,7 @@ class WS_Based_with_mem_Simulator : public GEMM_base
                                 for (int m = 0; m < map.M; m += map.mode) 
                                 {
                                     //load pusm
-                                    total_cycles += GLB_ACCESS * PSUM_STORE_LAT * map.mode * map.tn * PE::WEIGHT_H;
+                                    total_cycles += GLB_ACCESS * PSUM_STORE_LAT * map.mode * map.tn;
                                     //cout << "load psum to PE array\n";
                                     for(int i = 0; i < map.tn * map.mode; i++)
                                     {
@@ -161,7 +161,7 @@ class WS_Based_with_mem_Simulator : public GEMM_base
                                     //cout << "write back psum\n";
                                     // write psum(acc and store)
                                     total_cycles += PSUM_ACC_LAT;
-                                    total_cycles += GLB_ACCESS * PSUM_STORE_LAT * map.mode * map.tn * PE::WEIGHT_H;
+                                    total_cycles += GLB_ACCESS * PSUM_STORE_LAT * map.mode * map.tn;
                                     // accumulate psum
                                     pe_array.out_valid_all();
                                     pe_array.add_ipsum_all();
