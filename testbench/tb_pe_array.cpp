@@ -35,22 +35,12 @@ int main()
     string GEMM_log_path = "../log/GEMM.csv";
 
     int B[6] = {1, 32, 64, 128, 256};
-    //OS_no_mem_simulator.run(GEMV, pattern, GEMV_log_path);
-    //OS_mem_simulator.run(GEMV, pattern, GEMV_log_path);
-
-    //IS_no_mem_simulator.run(GEMM, pattern, GEMM_log_path);
-    //IS_mem_simulator.run(GEMM, pattern, GEMM_log_path);
-
-    //OS_no_mem_simulator.run(GEMM, pattern, GEMM_log_path);
-    
+    /*
     for(int i = 0; i < 5; i++)
     {
         GEMM.B = B[i];
-        OS_mem_simulator.run(GEMM, pattern, GEMM_log_path);
-    }
-    
-
-    //WS_no_mem_simulator.run(GEMM, pattern, GEMM_log_path);
-    //IS_no_mem_simulator.run(GEMM, pattern, GEMM_log_path);
+        WS_mem_simulator.run(GEMM, pattern, GEMM_log_path);
+    }*/
+    WS_mem_simulator.run(GEMM, pattern, GEMM_log_path);
     return 0;
 }

@@ -25,9 +25,11 @@ class GEMM_base
         static constexpr int IF_LOAD_LAT     = 3;
         static constexpr int W_LOAD_LAT      = 12;
         static constexpr int COMPUTE_LAT     = 48;  
-        static constexpr int PSUM_ACC_LAT    = 6;
+        static constexpr int PSUM_ACC_LAT    = 5;
         static constexpr int PSUM_STORE_LAT  = 4;
 
+        long long load_cycles = 0;
+        long long compute_cycles = 0;
         long long total_cycles = 0;
         std::array<int, 6> w_base = {0};
         std::array<int, 6> r_base = {0};
@@ -47,7 +49,12 @@ class GEMM_base
     public:
         virtual ~GEMM_base() = default;
 
-        long long get_total_cycles() const { return total_cycles; }
+        void reset_cycle()
+        { 
+            total_cycles = 0;
+            load_cycles = 0;
+            compute_cycles = 0;
+        }
 
         virtual void create_mapper() 
         {
@@ -130,8 +137,13 @@ class GEMM_base
             cout << "=          SIMULATION REPORT          =" << endl;
             cout << "=======================================" << endl;
             
-            long long final_cycles = get_total_cycles();
-            cout << "Total cycles simulated: " << final_cycles << endl;
+            cout << "Total MACs: " << mapper->analyzer->macs_per_layer() << endl;
+            cout << "Total cycles simulated: " << total_cycles << endl;
+            cout << "Total load cycles: " << load_cycles << endl;
+            cout << "Total compute cycles: " << compute_cycles << endl;
+            printf("Performance: %.2f MACs/cycle\n",
+                    double(mapper->analyzer->macs_per_layer()) / double(total_cycles));
+            
             
             bool pass;
             pass = equal(psum_dut.begin(), psum_dut.end(), golden.begin());
@@ -154,7 +166,7 @@ class GEMM_base
             }
             else
             {
-                mapper->best_result.cycles = final_cycles;
+                mapper->best_result.cycles = total_cycles;
                 mapper->mapping_to_csv_with_cycle(log_path);
             }
             cout << "=======================================\n" << endl;

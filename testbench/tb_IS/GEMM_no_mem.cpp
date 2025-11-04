@@ -6,7 +6,7 @@ class IS_Based_no_mem_Simulator : public GEMM_base
     public:
         void create_mapper() override 
         {
-            mapper = make_unique<EyerissMapper_OS>();  // ✅ 改成 OS 版本
+            mapper = make_unique<EyerissMapper_IS>();  // ✅ 改成 OS 版本
         }
         
         void run(const LinearShapeParam& linear, const string& pattern, string log_path = "") override
