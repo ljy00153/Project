@@ -160,7 +160,7 @@ class WS_Based_with_mem_Simulator : public GEMM_base
 
                                     //cout << "write back psum\n";
                                     // write psum(acc and store)
-                                    compute_cycles += PSUM_ACC_LAT;
+                                    compute_cycles += PSUM_ACC_LAT + map.tk - 1 ;
                                     load_cycles += GLB_ACCESS * PSUM_STORE_LAT * map.mode * map.tn;
                                     // accumulate psum
                                     pe_array.out_valid_all();

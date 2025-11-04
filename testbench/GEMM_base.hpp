@@ -25,7 +25,7 @@ class GEMM_base
         static constexpr int IF_LOAD_LAT     = 3;
         static constexpr int W_LOAD_LAT      = 12;
         static constexpr int COMPUTE_LAT     = 48;  
-        static constexpr int PSUM_ACC_LAT    = 5;
+        static constexpr int PSUM_ACC_LAT    = 4;
         static constexpr int PSUM_STORE_LAT  = 4;
 
         long long load_cycles = 0;
