@@ -27,7 +27,7 @@ int main()
     GEMV.in_features = 128 * 8 * 8;
     GEMV.out_features = 256;
 
-    GEMM.B = 64;
+    GEMM.B = 128;
     GEMM.in_features = 128 * 8 * 8;
     GEMM.out_features = 256;
     string pattern = "Pattern3";

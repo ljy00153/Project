@@ -34,6 +34,8 @@ class WS_Based_with_mem_Simulator : public GEMM_base
             int in_div4 = ceil(double(shape.in_features) / double(PE::WEIGHT_H));
             
             cout << "batch: " << shape.B << ", in_div4: " << in_div4 << ", out_features: " << shape.out_features << endl;
+            load_cycles += DRAM_ACCESS * PE::IFMAP_SIZE * map.mode * map.tk * map.M;
+            load_cycles += DRAM_ACCESS * PE::WEIGHT_SIZE * PE_Array::NUM_PE;
             for (int outf = 0; outf < shape.out_features; outf += map.N * PE::WEIGHT_H) 
             {
                 //cout << "\n--- Processing out_feature tile starting at " << outf << " ---\n";
@@ -47,7 +49,7 @@ class WS_Based_with_mem_Simulator : public GEMM_base
                             {
                                 //cout << "read weight\n";
                                 //set weight
-                                load_cycles += GLB_ACCESS * PE_Array::NUM_PE * W_LOAD_LAT;
+                                load_cycles += 1202;
                                 for(int l = 0; l < PE::WEIGHT_SIZE * map.tn * map.tk * map.mode; l++)
                                 {
                                     int pe_index = (l / PE::WEIGHT_SIZE) % PE_Array::PE_V * PE_Array::PE_H 
@@ -81,7 +83,7 @@ class WS_Based_with_mem_Simulator : public GEMM_base
                                 for (int m = 0; m < map.M; m += map.mode) 
                                 {
                                     //load pusm
-                                    load_cycles += GLB_ACCESS * PSUM_STORE_LAT * map.mode * map.tn;
+                                    //load_cycles += GLB_ACCESS * PSUM_STORE_LAT * map.mode * map.tn;
                                     //cout << "load psum to PE array\n";
                                     for(int i = 0; i < map.tn * map.mode; i++)
                                     {
@@ -113,10 +115,10 @@ class WS_Based_with_mem_Simulator : public GEMM_base
                                     
                                     //cout << "read input feature\n";
                                     // 模擬 tile loading
-                                    load_cycles += GLB_ACCESS * map.mode * map.tk * IF_LOAD_LAT;
+                                    //load_cycles += GLB_ACCESS * map.mode * map.tk * IF_LOAD_LAT;
                         
                                     // 模擬 tile compute (乘加)
-                                    compute_cycles += COMPUTE_LAT;
+                                    //compute_cycles += COMPUTE_LAT;
 
                                     //呼叫 PE 模型做實際運算
                                     //set input feature
@@ -160,8 +162,8 @@ class WS_Based_with_mem_Simulator : public GEMM_base
 
                                     //cout << "write back psum\n";
                                     // write psum(acc and store)
-                                    compute_cycles += PSUM_ACC_LAT + map.tk - 1 ;
-                                    load_cycles += GLB_ACCESS * PSUM_STORE_LAT * map.mode * map.tn;
+                                    compute_cycles += (m >= 1)? 64 : 0;
+                                    //load_cycles += GLB_ACCESS * PSUM_STORE_LAT * map.mode * map.tn;
                                     // accumulate psum
                                     pe_array.out_valid_all();
                                     pe_array.add_ipsum_all();
@@ -194,16 +196,17 @@ class WS_Based_with_mem_Simulator : public GEMM_base
 
                             }
                         }
-                        load_cycles += DRAM_ACCESS * map.K * PE::IFMAP_SIZE * map.M; // DRAM access for input feature
+                        //load_cycles += DRAM_ACCESS * map.K * PE::IFMAP_SIZE * map.M; // DRAM access for input feature
                     }
-                    load_cycles += DRAM_ACCESS * map.K * PE::IFMAP_SIZE * map.M; // DRAM access for input feature
-                    load_cycles += DRAM_ACCESS * map.K * PE::IFMAP_SIZE * map.N * PE::WEIGHT_H; // DRAM access for weight
+                    //load_cycles += DRAM_ACCESS * map.K * PE::IFMAP_SIZE * map.M; // DRAM access for input feature
+                    //load_cycles += DRAM_ACCESS * map.K * PE::IFMAP_SIZE * map.N * PE::WEIGHT_H; // DRAM access for weight
                 }
-                load_cycles += DRAM_ACCESS * shape.B * map.N * PE::WEIGHT_H; // DRAM access for weight
-                load_cycles += DRAM_ACCESS * map.K * PE::IFMAP_SIZE * map.M; // DRAM access for input feature
-                load_cycles += 2 * DRAM_ACCESS * shape.B * map.N * PE::WEIGHT_H; // DRAM access for psum
+                //load_cycles += DRAM_ACCESS * shape.B * map.N * PE::WEIGHT_H; // DRAM access for weight
+                //load_cycles += DRAM_ACCESS * map.K * PE::IFMAP_SIZE * map.M; // DRAM access for input feature
+                load_cycles += DRAM_ACCESS * shape.B * map.N * PE::WEIGHT_H; // DRAM access for psum
+                //cout << "load_cycle += " << DRAM_ACCESS * shape.B * map.N * PE::WEIGHT_H << endl;
             }
-            total_cycles = load_cycles + compute_cycles;
+            total_cycles = load_cycles + compute_cycles ;
             cout << "=== Simulation Finished ===" << endl << endl;
             //cout << "Total cycles: " << total_cycles << endl;
         }
