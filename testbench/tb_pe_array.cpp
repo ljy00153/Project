@@ -13,6 +13,7 @@ using namespace std;
 
 int main()
 {
+    int B[6] = {1, 32, 64, 128, 256};
     OS_Based_no_mem_Simulator OS_no_mem_simulator;
     OS_Based_with_mem_Simulator OS_mem_simulator;
     
@@ -27,16 +28,16 @@ int main()
     GEMV.in_features = 128 * 8 * 8;
     GEMV.out_features = 256;
 
-    GEMM.B = 128;
+    GEMM.B = B[4];
     GEMM.in_features = 128 * 8 * 8;
     GEMM.out_features = 256;
     string pattern = "Pattern3";
     string GEMV_log_path = "../log/GEMV.csv";
     string GEMM_log_path = "../log/GEMM.csv";
 
-    int B[6] = {1, 32, 64, 128, 256};
-    /*
-    for(int i = 0; i < 5; i++)
+    
+    
+    /*for(int i = 0; i < 5; i++)
     {
         GEMM.B = B[i];
         WS_mem_simulator.run(GEMM, pattern, GEMM_log_path);

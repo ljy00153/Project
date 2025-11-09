@@ -33,7 +33,7 @@ class WS_Based_with_mem_Simulator : public GEMM_base
             // 外層 tiling 順序依據 PDF：K → N → M → B → in_feature → out_feature
             int in_div4 = ceil(double(shape.in_features) / double(PE::WEIGHT_H));
             
-            cout << "batch: " << shape.B << ", in_div4: " << in_div4 << ", out_features: " << shape.out_features << endl;
+            cout << "batch: " << shape.B << ", in: " << shape.in_features << ", out_features: " << shape.out_features << endl;
             load_cycles += DRAM_ACCESS * PE::IFMAP_SIZE * map.mode * map.tk * map.M;
             load_cycles += DRAM_ACCESS * PE::WEIGHT_SIZE * PE_Array::NUM_PE;
             for (int outf = 0; outf < shape.out_features; outf += map.N * PE::WEIGHT_H) 
