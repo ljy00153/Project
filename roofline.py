@@ -95,7 +95,7 @@ def plot_roofline(
             label = str(row["layer"])
 
         plt.annotate(
-            f"{label}\nOI={row['OI']:.2f}\nPerf={row['Perf']:.2f}",
+            f"{label}\nOI={row['OI']:.2f}\nPerf={row['Perf']:.2f}, Perf_raw={row['Perf_raw']:.2f}",
             xy=(row["OI"], row["Perf"]),
             xytext=xytext,
             textcoords='offset points',

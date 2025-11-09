@@ -21,8 +21,8 @@ int main()
 
 
     mapper_OS.run(linear, 1, "../log/result_no_cycle.csv");
-    mapper_WS.run(linear, 1, "../log/result_no_cycle.csv");
-    mapper_IS.run(linear, 1, "../log/result_no_cycle.csv");
+    //mapper_WS.run(linear, 1, "../log/result_no_cycle.csv");
+    //mapper_IS.run(linear, 1, "../log/result_no_cycle.csv");
 
     return 0;
 }

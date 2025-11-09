@@ -6,6 +6,7 @@
 #include <algorithm>
 #include <fstream>
 #include <filesystem>
+#include <memory>
 
 #include "data_type.h"
 #include "Eyeriss_base.hpp"
