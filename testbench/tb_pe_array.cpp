@@ -37,11 +37,11 @@ int main()
 
     
     
-    /*for(int i = 0; i < 5; i++)
+    for(int i = 0; i < 5; i++)
     {
         GEMM.B = B[i];
         WS_mem_simulator.run(GEMM, pattern, GEMM_log_path);
-    }*/
-    WS_mem_simulator.run(GEMM, pattern, GEMM_log_path);
+    }
+    //WS_mem_simulator.run(GEMM, pattern, GEMM_log_path);
     return 0;
 }
