@@ -200,15 +200,16 @@ class WS_Based_with_mem_Simulator : public GEMM_base
                 //DMA write back psum tile to DRAM
                 DMA_write_PSUM( DRAM,
                                 DRAM_PSUM_base,
+                                DRAM_PSUM_idx,
                                 GLB,
                                 GLB_psum_base,
-                                DRAM_PSUM_idx,
                                 map.N * PE::WEIGHT_H);
 
                 load_cycles += DRAM_ACCESS * shape.B * map.N * PE::WEIGHT_H; // DRAM access for psum
                 //cout << "load_cycle += " << DRAM_ACCESS * shape.B * map.N * PE::WEIGHT_H << endl;
             }
             total_cycles = load_cycles + compute_cycles ;
+            
             cout << "=== Simulation Finished ===" << endl << endl;
             //cout << "Total cycles: " << total_cycles << endl;
         }

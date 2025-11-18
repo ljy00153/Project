@@ -152,9 +152,9 @@ class GEMM_base
 
         virtual void DMA_write_PSUM( vector<DataType>& DRAM,
                                      size_t DRAM_PSUM_base,
+                                     size_t DRAM_PSUM_idx,
                                      const vector<DataType>& GLB,
                                      size_t glb_addr,
-                                     size_t DRAM_PSUM_idx,
                                      size_t size)
         {
             for(int l = 0; l < shape.B; l++)
@@ -246,9 +246,11 @@ class GEMM_base
             cout << "    M: " << map.M << endl;
             cout << "    K: " << map.K << endl;
             cout << "    N: " << map.N << endl;
-
+            DRAM = vector<DataType>(); // clear DRAM
+            GLB = vector<DataType>(GLB_SIZE, 0); // reset GLB
             size_t total_size = in_features.size() + weights.size() + linear.B * linear.out_features;
             DRAM.resize(total_size, 0);   // 先分配好整塊空間
+            
 
             // copy in_features 到 DRAM 起始
             copy(in_features.begin(), in_features.end(), DRAM.begin());
@@ -257,7 +259,6 @@ class GEMM_base
             copy(weights.begin(), weights.end(), DRAM.begin() + in_features.size());
 
             run_simulation(in_features, weights, psum_dut);
-
 
             // 5. 報告與驗證
             cout << "=======================================" << endl;

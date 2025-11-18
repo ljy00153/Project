@@ -12,10 +12,6 @@
         GLB_WEIGHT_BASE
         GLB_OPSUM_BASE
 
-        GLB_IFMAP_SIZE
-        GLB_WEIGHT_SIZE
-        GLB_OPSUM_SIZE
-
         M_SIZE
         N_SIZE
         K_SIZE
@@ -23,7 +19,13 @@
         MODE
 
         DATA_FLOW
-    total 18 Register
+    Register for loop 
+        outf
+        inf
+        b
+        k
+        n
+        m
 
 FMT-D
 31        24 23       19 18       14 13 11 10       6 5       0
@@ -32,7 +34,10 @@ FMT-D
 +-----------+-----------+-----------+-----+----------+--------+
 
 FMT-C
-
+31       24 23 19 18 14 13      11 10 6 5       0
++----------+-----+-----+----------+----+--------+
+| imm[9:3] | RS2 | RS1 | imm[2:0] | RD | opcode |
++----------+-----+-----+----------+----+--------+
 
 FMT-P
 

@@ -101,7 +101,8 @@ class EyerissMapper_base
             {
                 // 取出 top 1
                 cout << "---------------------------------------" << endl;
-                cout << "Top-1 configuration details saved to "<< log_path << endl;
+                if(log_path != "")
+                    cout << "Top-1 configuration details saved to "<< log_path << endl;
                 auto &best = scored_results[0];
                 int idx = best.second;
                 best_result = results[idx];
