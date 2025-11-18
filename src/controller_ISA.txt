@@ -1,0 +1,50 @@
+#Register
+    CSR
+        DRAM_IFMAP_BASE
+        DRAM_WEIGHT_BASE
+        DRAM_OFMAP_BASE
+
+        DRAM_IFMAP_SIZE
+        DRAM_WEIGHT_SIZE
+        DRAM_OFMAP_SIZE
+
+        GLB_IFMAP_BASE
+        GLB_WEIGHT_BASE
+        GLB_OPSUM_BASE
+
+        GLB_IFMAP_SIZE
+        GLB_WEIGHT_SIZE
+        GLB_OPSUM_SIZE
+
+        M_SIZE
+        N_SIZE
+        K_SIZE
+        B_SIZE
+        MODE
+
+        DATA_FLOW
+    total 18 Register
+
+FMT-D
+31        24 23       19 18       14 13 11 10       6 5       0
++-----------+-----------+-----------+-----+----------+--------+
+| imm[12:5] | base(CSR) | size(CSR) | L\S | imm[4:0] | opcode |
++-----------+-----------+-----------+-----+----------+--------+
+
+FMT-C
+
+
+FMT-P
+
+指令名      OPCODE  bitfield格式
+DMA_LD	    0x01	FMT-D
+DMA_ST	    0x02	FMT-D
+GLB2PE	    0x03	FMT-D
+PE2GLB	    0x04	FMT-D
+
+CPT_IFIDX	0x10	FMT-C
+CPT_WTIDX	0x11	FMT-C
+CPT_IPIDX	0x12	FMT-C
+CPT_OPIDX	0x13	FMT-C
+CPT_TAG	    0x14	FMT-C
+PE_RUN	    0x20	FMT-P

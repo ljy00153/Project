@@ -56,7 +56,7 @@ def plot_roofline(
     # 畫 workload 實測點
     # ---------------------------------------------------------------
     offsets = [
-    (-50, 0), #左
+    (-50, 10), #左
     (50, 0),  #右
     (0, 50),  #上
     (0, -50), #下
@@ -112,8 +112,8 @@ def plot_roofline(
     # ---------------------------------------------------------------
     plt.xscale("log")
     plt.yscale("log")
-    plt.xlim(max(1e-3, xmin * 0.8), xmax * 1.5)
-    plt.ylim(max(1e-3, ymin * 0.8), ymax * 1.5)
+    plt.xlim(max(1e-1, xmin * 0.8), xmax * 1.5)
+    plt.ylim(max(1e-1, ymin * 0.8), ymax * 1.5)
     plt.legend(fontsize=9, loc="best")
 
     path = Path(filename)

@@ -20,6 +20,11 @@ class GEMM_base
         LinearShapeParam shape;
         PE_Array pe_array;
 
+        static constexpr size_t GLB_SIZE = 64 * 1024;
+
+        vector<DataType> DRAM;
+        vector<DataType> GLB;
+
         unique_ptr<EyerissMapper_base> mapper;  // <-- 抽象化 mapper
 
         static constexpr int IF_LOAD_LAT     = 3;
@@ -47,7 +52,120 @@ class GEMM_base
         }
 
     public:
+        GEMM_base() : DRAM(), GLB(GLB_SIZE, 0) {}
         virtual ~GEMM_base() = default;
+
+        virtual void DMA_load(  vector<DataType>& GLB,
+                        size_t glb_addr,
+                        const vector<DataType>& DRAM,
+                        size_t dram_addr,
+                        size_t size)
+        {
+            if (glb_addr + size > GLB.size())
+                throw runtime_error("GLB overflow!");
+
+            // 計算 DRAM 可用 bytes
+            size_t dram_available = 0;
+            if (dram_addr < DRAM.size())
+                dram_available = DRAM.size() - dram_addr;
+
+            // 可 copy 的真實大小（取 min）
+            size_t copy_size = min(size, dram_available);
+            //cout << "copy_size: " << copy_size << endl;
+            // 先 copy DRAM 範圍內的資料
+            if (copy_size > 0)
+                memcpy(&GLB[glb_addr], &DRAM[dram_addr], copy_size * sizeof(int));
+
+            // 如果不足就填 0
+            size_t pad_size = size - copy_size;
+            if (pad_size > 0)
+                memset(&GLB[glb_addr + copy_size], 0, pad_size * sizeof(int));
+                
+        }
+
+        virtual void DMA_write( vector<DataType>& DRAM,
+                          size_t dram_addr,
+                          const vector<DataType>& GLB,
+                          size_t glb_addr,
+                          size_t size)
+        {
+            if (dram_addr + size > DRAM.size())
+                throw runtime_error("DRAM overflow!");
+
+            if (glb_addr + size > GLB.size())
+                throw runtime_error("GLB overflow!");
+
+            memcpy(&DRAM[dram_addr], &GLB[glb_addr], size * sizeof(int));
+        }
+
+        virtual void DMA_load_PSUM( vector<DataType>& GLB,
+                                    size_t glb_addr,
+                                    const vector<DataType>& DRAM,
+                                    size_t DRAM_PSUM_base,
+                                    size_t DRAM_PSUM_idx,
+                                    size_t size)
+        {
+            for(int l = 0; l < shape.B; l++)
+            {
+                DMA_load( GLB,
+                          glb_addr + l * map.N * PE::WEIGHT_H,
+                          DRAM,
+                          DRAM_PSUM_base + l * shape.out_features + DRAM_PSUM_idx,
+                          size);
+            }
+        }
+
+        virtual void DMA_load_IFMAP( vector<DataType>& GLB,
+                                     size_t glb_addr,
+                                     const vector<DataType>& DRAM,
+                                     size_t DRAM_IFMAP_base,
+                                     size_t DRAM_IFMAP_idx,
+                                     size_t size)
+        {
+            int in_div4 = ceil(double(shape.in_features) / 4);
+            for(int l = 0; l < map.M; l++)
+            {
+                DMA_load( GLB,
+                          glb_addr + l * map.K * PE::IFMAP_SIZE,
+                          DRAM,
+                          DRAM_IFMAP_base + l * in_div4 + DRAM_IFMAP_idx,
+                          size);
+            }
+        }
+
+        virtual void DMA_load_WEIGHT( vector<DataType>& GLB,
+                                     size_t glb_addr,
+                                     const vector<DataType>& DRAM,
+                                     size_t DRAM_WEIGHT_base,
+                                     size_t DRAM_WEIGHT_idx,
+                                     size_t size)
+        {
+            for(int l = 0; l < map.K * PE::IFMAP_SIZE; l++)
+            {
+                DMA_load( GLB,
+                          glb_addr + l * map.N * PE::WEIGHT_H,
+                          DRAM,
+                          DRAM_WEIGHT_base + l * shape.out_features + DRAM_WEIGHT_idx,
+                          size);
+            }
+        }
+
+        virtual void DMA_write_PSUM( vector<DataType>& DRAM,
+                                     size_t DRAM_PSUM_base,
+                                     const vector<DataType>& GLB,
+                                     size_t glb_addr,
+                                     size_t DRAM_PSUM_idx,
+                                     size_t size)
+        {
+            for(int l = 0; l < shape.B; l++)
+            {
+                DMA_write( DRAM,
+                           DRAM_PSUM_base + l * shape.out_features + DRAM_PSUM_idx,
+                           GLB,
+                           glb_addr + l * map.N * PE::WEIGHT_H,
+                           size);
+            }
+        }
 
         void reset_cycle()
         { 
@@ -129,6 +247,15 @@ class GEMM_base
             cout << "    K: " << map.K << endl;
             cout << "    N: " << map.N << endl;
 
+            size_t total_size = in_features.size() + weights.size() + linear.B * linear.out_features;
+            DRAM.resize(total_size, 0);   // 先分配好整塊空間
+
+            // copy in_features 到 DRAM 起始
+            copy(in_features.begin(), in_features.end(), DRAM.begin());
+
+            // copy weights 到 in_features 後面
+            copy(weights.begin(), weights.end(), DRAM.begin() + in_features.size());
+
             run_simulation(in_features, weights, psum_dut);
 
 
@@ -146,7 +273,7 @@ class GEMM_base
             
             
             bool pass;
-            pass = equal(psum_dut.begin(), psum_dut.end(), golden.begin());
+            pass = equal(DRAM.begin() + in_features.size() + weights.size(), DRAM.end(), golden.begin());
             
             cout << "Result Verification: " << (pass ? "PASSED" : "FAILED") << endl;
             
@@ -156,11 +283,12 @@ class GEMM_base
             }*/
             if (!pass) 
             {
-                for(size_t i=0; i < psum_dut.size(); i++) 
+                
+                for(size_t i=0; i < linear.B * linear.out_features; i++) 
                 {
-                    if (psum_dut[i] != golden[i]) 
+                    if (DRAM[i + in_features.size() + weights.size()] != golden[i]) 
                     {
-                        cout << "Mismatch at index " << i << ": DUT=" << psum_dut[i] << ", Golden=" << golden[i] << endl;
+                        cout << "Mismatch at index " << i << ": DUT=" << DRAM[i + in_features.size() + weights.size()] << ", Golden=" << golden[i] << endl;
                     }
                 }
             }

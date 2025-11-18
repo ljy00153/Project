@@ -26,12 +26,20 @@ class WS_Based_with_mem_Simulator : public GEMM_base
                             const vector<DataType>& all_weights,
                             vector<DataType>& final_psums) override
         {
+            int DRAM_ifmap_base = 0;
+            int DRAM_weight_base = DRAM_ifmap_base + all_in_features.size();//in_div4 * shape.B;
+            int DRAM_PSUM_base = DRAM_weight_base + all_weights.size();
+
+            int GLB_ifmap_base = 0;
+            int GLB_weight_base = GLB_ifmap_base + map.K * PE::IFMAP_SIZE * map.M;
+            int GLB_psum_base = GLB_weight_base + map.K * PE::IFMAP_SIZE * map.N * PE::WEIGHT_H;
+
             reset_cycle();
             setup_pe_bases();
             cout << "\n=== Start GEMM Tile Simulation ===" << endl;
 
             // 外層 tiling 順序依據 PDF：K → N → M → B → in_feature → out_feature
-            int in_div4 = ceil(double(shape.in_features) / double(PE::WEIGHT_H));
+            int in_div4 = ceil(double(shape.in_features) / 4);
             
             cout << "batch: " << shape.B << ", in: " << shape.in_features << ", out_features: " << shape.out_features << endl;
             load_cycles += DRAM_ACCESS * PE::IFMAP_SIZE * map.mode * map.tk * map.M;
@@ -39,10 +47,41 @@ class WS_Based_with_mem_Simulator : public GEMM_base
             for (int outf = 0; outf < shape.out_features; outf += map.N * PE::WEIGHT_H) 
             {
                 //cout << "\n--- Processing out_feature tile starting at " << outf << " ---\n";
+                //load_cycles += DRAM_ACCESS * map.K * PE::IFMAP_SIZE * map.N * PE::WEIGHT_H; // DRAM access for weight
+                
+                //load_cycles += DRAM_ACCESS * map.K * PE::IFMAP_SIZE * map.M; // DRAM access for input feature
+
+                //DMA load psum tile to GLB
+                int DRAM_PSUM_idx = outf;
+                DMA_load_PSUM( GLB,
+                               GLB_psum_base,
+                               DRAM,
+                               DRAM_PSUM_base,
+                               DRAM_PSUM_idx,
+                               map.N * PE::WEIGHT_H);
+
                 for (int inf = 0; inf < in_div4; inf += map.K * PE::IFMAP_SIZE) 
                 {
+                    //DMA load weight tile to GLB
+                    int DRAM_WEIGHT_idx = (inf * shape.out_features + outf);
+                    DMA_load_WEIGHT( GLB,
+                                     GLB_weight_base,
+                                     DRAM,
+                                     DRAM_weight_base,
+                                     DRAM_WEIGHT_idx,
+                                     map.N * PE::WEIGHT_H);
+
                     for (int b = 0; b < shape.B; b += map.M) 
                     {
+                        //DMA load input feature tile to GLB
+                        int DRAM_IFMAP_idx = b * in_div4 + inf;
+                        DMA_load_IFMAP( GLB,
+                                        GLB_ifmap_base,
+                                        DRAM,
+                                        DRAM_ifmap_base,
+                                        DRAM_IFMAP_idx,
+                                        map.K * PE::IFMAP_SIZE);
+
                         for (int k = 0; k < map.K * PE::IFMAP_SIZE; k += map.tk * PE::IFMAP_SIZE) 
                         {
                             for (int n = 0; n < map.N * PE::WEIGHT_H; n += map.tn * PE::WEIGHT_H) 
@@ -54,27 +93,12 @@ class WS_Based_with_mem_Simulator : public GEMM_base
                                 {
                                     int pe_index = (l / PE::WEIGHT_SIZE) % PE_Array::PE_V * PE_Array::PE_H 
                                                     + (l / PE::WEIGHT_SIZE / PE_Array::PE_V);
-                                    int idx_w = (inf * shape.out_features + outf) + k * shape.out_features + n;
+                                    int idx_w = GLB_weight_base + k * map.N * PE::WEIGHT_H + n;
                                     int weight_index = idx_w + l % PE::WEIGHT_H 
-                                                        + ((l / PE::WEIGHT_H) % (map.tk * PE::IFMAP_SIZE)) * shape.out_features 
+                                                        + ((l / PE::WEIGHT_H) % (map.tk * PE::IFMAP_SIZE)) * map.N * PE::WEIGHT_H 
                                                         + (l / PE::WEIGHT_SIZE / PE_Array::PE_V) * PE::WEIGHT_H;
                                     int weight_data;
-                                    if (pe_index >= PE_Array::NUM_PE) 
-                                    {
-                                        cerr << "pe_index out of range: " << pe_index << endl;
-                                        exit(1);
-                                    }
-                                    if (weight_index >= all_weights.size()) 
-                                    {
-                                        weight_data = 0;
-                                        //cout << "weight_index out of range: " << weight_index << endl;
-                                        //cerr << "inf: " << inf << ", outf: " << outf << ", k: " << k << ", n: " << n << ", l: " << l << endl;
-                                        //exit(1);
-                                    }
-                                    else
-                                    {
-                                        weight_data = all_weights[weight_index];
-                                    }
+                                    weight_data = GLB[weight_index];
                                     //cout << "PE[" << pe_index << "] load weight from index[" << weight_index << "]\n";
                                     pe_array.pe[pe_index].weight_spad[l % PE::WEIGHT_SIZE] = weight_data;
                                 }
@@ -92,20 +116,11 @@ class WS_Based_with_mem_Simulator : public GEMM_base
                                         for (int j = 0; j < PE::WEIGHT_H; j++)
                                         {
                                             //in_idx need to be checked
-                                            int in_idx = (b * shape.out_features + outf) 
-                                                            + (n) + m * shape.out_features + i / map.tn * shape.out_features + (i % map.tn) * PE::WEIGHT_H + j;
+                                            int in_idx = GLB_psum_base + (b * map.N * PE::WEIGHT_H) 
+                                                        + (n) + m * map.N * PE::WEIGHT_H + i / map.tn * map.N * PE::WEIGHT_H + (i % map.tn) * PE::WEIGHT_H + j;
                                             int32_t pe_input;
-                                            if (in_idx < 0 || in_idx >= final_psums.size()) 
-                                            {
-                                                pe_input = 0;
-                                                //cout << "ERROR: in_idx out of range: " << in_idx << endl;
-                                                //cerr << "b: " << b << ", outf: " << outf << ", n: " << n << ", m: " << m << ", i: " << i << ", j: " << j << endl;
-                                                //exit(1);
-                                            }
-                                            else
-                                            {
-                                                pe_input = final_psums[in_idx];
-                                            }
+
+                                            pe_input = GLB[in_idx];
                                             //cout <<"at index["<< in_idx << "], " ;
                                             pe_array.pe[num].add_ipsum(pe_input, j);
                                         }
@@ -121,44 +136,29 @@ class WS_Based_with_mem_Simulator : public GEMM_base
                                     //compute_cycles += COMPUTE_LAT;
 
                                     //呼叫 PE 模型做實際運算
+
                                     //set input feature
                                     //cout << "read in_feature\n";
                                     for(int l = 0; l < PE::IFMAP_SIZE * map.tk * map.mode; l++)
                                     {
-                                        int idx_f = (b * in_div4 + m * in_div4 + inf) + k;
+                                        int idx_f = GLB_ifmap_base + m * map.K * PE::IFMAP_SIZE + k;
+                                        //cout << "GLB_ifmap_base: " << GLB_ifmap_base << ", m: " << m << ", map.K: " << map.K << ", PE::IFMAP_SIZE: " << PE::IFMAP_SIZE << ", k: " << k << endl;
                                         for(int i = 0; i < map.tn; i++)
                                         {
                                             int pe_index = i + (l / PE::IFMAP_SIZE) * PE_Array::PE_H;
-                                            int inf_index = idx_f + (l / map.tk / PE::IFMAP_SIZE * in_div4) + l % (map.tk * PE::IFMAP_SIZE);
+                                            int inf_index = idx_f + (l / map.tk / PE::IFMAP_SIZE * map.K * PE::IFMAP_SIZE) + l % (map.tk * PE::IFMAP_SIZE);
                                             int in_data;
-                                            if (pe_index >= PE_Array::NUM_PE) 
-                                            {
-                                                cerr << "pe_index out of range: " << pe_index << endl;
-                                                exit(1);
-                                            }
-                                            if (inf_index >= all_in_features.size()) 
-                                            {
-                                                in_data = 0;
-                                                //cout << "inf_index out of range: " << inf_index << endl;
-                                                //cerr << "b: " << b << ", m: " << m << ", inf: " << inf << ", k: " << k << ", l: " << l << ", i: " << i << endl;
-                                                //exit(1);
-                                            }
-                                            else
-                                            {
-                                                in_data = all_in_features[inf_index];
-                                            }
-                                            
+                                            in_data = GLB[inf_index];
+                                            //cout << "GLB[" << inf_index << "]: " << in_data << endl;
                                             //cout << "PE[" << pe_index << "]" <<".[" << l % PE::IFMAP_SIZE << "] " << "load in_feature from index[" << inf_index << "]\n";
                                             pe_array.pe[pe_index].in_feature_spad[l % PE::IFMAP_SIZE] = in_data;                                            
                                         }
 
                                     }
 
-
                                     //compute
                                     //cout << "start compute\n";
                                     pe_array.compute_full_all();
-
 
                                     //cout << "write back psum\n";
                                     // write psum(acc and store)
@@ -167,7 +167,8 @@ class WS_Based_with_mem_Simulator : public GEMM_base
                                     // accumulate psum
                                     pe_array.out_valid_all();
                                     pe_array.add_ipsum_all();
-                                    // read psum from PE and write back to final_psums
+
+                                    //write back to GLB
                                     for(int i = 0; i < map.tn * map.mode; i++)
                                     {
                                         int num = w_base[i / PE_Array::PE_H] + i % PE_Array::PE_H;
@@ -176,17 +177,11 @@ class WS_Based_with_mem_Simulator : public GEMM_base
                                         {
                                             int32_t pe_output = pe_array.pe[num].output_psum(j);
                                             //out_idx need to be checked
-                                            int out_idx = (b * shape.out_features + outf) + (n) + m * shape.out_features + i / map.tn * shape.out_features + (i % map.tn) * PE::WEIGHT_H + j;
-        
-                                            if (out_idx < final_psums.size()) 
-                                            {
-                                                final_psums[out_idx] = pe_output;
-                                            }
-                                            else
-                                            {
-                                                //cout << "ERROR: out_idx out of range: " << out_idx << endl;
-                                                //exit(1);
-                                            }
+                                            int out_idx = GLB_psum_base + (b * map.N * PE::WEIGHT_H) 
+                                                        + (n) + m * map.N * PE::WEIGHT_H + i / map.tn * map.N * PE::WEIGHT_H + (i % map.tn) * PE::WEIGHT_H + j;
+                                            
+                                            GLB[out_idx] = pe_output;
+                                            //cout << "GLB[" << out_idx << "] = " << pe_output << endl;
                                             
                                         }
                                         pe_array.pe[num].out_valid = false; // reset out_valid after reading
@@ -201,8 +196,15 @@ class WS_Based_with_mem_Simulator : public GEMM_base
                     //load_cycles += DRAM_ACCESS * map.K * PE::IFMAP_SIZE * map.M; // DRAM access for input feature
                     //load_cycles += DRAM_ACCESS * map.K * PE::IFMAP_SIZE * map.N * PE::WEIGHT_H; // DRAM access for weight
                 }
-                //load_cycles += DRAM_ACCESS * shape.B * map.N * PE::WEIGHT_H; // DRAM access for weight
-                //load_cycles += DRAM_ACCESS * map.K * PE::IFMAP_SIZE * map.M; // DRAM access for input feature
+
+                //DMA write back psum tile to DRAM
+                DMA_write_PSUM( DRAM,
+                                DRAM_PSUM_base,
+                                GLB,
+                                GLB_psum_base,
+                                DRAM_PSUM_idx,
+                                map.N * PE::WEIGHT_H);
+
                 load_cycles += DRAM_ACCESS * shape.B * map.N * PE::WEIGHT_H; // DRAM access for psum
                 //cout << "load_cycle += " << DRAM_ACCESS * shape.B * map.N * PE::WEIGHT_H << endl;
             }
