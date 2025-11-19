@@ -85,7 +85,7 @@ class EyerissAnalyzer_base
             //cout << "in_features" << linear_shape.in_features << endl;
             //cout << "mapping.K" << mapping.K << endl;
             long long int B_div_M = ceil(double(linear_shape.B) / double(mapping.M));
-            long long int in_f_div_K = ceil(double(linear_shape.in_features) / double(mapping.K * 3));
+            long long int in_f_div_K = ceil(double(linear_shape.in_features) / double(mapping.K * 3*4));
             long long int out_f_div_N = ceil(double(linear_shape.out_features) / double(mapping.N * 4));
             long long int num_weight_linear = in_f_div_K * ceil(double(linear_shape.out_features) / double(mapping.N * 4));
 
@@ -105,7 +105,7 @@ class EyerissAnalyzer_base
 
             long long int M_div_mode = ceil(double(mapping.M) / double(mapping.mode));
             long long int B_div_M = ceil(double(linear_shape.B) / double(mapping.M));
-            long long int in_f_div_K = ceil(double(linear_shape.in_features) / double(mapping.K * 3));
+            long long int in_f_div_K = ceil(double(linear_shape.in_features) / double(mapping.K * 3 *4));
             long long int out_f_div_N = ceil(double(linear_shape.out_features) / double(mapping.N * 4));
             long long int K_div_tk = ceil(double(mapping.K) / double(mapping.tk));
             long long int N_div_tn = ceil(double(mapping.N) / double(mapping.tn));

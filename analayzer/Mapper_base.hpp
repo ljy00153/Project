@@ -210,7 +210,7 @@ class EyerissMapper_base
                     csv << "layer,glb_usage,glb_read,glb_write,glb_access,dram_read,"
                         "dram_write,dram_access,"
                         "macs,intensity,peak_performance,peak_bandwidth,latency,energy_total,power_total,"
-                        "tk,tn,mode,M,K,N\n";    
+                        "tk,tn,mode,M,N,K\n";    
                 }
                 
 
@@ -272,7 +272,7 @@ class EyerissMapper_base
                     csv << "layer,glb_usage,glb_read,glb_write,glb_access,dram_read,"
                         "dram_write,dram_access,"
                         "macs,intensity,peak_performance,peak_bandwidth,cycles,latency,energy_total,power_total,"
-                        "tk,tn,mode,M,K,N\n";    
+                        "tk,tn,mode,M,N,K\n";    
                 }
                 
                 // 寫入資料

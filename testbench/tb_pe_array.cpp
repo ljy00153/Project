@@ -36,12 +36,18 @@ int main()
     string GEMM_log_path = "../log/GEMM.csv";
 
     
-    
-    /*for(int i = 0; i < 5; i++)
+    /*
+    for(int i = 0; i < 5; i++)
     {
         GEMM.B = B[i];
         WS_mem_simulator.run(GEMM, pattern, GEMM_log_path);
     }*/
-    WS_mem_simulator.run(GEMM, pattern, GEMM_log_path);
+    GEMM.B = 64;
+
+    OS_mem_simulator.run(GEMM, pattern, GEMV_log_path);
+    IS_mem_simulator.run(GEMM, pattern, GEMV_log_path);
+    WS_mem_simulator.run(GEMM, pattern, GEMV_log_path);
+
+    //WS_mem_simulator.run(GEMM, pattern, GEMM_log_path);
     return 0;
 }

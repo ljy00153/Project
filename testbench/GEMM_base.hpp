@@ -7,7 +7,7 @@
 #include <sstream>
 #include "../src/PE/pe_array.cpp"
 
-#include "../analayzer/mapper_base.hpp"
+#include "../analayzer/Mapper_base.hpp"
 
 using namespace std;
 using DataType = int32_t;

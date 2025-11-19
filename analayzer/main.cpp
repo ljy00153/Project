@@ -12,7 +12,7 @@ int main()
     EyerissMapper_WS mapper_WS;
     EyerissMapper_IS mapper_IS;
     LinearShapeParam linear;
-    linear.B = 256;
+    linear.B = 1;
     linear.in_features = 128 * 8 * 8;
     linear.out_features = 256;
     cout << "Batch : " << linear.B << endl;
@@ -20,9 +20,9 @@ int main()
     cout << "out_features : " << linear.out_features << endl;
 
 
+    mapper_IS.run(linear, 1, "../log/result_no_cycle.csv");
+    mapper_WS.run(linear, 1, "../log/result_no_cycle.csv");
     mapper_OS.run(linear, 1, "../log/result_no_cycle.csv");
-    //mapper_WS.run(linear, 1, "../log/result_no_cycle.csv");
-    //mapper_IS.run(linear, 1, "../log/result_no_cycle.csv");
 
     return 0;
 }
