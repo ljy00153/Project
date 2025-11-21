@@ -255,7 +255,13 @@ module isa_controller #(
         // Hold PC until all waited events are set
         if ((event_status & instr_r.imm[17:0]) != instr_r.imm[17:0]) begin
           pc_hold = 1'b1; 
-
+        end 
+      end 
+      OP_GLB_READ: begin
+        GLB_EN   = 1'b1;
+        GLB_WEB  = 1'b0; // read
+        GLB_MODE = 1'b0; // burst
+        GLB_A    = cfg.glb_addr + instr_r.imm[`GLB_ADDR_BITS-1:0];
 
       end
       end 
