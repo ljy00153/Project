@@ -40,6 +40,7 @@ parameter IDLE = 4'd0,
           ADD_IPSUM = 4'd4,
           OUTPUT_OPSUM = 4'd5,
           REUSE_IFMAP = 4'd6;
+          REUSE_WEIGHT = 4'd7;
 logic [`IFMAP_SIZE-1:0] ifmap_spad [0:`IFMAP_SPAD_LEN-1];
 logic [`FILTER_SIZE-1:0] filter_spad [0:`FILTER_SPAD_LEN-1];
 logic [`PSUM_SIZE-1:0] ofmap_spad [0:`OFMAP_SPAD_LEN-1];
@@ -56,7 +57,7 @@ logic [`OFMAP_COL_BIT-1:0]ofmap_col,count_ofmap_col ;
 logic [`OFMAP_INDEX_BIT-1:0]ofmap_ch,count_ofmap_ch;
 logic [1:0] input_ch,count_input_ch;
 logic [1:0]count_filter_col;
-
+logic layer; //0: conv 1: fc
 //filter_count {2bit filter col, 2bit ofmap channel,2bit filter channel}
 assign filter_count={count_filter_col,count_ofmap_ch,count_input_ch};
 assign ifmap_count = {count_filter_col,count_input_ch};
@@ -99,12 +100,17 @@ always_comb begin
         OUTPUT_OPSUM:
             if(opsum_ready&&count_ofmap_ch==ofmap_ch)begin
                 if(count_ofmap_col==ofmap_col)ns=IDLE;
-                else ns=REUSE_IFMAP;   
+                else begin
+                    ns=(mode)?REUSE_IFMAP:REUSE_WEIGHT;   
+                end 
             end 
             else ns=OUTPUT_OPSUM;
         REUSE_IFMAP:
             if(ifmap_valid)ns=COMPUTE;
             else ns=REUSE_IFMAP;
+        REUSE_WEIGHT:
+            if(filter_valid)ns=COMPUTE;
+            else ns=REUSE_WEIGHT;
         default: ns=cs;
     endcase
 
@@ -120,17 +126,20 @@ always_ff @( posedge clk or posedge rst ) begin
         input_ch <= 2'd0;
         ofmap_col <= 5'd0;
         ofmap_ch <=2'd0;
+        mode <= 1'b0;
     end 
     else begin
         if(cs==IDLE&&PE_en)begin
             input_ch <= i_config[1:0];
             ofmap_col <= i_config[`OFMAP_COL_BIT+1:2];
             ofmap_ch <= i_config[`OFMAP_COL_BIT+`OFMAP_INDEX_BIT+1:`OFMAP_COL_BIT+2];
+            mode <= i_config[9];
         end 
         else begin
             input_ch <= input_ch;
             ofmap_col <= ofmap_col;
             ofmap_ch <= ofmap_ch;
+            mode <= mode;
         end 
     end
 
@@ -244,7 +253,7 @@ end
 
 always_ff @( posedge clk or posedge rst ) begin 
     integer i;
-    if (rst) for (i = 0; i < 24; i = i + 1) filter_spad[i] <= 8'd0;
+    if (rst) for (i = 0; i < 48; i = i + 1) filter_spad[i] <= 8'd0;
     else begin
         if (cs == REC_FIL && filter_valid) begin
             filter_spad[filter_count] <= filter[7:0];
