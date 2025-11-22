@@ -39,7 +39,7 @@ uniform_int_distribution<int32_t> dist_ipsum(-32, 32);//數字隨機範圍
 
 int main()
 {
-    int pattern_id = 4;//放在第幾個資料夾
+    int pattern_id = 0;//放在第幾個資料夾
     int m = 3; //GEMM now
     int n = 4;
     int p = 12;
@@ -47,7 +47,7 @@ int main()
     // A: m * n
     // B: n * p
     // C: m * p
-    string folder = "Pattern" + to_string(pattern_id);
+    string folder = "test_data" + to_string(pattern_id);
 
     // ===== 建立矩陣 =====
     vector<int32_t> A(m * n_div4);
