@@ -1,0 +1,31 @@
+Verilator Statistics Report
+
+Information:
+  Version: Verilator 5.031 devel rev v5.030-165-g530ebecfb
+  Arguments: --cc --exe -I./include --build --trace --trace-max-array 1024 --debug -CFLAGS -DTB_PE=0 ./testbench/tb_PE.cpp
+  Build jobs: 1
+  Verilate jobs: 1
+
+Global Statistics:
+
+
+Performance Statistics:
+
+
+Stage Statistics:
+  Stat                                Final all  Final fast
+  --------                            -------    -------  
+
+  Node count, CONSTPOOL                     1
+  Node count, MODULE                        1
+  Node count, NETLIST                       1
+  Node count, SCOPE                         1
+  Node count, TYPETABLE                     1
+
+  Node memory TOTAL (MiB)                   0          0
+
+  Node memory share (%), CONSTPOOL      23.00
+  Node memory share (%), MODULE         17.00
+  Node memory share (%), NETLIST        16.00
+  Node memory share (%), SCOPE          13.50
+  Node memory share (%), TYPETABLE      30.50

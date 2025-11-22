@@ -59,5 +59,19 @@ const int I_CH = 4; //4*8=32bit
 const int OFMAP_CH = 4; //WEIGHT_WIDTH
 const int Layer = 1; // 0 for conv, 1 for fc
 const int Batch= 8;
+
+#elif (TB_PE == 4)
+const string IFMAP_FILE = "./testbench/PE_test_data/tb4/ifmap_tb4.txt";
+const string FILT_FILE = "./testbench/PE_test_data/tb4/filter_tb4.txt";
+const string IPSUM_FILE = "./testbench/PE_test_data/tb4/ipsum_tb4.txt";
+const string OPSUM_FILE = "./testbench/PE_test_data/tb4/ofmap_tb4.txt";
+const int IFMAP_COL = 3;
+const int OFMAP_COL = 0;
+const int FILT_COL = 3;
+const int I_CH = 4; //4*8=32bit
+const int OFMAP_CH = 4; //WEIGHT_WIDTH
+const int Layer = 1; // 0 for conv, 1 for fc
+const int Batch= 32;
+
 #endif
 #endif  // CONFIG_H

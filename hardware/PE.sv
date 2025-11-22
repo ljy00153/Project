@@ -55,7 +55,7 @@ logic [`OFMAP_COL_BIT-1:0]ofmap_col,count_ofmap_col ;
 logic [`OFMAP_INDEX_BIT-1:0]ofmap_ch,count_ofmap_ch;
 logic [1:0] input_ch,count_input_ch;
 logic [1:0] count_filter_col;
-logic [6:0] batch,count_batch;
+logic [4:0] batch,count_batch;
 logic layer; //0: conv 1: fc
 logic [1:0]ipsum_top;
 logic ipsum_full;
@@ -66,7 +66,7 @@ assign ofmap_count = count_ofmap_ch;
 
 assign filter_ready = (cs == REC_FIL)? 1'b1 : 1'b0;
 assign ifmap_ready = (cs == REC_IFMAP||cs == REUSE_IFMAP)? 1'b1 : 1'b0;
-assign ipsum_ready = (cs != ADD_IPSUM)? 1'b1 : 1'b0;//load ipsum into spad at anytime except ADD_IPSUM
+assign ipsum_ready = (cs != ADD_IPSUM && cs != OUTPUT_OPSUM)? 1'b1 : 1'b0;//load ipsum into spad at anytime except ADD_IPSUM and OPSUM state
 assign opsum_valid = (cs == OUTPUT_OPSUM)? 1'b1 : 1'b0;
 assign opsum = ofmap_spad[ofmap_count];
 always_ff@(posedge clk or posedge rst)begin
@@ -93,10 +93,10 @@ always_comb begin
             if(ifmap_valid &&  count_filter_col == FILTER_COL)ns=COMPUTE;
             else ns=REC_IFMAP;
         COMPUTE:
-            if(count_filter_col == FILTER_COL&& count_input_ch == input_ch && count_ofmap_ch == ofmap_ch)ns=ADD_IPSUM;
+            if(count_filter_col == FILTER_COL&& count_input_ch == input_ch && count_ofmap_ch == ofmap_ch&&ipsum_full)ns=ADD_IPSUM;
             else ns=COMPUTE;
         ADD_IPSUM:
-            if(ipsum_full&& count_ofmap_ch== ofmap_ch)ns=OUTPUT_OPSUM;
+            if( count_ofmap_ch== ofmap_ch)ns=OUTPUT_OPSUM;
             else ns=ADD_IPSUM;
         OUTPUT_OPSUM:
             if(opsum_ready&&count_ofmap_ch==ofmap_ch)begin
@@ -113,8 +113,15 @@ always_comb begin
             end 
             else ns=OUTPUT_OPSUM;
         REUSE_IFMAP:
-            if(ifmap_valid)ns=COMPUTE;
-            else ns=REUSE_IFMAP;
+            if(layer)begin//FC layer
+                if(ifmap_valid && count_filter_col == FILTER_COL)ns=COMPUTE;
+                else ns=REUSE_IFMAP;
+            end 
+            else begin
+                if(ifmap_valid)ns=COMPUTE;
+                else ns=REUSE_IFMAP;
+            end 
+            
         default: ns=cs;
     endcase
 
@@ -131,6 +138,7 @@ always_ff @( posedge clk or posedge rst ) begin
         ofmap_col <= 5'd0;
         ofmap_ch <=2'd0;
         layer <= 1'b0;
+        batch<=5'd0;
     end 
     else begin
         if(cs==IDLE&&PE_en)begin
@@ -143,7 +151,8 @@ always_ff @( posedge clk or posedge rst ) begin
                 end
                 FC_LAYER: begin
                     input_ch <= i_config[1:0];
-                    batch<= i_config[`batch_BIT+1:2]; 
+                    batch<= i_config[`BATCH_BIT+1:2]; 
+                    ofmap_ch <= i_config[`BATCH_BIT+`OFMAP_INDEX_BIT+1:`OFMAP_COL_BIT+2];
                     layer <= 1'b1;
                 end
             endcase
@@ -188,7 +197,12 @@ always_ff @( posedge clk or posedge rst ) begin
                     
                 end 
                 else count_filter_col <= count_filter_col;
-               
+            REUSE_IFMAP:
+                if(ifmap_valid)begin
+                    if(count_filter_col == FILTER_COL)count_filter_col <= 0;
+                    else count_filter_col <= count_filter_col + 1;
+                end
+                else count_filter_col <= count_filter_col;   
             default: count_filter_col <= count_filter_col;
         endcase
       
@@ -332,22 +346,45 @@ always_ff @( posedge clk or posedge rst ) begin
             ipsum_spad[i] <= 32'b0;
         end 
         ipsum_top <= 2'b0;
-        ipsum_full <= 1'b0;
     end 
     else begin
         if (ipsum_valid) begin
             ipsum_spad[ipsum_top] <= ipsum;
             ipsum_top <= ipsum_top + 1'b1;
-            if(ipsum_top == 2'b11) ipsum_full <= 1'b1;
+            
+        end
+        else if(cs == OUTPUT_OPSUM && opsum_ready) begin
+            ipsum_spad[ipsum_top] <= 32'b0;
+            ipsum_top <= ipsum_top - 1'b1 ;
+          
         end
         else begin
             ipsum_spad[ipsum_top] <= ipsum_spad[ipsum_top];
             ipsum_top <= ipsum_top;
-            ipsum_full <= ipsum_full;
 
         end 
     end
 end
+always_ff @( posedge clk or posedge rst ) begin 
+    integer i;
+    if (rst)begin
+        ipsum_full <= 1'b0;
+    end 
+    else begin
+
+        if(ipsum_top == 2'b11)begin
+            ipsum_full <= 1'b1;
+        end 
+        else if(cs == OUTPUT_OPSUM && opsum_ready)begin
+            ipsum_full <= 1'b0;
+        end 
+        else begin
+            ipsum_full <= ipsum_full;
+        end    
+    end
+    
+end 
+
 
 logic signed [`IFMAP_SIZE+`FILTER_SIZE-1:0] mul_res;
 assign mul_res = $signed (ifmap_spad[ifmap_count]) * $signed(filter_spad[filter_count]);

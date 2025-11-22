@@ -31,6 +31,7 @@ using namespace std;
 
 struct Index {
     int count_ifmap_col;
+    int count_batch;
     int count_filter_col;
     int count_filter_num;
     int count_ipsum_ch;
@@ -63,7 +64,7 @@ void load_test_data(vector<vector<uint8_t>>& ifmap_data, vector<vector<vector<in
     ifmap_file.close();
     ss.str(line);  // 重設 stringstream 的內容
     ss.clear();    // 清除 stringstream 的狀態
-    for (int i = 0; i < IFMAP_COL; i++) {
+    for (int i = 0; i < Batch*IFMAP_COL; i++) {
         for (int j = 0; j < I_CH; j++) {
             if (getline(ss, value, ',')) {
                 ifmap_data[i][j] = stoi(value);
@@ -86,12 +87,13 @@ void load_test_data(vector<vector<uint8_t>>& ifmap_data, vector<vector<vector<in
         }
     }
 
+    int data_col = !Layer ? OFMAP_COL : Batch;
     ifstream ipsum_file(IPSUM_FILE);
     getline(ipsum_file, line);
     ipsum_file.close();
     ss.str(line);  // 重設 stringstream 的內容
     ss.clear();    // 清除 stringstream 的狀態
-    for (int i = 0; i < OFMAP_COL; i++) {
+    for (int i = 0; i < data_col; i++) {
         for (int j = 0; j < OFMAP_CH; j++) {
             if (getline(ss, value, ',')) {
                 ipsum_data[i][j] = stoi(value);
@@ -104,7 +106,7 @@ void load_test_data(vector<vector<uint8_t>>& ifmap_data, vector<vector<vector<in
     opsum_file.close();         // 檔案讀取完成後關閉檔案
     ss.str(line);               // 重設 stringstream 的內容
     ss.clear();                 // 清除 stringstream 的狀態
-    for (int i = 0; i < OFMAP_COL; i++) {
+    for (int i = 0; i < data_col; i++) {
         for (int j = 0; j < OFMAP_CH; j++) {
             if (getline(ss, value, ',')) {
                 opsum_data_golden[i][j] = stoi(value);  // 將字串轉成整數
@@ -126,7 +128,7 @@ void transaction(VPE* dut, int& send_data_type, Index* index, const vector<vecto
         case SEND_CONFIG:
             set_signal(dut, dut->PE_en, 1);
             if(!Layer) {set_signal(dut, dut->i_config, (Layer<<9)+((OFMAP_CH - 1) << 7) + ((OFMAP_COL - 1) << 2) + (I_CH - 1));}
-            else {set_signal(dut, dut->i_config, (Layer<<9) +((Batch-1)<<2) + (I_CH - 1));}
+            else {set_signal(dut, dut->i_config, (Layer<<9) +((OFMAP_CH - 1) << 7) +((Batch-1)<<2)+ (I_CH - 1));}
             send_data_type = SEND_FILT;
             break;
         case SEND_FILT:
@@ -156,9 +158,16 @@ void transaction(VPE* dut, int& send_data_type, Index* index, const vector<vecto
         case SEND_IFMAP:
             set_signal(dut, dut->ifmap_valid, rand() % 2);  // randomize idata_valid 0 or 1
 
-            // send_data
-            for (int i = 0; i < I_CH; i++) send_data += ifmap_data[index->count_ifmap_col][i] << (8 * i);
-            for (int i = I_CH; i < 4; i++) send_data += 128 << (8 * i);
+            // send_data (with bounds check)
+            if (index->count_ifmap_col < 0 || index->count_ifmap_col >= (int)ifmap_data.size()) {
+                cerr << "[tb_PE] ERROR: ifmap index out of range: " << index->count_ifmap_col
+                     << " (ifmap_data.size=" << ifmap_data.size() << ")\n";
+                // prevent crash: produce zero data
+                send_data = 0;
+            } else {
+                for (int i = 0; i < I_CH; i++) send_data += ifmap_data[index->count_ifmap_col][i] << (8 * i);
+                for (int i = I_CH; i < 4; i++) send_data += 128 << (8 * i);
+            }
             if (dut->ifmap_valid) {
                 set_signal(dut, dut->ifmap, send_data);
             } else {
@@ -167,7 +176,11 @@ void transaction(VPE* dut, int& send_data_type, Index* index, const vector<vecto
 
             // hand shake
             if (dut->ifmap_valid && dut->ifmap_ready) {
-                if (index->count_ifmap_col < (FILT_COL - 1)) {
+                // Compute current column within the current IFMAP window (per-batch)
+                int cur_col = 0;
+                if (IFMAP_COL > 0) cur_col = index->count_ifmap_col % IFMAP_COL;
+                // advance ifmap column until we've sent FILT_COL entries, then move to ipsum
+                if (cur_col < (FILT_COL - 1)) {
                     index->count_ifmap_col++;
                 } else {
                     send_data_type = SEND_IPSUM;
@@ -178,26 +191,65 @@ void transaction(VPE* dut, int& send_data_type, Index* index, const vector<vecto
         case SEND_IPSUM:
             set_signal(dut, dut->ipsum_valid, rand() % 2);  // randomize ipsum_valid 0 or 1
             if (dut->ipsum_valid && dut->ipsum_ready) {
-                set_signal(dut, dut->ipsum, ipsum_data[index->count_ifmap_col - FILT_COL + 1][index->count_ipsum_ch]);
+                int ipsum_row = 0;
+                if (!Layer) {
+                    ipsum_row = index->count_ifmap_col - FILT_COL + 1;
+                } else {
+                    if (IFMAP_COL > 0)
+                        ipsum_row = index->count_ifmap_col / IFMAP_COL;
+                    else
+                        ipsum_row = 0;
+                }
+                if (ipsum_row < 0 || ipsum_row >= (int)ipsum_data.size() || index->count_ipsum_ch < 0 || index->count_ipsum_ch >= (int)ipsum_data[0].size()) {
+                    cerr << "[tb_PE] ERROR: ipsum access out of range: row=" << ipsum_row << " row_count=" << ipsum_data.size()
+                         << " ch=" << index->count_ipsum_ch << " OFMAP_CH=" << OFMAP_CH << "\n";
+                    set_signal(dut, dut->ipsum, 0);
+                } else {
+                    set_signal(dut, dut->ipsum, ipsum_data[ipsum_row][index->count_ipsum_ch]);
+                }
                 if (index->count_ipsum_ch == (OFMAP_CH - 1)) {
                     index->count_ipsum_ch = 0;
                     send_data_type = STORE_OPSUM;
-                } else
+                } else {
                     index->count_ipsum_ch++;
+                }
             } else
                 dut->ipsum = 0;
             break;
         case STORE_OPSUM:
             set_signal(dut, dut->opsum_ready, rand() % 2);  // randomize opsum_ready 0 or 1
             if (dut->opsum_ready && dut->opsum_valid) {
-                opsum_data[index->count_ifmap_col - FILT_COL + 1][index->count_ofmap_ch] = dut->opsum;
+                int opsum_row = 0;
+                if (!Layer) {
+                    opsum_row = index->count_ifmap_col - FILT_COL + 1;
+                } else {
+                    if (IFMAP_COL > 0)
+                        opsum_row = index->count_ifmap_col / IFMAP_COL;
+                    else
+                        opsum_row = 0;
+                }
+                if (opsum_row < 0 || opsum_row >= (int)opsum_data.size() || index->count_ofmap_ch < 0 || index->count_ofmap_ch >= (int)opsum_data[0].size()) {
+                    cerr << "[tb_PE] ERROR: opsum write out of range: row=" << opsum_row << " rows=" << opsum_data.size()
+                         << " ch=" << index->count_ofmap_ch << " OFMAP_CH=" << OFMAP_CH << "\n";
+                } else {
+                    opsum_data[opsum_row][index->count_ofmap_ch] = dut->opsum;
+                }
                 if (index->count_ofmap_ch == (OFMAP_CH - 1)) {
                     index->count_ofmap_ch = 0;
                     send_data_type = SEND_IFMAP;
-                    if (index->count_ifmap_col == (IFMAP_COL - 1))
-                        opsum_end = 1;
-                    else
-                        index->count_ifmap_col++;
+                    if(!Layer) {
+                        if (index->count_ifmap_col == (OFMAP_COL - 1))
+                            opsum_end = 1;
+                        else
+                            index->count_ifmap_col++;
+                    }
+                    else {
+                        if (index->count_ifmap_col == (Batch * IFMAP_COL - 1))
+                            opsum_end = 1;
+                        else
+                            index->count_ifmap_col++;
+                    }
+
                 } else
                     index->count_ofmap_ch++;
             }
@@ -268,7 +320,7 @@ int main(int argc, char** argv) {
         filter_data.assign(OFMAP_CH, vector<vector<int8_t>>(3, vector<int8_t>(I_CH)));
         ipsum_data.assign(Batch, vector<int>(OFMAP_CH));
         opsum_data.assign(Batch, vector<int>(OFMAP_CH));
-        opsum_data_golden.assign(OFMAP_COL, vector<int>(OFMAP_CH));
+        opsum_data_golden.assign(Batch, vector<int>(OFMAP_CH));
     }
 
     load_test_data(ifmap_data, filter_data, ipsum_data, opsum_data_golden);
@@ -306,7 +358,10 @@ int main(int argc, char** argv) {
         dut->eval();
     }
     // Check if the output is correct
-    check_output(opsum_data, opsum_data_golden, OFMAP_COL, OFMAP_CH, time);
+    if (!Layer)
+        check_output(opsum_data, opsum_data_golden, OFMAP_COL, OFMAP_CH, time);
+    else
+        check_output(opsum_data, opsum_data_golden, Batch, OFMAP_CH, time);
 
     fp->close();
     dut->final();
