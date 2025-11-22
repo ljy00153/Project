@@ -36,7 +36,9 @@ struct Index {
     int count_filter_num;
     int count_ipsum_ch;
     int count_ofmap_ch;
+    int count_ifmap_offset;
 };
+    
 
 void print_config() {
     cout << "using TB" << TB_PE << endl;
@@ -64,14 +66,24 @@ void load_test_data(vector<vector<uint8_t>>& ifmap_data, vector<vector<vector<in
     ifmap_file.close();
     ss.str(line);  // 重設 stringstream 的內容
     ss.clear();    // 清除 stringstream 的狀態
-    for (int i = 0; i < Batch*IFMAP_COL; i++) {
-        for (int j = 0; j < I_CH; j++) {
-            if (getline(ss, value, ',')) {
-                ifmap_data[i][j] = stoi(value);
+    if(!Layer) {
+        for (int i = 0; i < IFMAP_COL; i++) {
+            for (int j = 0; j < I_CH; j++) {
+                if (getline(ss, value, ',')) {
+                    ifmap_data[i][j] = stoi(value);
+                }
+            }
+        }
+    } 
+    else {
+        for (int i = 0; i < Batch*IFMAP_COL; i++) {
+            for (int j = 0; j < I_CH; j++) {
+                if (getline(ss, value, ',')) {
+                    ifmap_data[i][j] = stoi(value);
+                }
             }
         }
     }
-
     ifstream filter_file(FILT_FILE);
     getline(filter_file, line);
     filter_file.close();
@@ -238,7 +250,7 @@ void transaction(VPE* dut, int& send_data_type, Index* index, const vector<vecto
                     index->count_ofmap_ch = 0;
                     send_data_type = SEND_IFMAP;
                     if(!Layer) {
-                        if (index->count_ifmap_col == (OFMAP_COL - 1))
+                        if (index->count_ifmap_col == (IFMAP_COL - 1))
                             opsum_end = 1;
                         else
                             index->count_ifmap_col++;
@@ -341,7 +353,7 @@ int main(int argc, char** argv) {
 
     bool opsum_end = 0;
 
-    Index index = {0};
+    Index index = {};
 
     // Simulate until time_out or opsum_end
     while (time <= 100000) {

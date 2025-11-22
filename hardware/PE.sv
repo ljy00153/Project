@@ -194,15 +194,18 @@ always_ff @( posedge clk or posedge rst ) begin
                 if(count_input_ch == input_ch)begin
                     if(count_filter_col == FILTER_COL)count_filter_col <= 0;
                     else count_filter_col <=count_filter_col+1;
-                    
                 end 
                 else count_filter_col <= count_filter_col;
             REUSE_IFMAP:
-                if(ifmap_valid)begin
-                    if(count_filter_col == FILTER_COL)count_filter_col <= 0;
-                    else count_filter_col <= count_filter_col + 1;
-                end
-                else count_filter_col <= count_filter_col;   
+                if(layer)begin
+                    if(ifmap_valid)begin
+                        if(count_filter_col == FILTER_COL)count_filter_col <= 0;
+                        else count_filter_col <= count_filter_col + 1;
+                    end
+                    else count_filter_col <= count_filter_col;
+                end 
+                else count_filter_col <= count_filter_col;
+                
             default: count_filter_col <= count_filter_col;
         endcase
       
