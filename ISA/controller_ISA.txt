@@ -72,7 +72,7 @@ OP_CPT_TAGXY	            = 6'b011000 //compute tagX and tagY of PE
 OP_COMPUTE                  = 6'b011100 // set pe enable
 OP_WAIT                     = 6'b011101 // wait for ready of pe
 OP_JUMP                     = 6'b011110 // absolute jump (pc = imm)
-OP_LOOP                     = 6'b011111 // loop counter--, 若非 0 跳
+OP_LOOP                     = 6'b011111 // loop counter += offset, if loop counter > certain value, stop looping
 
 //100xxx
 OP_LOADI                    = 6'b100000 // rd = imm
@@ -80,3 +80,95 @@ OP_ADDI                     = 6'b100001 // rd = rs + imm
 
 //111111
 OP_END                      = 6'b111111 // program end
+
+
+FMT-CFG
+31             11 10       6 5      0
++-----------------+--------+--------+
+|    reserved     | csr_id | opcode |
++-----------------+--------+--------+
+OP_CFG_DF
+OP_CFG_TILE
+OP_CFG_DRAM_IFM_ADDR
+OP_CFG_DRAM_W_ADDR
+OP_CFG_DRAM_OFM_ADDR
+OP_CFG_GLB_IFMAP_ADDR
+OP_CFG_GLB_WEIGHT_ADDR
+OP_CFG_GLB_OPSUM_ADDR
+    CSR[csr_id] = certain input
+
+FMT-DMA
+31       14 13    9 8   6 5      0
++----------+--------+----+--------+
+|  size18  | csr_id | rs | opcode |
++----------+--------+----+--------+
+OP_DMA_LOAD_IFMAP
+OP_DMA_LOAD_WEIGHT
+OP_DMA_LOAD_PSUM
+OP_DMA_STORE_OFMAP
+    DMA(DRAM_TO_GLB, CSR[csr_id] + REG[rs] , size)
+
+FMT-STREAM
+31     20 19    17 16  14 13      9 8  6 5       0
++---------+-------+-------+--------+----+--------+
+|  size12 | tagX3 | tagY3 | csr_id | rs | opcode |
++--------+-------+-------+--------+----------+--------+
+OP_G2P_IFMAP
+OP_G2P_WEIGHT
+OP_G2P_PSUM
+OP_P2G_OPSUM
+    GLB_to_PE(CSR[csr_id] + REG[rs], tagX, tagY, size)
+    PE_to_GLB(CSR[csr_id] + REG[rs], tagX, tagY, size)
+
+FMT-IDX
+31           15 14    10 9     6 5      0
++--------------+--------+--------+--------+
+|    imm16     |   rs   |   rd   | opcode |
++--------------+--------+--------+--------+
+OP_CPT_IFIDX
+OP_CPT_WTIDX
+OP_CPT_IPIDX
+OP_CPT_OPIDX
+    rd = rs + imm16
+
+FMT-TAG
+31    19 18   16 15    10 9     6 5      0
++------+-------+--------+--------+--------+
+|reser.| type  |  tagY  |  tagX  | opcode |
++------+-------+--------+--------+--------+
+OP_CPT_TAGXY
+
+FMT-CTRL
+31                           6 5      0
++-----------------------------+--------+
+|         imm26 / rsv         | opcode |
++-----------------------------+--------+
+OP_COMPUTE
+OP_WAIT
+OP_JUMP
+
+
+FMT-LOOP
+31     21 20     17 16     12 11      6 5      0
++--------+---------+---------+---------+--------+
+| offset | loopReg |  csr_id | target6 | opcode |
++--------+---------+---------+---------+--------+
+OP_LOOP
+    if (R[loopReg] <= CSR[csr_id]) PC = target
+    else PC = PC + 1
+    R[loopReg] += sign_extend(offset)
+
+FMT-ALU
+31           16 15    10 9     6 5      0
++--------------+--------+--------+--------+
+|    imm16     |   rs   |   rd   | opcode |
++--------------+--------+--------+--------+
+OP_LOADI     rd = imm16
+OP_ADDI      rd = rs + imm16
+
+FMT-END
+31                           6 5      0
++-----------------------------+--------+
+|            zeros            | opcode |
++-----------------------------+--------+
+OP_END 
