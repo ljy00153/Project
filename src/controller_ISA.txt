@@ -20,36 +20,63 @@
 
         DATA_FLOW
     Register for loop 
-        outf
-        inf
-        b
-        k
-        n
-        m
+        outf // out_features / N * 4 + 1
+        inf  // (in_features / 4) / K * 3 + 1
+        b    // batch / M + 1
+        k    // K * 3 / tk * 3 + 1
+        n    // N / tn * 8 + 1
+        m    // M / mode + 1
 
-FMT-D
-31        24 23       19 18       14 13 11 10       6 5       0
-+-----------+-----------+-----------+-----+----------+--------+
-| imm[12:5] | base(CSR) | size(CSR) | L\S | imm[4:0] | opcode |
-+-----------+-----------+-----------+-----+----------+--------+
+    General Register
+        x0 ~ x15
 
-FMT-C
-31       24 23 19 18 14 13      11 10 6 5       0
-+----------+-----+-----+----------+----+--------+
-| imm[9:3] | RS2 | RS1 | imm[2:0] | RD | opcode |
-+----------+-----+-----+----------+----+--------+
+//000xxx
+OP_NOP                      = 6'b000000 // no operation
+OP_CFG_DF                   = 6'b000001 // set dataflow (WS/OS/IS)
+OP_CFG_TILE                 = 6'b000010 // set tile sizes/strides
+OP_CFG_DRAM_IFM_ADDR        = 6'b000100 // set DRAM ifmap   base addresses
+OP_CFG_DRAM_W_ADDR          = 6'b000101 // set DRAM weight  base addresses
+OP_CFG_DRAM_OFM_ADDR        = 6'b000110 // set DRAM ofmap   base addresses
 
-FMT-P
+//001xxx
+OP_CFG_GLB_IFMAP_ADDR       = 6'b001000 // set GLB ifmap    base addresses
+OP_CFG_GLB_WEIGHT_ADDR      = 6'b001001 // set GLB weight   base addresses
+OP_CFG_GLB_OPSUM_ADDR       = 6'b001010 // set GLB ofmap    base addresses
 
-指令名      OPCODE  bitfield格式
-DMA_LD	    0x01	FMT-D
-DMA_ST	    0x02	FMT-D
-GLB2PE	    0x03	FMT-D
-PE2GLB	    0x04	FMT-D
+//0011xx
+OP_DMA_LOAD_IFMAP           = 6'b001100 // DMA read ifmap
+OP_DMA_LOAD_WEIGHT          = 6'b001101 // DMA read weights
+OP_DMA_LOAD_PSUM            = 6'b001110 // DMA read psum
+OP_DMA_STORE_OFMAP          = 6'b001111 // DMA write ofmap
 
-CPT_IFIDX	0x10	FMT-C
-CPT_WTIDX	0x11	FMT-C
-CPT_IPIDX	0x12	FMT-C
-CPT_OPIDX	0x13	FMT-C
-CPT_TAG	    0x14	FMT-C
-PE_RUN	    0x20	FMT-P
+//0100xx
+OP_G2P_IFMAP	            = 6'b010000	// GLB → PE ifmap
+OP_G2P_WEIGHT	            = 6'b010001	// GLB → PE weight
+OP_G2P_PSUM	                = 6'b010010	// GLB → PE psum
+OP_P2G_OPSUM	            = 6'b010011	// PE → GLB opsum
+
+//0101xx
+OP_CPT_IFIDX	            = 6'b010100	//compute index of ifmap    in GLB
+OP_CPT_WTIDX	            = 6'b010101	//compute index of weight   in GLB
+OP_CPT_IPIDX	            = 6'b010110	//compute index of psum     in GLB
+OP_CPT_OPIDX	            = 6'b010111	//compute index of opsum    in GLB
+
+//0110xx
+OP_CPT_TAGXY	            = 6'b011000 //compute tagX and tagY of PE 
+                                        //ifmap:    tagX, tagY
+                                        //weight:   tagX, tagY
+                                        //ipsum:    tagX, tagY
+                                        //opsum:    tagX, tagY
+                                        //total 4 kind of tag -> 8 small Register
+//0111xx
+OP_COMPUTE                  = 6'b011100 // set pe enable
+OP_WAIT                     = 6'b011101 // wait for ready of pe
+OP_JUMP                     = 6'b011110 // absolute jump (pc = imm)
+OP_LOOP                     = 6'b011111 // loop counter--, 若非 0 跳
+
+//100xxx
+OP_LOADI                    = 6'b100000 // rd = imm
+OP_ADDI                     = 6'b100001 // rd = rs + imm
+
+//111111
+OP_END                      = 6'b111111 // program end
