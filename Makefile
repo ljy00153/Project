@@ -19,8 +19,8 @@ CXXFLAGS += -g
 # VERILATOR_FLAGS += -x-assign fast
 
 # Warn abount lint issues; may not want this on less solid designs
-# VERILATOR_FLAGS += -Wall
-# VERILATOR_FLAGS += -Wall -Wno-lint
+ #VERILATOR_FLAGS += -Wall
+  VERILATOR_FLAGS += -Wall -Wno-lint
 
 # Automatically build the Verilated model
 VERILATOR_FLAGS += --build

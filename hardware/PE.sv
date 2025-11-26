@@ -66,7 +66,7 @@ assign ofmap_count = count_ofmap_ch;
 
 assign filter_ready = (cs == REC_FIL)? 1'b1 : 1'b0;
 assign ifmap_ready = (cs == REC_IFMAP||cs == REUSE_IFMAP)? 1'b1 : 1'b0;
-assign ipsum_ready = (cs != ADD_IPSUM && cs != OUTPUT_OPSUM)? 1'b1 : 1'b0;//load ipsum into spad at anytime except ADD_IPSUM and OPSUM state
+assign ipsum_ready = (cs != OUTPUT_OPSUM && !ipsum_full)? 1'b1 : 1'b0;//load ipsum into spad at anytime except ADD_IPSUM and OPSUM state
 assign opsum_valid = (cs == OUTPUT_OPSUM)? 1'b1 : 1'b0;
 assign opsum = ofmap_spad[ofmap_count];
 always_ff@(posedge clk or posedge rst)begin
@@ -93,7 +93,7 @@ always_comb begin
             if(ifmap_valid &&  count_filter_col == FILTER_COL)ns=COMPUTE;
             else ns=REC_IFMAP;
         COMPUTE:
-            if(count_filter_col == FILTER_COL&& count_input_ch == input_ch && count_ofmap_ch == ofmap_ch&&ipsum_full)ns=ADD_IPSUM;
+            if(count_filter_col == FILTER_COL&& count_input_ch == input_ch && count_ofmap_ch == ofmap_ch)ns=ADD_IPSUM;
             else ns=COMPUTE;
         ADD_IPSUM:
             if( count_ofmap_ch== ofmap_ch)ns=OUTPUT_OPSUM;
@@ -351,7 +351,7 @@ always_ff @( posedge clk or posedge rst ) begin
         ipsum_top <= 2'b0;
     end 
     else begin
-        if (ipsum_valid) begin
+        if (ipsum_valid ) begin
             ipsum_spad[ipsum_top] <= ipsum;
             ipsum_top <= ipsum_top + 1'b1;
             
@@ -375,7 +375,7 @@ always_ff @( posedge clk or posedge rst ) begin
     end 
     else begin
 
-        if(ipsum_top == 2'b11)begin
+        if(ipsum_top == 2'b11&ipsum_valid)begin
             ipsum_full <= 1'b1;
         end 
         else if(cs == OUTPUT_OPSUM && opsum_ready)begin
