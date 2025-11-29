@@ -87,7 +87,7 @@ FMT-CFG
 +----------+--------+------+--------+
 | reserved | csr_id | type | opcode |
 +----------+--------+------+--------+
-OP_CFG_SET
+OP_CFG_SET csr_id type
     case(type)
         0:  input = DATA_FLOW
         1:  input = TILE
@@ -107,10 +107,10 @@ FMT-DMA
 +----------+--------+----+--------+
 |  size18  | csr_id | rs | opcode |
 +----------+--------+----+--------+
-OP_DMA_LOAD_IFMAP
-OP_DMA_LOAD_WEIGHT
-OP_DMA_LOAD_PSUM
-OP_DMA_STORE_OFMAP
+OP_DMA_LOAD_IFMAP   csr_id rs size
+OP_DMA_LOAD_WEIGHT  csr_id rs size
+OP_DMA_LOAD_PSUM    csr_id rs size
+OP_DMA_STORE_OFMAP  csr_id rs size
     DMA(DRAM_TO_GLB, CSR[csr_id] + REG[rs] , size)
 
 FMT-STREAM
@@ -118,8 +118,8 @@ FMT-STREAM
 +---------+--------+----+--------+
 |  size18 | csr_id | rs | opcode |
 +---------+--------+----+--------+
-OP_G2P
-OP_P2G_OPSUM
+OP_G2P          csr_id rs size
+OP_P2G_OPSUM    csr_id rs size
     IFMAP:  tagY = 0, tagX = 1
     WEIGHT: tagY = 2, tagX = 3
     IPSUM:  tagY = 4, tagX = 5
@@ -133,10 +133,10 @@ FMT-IDX
 +--------------+--------+--------+--------+
 |    imm18     |   rs   |   rd   | opcode |
 +--------------+--------+--------+--------+
-OP_CPT_IFIDX
-OP_CPT_WTIDX
-OP_CPT_IPIDX
-OP_CPT_OPIDX
+OP_CPT_IFIDX rd rs imm
+OP_CPT_WTIDX rd rs imm
+OP_CPT_IPIDX rd rs imm
+OP_CPT_OPIDX rd rs imm
     rd = rs + imm16
 
 FMT-TAG
@@ -144,7 +144,7 @@ FMT-TAG
 +---------+------+--------+
 | reserve | type | opcode |
 +---------+------+--------+
-OP_CPT_TAGXY
+OP_CPT_TAGXY type
     case(type)
         IFMAP   : tagY = 0// count_ifmap_y,     tagX = 1// count_ifmap_x
         WEIGHT  : tagY = 2// count_weight_y,    tagX = 3// count_weight_x
@@ -175,10 +175,10 @@ OP_CPT_TAGXY
         count_opsum_y = 5
 
 FMT-COMPUTE (OP_COMPUTE)
-31             9 8       6 5       0
-+---------------+---------+--------+
-|     reserved  | valid_e | opcode |
-+---------------+---------+--------+
+31           6 5       0
++-------------+--------+
+|   reserved  | opcode |
++-------------+--------+
 OP_COMPUTE
     case(valid_e)
         0: PE_en = {6{8'b00000000}};
@@ -194,7 +194,8 @@ FMT-WAIT (OP_WAIT)
 +------------+------------+--------+
 |  reserved  | DMA or GLB | opcode |
 +------------+------------+--------+
-OP_WAIT
+OP_WAIT DMA
+OP_WAIT GLB
     OP_WAIT(DMA), OP_WAIT(GLB)
     DMA = 1
     GLB = 0
@@ -204,14 +205,15 @@ FMT-JUMP (OP_JUMP)
 +-----------------------------+--------+
 |        jump_addr26          | opcode |
 +-----------------------------+--------+
-OP_JUMP     PC = PC + jump_addr
+OP_JUMP jump_addr      
+    PC = PC + jump_addr
 
 FMT-LOOP
 31     20 29     14 13     10 9       6 5       0
 +--------+---------+---------+---------+--------+
 | offset | target6 |  csr_id | loopReg | opcode |
 +--------+---------+---------+---------+--------+
-OP_LOOP
+OP_LOOP csr_id loopReg target offset
     if (REG[loopReg] <= CSR[csr_id]) PC = target
     else PC = PC + 1
     REG[loopReg] += sign_extend(offset)
@@ -221,8 +223,10 @@ FMT-ALU
 +--------------+--------+--------+--------+
 |    imm18     |   rs   |   rd   | opcode |
 +--------------+--------+--------+--------+
-OP_LOADI     rd = imm16
-OP_ADDI      rd = rs + imm16
+OP_LOADI rd imm   
+    rd = imm16
+OP_ADDI rd rs imm      
+    rd = rs + imm16
 
 FMT-END
 31                           6 5      0
