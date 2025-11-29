@@ -40,7 +40,7 @@
             
 //000xxx
 OP_NOP                      = 6'b000000 // no operation
-OP_CFG_SET                   = 6'b000001 // set dataflow (WS/OS/IS)
+OP_CFG_SET                  = 6'b000001 // set CSR
 
 //001xxx
 OP_CFG_GLB_IFMAP_ADDR       = 6'b001000 // set GLB ifmap    base addresses
@@ -95,14 +95,6 @@ FMT-CFG
 | reserved | csr_id | type | opcode |
 +----------+--------+------+--------+
 OP_CFG_SET
-    DATA_FLOW
-    TILE            
-    DRAM_IFM_ADDR   
-    DRAM_W_ADDR     
-    DRAM_OFM_ADDR   
-    GLB_IFMAP_ADDR  
-    GLB_WEIGHT_ADDR 
-    GLB_OPSUM_ADDR  
     case(type)
         0:  input = DATA_FLOW
         1:  input = TILE
