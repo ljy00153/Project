@@ -151,10 +151,27 @@ OP_CPT_TAGXY
         WEIGHT  : tagY = count_weight_y, tagY = count_weight_x 
         IPSUM   : tagY = count_ipsum_y, tagY = count_ipsum_x 
         OPSUM   : tagY = count_opsum_y, tagY = count_opsum_x 
-    count_ifmap_y, count_ifmap_x
-    count_weight_y, count_weight_x
-    count_ipsum_y, count_ipsum_x
-    count_opsum_y, count_opsum_x
+    //ifmap GIN bus tag setting
+    ifmap_bus_x: bus_tag = 0
+    ifmap_bus_y: bus_tag = i, i from 0 to 5
+        count_ifmap_x = 0   
+        count_ifmap_y++     
+    //weight GIN bus tag setting
+    weight_bus_x: bus_tag = i, i from 0 to 7
+    weight_bus_y: bus_tag = i, i from 0 to 5
+        count_weight_x = (PE_weight_num == 12)? count_weight_x++ ： count_weight_x
+        count_weight_y = (count_weight_x == 7)? count_weight_y++ : count_weight_y
+    //ipsum GIN bus tag setting
+    ipsum_bus_x: bus_tag = i, i from 0 to 7
+    ipsum_bus_y: bus_tag = i, i from 0 to 5
+        //only PE at ROW[0] will receive ipsum
+        count_ipsum_x = (PE_ipsum_num == 4)? count_weight_x++ ： count_weight_x
+        count_ipsum_y = 0
+    //opsum GIN bus tag setting
+    opsum_bus_x: bus_tag = i, i from 0 to 7
+    opsum_bus_y: bus_tag = i, i from 0 to 5
+        count_opsum_x = (PE_opsum_num == 4)? count_weight_x++ ： count_weight_x
+        count_opsum_y = 5
 
 FMT-COMPUTE (OP_COMPUTE)
 31             9 8       6 5       0
