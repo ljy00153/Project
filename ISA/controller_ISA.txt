@@ -8,13 +8,15 @@
         CSR[4]: GLB_WEIGHT_BASE
         CSR[5]: GLB_OPSUM_BASE
 
-        CSR[6]: M_SIZE
-        CSR[7]: N_SIZE
-        CSR[8]: K_SIZE
-        CSR[9]: B_SIZE
-        CSR[10]: MODE
+        CSR[6]: OF_SIZE
+        CSR[7]: IF_SIZE
+        CSR[8]: B_SIZE
+        CSR[9]: K_SIZE
+        CSR[10]: N_SIZE
+        CSR[11]: M_SIZE
 
-        CSR[11]: DATA_FLOW
+        CSR[12]: MODE
+        CSR[13]: DATA_FLOW
     Register 32bit
         loop:
             REG[0]: outf // out_features / N * 4 + 1
