@@ -1,30 +1,43 @@
 #Register
     CSR 32bit
-        DRAM_IFMAP_BASE
-        DRAM_WEIGHT_BASE
-        DRAM_OFMAP_BASE
+        CSR[0]: DRAM_IFMAP_BASE
+        CSR[1]: DRAM_WEIGHT_BASE
+        CSR[2]: DRAM_OFMAP_BASE
 
-        GLB_IFMAP_BASE
-        GLB_WEIGHT_BASE
-        GLB_OPSUM_BASE
+        CSR[3]: GLB_IFMAP_BASE
+        CSR[4]: GLB_WEIGHT_BASE
+        CSR[5]: GLB_OPSUM_BASE
 
-        M_SIZE
-        N_SIZE
-        K_SIZE
-        B_SIZE
-        MODE
+        CSR[6]: M_SIZE
+        CSR[7]: N_SIZE
+        CSR[8]: K_SIZE
+        CSR[9]: B_SIZE
+        CSR[10]: MODE
 
-        DATA_FLOW
-    Register for loop (REG)32bit
-        outf // out_features / N * 4 + 1
-        inf  // (in_features / 4) / K * 3 + 1
-        b    // batch / M + 1
-        k    // K * 3 / tk * 3 + 1
-        n    // N / tn * 8 + 1
-        m    // M / mode + 1
+        CSR[11]: DATA_FLOW
+    Register 32bit
+        loop:
+            REG[0]: outf // out_features / N * 4 + 1
+            REG[1]: inf  // (in_features / 4) / K * 3 + 1
+            REG[2]: b    // batch / M + 1
+            REG[3]: k    // K * 3 / tk * 3 + 1
+            REG[4]: n    // N / tn * 8 + 1
+            REG[5]: m    // M / mode + 1
+        compute:
+            REG[6]: valid_e 
         General Register
-            
+            REG[7] ~ REG[15]
+    TAG 3bit
+        TAG[0]: count_ifmap_y
+        TAG[1]: count_ifmap_x
+        TAG[2]: count_weight_y
+        TAG[3]: count_weight_x
+        TAG[4]: count_ipsum_y
+        TAG[5]: count_ipsum_x
+        TAG[6]: count_opsum_y
+        TAG[7]: count_opsum_x
 
+            
 //000xxx
 OP_NOP                      = 6'b000000 // no operation
 OP_CFG_SET                   = 6'b000001 // set dataflow (WS/OS/IS)
@@ -150,7 +163,6 @@ OP_CPT_TAGXY
     count_weight_y, count_weight_x
     count_ipsum_y, count_ipsum_x
     count_opsum_y, count_opsum_x
-    these register are including in REG
 
 FMT-COMPUTE (OP_COMPUTE)
 31             9 8       6 5       0
