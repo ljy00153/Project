@@ -48,11 +48,9 @@ OP_DMA_LOAD_WEIGHT          = 6'b000101 // DMA read weights
 OP_DMA_LOAD_PSUM            = 6'b000110 // DMA read psum
 OP_DMA_STORE_OFMAP          = 6'b000111 // DMA write ofmap
 
-//0010xx
-OP_G2P_IFMAP	            = 6'b001000	// GLB → PE ifmap
-OP_G2P_WEIGHT	            = 6'b001001	// GLB → PE weight
-OP_G2P_PSUM	                = 6'b001010	// GLB → PE psum
-OP_P2G_OPSUM	            = 6'b001011	// PE → GLB opsum
+//00100x
+OP_G2P	                    = 6'b001000	// GLB → PE
+OP_P2G_OPSUM	            = 6'b001001	// PE → GLB opsum
 
 //0100xx
 OP_CPT_IFIDX	            = 6'b010000	//compute index of ifmap    in GLB
@@ -61,7 +59,7 @@ OP_CPT_IPIDX	            = 6'b010010	//compute index of psum     in GLB
 OP_CPT_OPIDX	            = 6'b010011	//compute index of opsum    in GLB
 
 //011000
-OP_CPT_TAGXY	            = 6'b011000 //compute tagX and tagY of PE 
+OP_CPT_TAGXY	            = 6'b011000 //compute and set tagX and tagY of PE 
                                         //ifmap:    tagX, tagY
                                         //weight:   tagX, tagY
                                         //ipsum:    tagX, tagY
@@ -116,16 +114,19 @@ OP_DMA_STORE_OFMAP
     DMA(DRAM_TO_GLB, CSR[csr_id] + REG[rs] , size)
 
 FMT-STREAM
-31     20 29    17 16   14 13    10 9  6 5       0
-+---------+-------+-------+--------+----+--------+
-|  size12 | tagX3 | tagY3 | csr_id | rs | opcode |
-+---------+-------+-------+--------+----+--------+
-OP_G2P_IFMAP
-OP_G2P_WEIGHT
-OP_G2P_PSUM
+31     14 13     10 9  6 5       0
++---------+--------+----+--------+
+|  size18 | csr_id | rs | opcode |
++---------+--------+----+--------+
+OP_G2P
 OP_P2G_OPSUM
-    GLB_to_PE(CSR[csr_id] + REG[rs], tagX, tagY, size)
-    PE_to_GLB(CSR[csr_id] + REG[rs], tagX, tagY, size)
+    IFMAP:  tagY = 0, tagX = 1
+    WEIGHT: tagY = 2, tagX = 3
+    IPSUM:  tagY = 4, tagX = 5
+    OPSUM:  tagY = 6, tagX = 7
+
+    GLB_to_PE(CSR[csr_id] + REG[rs], size)
+    PE_to_GLB(CSR[csr_id] + REG[rs], size)
 
 FMT-IDX
 31           14 13    10 9     6 5      0
@@ -139,10 +140,10 @@ OP_CPT_OPIDX
     rd = rs + imm16
 
 FMT-TAG
-31    14 13   12 11    9 8      6 5       0
-+------+-------+--------+--------+--------+
-|reser.| type  |  tagY  |  tagX  | opcode |
-+------+-------+--------+--------+--------+
+31      8 7     6 5       0
++---------+------+--------+
+| reserve | type | opcode |
++---------+------+--------+
 OP_CPT_TAGXY
     case(type)
         IFMAP   : tagY = 0// count_ifmap_y,     tagX = 1// count_ifmap_x
