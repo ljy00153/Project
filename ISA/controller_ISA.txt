@@ -38,34 +38,29 @@
         TAG[7]: count_opsum_x
 
             
-//000xxx
+//00000x
 OP_NOP                      = 6'b000000 // no operation
 OP_CFG_SET                  = 6'b000001 // set CSR
 
-//001xxx
-OP_CFG_GLB_IFMAP_ADDR       = 6'b001000 // set GLB ifmap    base addresses
-OP_CFG_GLB_WEIGHT_ADDR      = 6'b001001 // set GLB weight   base addresses
-OP_CFG_GLB_OPSUM_ADDR       = 6'b001010 // set GLB ofmap    base addresses
+//0001xx
+OP_DMA_LOAD_IFMAP           = 6'b000100 // DMA read ifmap
+OP_DMA_LOAD_WEIGHT          = 6'b000101 // DMA read weights
+OP_DMA_LOAD_PSUM            = 6'b000110 // DMA read psum
+OP_DMA_STORE_OFMAP          = 6'b000111 // DMA write ofmap
 
-//0011xx
-OP_DMA_LOAD_IFMAP           = 6'b001100 // DMA read ifmap
-OP_DMA_LOAD_WEIGHT          = 6'b001101 // DMA read weights
-OP_DMA_LOAD_PSUM            = 6'b001110 // DMA read psum
-OP_DMA_STORE_OFMAP          = 6'b001111 // DMA write ofmap
+//0010xx
+OP_G2P_IFMAP	            = 6'b001000	// GLB → PE ifmap
+OP_G2P_WEIGHT	            = 6'b001001	// GLB → PE weight
+OP_G2P_PSUM	                = 6'b001010	// GLB → PE psum
+OP_P2G_OPSUM	            = 6'b001011	// PE → GLB opsum
 
 //0100xx
-OP_G2P_IFMAP	            = 6'b010000	// GLB → PE ifmap
-OP_G2P_WEIGHT	            = 6'b010001	// GLB → PE weight
-OP_G2P_PSUM	                = 6'b010010	// GLB → PE psum
-OP_P2G_OPSUM	            = 6'b010011	// PE → GLB opsum
+OP_CPT_IFIDX	            = 6'b010000	//compute index of ifmap    in GLB
+OP_CPT_WTIDX	            = 6'b010001	//compute index of weight   in GLB
+OP_CPT_IPIDX	            = 6'b010010	//compute index of psum     in GLB
+OP_CPT_OPIDX	            = 6'b010011	//compute index of opsum    in GLB
 
-//0101xx
-OP_CPT_IFIDX	            = 6'b010100	//compute index of ifmap    in GLB
-OP_CPT_WTIDX	            = 6'b010101	//compute index of weight   in GLB
-OP_CPT_IPIDX	            = 6'b010110	//compute index of psum     in GLB
-OP_CPT_OPIDX	            = 6'b010111	//compute index of opsum    in GLB
-
-//0110xx
+//011000
 OP_CPT_TAGXY	            = 6'b011000 //compute tagX and tagY of PE 
                                         //ifmap:    tagX, tagY
                                         //weight:   tagX, tagY
@@ -90,7 +85,7 @@ REG[31:0] [3:0]//size, number
 TAG[2:0]  [2:0]//size, number
 
 FMT-CFG
-31       14 13     10 9   6 5       0
+31       15 14    11 10   6 5       0
 +----------+--------+------+--------+
 | reserved | csr_id | type | opcode |
 +----------+--------+------+--------+
@@ -104,6 +99,9 @@ OP_CFG_SET
         5:  input = GLB_IFMAP_ADDR 
         6:  input = GLB_WEIGHT_ADDR
         7:  input = GLB_OPSUM_ADDR 
+        8:  input = GLB_IFMAP_BASE
+        9:  input = GLB_WEIGHT_BASE
+        10: input = GLB_OPSUM_BASE
     CSR[csr_id] = input
 
 FMT-DMA
@@ -152,32 +150,32 @@ OP_CPT_TAGXY
         IPSUM   : tagY = count_ipsum_y, tagY = count_ipsum_x 
         OPSUM   : tagY = count_opsum_y, tagY = count_opsum_x 
     //ifmap GIN bus tag setting
-    ifmap_bus_x: bus_tag = 0
-    ifmap_bus_y: bus_tag = i, i from 0 to 5
+        ifmap_bus_x: bus_tag = 0
+        ifmap_bus_y: bus_tag = i, i from 0 to 5
         count_ifmap_x = 0   
         count_ifmap_y++     
     //weight GIN bus tag setting
-    weight_bus_x: bus_tag = i, i from 0 to 7
-    weight_bus_y: bus_tag = i, i from 0 to 5
+        weight_bus_x: bus_tag = i, i from 0 to 7
+        weight_bus_y: bus_tag = i, i from 0 to 5
         count_weight_x = (PE_weight_num == 12)? count_weight_x++ ： count_weight_x
         count_weight_y = (count_weight_x == 7)? count_weight_y++ : count_weight_y
     //ipsum GIN bus tag setting
-    ipsum_bus_x: bus_tag = i, i from 0 to 7
-    ipsum_bus_y: bus_tag = i, i from 0 to 5
+        ipsum_bus_x: bus_tag = i, i from 0 to 7
+        ipsum_bus_y: bus_tag = i, i from 0 to 5
         //only PE at ROW[0] will receive ipsum
         count_ipsum_x = (PE_ipsum_num == 4)? count_weight_x++ ： count_weight_x
         count_ipsum_y = 0
     //opsum GIN bus tag setting
-    opsum_bus_x: bus_tag = i, i from 0 to 7
-    opsum_bus_y: bus_tag = i, i from 0 to 5
+        opsum_bus_x: bus_tag = i, i from 0 to 7
+        opsum_bus_y: bus_tag = i, i from 0 to 5
         count_opsum_x = (PE_opsum_num == 4)? count_weight_x++ ： count_weight_x
         count_opsum_y = 5
 
 FMT-COMPUTE (OP_COMPUTE)
 31             9 8       6 5       0
-+-------------------------+--------+
++---------------+---------+--------+
 |     reserved  | valid_e | opcode |
-+------------------+--------+
++---------------+---------+--------+
 OP_COMPUTE
     case(valid_e)
         0: PE_en = {6{8'b00000000}};
