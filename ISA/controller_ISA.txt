@@ -83,13 +83,13 @@ FMT-CFG
 +----------+--------+------+--------+
 OP_CFG_SET
     DATA_FLOW
-    TILE            :
-    DRAM_IFM_ADDR   :
-    DRAM_W_ADDR     :
-    DRAM_OFM_ADDR   :
-    GLB_IFMAP_ADDR  :
-    GLB_WEIGHT_ADDR :
-    GLB_OPSUM_ADDR  :
+    TILE            
+    DRAM_IFM_ADDR   
+    DRAM_W_ADDR     
+    DRAM_OFM_ADDR   
+    GLB_IFMAP_ADDR  
+    GLB_WEIGHT_ADDR 
+    GLB_OPSUM_ADDR  
     case(type)
         0:  input = DATA_FLOW
         1:  input = TILE
