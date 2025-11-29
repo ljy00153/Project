@@ -4,10 +4,6 @@
         DRAM_WEIGHT_BASE
         DRAM_OFMAP_BASE
 
-        DRAM_IFMAP_SIZE
-        DRAM_WEIGHT_SIZE
-        DRAM_OFMAP_SIZE
-
         GLB_IFMAP_BASE
         GLB_WEIGHT_BASE
         GLB_OPSUM_BASE
@@ -31,11 +27,7 @@
 
 //000xxx
 OP_NOP                      = 6'b000000 // no operation
-OP_CFG_DF                   = 6'b000001 // set dataflow (WS/OS/IS)
-OP_CFG_TILE                 = 6'b000010 // set tile sizes/strides
-OP_CFG_DRAM_IFM_ADDR        = 6'b000100 // set DRAM ifmap   base addresses
-OP_CFG_DRAM_W_ADDR          = 6'b000101 // set DRAM weight  base addresses
-OP_CFG_DRAM_OFM_ADDR        = 6'b000110 // set DRAM ofmap   base addresses
+OP_CFG_SET                   = 6'b000001 // set dataflow (WS/OS/IS)
 
 //001xxx
 OP_CFG_GLB_IFMAP_ADDR       = 6'b001000 // set GLB ifmap    base addresses
@@ -85,19 +77,29 @@ REG[31:0] [3:0]//size, number
 TAG[2:0]  [2:0]//size, number
 
 FMT-CFG
-31       14 13     10 9       6 5       0
-+----------+--------+----------+--------+
-| reserved | csr_id | reserved | opcode |
-+----------+--------+----------+--------+
-OP_CFG_DF
-OP_CFG_TILE
-OP_CFG_DRAM_IFM_ADDR
-OP_CFG_DRAM_W_ADDR
-OP_CFG_DRAM_OFM_ADDR
-OP_CFG_GLB_IFMAP_ADDR
-OP_CFG_GLB_WEIGHT_ADDR
-OP_CFG_GLB_OPSUM_ADDR
-    CSR[csr_id] = certain input
+31       14 13     10 9   6 5       0
++----------+--------+------+--------+
+| reserved | csr_id | type | opcode |
++----------+--------+------+--------+
+OP_CFG_SET
+    DATA_FLOW
+    TILE            :
+    DRAM_IFM_ADDR   :
+    DRAM_W_ADDR     :
+    DRAM_OFM_ADDR   :
+    GLB_IFMAP_ADDR  :
+    GLB_WEIGHT_ADDR :
+    GLB_OPSUM_ADDR  :
+    case(type)
+        0:  input = DATA_FLOW
+        1:  input = TILE
+        2:  input = DRAM_IFM_ADDR
+        3:  input = DRAM_W_ADDR
+        4:  input = DRAM_OFM_ADDR    
+        5:  input = GLB_IFMAP_ADDR 
+        6:  input = GLB_WEIGHT_ADDR
+        7:  input = GLB_OPSUM_ADDR 
+    CSR[csr_id] = input
 
 FMT-DMA
 31       14 13    10 9   6 5      0
