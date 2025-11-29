@@ -1,0 +1,400 @@
+import re
+import sys
+import struct
+
+# ----------------------------------
+#  CSR + Loop Register Symbol Tables 
+# ----------------------------------
+CSR_MAP = {
+    'DRAM_IFMAP_BASE':      0,
+    'DRAM_WEIGHT_BASE':     1,
+    'DRAM_OFMAP_BASE':      2,
+
+    'GLB_IFMAP_BASE':       3,
+    'GLB_WEIGHT_BASE':      4,
+    'GLB_OPSUM_BASE':       5,
+
+    'OF_SIZE':              6,
+    'IF_SIZE':              7,
+    'B_SIZE':               8,
+    'K_SIZE':               9,
+    'N_SIZE':               10,
+    'M_SIZE':               11,
+
+    'MODE':                 12,
+    'DATA_FLOW':            13,
+}
+
+LOOP_REG_MAP = {
+    'x0':   0,
+    'outf': 1,
+    'inf':  2,
+    'b':    3,
+    'k':    4,
+    'n':    5,
+    'm':    6,
+    'e':    7,
+}
+
+TAG_TYPE_MAP = {
+    'IFMAP':    0,
+    'WEIGHT':   1,
+    'IPSUM':    2,
+    'OPSUM':    3,
+}
+
+# ----------------------
+# Instruction Opcodes
+# ----------------------
+OPC = {
+    'NOP':              0b000000,
+    'CFG_SET':          0b000001,
+
+    'DMA_LOAD_IFMAP':   0b000100,
+    'DMA_LOAD_WEIGHT':  0b000101,
+    'DMA_LOAD_PSUM':    0b000110,
+    'DMA_STORE_OFMAP':  0b000111,
+
+    'G2P':              0b001000,
+    'P2G_OPSUM':        0b001001,
+
+    'CPT_IFIDX':        0b010000,
+    'CPT_WTIDX':        0b010001,
+    'CPT_IPIDX':        0b010010,
+    'CPT_OPIDX':        0b010011,
+
+    'CPT_TAGXY':        0b011000,
+
+    'COMPUTE':          0b011100,
+    'WAIT':             0b011101,
+    'JUMP':             0b011110,
+    'LOOP':             0b011111,
+
+    'LOADI':            0b100000,
+    'ADDI':             0b100001,
+
+    'END':              0b111111,
+}
+
+WAIT = {
+    'GLB': 0,
+    'DMA': 1,
+}
+
+# -------------------------------------------------------
+# Operand Parser
+# -------------------------------------------------------
+def parse_operand(tok):
+    tok = tok.strip()
+
+    if tok in LOOP_REG_MAP:
+        return ("reg", LOOP_REG_MAP[tok])
+
+    if tok in CSR_MAP:
+        return ("csr", CSR_MAP[tok])
+
+    if tok in TAG_TYPE_MAP:
+        return ("tagtype", TAG_TYPE_MAP[tok])
+    if tok in WAIT:
+        return ("waittype", WAIT[tok])
+
+    m = re.match(r'^CSR\[(\d+)\]$', tok)
+    if m:
+        return ("csr", int(m.group(1)))
+
+    m = re.match(r'^REG\[(\d+)\]$', tok)
+    if m:
+        return ("reg", int(m.group(1)))
+
+    m = re.match(r'^[Rr](\d+)$', tok)
+    if m:
+        return ("reg", int(m.group(1)))
+
+    if re.match(r'^0x[0-9A-Fa-f]+$', tok):
+        return ("imm", int(tok,16))
+
+    if re.match(r'^-?\d+$', tok):
+        return ("imm", int(tok))
+
+    return ("label", tok)
+
+# -------------------------------------------------------
+# Pass 1: parse program & collect labels
+# -------------------------------------------------------
+def assemble(lines):
+    program = []
+    labels = {}
+    pc = 0
+
+    for lineno, line in enumerate(lines):
+        line = line.strip()
+        if line == "" or line.startswith("#"):
+            continue
+
+        if ":" in line:
+            label = line.replace(":", "").strip()
+            labels[label] = pc
+            continue
+
+        parts = line.split()
+        op = parts[0].upper()
+        operands = []
+        if len(parts) > 1:
+            operands = [x.strip() for x in " ".join(parts[1:]).split(",")]
+
+        program.append( (pc, op, operands, lineno) )
+        pc += 1
+    return program, labels
+
+# -------------------------------------------------------
+# Helper to encode 32-bit
+# -------------------------------------------------------
+def enc32(**kwargs):
+    v = 0
+    for key, val in kwargs.items():
+        shift = val[0]
+        field  = val[1]
+        v |= (field << shift)
+    return v & 0xffffffff
+
+# -------------------------------------------------------
+# Pass 2: encode instructions
+# -------------------------------------------------------
+def encode(program, labels):
+    out = []
+
+    for pc, op, operands, lineno in program:
+
+        # ------------------------------
+        # NOP / END
+        # ------------------------------
+        if op == "NOP" or op == "END":
+            out.append( OPC[op] )
+            continue
+
+        # ------------------------------
+        # CFG_SET
+        # FMT-CFG
+        # Syntax: CFG_SET csr, reg, label, offset
+        # ------------------------------
+        if op == "CFG_SET":
+            csr, typ = operands
+            t0, csr_id = parse_operand(csr)
+            t1, typ_val = parse_operand(typ)
+            instr = enc32(
+                opcode=(0, OPC['CFG_SET']),
+                type=(6, typ_val & 0xF),
+                csr=(10, csr_id & 0xF),
+            )
+            out.append(instr)
+            continue
+
+        # ------------------------------
+        # DMA
+        # FMT-DMA
+        # Syntax: DMA_LOAD_IFMAP   csr_id rs size
+        #         DMA_LOAD_WEIGHT  csr_id rs size
+        #         DMA_LOAD_PSUM    csr_id rs size
+        #         DMA_STORE_OFMAP  csr_id rs size
+        # ------------------------------
+        if op.startswith("DMA_"):
+            t, csr_id = parse_operand(operands[0])
+            rs, r = parse_operand(operands[1])
+            s, c = parse_operand(operands[2])
+            instr = enc32(
+                opcode=(0, OPC[op]),
+                rs=(6, r & 0xF),
+                csr=(10, csr_id & 0xF),
+                size=(14, c & 0x3FFFF),
+            )
+            out.append(instr)
+            continue
+
+        # ------------------------------
+        # G2P / P2G_OPSUM
+        # FMT-STREAM
+        # Syntax: G2P          csr_id rs size
+        #         P2G_OPSUM    csr_id rs size
+        # ------------------------------
+        if op == "G2P" or op == "P2G_OPSUM":
+            tcsr, csr_id = parse_operand(operands[0])
+            tr, r = parse_operand(operands[1])
+            ts, sz = parse_operand(operands[2])
+            instr = enc32(
+                opcode=(0, OPC[op]),
+                rs=(6, r & 0xF),
+                csr=(10, csr_id & 0xF),
+                size=(14, sz & 0x3FFFF),
+            )
+            out.append(instr)
+            continue
+
+        # ------------------------------
+        # CPT_IDX (IFIDX / WTIDX / IPIDX / OPIDX)
+        # FMT-IDX
+        # Syntax: CPT_IFIDX rd rs imm
+        #         CPT_WTIDX rd rs imm
+        #         CPT_IPIDX rd rs imm
+        #         CPT_OPIDX rd rs imm
+        # ------------------------------
+        if op.startswith("CPT_") and op.endswith("IDX"):
+            trd, rd = parse_operand(operands[0])
+            trs, rs = parse_operand(operands[1])
+            timm, imm = parse_operand(operands[2])
+            instr = enc32(
+                opcode=(0, OPC[op]),
+                rd=(6, rd & 0xF),
+                rs=(10, rs & 0xF),
+                imm=(14, imm & 0x3FFFF),
+            )
+            out.append(instr)
+            continue
+
+        # ------------------------------
+        # CPT_TAGXY
+        # Syntax: CPT_TAGXY type
+        # ------------------------------
+        if op == "CPT_TAGXY":
+            t, typ = parse_operand(operands[0])
+            instr = enc32(
+                opcode=(0, OPC['CPT_TAGXY']),
+                type=(6, typ & 0x3),
+            )
+            out.append(instr)
+            continue
+
+        # ------------------------------
+        # COMPUTE
+        # FMT-COMPUTE
+        # Syntax: COMPUTE
+        # ------------------------------
+        if op == "COMPUTE":
+            out.append(OPC['COMPUTE'])
+            continue
+
+        # ------------------------------
+        # WAIT
+        # FMT-WAIT
+        # Syntax: WAIT DMA
+        #         WAIT GLB
+        # ------------------------------
+        if op == "WAIT":
+            tm, typ = parse_operand(operands[0])
+            instr = enc32(
+                opcode=(0, OPC['WAIT']),
+                type=(6, typ & 0x1),
+            )
+            out.append(instr)
+            continue
+
+        # ------------------------------
+        # JUMP
+        # FMT-JUMP
+        # Syntax: JUMP label
+        # ------------------------------
+        if op == "JUMP":
+            label = operands[0]
+            if label not in labels:
+                raise Exception(f"Unknown label {label}")
+            target_pc = labels[label]
+            imm = target_pc & 0x3FFFFFF
+            instr = enc32(
+                opcode=(0, OPC['JUMP']),
+                imm=(6, imm),
+            )
+            out.append(instr)
+            continue
+
+        # ------------------------------
+        # LOOP
+        # FMT-LOOP
+        # Syntax: LOOP csr, reg, label, offset
+        # ------------------------------
+        if op == "LOOP":
+            csr_t, csr_id = parse_operand(operands[0])
+            reg_t, loopreg = parse_operand(operands[1])
+            label = operands[2]
+            off_t, offset = parse_operand(operands[3])
+
+            if label not in labels:
+                raise Exception(f"Unknown label {label}")
+
+            target = labels[label] & 0x3F
+
+            instr = enc32(
+                opcode=(0, OPC['LOOP']),
+                loop=(6, loopreg & 0xF),
+                csr=(10, csr_id & 0xF),
+                target=(14, target),
+                offset=(20, offset & 0xFFF),
+            )
+            out.append(instr)
+            continue
+
+        # ------------------------------
+        # LOADI / ADDI
+        # FMT-ALU
+        # Syntax: LOADI rd imm   
+        #         ADDI  rd rs imm  
+        # ------------------------------
+        if op == "LOADI":
+            trd, rd = parse_operand(operands[0])
+            timm, imm = parse_operand(operands[1])
+            instr = enc32(
+                opcode=(0, OPC['LOADI']),
+                rd=(6, rd & 0xF),
+                imm=(10, imm & 0x3FFFF),
+            )
+            out.append(instr)
+            continue
+
+        if op == "ADDI":
+            trd, rd = parse_operand(operands[0])
+            trs, rs = parse_operand(operands[1])
+            timm, imm = parse_operand(operands[2])
+            instr = enc32(
+                opcode=(0, OPC['ADDI']),
+                rd=(6, rd & 0xF),
+                rs=(10, rs & 0xF),
+                imm=(14, imm & 0x3FFFF),
+            )
+            out.append(instr)
+            continue
+
+        raise Exception(f"Unknown instruction {op} at line {lineno}")
+
+    return out
+
+# ---------------------------------------------
+# Output: .hex, .bin (string), .bin.raw (binary)
+# ---------------------------------------------
+def write_outputs(words):
+    with open("program.hex", "w") as f:
+        for w in words:
+            f.write(f"{w:08X}\n")
+
+    with open("program.bin", "w") as f:
+        for w in words:
+            f.write(f"{w:032b}\n")
+
+    with open("program.bin.raw", "wb") as f:
+        for w in words:
+            f.write(struct.pack(">I", w))
+
+    print("[OK] program.hex / program.bin / program.bin.raw 已輸出")
+
+
+# ---------------------------------------------
+# Main
+# ---------------------------------------------
+if __name__ == "__main__":
+    if len(sys.argv) < 2:
+        print("Usage: python assembler.py program.txt")
+        sys.exit(0)
+
+    with open(sys.argv[1]) as f:
+        lines = f.readlines()
+
+    program, labels = assemble(lines)
+    binary = encode(program, labels)
+    write_outputs(binary)
