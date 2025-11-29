@@ -145,10 +145,12 @@ FMT-TAG
 +------+-------+--------+--------+--------+
 OP_CPT_TAGXY
     case(type)
-        IFMAP   : tagY = count_ifmap_y, tagY = count_ifmap_x 
-        WEIGHT  : tagY = count_weight_y, tagY = count_weight_x 
-        IPSUM   : tagY = count_ipsum_y, tagY = count_ipsum_x 
-        OPSUM   : tagY = count_opsum_y, tagY = count_opsum_x 
+        IFMAP   : tagY = 0// count_ifmap_y,     tagX = 1// count_ifmap_x
+        WEIGHT  : tagY = 2// count_weight_y,    tagX = 3// count_weight_x
+        IPSUM   : tagY = 4// count_ipsum_y,     tagX = 5// count_ipsum_x 
+        OPSUM   : tagY = 6// count_opsum_y,     tagX = 7// count_opsum_x 
+    output_tagY = TAG[tagY], output_tagX = TAG[tagX] 
+    update next count_xxx_y and count_xxx_x
     //ifmap GIN bus tag setting
         ifmap_bus_x: bus_tag = 0
         ifmap_bus_y: bus_tag = i, i from 0 to 5
