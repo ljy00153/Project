@@ -1,1 +1,2 @@
 layer,glb_usage,glb_read,glb_write,glb_access,dram_read,dram_write,dram_access,macs,intensity,peak_performance,peak_bandwidth,cycles,latency,energy_total,power_total,tk,tn,mode,M,K,N
+"WS(64,8192,256)",60416,36057088,7471104,43528192,3151872,65536,3217408,134217728,41.7161,48,4,4863968,0.128929,1347.2,10449.1,6,8,1,64,32,12

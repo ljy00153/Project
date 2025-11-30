@@ -56,10 +56,7 @@ OPC = {
     'G2P':              0b001000,
     'P2G_OPSUM':        0b001001,
 
-    'CPT_IFIDX':        0b010000,
-    'CPT_WTIDX':        0b010001,
-    'CPT_IPIDX':        0b010010,
-    'CPT_OPIDX':        0b010011,
+    'CPT_INDEX':        0b010000,
 
     'CPT_TAGXY':        0b011000,
 
@@ -70,6 +67,9 @@ OPC = {
 
     'LOADI':            0b100000,
     'ADDI':             0b100001,
+
+    'ADD':              0b100100,
+    'MUL':              0b100101,
 
     'END':              0b111111,
 }
@@ -272,12 +272,9 @@ def encode(program, labels):
         # ------------------------------
         # CPT_IDX (IFIDX / WTIDX / IPIDX / OPIDX)
         # FMT-IDX
-        # Syntax: CPT_IFIDX rd rs imm
-        #         CPT_WTIDX rd rs imm
-        #         CPT_IPIDX rd rs imm
-        #         CPT_OPIDX rd rs imm
+        # Syntax: OP_CPT_INDEX rd rs imm
         # ------------------------------
-        if op.startswith("CPT_") and op.endswith("IDX"):
+        if op.startswith("CPT_") and op.endswith("INDEX"):
             trd, rd = parse_operand(operands[0])
             trs, rs = parse_operand(operands[1])
             timm, imm = parse_operand(operands[2])
@@ -373,7 +370,7 @@ def encode(program, labels):
 
         # ------------------------------
         # LOADI / ADDI
-        # FMT-ALU
+        # FMT-ALU-I
         # Syntax: LOADI rd imm   
         #         ADDI  rd rs imm  
         # ------------------------------
@@ -397,6 +394,36 @@ def encode(program, labels):
                 rd=(6, rd & 0xF),
                 rs=(10, rs & 0xF),
                 imm=(14, imm & 0x3FFFF),
+            )
+            out.append(instr)
+            continue
+        # ------------------------------
+        # ADD / MUL
+        # FMT-ALU
+        # Syntax: ADD rd rs1 rs2   
+        #         MUL rd rs1 rs2  
+        # ------------------------------
+        if op == "ADD":
+            trd, rd = parse_operand(operands[0])
+            trs1, rs1 = parse_operand(operands[1])
+            trs2, rs2 = parse_operand(operands[2])
+            instr = enc32(
+                opcode=(0, OPC['ADD']),
+                rd=(6, rd & 0xF),
+                rs1=(10, rs1 & 0xF),
+                rs2=(14, rs2 & 0xF),
+            )
+            out.append(instr)
+            continue
+        if op == "MUL":
+            trd, rd = parse_operand(operands[0])
+            trs1, rs1 = parse_operand(operands[1])
+            trs2, rs2 = parse_operand(operands[2])
+            instr = enc32(
+                opcode=(0, OPC['MUL']),
+                rd=(6, rd & 0xF),
+                rs1=(10, rs1 & 0xF),
+                rs2=(14, rs2 & 0xF),
             )
             out.append(instr)
             continue

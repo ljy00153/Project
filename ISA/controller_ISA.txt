@@ -71,9 +71,13 @@ OP_WAIT                     = 6'b011101 // wait for ready of pe
 OP_JUMP                     = 6'b011110 // absolute jump (pc = imm)
 OP_LOOP                     = 6'b011111 // loop counter += offset, if loop counter > certain value, stop looping
 
-//100xxx
+//10000x
 OP_LOADI                    = 6'b100000 // rd = imm
 OP_ADDI                     = 6'b100001 // rd = rs + imm
+
+//1001xx
+OP_ADD                      = 6'b100100 // rd = rs1 + rs2
+OP_MUL                      = 6'b100101 // rd = rs1 * rs2
 
 //111111
 OP_END                      = 6'b111111 // program end
@@ -219,7 +223,7 @@ Syntax: LOOP csr_id loopReg target offset
     else PC = PC + 1
     REG[loopReg] += sign_extend(offset)
 
-FMT-ALU
+FMT-ALU-I
 31           14 13    10 9     6 5      0
 +--------------+--------+--------+--------+
 |    imm18     |   rs   |   rd   | opcode |
@@ -228,6 +232,14 @@ Syntax: LOADI rd imm
         rd = imm16
 Syntax: ADDI  rd rs imm      
         rd = rs + imm16
+
+FMT-ALU
+31        18 17    14 13     10 9     6 5       0
++-----------+-------+---------+--------+--------+
+|  reserve  |  rs2  |   rs1   |   rd   | opcode |
++-----------+-------+---------+--------+--------+
+Syntax: ADD rd rs1 rs2   
+Syntax: MUL rd rs1 rs2   
 
 FMT-END
 31                           6 5      0

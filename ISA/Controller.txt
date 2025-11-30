@@ -17,31 +17,21 @@ ipsum_YID_scan_in,
 opsum_YID_scan_in,
 #SET_ID
 
+compute_ifmap_index(DRAM_ifmap_idx)
+DMA(DRAM_TO_GLB, DRAM_ifmap_idx, size = M * K * 12) #4byte
+
+compute_weight_index(DRAM_weight_idx)
+DMA(DRAM_TO_GLB, DRAM_weight_idx, size = K * N * 48) #4byte
+
+compute_ipsum_index(DRAM_ipsum_idx)
+DMA(DRAM_TO_GLB, DRAM_ipsum_idx, size = B * N * 16) #4byte
 
 # Output feature tiles
 for outf in range(0, out_features, N * 4)
-    compute_ifmap_index(DRAM_ifmap_idx)
-    DMA(DRAM_TO_GLB, DRAM_ifmap_idx, size = M * K * 12) #4byte
-
-    compute_weight_index(DRAM_weight_idx)
-    DMA(DRAM_TO_GLB, DRAM_weight_idx, size = K * N * 48) #4byte
-
-    compute_ipsum_index(DRAM_ipsum_idx)
-    DMA(DRAM_TO_GLB, DRAM_ipsum_idx, size = B * N * 16) #4byte
-
     # Input feature tiles
     for inf in range(0, in_features / 4, K * 3)
-        compute_ifmap_index(DRAM_ifmap_idx)
-        DMA(DRAM_TO_GLB, DRAM_ifmap_idx, size = M * K * 12) #4byte
-
-        compute_weight_index(DRAM_weight_idx)
-        DMA(DRAM_TO_GLB, DRAM_weight_idx, size = K * N * 48) #4byte
-
         # Batch loop
         for b in range(0, batch, M)
-            compute_ifmap_index(DRAM_ifmap_idx)
-            DMA(DRAM_TO_GLB, DRAM_ifmap_idx, size = M * K * 12)
-
             for k in range(0, K * 3, tk * 3)
                 for n in range(0, N, tn * 8)
                     compute_weight_tag_x(weight_x)
@@ -65,9 +55,17 @@ for outf in range(0, out_features, N * 4)
                         compute_opsum_tag_y(opsum_y)
                         compute_opsum_index(opsum_idx)
                         PE_to_GLB(opsum_idx, opsum_x, opsum_y, size = 4) #4byte
+                        
+            compute_ifmap_index(DRAM_ifmap_idx)
+            DMA(DRAM_TO_GLB, DRAM_ifmap_idx, size = M * K * 12)
+
+        compute_weight_index(DRAM_weight_idx)
+        DMA(DRAM_TO_GLB, DRAM_weight_idx, size = K * N * 48) #4byte
 
     compute_output_idx(DRAM_opsum_idx)
     DMA(GLB_to_DRAM, DRAM_opsum_idx, size = B * N * 16)
+    compute_ipsum_index(DRAM_ipsum_idx)
+    DMA(DRAM_TO_GLB, DRAM_ipsum_idx, size = B * N * 16) #4byte
 
 # GLB_to_PE is parallel
 
