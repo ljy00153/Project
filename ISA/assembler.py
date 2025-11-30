@@ -78,6 +78,7 @@ OPC = {
 WAIT = {
     'GLB': 0,
     'DMA': 1,
+    'PE_ARRAY': 2
 }
 
 # --------------------------------------
@@ -381,13 +382,14 @@ def encode(program, labels):
         # FMT-WAIT
         # Syntax: WAIT DMA
         #         WAIT GLB
+        #         WAIT PE_ARRAY
         # ------------------------------
         if op == "WAIT":
             check_operands(op, operands, 1, lineno, original_line)
             tm, typ = parse_operand(operands[0])
             instr = enc32(
                 opcode=(0, OPC['WAIT']),
-                type=(6, typ & 0x1),
+                type=(6, typ & 0x3),
             )
             out.append(instr)
             continue

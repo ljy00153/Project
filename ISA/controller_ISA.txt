@@ -195,15 +195,16 @@ Syntax: COMPUTE
 Syntax: SET_ID  //call another module to work
 
 FMT-WAIT (OP_WAIT)
-31          7            6 5      0
-+------------+------------+--------+
-|  reserved  | DMA or GLB | opcode |
-+------------+------------+--------+
+31          8 7    6 5      0
++------------+------+--------+
+|  reserved  | type | opcode |
++------------+------+--------+
 Syntax: WAIT DMA
 Syntax: WAIT GLB
-    OP_WAIT(DMA), OP_WAIT(GLB)
-    DMA = 1
-    GLB = 0
+Syntax: WAIT PE_ARRAY
+    GLB = 00
+    DMA = 01
+    PE_ARRAY = 10
 
 FMT-JUMP (OP_JUMP)
 31                           6 5      0

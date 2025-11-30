@@ -94,6 +94,7 @@ loop_outf:
                         WAIT GLB
                         #start pe array
                         COMPUTE
+                        WAIT PE_ARRAY
                         #write to GLB
                         CPT_TAGXY OPSUM
                         P2G_OPSUM GLB_OPSUM_BASE, REG[11], PE_ARRAY_IPSUM_SIZE
