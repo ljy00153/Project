@@ -3,20 +3,19 @@ uint8 IFMAP[M * K * 12]
 int8 WEIGHT[K * N * 48]
 int32 PSUM[B * N * 16]
 
+set_LN
+LN_config_in
 set_XID
 ifmap_XID_scan_in
 filter_XID_scan_in
 ipsum_XID_scan_in
 opsum_XID_scan_in
-
 set_YID
 ifmap_YID_scan_in
 filter_YID_scan_in,
 ipsum_YID_scan_in,
 opsum_YID_scan_in,
-
-set_LN
-LN_config_in
+#SET_ID
 
 
 # Output feature tiles

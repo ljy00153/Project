@@ -215,7 +215,7 @@ def encode(program, labels):
         # ------------------------------
         # CFG_SET
         # FMT-CFG
-        # Syntax: CFG_SET csr, reg, label, offset
+        # Syntax: CFG_SET csr, type
         # ------------------------------
         if op == "CFG_SET":
             csr, typ = operands
