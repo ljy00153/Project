@@ -1,0 +1,34 @@
+#in feature = 128 * 8 * 8 = 8192
+#batch = 64
+#out feature = 256
+
+#set constant
+.set IF, 8192
+.set OF, 256
+.set B, 64
+.set M, 64
+.set K, 32
+.set N, 12
+.set outf_offest, 48 # N * 4
+
+SET_ID
+CFG_SET DRAM_IFMAP_BASE     0
+CFG_SET DRAM_WEIGHT_BASE    1
+CFG_SET DRAM_OFMAP_BASE     2
+CFG_SET GLB_IFMAP_BASE      3
+CFG_SET GLB_WEIGHT_BASE     4
+CFG_SET GLB_OPSUM_BASE      5
+CFG_SET OF_SIZE 6
+CFG_SET IF_SIZE 7
+CFG_SET B_SIZE  8
+CFG_SET K_SIZE  9
+CFG_SET N_SIZE  10
+CFG_SET M_SIZE  11
+CFG_SET MODE    12
+CFG_SET DATA_FLOW 13
+
+# Output feature tiles
+loop_outf:
+    
+    LOOP OF_SIZE outf loop_outf outf_offest
+

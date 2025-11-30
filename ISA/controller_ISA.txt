@@ -56,10 +56,7 @@ OP_G2P	                    = 6'b001000	// GLB → PE
 OP_P2G_OPSUM	            = 6'b001001	// PE → GLB opsum
 
 //0100xx
-OP_CPT_IFIDX	            = 6'b010000	//compute index of ifmap    in GLB
-OP_CPT_WTIDX	            = 6'b010001	//compute index of weight   in GLB
-OP_CPT_IPIDX	            = 6'b010010	//compute index of psum     in GLB
-OP_CPT_OPIDX	            = 6'b010011	//compute index of opsum    in GLB
+OP_CPT_INDEX	            = 6'b010000	//compute index in GLB
 
 //011000
 OP_CPT_TAGXY	            = 6'b011000 //compute and SET tagX and tagY for BUS
@@ -139,11 +136,8 @@ FMT-IDX
 +--------------+--------+--------+--------+
 |    imm18     |   rs   |   rd   | opcode |
 +--------------+--------+--------+--------+
-Syntax: CPT_IFIDX rd rs imm
-Syntax: CPT_WTIDX rd rs imm
-Syntax: CPT_IPIDX rd rs imm
-Syntax: CPT_OPIDX rd rs imm
-    rd = rs + imm16
+Syntax: OP_CPT_INDEX rd rs imm
+        rd = rs + imm16
 
 FMT-TAG
 31      8 7     6 5       0
