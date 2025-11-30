@@ -91,7 +91,7 @@ FMT-CFG
 +----------+--------+------+--------+
 | reserved | csr_id | type | opcode |
 +----------+--------+------+--------+
-Syntax: CFG_SET csr_id type
+Syntax: CFG_SET csr_id, type
     case(type)
         0:  input = DRAM_IFMAP_BASE
         1:  input = DRAM_WEIGHT_BASE
@@ -114,10 +114,10 @@ FMT-DMA
 +----------+--------+----+--------+
 |  size18  | csr_id | rs | opcode |
 +----------+--------+----+--------+
-Syntax: DMA_LOAD_IFMAP   csr_id rs size
-Syntax: DMA_LOAD_WEIGHT  csr_id rs size
-Syntax: DMA_LOAD_PSUM    csr_id rs size
-Syntax: DMA_STORE_OFMAP  csr_id rs size
+Syntax: DMA_LOAD_IFMAP   csr_id, rs, size
+Syntax: DMA_LOAD_WEIGHT  csr_id, rs, size
+Syntax: DMA_LOAD_PSUM    csr_id, rs, size
+Syntax: DMA_STORE_OFMAP  csr_id, rs, size
     DMA(DRAM_TO_GLB, CSR[csr_id] + REG[rs] , size)
 
 FMT-STREAM
@@ -125,8 +125,8 @@ FMT-STREAM
 +---------+--------+----+--------+
 |  size18 | csr_id | rs | opcode |
 +---------+--------+----+--------+
-Syntax: G2P          csr_id rs size
-Syntax: P2G_OPSUM    csr_id rs size
+Syntax: G2P          csr_id, rs, size
+Syntax: P2G_OPSUM    csr_id, rs, size
     IFMAP:  tagY = 0, tagX = 1
     WEIGHT: tagY = 2, tagX = 3
     IPSUM:  tagY = 4, tagX = 5
@@ -140,7 +140,7 @@ FMT-IDX
 +--------------+--------+--------+--------+
 |    imm18     |   rs   |   rd   | opcode |
 +--------------+--------+--------+--------+
-Syntax: OP_CPT_INDEX rd rs imm
+Syntax: OP_CPT_INDEX rd, rs, imm
         rd = rs + imm16
 
 FMT-TAG
@@ -219,7 +219,7 @@ FMT-LOOP
 +--------+---------+---------+---------+--------+
 | offset | target6 |  csr_id | loopReg | opcode |
 +--------+---------+---------+---------+--------+
-Syntax: LOOP csr_id loopReg target offset
+Syntax: LOOP csr_id, loopReg, target, offset
     if (REG[loopReg] <= CSR[csr_id]) PC = target
     else PC = PC + 1
     REG[loopReg] += sign_extend(offset)
@@ -229,9 +229,9 @@ FMT-ALU-I
 +--------------+--------+--------+--------+
 |    imm18     |   rs   |   rd   | opcode |
 +--------------+--------+--------+--------+
-Syntax: LOADI rd imm   
+Syntax: LOADI rd, imm   
         rd = imm16
-Syntax: ADDI  rd rs imm      
+Syntax: ADDI  rd, rs, imm      
         rd = rs + imm16
 
 FMT-ALU
@@ -239,8 +239,8 @@ FMT-ALU
 +-----------+-------+---------+--------+--------+
 |  reserve  |  rs2  |   rs1   |   rd   | opcode |
 +-----------+-------+---------+--------+--------+
-Syntax: ADD rd rs1 rs2   
-Syntax: MUL rd rs1 rs2   
+Syntax: ADD rd, rs1, rs2   
+Syntax: MUL rd, rs1, rs2   
 
 FMT-END
 31                           6 5      0
