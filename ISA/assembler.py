@@ -47,6 +47,7 @@ TAG_TYPE_MAP = {
 OPC = {
     'NOP':              0b000000,
     'CFG_SET':          0b000001,
+    'SET_ID':           0b000010,
 
     'DMA_LOAD_IFMAP':   0b000100,
     'DMA_LOAD_WEIGHT':  0b000101,
@@ -139,36 +140,45 @@ def assemble(lines):
     program = []
     labels = {}
     global CONSTANTS
-    pc = 0
+    pc = 0 # Program Counter
 
     for lineno, line in enumerate(lines):
-        line = line.strip()
+        original_line = line.strip() # <-- 儲存原始行，用於錯誤報告
+        line = original_line
+
+        # Strip comments
         if "#" in line:
-            line = line.split("#", 1)[0].strip()
+           line = line.split("#", 1)[0].strip()
         if line == "":
             continue
 
         # ---------- constant define ----------
         if line.startswith(".set"):
             # format: .set NAME, value
-            _, rest = line.split(None, 1)
-            name, val = rest.split(",")
+            try:
+                _, rest = line.split(None, 1)
+                name, val = rest.split(",", 1)
+            except ValueError:
+                raise ValueError(f"Invalid .set format on line {lineno + 1}: {original_line}")
+            
             name = name.strip()
             val = val.strip()
 
-            # support hex or dec
+            # support hex or dec literal values for .set
             if re.match(r'^0x[0-9A-Fa-f]+$', val):
                 CONSTANTS[name] = int(val, 16)
-            elif re.match(r'^\d+$', val):
-                CONSTANTS[name] = int(val)
+            elif re.match(r'^-?\d+$', val):
+                 CONSTANTS[name] = int(val)
             else:
-                raise ValueError(f"Invalid constant on line {lineno}: {line}")
+                raise ValueError(f"Invalid constant value for .set on line {lineno + 1}: {val} in line: {original_line}")
 
             continue
 
         # ---------- label ----------
         if line.endswith(":"):
             label = line[:-1].strip()
+            if label in labels:
+               raise Exception(f"Duplicate label definition: {label} on line {lineno + 1}")
             labels[label] = pc
             continue
 
@@ -178,10 +188,12 @@ def assemble(lines):
 
         operands = []
         if len(parts) > 1:
+            # Rejoin and split by comma to handle spaces in operands (e.g., in labels)
             operand_text = " ".join(parts[1:])
             operands = [x.strip() for x in operand_text.split(",")]
 
-        program.append((pc, op, operands, lineno))
+        # 儲存原始行內容，以便在 Pass 2 報告錯誤時使用
+        program.append((pc, op, operands, lineno, original_line))
         pc += 1
 
     return program, labels
@@ -197,18 +209,60 @@ def enc32(**kwargs):
         v |= (field << shift)
     return v & 0xffffffff
 
+
+# -------------------------------------------------------
+# Helper to check operand count and raise a meaningful error
+# -------------------------------------------------------
+def check_operands(op, operands, expected_count, lineno, original_line):
+    #Checks the number of operands and provides detailed error messages if mismatch occurs."""
+    if len(operands) != expected_count:
+        # Construct the expected syntax format
+        syntax_map = {
+            'CFG_SET': 'csr, type (e.g., CFG_SET MODE, 0x1)',
+            'DMA_*': 'csr_id, rs, size (e.g., DMA_LOAD_IFMAP 0, R0, 1024)',
+            'G2P': 'csr_id, rs, size',
+            'P2G_OPSUM': 'csr_id, rs, size',
+            'CPT_INDEX': 'rd, rs, imm (e.g., CPT_INDEX R0, R1, 1)', # Updated for CPT_INDEX
+            'CPT_TAGXY': 'type (e.g., CPT_TAGXY IFMAP)',
+            'WAIT': 'type (e.g., WAIT DMA)',
+            'JUMP': 'label (e.g., JUMP start_loop)',
+            'LOOP': 'csr, reg, label, offset (e.g., LOOP N_SIZE, n, loop_body, 1)',
+            'LOADI': 'rd, imm (e.g., LOADI R0, 10)',
+            'ADDI': 'rd, rs, imm (e.g., ADDI R0, R0, 4)',
+            'ADD': 'rd, rs1, rs2 (e.g., ADD R0, R1, R2)',
+            'MUL': 'rd, rs1, rs2 (e.g., MUL R0, R1, R2)',
+        }
+        
+        # Use a generic key for instruction families
+        syntax_key = op
+        if op.startswith("DMA_"): syntax_key = "DMA_*"
+
+        expected_syntax = syntax_map.get(syntax_key, 'N/A')
+        
+        # NOTE: lineno is 0-based in assembly code, adding 1 for user readability
+        error_msg = (
+            f"(Operand Count Mismatch) for {op} at line {lineno + 1}.\n"
+            f"Expected_count: {expected_count}, Receive: {len(operands)}.\n"
+            f"請檢查參數之間是否遺漏了逗號 (,)。\n"
+            f"Expected: {op} {expected_syntax}\n"
+            f"Original: {original_line}"
+        )
+        raise Exception(error_msg)
 # -------------------------------------------------------
 # Pass 2: encode instructions
 # -------------------------------------------------------
 def encode(program, labels):
     out = []
 
-    for pc, op, operands, lineno in program:
+    for pc, op, operands, lineno, original_line in program:
 
         # ------------------------------
         # NOP / END
         # ------------------------------
         if op == "NOP" or op == "END":
+            # These instructions should not have operands
+            if operands:
+                raise Exception(f"{op} No operands expected at line {lineno + 1}.\n Original: {original_line}")
             out.append( OPC[op] )
             continue
 
@@ -218,6 +272,7 @@ def encode(program, labels):
         # Syntax: CFG_SET csr, type
         # ------------------------------
         if op == "CFG_SET":
+            check_operands(op, operands, 2, lineno, original_line)
             csr, typ = operands
             t0, csr_id = parse_operand(csr)
             t1, typ_val = parse_operand(typ)
@@ -238,6 +293,7 @@ def encode(program, labels):
         #         DMA_STORE_OFMAP  csr_id rs size
         # ------------------------------
         if op.startswith("DMA_"):
+            check_operands(op, operands, 3, lineno, original_line)
             t, csr_id = parse_operand(operands[0])
             rs, r = parse_operand(operands[1])
             s, c = parse_operand(operands[2])
@@ -257,6 +313,7 @@ def encode(program, labels):
         #         P2G_OPSUM    csr_id rs size
         # ------------------------------
         if op == "G2P" or op == "P2G_OPSUM":
+            check_operands(op, operands, 3, lineno, original_line)
             tcsr, csr_id = parse_operand(operands[0])
             tr, r = parse_operand(operands[1])
             ts, sz = parse_operand(operands[2])
@@ -275,6 +332,7 @@ def encode(program, labels):
         # Syntax: OP_CPT_INDEX rd rs imm
         # ------------------------------
         if op.startswith("CPT_") and op.endswith("INDEX"):
+            check_operands(op, operands, 3, lineno, original_line)
             trd, rd = parse_operand(operands[0])
             trs, rs = parse_operand(operands[1])
             timm, imm = parse_operand(operands[2])
@@ -292,6 +350,7 @@ def encode(program, labels):
         # Syntax: CPT_TAGXY type
         # ------------------------------
         if op == "CPT_TAGXY":
+            check_operands(op, operands, 1, lineno, original_line)
             t, typ = parse_operand(operands[0])
             instr = enc32(
                 opcode=(0, OPC['CPT_TAGXY']),
@@ -302,11 +361,19 @@ def encode(program, labels):
 
         # ------------------------------
         # COMPUTE
-        # FMT-COMPUTE
-        # Syntax: COMPUTE
+        # FMT-PE_ARRAY
+        # Syntax: COMPUTE SET_ID
         # ------------------------------
         if op == "COMPUTE":
+            # These instructions should not have operands
+            if operands:
+                raise Exception(f"{op} No operands expected at line {lineno + 1}.\n Original: {original_line}")
             out.append(OPC['COMPUTE'])
+            continue
+        if op == "SET_ID":
+            if operands:
+                raise Exception(f"{op} No operands expected at line {lineno + 1}.\n Original: {original_line}")
+            out.append(OPC['SET_ID'])
             continue
 
         # ------------------------------
@@ -316,6 +383,7 @@ def encode(program, labels):
         #         WAIT GLB
         # ------------------------------
         if op == "WAIT":
+            check_operands(op, operands, 1, lineno, original_line)
             tm, typ = parse_operand(operands[0])
             instr = enc32(
                 opcode=(0, OPC['WAIT']),
@@ -330,6 +398,7 @@ def encode(program, labels):
         # Syntax: JUMP label
         # ------------------------------
         if op == "JUMP":
+            check_operands(op, operands, 1, lineno, original_line)
             label = operands[0]
             if label not in labels:
                 raise Exception(f"Unknown label {label}")
@@ -348,6 +417,7 @@ def encode(program, labels):
         # Syntax: LOOP csr, reg, label, offset
         # ------------------------------
         if op == "LOOP":
+            check_operands(op, operands, 4, lineno, original_line)
             csr_t, csr_id = parse_operand(operands[0])
             reg_t, loopreg = parse_operand(operands[1])
             label = operands[2]
@@ -375,6 +445,7 @@ def encode(program, labels):
         #         ADDI  rd rs imm  
         # ------------------------------
         if op == "LOADI":
+            check_operands(op, operands, 2, lineno, original_line)
             trd, rd = parse_operand(operands[0])
             timm, imm = parse_operand(operands[1])
             instr = enc32(
@@ -386,6 +457,7 @@ def encode(program, labels):
             continue
 
         if op == "ADDI":
+            check_operands(op, operands, 3, lineno, original_line)
             trd, rd = parse_operand(operands[0])
             trs, rs = parse_operand(operands[1])
             timm, imm = parse_operand(operands[2])
@@ -403,24 +475,13 @@ def encode(program, labels):
         # Syntax: ADD rd rs1 rs2   
         #         MUL rd rs1 rs2  
         # ------------------------------
-        if op == "ADD":
+        if op == "ADD" or op == "MUL":
+            check_operands(op, operands, 3, lineno, original_line)
             trd, rd = parse_operand(operands[0])
             trs1, rs1 = parse_operand(operands[1])
             trs2, rs2 = parse_operand(operands[2])
             instr = enc32(
-                opcode=(0, OPC['ADD']),
-                rd=(6, rd & 0xF),
-                rs1=(10, rs1 & 0xF),
-                rs2=(14, rs2 & 0xF),
-            )
-            out.append(instr)
-            continue
-        if op == "MUL":
-            trd, rd = parse_operand(operands[0])
-            trs1, rs1 = parse_operand(operands[1])
-            trs2, rs2 = parse_operand(operands[2])
-            instr = enc32(
-                opcode=(0, OPC['MUL']),
+                opcode=(0, OPC[op]),
                 rd=(6, rd & 0xF),
                 rs1=(10, rs1 & 0xF),
                 rs2=(14, rs2 & 0xF),
@@ -428,7 +489,7 @@ def encode(program, labels):
             out.append(instr)
             continue
 
-        raise Exception(f"Unknown instruction {op} at line {lineno}")
+        raise Exception(f"Unknown instruction {op} at line {lineno + 1}")
 
     return out
 
