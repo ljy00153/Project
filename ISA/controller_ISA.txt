@@ -42,7 +42,8 @@
             
 //00000x
 OP_NOP                      = 6'b000000 // no operation
-OP_CFG_SET                  = 6'b000001 // set CSR
+OP_CFG_SET                  = 6'b000001 // SET CSR
+OP_SET_ID                   = 6'b000010 // SET_LN、SET_XID、SET_YID
 
 //0001xx
 OP_DMA_LOAD_IFMAP           = 6'b000100 // DMA read ifmap
@@ -61,7 +62,7 @@ OP_CPT_IPIDX	            = 6'b010010	//compute index of psum     in GLB
 OP_CPT_OPIDX	            = 6'b010011	//compute index of opsum    in GLB
 
 //011000
-OP_CPT_TAGXY	            = 6'b011000 //compute and set tagX and tagY of PE 
+OP_CPT_TAGXY	            = 6'b011000 //compute and SET tagX and tagY for BUS
                                         //ifmap:    tagX, tagY
                                         //weight:   tagX, tagY
                                         //ipsum:    tagX, tagY
@@ -89,19 +90,22 @@ FMT-CFG
 +----------+--------+------+--------+
 | reserved | csr_id | type | opcode |
 +----------+--------+------+--------+
-CFG_SET csr_id type
+Syntax: CFG_SET csr_id type
     case(type)
-        0:  input = DATA_FLOW
-        1:  input = TILE
-        2:  input = DRAM_IFM_ADDR
-        3:  input = DRAM_W_ADDR
-        4:  input = DRAM_OFM_ADDR    
-        5:  input = GLB_IFMAP_ADDR 
-        6:  input = GLB_WEIGHT_ADDR
-        7:  input = GLB_OPSUM_ADDR 
-        8:  input = GLB_IFMAP_BASE
-        9:  input = GLB_WEIGHT_BASE
-        10: input = GLB_OPSUM_BASE
+        0:  input = DRAM_IFMAP_BASE
+        1:  input = DRAM_WEIGHT_BASE
+        2:  input = DRAM_OFMAP_BASE
+        3:  input = GLB_IFMAP_BASE
+        4:  input = GLB_WEIGHT_BASE  
+        5:  input = GLB_OPSUM_BASE
+        6:  input = OF_SIZE
+        7:  input = IF_SIZE
+        8:  input = B_SIZE
+        9:  input = K_SIZE
+        10: input = N_SIZE
+        11: input = M_SIZE
+        12: input = MODE
+        13: input = DATA_FLOW
     CSR[csr_id] = input
 
 FMT-DMA
@@ -109,10 +113,10 @@ FMT-DMA
 +----------+--------+----+--------+
 |  size18  | csr_id | rs | opcode |
 +----------+--------+----+--------+
-DMA_LOAD_IFMAP   csr_id rs size
-DMA_LOAD_WEIGHT  csr_id rs size
-DMA_LOAD_PSUM    csr_id rs size
-DMA_STORE_OFMAP  csr_id rs size
+Syntax: DMA_LOAD_IFMAP   csr_id rs size
+Syntax: DMA_LOAD_WEIGHT  csr_id rs size
+Syntax: DMA_LOAD_PSUM    csr_id rs size
+Syntax: DMA_STORE_OFMAP  csr_id rs size
     DMA(DRAM_TO_GLB, CSR[csr_id] + REG[rs] , size)
 
 FMT-STREAM
@@ -120,13 +124,13 @@ FMT-STREAM
 +---------+--------+----+--------+
 |  size18 | csr_id | rs | opcode |
 +---------+--------+----+--------+
-G2P          csr_id rs size
-P2G_OPSUM    csr_id rs size
+Syntax: G2P          csr_id rs size
+Syntax: P2G_OPSUM    csr_id rs size
     IFMAP:  tagY = 0, tagX = 1
     WEIGHT: tagY = 2, tagX = 3
     IPSUM:  tagY = 4, tagX = 5
     OPSUM:  tagY = 6, tagX = 7
-
+    if data is valid, valid = 1 else valid = 0
     GLB_to_PE(CSR[csr_id] + REG[rs], size)
     PE_to_GLB(CSR[csr_id] + REG[rs], size)
 
@@ -135,10 +139,10 @@ FMT-IDX
 +--------------+--------+--------+--------+
 |    imm18     |   rs   |   rd   | opcode |
 +--------------+--------+--------+--------+
-CPT_IFIDX rd rs imm
-CPT_WTIDX rd rs imm
-CPT_IPIDX rd rs imm
-CPT_OPIDX rd rs imm
+Syntax: CPT_IFIDX rd rs imm
+Syntax: CPT_WTIDX rd rs imm
+Syntax: CPT_IPIDX rd rs imm
+Syntax: CPT_OPIDX rd rs imm
     rd = rs + imm16
 
 FMT-TAG
@@ -146,7 +150,7 @@ FMT-TAG
 +---------+------+--------+
 | reserve | type | opcode |
 +---------+------+--------+
-CPT_TAGXY type
+Syntax: CPT_TAGXY type
     case(type)
         IFMAP   : tagY = 0// count_ifmap_y,     tagX = 1// count_ifmap_x
         WEIGHT  : tagY = 2// count_weight_y,    tagX = 3// count_weight_x
@@ -176,12 +180,12 @@ CPT_TAGXY type
         count_opsum_x = (PE_opsum_num == 4)? count_weight_x++ ： count_weight_x
         count_opsum_y = 5
 
-FMT-COMPUTE (OP_COMPUTE)
+FMT-PE_ARRAY (OP_COMPUTE, OP_SET_ID)
 31           6 5       0
 +-------------+--------+
 |   reserved  | opcode |
 +-------------+--------+
-COMPUTE
+Syntax: COMPUTE
     case(valid_e)
         0: PE_en = {6{8'b00000000}};
         1: PE_en = {1{8'b11111111}, 5{8'b00000000}};
@@ -190,14 +194,15 @@ COMPUTE
         4: PE_en = {4{8'b11111111}, 2{8'b00000000}};
         5: PE_en = {5{8'b11111111}, 1{8'b00000000}};
         6: PE_en = {6{8'b11111111}};
+Syntax: SET_ID  //call another module to work
 
 FMT-WAIT (OP_WAIT)
 31          7            6 5      0
 +------------+------------+--------+
 |  reserved  | DMA or GLB | opcode |
 +------------+------------+--------+
-WAIT DMA
-WAIT GLB
+Syntax: WAIT DMA
+Syntax: WAIT GLB
     OP_WAIT(DMA), OP_WAIT(GLB)
     DMA = 1
     GLB = 0
@@ -207,7 +212,7 @@ FMT-JUMP (OP_JUMP)
 +-----------------------------+--------+
 |        jump_addr26          | opcode |
 +-----------------------------+--------+
-JUMP label      
+Syntax: JUMP label      
     PC = PC + jump_addr
 
 FMT-LOOP
@@ -215,7 +220,7 @@ FMT-LOOP
 +--------+---------+---------+---------+--------+
 | offset | target6 |  csr_id | loopReg | opcode |
 +--------+---------+---------+---------+--------+
-LOOP csr_id loopReg target offset
+Syntax: LOOP csr_id loopReg target offset
     if (REG[loopReg] <= CSR[csr_id]) PC = target
     else PC = PC + 1
     REG[loopReg] += sign_extend(offset)
@@ -225,14 +230,14 @@ FMT-ALU
 +--------------+--------+--------+--------+
 |    imm18     |   rs   |   rd   | opcode |
 +--------------+--------+--------+--------+
-LOADI rd imm   
-    rd = imm16
-ADDI  rd rs imm      
-    rd = rs + imm16
+Syntax: LOADI rd imm   
+        rd = imm16
+Syntax: ADDI  rd rs imm      
+        rd = rs + imm16
 
 FMT-END
 31                           6 5      0
 +-----------------------------+--------+
 |            zeros            | opcode |
 +-----------------------------+--------+
-END 
+Syntax: END 
