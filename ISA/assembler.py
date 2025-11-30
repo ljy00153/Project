@@ -1,6 +1,6 @@
 import re
 import sys
-import struct
+import os
 
 # ----------------------------------
 #  CSR + Loop Register Symbol Tables 
@@ -430,8 +430,9 @@ if __name__ == "__main__":
         sys.exit(0)
 
     asm_file = sys.argv[1]
-    out_bin = asm_file.replace(".txt", ".bin")
-    out_hex = asm_file.replace(".txt", ".hex")
+    base, _ = os.path.splitext(asm_file)
+    out_bin = base + ".bin"
+    out_hex = base + ".hex"
 
     with open(asm_file) as f:
         lines = f.readlines()
