@@ -79,41 +79,57 @@ WAIT = {
     'DMA': 1,
 }
 
+# --------------------------------------
+# CONSTANT TABLE
+# --------------------------------------
+
+CONSTANTS = {}
+
 # -------------------------------------------------------
 # Operand Parser
 # -------------------------------------------------------
 def parse_operand(tok):
     tok = tok.strip()
-
+    # constant support
+    if tok in CONSTANTS:
+        return ("imm", CONSTANTS[tok])
+    # Loop registers
     if tok in LOOP_REG_MAP:
         return ("reg", LOOP_REG_MAP[tok])
-
+    # CSR names
     if tok in CSR_MAP:
         return ("csr", CSR_MAP[tok])
-
+    # TAG type
     if tok in TAG_TYPE_MAP:
         return ("tagtype", TAG_TYPE_MAP[tok])
+    # WAIT type
     if tok in WAIT:
         return ("waittype", WAIT[tok])
 
+    # CSR[index]
     m = re.match(r'^CSR\[(\d+)\]$', tok)
     if m:
         return ("csr", int(m.group(1)))
 
+    # REG[index]
     m = re.match(r'^REG\[(\d+)\]$', tok)
     if m:
         return ("reg", int(m.group(1)))
 
-    m = re.match(r'^[Rr](\d+)$', tok)
+    # R#
+    m = re.match(r'^R(\d+)$', tok, re.IGNORECASE)
     if m:
         return ("reg", int(m.group(1)))
 
+    # hex number
     if re.match(r'^0x[0-9A-Fa-f]+$', tok):
-        return ("imm", int(tok,16))
+        return ("imm", int(tok, 16))
 
+    # decimal number
     if re.match(r'^-?\d+$', tok):
         return ("imm", int(tok))
 
+    # otherwise → label
     return ("label", tok)
 
 # -------------------------------------------------------
@@ -122,26 +138,52 @@ def parse_operand(tok):
 def assemble(lines):
     program = []
     labels = {}
+    global CONSTANTS
     pc = 0
 
     for lineno, line in enumerate(lines):
         line = line.strip()
-        if line == "" or line.startswith("#"):
+        if "#" in line:
+            line = line.split("#", 1)[0].strip()
+        if line == "":
             continue
 
-        if ":" in line:
-            label = line.replace(":", "").strip()
+        # ---------- constant define ----------
+        if line.startswith(".set"):
+            # format: .set NAME, value
+            _, rest = line.split(None, 1)
+            name, val = rest.split(",")
+            name = name.strip()
+            val = val.strip()
+
+            # support hex or dec
+            if re.match(r'^0x[0-9A-Fa-f]+$', val):
+                CONSTANTS[name] = int(val, 16)
+            elif re.match(r'^\d+$', val):
+                CONSTANTS[name] = int(val)
+            else:
+                raise ValueError(f"Invalid constant on line {lineno}: {line}")
+
+            continue
+
+        # ---------- label ----------
+        if line.endswith(":"):
+            label = line[:-1].strip()
             labels[label] = pc
             continue
 
+        # ---------- assembly instruction ----------
         parts = line.split()
         op = parts[0].upper()
+
         operands = []
         if len(parts) > 1:
-            operands = [x.strip() for x in " ".join(parts[1:]).split(",")]
+            operand_text = " ".join(parts[1:])
+            operands = [x.strip() for x in operand_text.split(",")]
 
-        program.append( (pc, op, operands, lineno) )
+        program.append((pc, op, operands, lineno))
         pc += 1
+
     return program, labels
 
 # -------------------------------------------------------
@@ -364,22 +406,19 @@ def encode(program, labels):
     return out
 
 # ---------------------------------------------
-# Output: .hex, .bin (string), .bin.raw (binary)
+# Output: .hex, .bin (string)
 # ---------------------------------------------
-def write_outputs(words):
-    with open("program.hex", "w") as f:
-        for w in words:
-            f.write(f"{w:08X}\n")
 
-    with open("program.bin", "w") as f:
-        for w in words:
-            f.write(f"{w:032b}\n")
+def write_bin(filename, binary):
+    with open(filename, "wb") as f:
+        for code in binary:
+            f.write(code.to_bytes(4, 'little'))
 
-    with open("program.bin.raw", "wb") as f:
-        for w in words:
-            f.write(struct.pack(">I", w))
 
-    print("[OK] program.hex / program.bin / program.bin.raw 已輸出")
+def write_hex(filename, binary):
+    with open(filename, "w") as f:
+        for code in binary:
+            f.write(f"{code:08X}\n")
 
 
 # ---------------------------------------------
@@ -390,9 +429,17 @@ if __name__ == "__main__":
         print("Usage: python assembler.py program.txt")
         sys.exit(0)
 
-    with open(sys.argv[1]) as f:
+    asm_file = sys.argv[1]
+    out_bin = asm_file.replace(".txt", ".bin")
+    out_hex = asm_file.replace(".txt", ".hex")
+
+    with open(asm_file) as f:
         lines = f.readlines()
 
     program, labels = assemble(lines)
     binary = encode(program, labels)
-    write_outputs(binary)
+
+    write_bin(out_bin, binary)
+    write_hex(out_hex, binary)
+    print(f"[OK] {out_bin} / {out_hex} 已輸出")
+
