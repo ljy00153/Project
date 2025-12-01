@@ -475,7 +475,7 @@ struct ISASim {
         PC = nextPC;
     }
 
-    void run(int max_steps = 1000000) {
+    void run(int max_steps = 10000000) {
         int steps = 0;
         while (running && steps < max_steps) {
             cout << "cycle " << cur_cycle << ": ";
