@@ -22,11 +22,12 @@
 # count_K   -> inf
 # count_N   -> outf
 
-LOADI b,    0      
-LOADI n,    0    
-LOADI k,    0     
-LOADI inf,  0    
-LOADI outf, 0     
+ADDI m,x0,     0
+ADDI b,x0,     0      
+ADDI n,x0,     0    
+ADDI k,x0,     0     
+ADDI inf,x0,   0    
+ADDI outf,x0,  0     
 
 # ------------------------------------------------
 # D2G_IFM block：從 DRAM 把 IFMAP / WEIGHT 搬到 GLB

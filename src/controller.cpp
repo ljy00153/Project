@@ -346,7 +346,7 @@ struct ISASim {
 
 int main() {
     ISASim sim;
-    sim.load_program_txt("program.hex"); // 你可以把 assembler 的 program.hex 改名成這個
+    sim.load_program_txt("example.hex"); // 你可以把 assembler 的 program.hex 改名成這個
     sim.run();
     return 0;
 }
