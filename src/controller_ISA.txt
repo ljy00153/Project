@@ -24,7 +24,7 @@
             REG[2]: inf  // (in_features / 4) / K * 3 + 1
             REG[3]: b    // batch / M + 1
             REG[4]: k    // K * 3 / tk * 3 + 1
-            REG[5]: n    // N / tn * 8 + 1
+            REG[5]: n    // N / tn * 4 + 1
             REG[6]: m    // M / mode + 1
         compute:
             REG[7]: valid_e 
