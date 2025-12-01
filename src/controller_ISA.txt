@@ -73,7 +73,6 @@ OP_JUMP                     = 6'b011110 // absolute jump (pc = imm)
 OP_LOOP                     = 6'b011111 // loop counter += offset, if loop counter > certain value, stop looping
 
 //10000x
-OP_LOADI                    = 6'b100000 // rd = imm
 OP_ADDI                     = 6'b100001 // rd = rs + imm
 
 //1001xx
@@ -230,8 +229,6 @@ FMT-ALU-I
 +--------------+--------+--------+--------+
 |    imm18     |   rs   |   rd   | opcode |
 +--------------+--------+--------+--------+
-Syntax: LOADI rd, imm   
-        rd = imm16
 Syntax: ADDI  rd, rs, imm      
         rd = rs + imm16
 
