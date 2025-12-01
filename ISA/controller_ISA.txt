@@ -18,17 +18,18 @@
         CSR[12]: MODE
         CSR[13]: DATA_FLOW
     Register 32bit
+        REG[0]: 0
         loop:
-            REG[0]: outf // out_features / N * 4 + 1
-            REG[1]: inf  // (in_features / 4) / K * 3 + 1
-            REG[2]: b    // batch / M + 1
-            REG[3]: k    // K * 3 / tk * 3 + 1
-            REG[4]: n    // N / tn * 8 + 1
-            REG[5]: m    // M / mode + 1
+            REG[1]: outf // max: out_features / N * 4 + 1
+            REG[2]: inf  // max: (in_features / 4) / K * 3 + 1
+            REG[3]: b    // max: batch / M + 1
+            REG[4]: k    // max: K * 3 / tk * 3 + 1
+            REG[5]: n    // max: N / tn * 8 + 1
+            REG[6]: m    // max: M / mode + 1
         compute:
-            REG[6]: valid_e 
+            REG[7]: valid_e 
         General Register
-            REG[7] ~ REG[15]
+            REG[8] ~ REG[15]
     TAG 3bit
         TAG[0]: count_ifmap_y
         TAG[1]: count_ifmap_x
