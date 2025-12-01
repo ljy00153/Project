@@ -230,8 +230,8 @@ FMT-ALU-I
 +--------------+--------+--------+--------+
 |    imm18     |   rs   |   rd   | opcode |
 +--------------+--------+--------+--------+
-Syntax: LOADI rd, imm   
-        rd = imm16
+Syntax: LOADI rd, imm = ADDI rd, REG[0], imm   
+        rd = REG[0] + imm16
 Syntax: ADDI  rd, rs, imm      
         rd = rs + imm16
 
