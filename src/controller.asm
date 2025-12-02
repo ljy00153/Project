@@ -19,8 +19,8 @@
 .set PE_ARRAY_WEIGHT_SIZE, 576  # 48 * 12 (4 byte)
 .set PE_ARRAY_IPSUM_SIZE, 32    # 8 * 1 * 4 (4 byte)
 .set PE_ARRAY_IFMAP_SIZE, 18   # 6 * 3 (4 byte)
-.set DRAM_IFMAP_SIZE, 8192      # M * K * 12
-.set DRAM_WEIGHT_SIZE, 18432    # K * N * 48
+.set DRAM_IFMAP_SIZE, 2304      # M * K * 12
+.set DRAM_WEIGHT_SIZE, 4608    # K * N * 48
 .set DRAM_OPSUM_SIZE, 12288     # B * N * 16
 
 SET_ID
@@ -57,11 +57,11 @@ LOADI REG[14], 0
 DMA_LOAD_IFMAP   DRAM_IFMAP_BASE,    outf, DRAM_IFMAP_SIZE
 WAIT DMA
 #load WEIGHT to GLB
-DMA_LOAD_WEIGHT  DRAM_WEIGHT_BASE,   outf, DRAM_IFMAP_SIZE
+DMA_LOAD_WEIGHT  DRAM_WEIGHT_BASE,   outf, DRAM_WEIGHT_SIZE
 WAIT DMA
 #load PSUM to GLB
-DMA_LOAD_PSUM    DRAM_OFMAP_BASE,    outf, DRAM_OPSUM_SIZE
-WAIT DMA
+#DMA_LOAD_PSUM    DRAM_OFMAP_BASE,    outf, DRAM_OPSUM_SIZE
+#WAIT DMA
 
 # Output feature tiles
 loop_outf:
@@ -86,15 +86,19 @@ loop_outf:
                         ADD REG[12], REG[12], REG[13]
                         G2P GLB_OPSUM_BASE, REG[12], PE_ARRAY_IPSUM_SIZE
                         WAIT GLB
+                        
                         #load ifmap to pe array
                         CPT_TAGXY IFMAP
+                        
                         #compute index
                         MUL REG[14], m, K_SIZE
                         G2P GLB_IFMAP_BASE, REG[14], PE_ARRAY_IFMAP_SIZE
                         WAIT GLB
+                        
                         #start pe array
                         COMPUTE
                         WAIT PE_ARRAY
+                        
                         #write to GLB
                         CPT_TAGXY OPSUM
                         P2G_OPSUM GLB_OPSUM_BASE, REG[12], PE_ARRAY_IPSUM_SIZE

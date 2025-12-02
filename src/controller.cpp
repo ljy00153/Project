@@ -2,6 +2,30 @@
 #include <fstream>
 using namespace std;
 
+// === LOGGING: 同時輸出到 stdout 與 controller.log ===
+ofstream logger("controller.log");
+
+struct DualOut {
+    std::ostream &a;
+    std::ostream &b;
+
+    template <typename T>
+    DualOut &operator<<(const T &v) {
+        a << v;
+        b << v;
+        return *this;
+    }
+
+    // 支援 std::endl、std::hex 這種 manipulator
+    DualOut &operator<<(std::ostream &(*manip)(std::ostream &)) {
+        manip(a);
+        manip(b);
+        return *this;
+    }
+};
+
+DualOut dlog{cout, logger};
+
 static int DMA_cycle = 5; 
 static int GLB_cycle = 2; // 每個 element 的 GLB latency
 
@@ -133,7 +157,7 @@ struct ISASim {
     bool load_program_txt(const string& filename) {
         ifstream fin(filename);
         if (!fin.is_open()) {
-            cerr << "Cannot open " << filename << endl;
+            dlog << "Cannot open " << filename << "\n";
             return false;
         }
         program.clear();
@@ -143,39 +167,39 @@ struct ISASim {
             program.push_back(inst);
         }
         fin.close();
-        cout << "Loaded " << program.size() << " instructions from " << filename << "\n";
+        dlog << "Loaded " << program.size() << " instructions from " << filename << "\n";
         return true;
     }
 
     // ===== stub: 這些是輸出行為（你之後可以接真實硬體） =====
     void dma_read(uint32_t dram_addr, uint32_t size) {
-        cout << "[DMA READ] addr=" << dram_addr << " size=" << size << "\n";
+        dlog << "[DMA READ] addr=" << dram_addr << " size=" << size << "\n";
     }
     void dma_write(uint32_t dram_addr, uint32_t size) {
-        cout << "[DMA WRITE] addr=" << dram_addr << " size=" << size << "\n";
+        dlog << "[DMA WRITE] addr=" << dram_addr << " size=" << size << "\n";
     }
     void glb_to_pe(uint32_t addr, uint8_t tagX, uint8_t tagY, uint32_t size) {
-        cout << "[G2P] addr=" << addr << " tag=("
+        dlog << "[G2P] addr=" << addr << " tag=("
              << (int)tagX << "," << (int)tagY << ") size=" << size << "\n";
     }
     void pe_to_glb(uint32_t addr, uint8_t tagX, uint8_t tagY, uint32_t size) {
-        cout << "[P2G] addr=" << addr << " tag=("
+        dlog << "[P2G] addr=" << addr << " tag=("
              << (int)tagX << "," << (int)tagY << ") size=" << size << "\n";
     }
-    void wait_dma_msg() { cout << "[WAIT DMA]\n"; }
-    void wait_glb_msg() { cout << "[WAIT GLB]\n"; }
-    void wait_pe_array() { cout << "[WAIT PE_ARRAY]\n"; }
+    void wait_dma_msg() { dlog << "[WAIT DMA]\n"; }
+    void wait_glb_msg() { dlog << "[WAIT GLB]\n"; }
+    void wait_pe_array() { dlog << "[WAIT PE_ARRAY]\n"; }
     void set_pe_en(uint8_t valid_e) {
-        cout << "[COMPUTE] valid_e=" << (int)valid_e << "\n";
+        dlog << "[COMPUTE] valid_e=" << (int)valid_e << "\n";
     }
     void set_id() {
-        cout << "[SET_ID] (call PE array config module)\n";
+        dlog << "[SET_ID] (call PE array config module)\n";
     }
 
     void step() {
         if (!running) return;
         if (PC >= program.size()) {
-            cerr << "PC out of range\n";
+            dlog << "PC out of range\n";
             running = false;
             return;
         }
@@ -183,22 +207,22 @@ struct ISASim {
         // 更新 DMA_done 狀態
         if (dma_busy && cur_cycle >= dma_done_cycle) {
             dma_busy = false;
-            // cout << "    [DMA_DONE at cycle " << cur_cycle << "]\n";
+            // dlog << "    [DMA_DONE at cycle " << cur_cycle << "]\n";
         }
         // 更新 GLB_done 狀態
         if (glb_busy && cur_cycle >= glb_done_cycle) {
             glb_busy = false;
-            // cout << "    [GLB_DONE at cycle " << cur_cycle << "]\n";
+            // dlog << "    [GLB_DONE at cycle " << cur_cycle << "]\n";
         }
 
         uint32_t insn = program[PC];
         uint8_t opcode = insn & 0x3F;
         InstrFormat fmt = get_format(opcode);
 
-        cout << "PC=0x"
+        dlog << "PC=0x"
              << std::hex << std::setw(4) << std::setfill('0') << PC
              << std::dec << " ";
-        cout << "OPCODE=0x"
+        dlog << "OPCODE=0x"
              << std::hex << std::setw(2) << std::setfill('0')
              << static_cast<int>(opcode)
              << std::dec << " ";
@@ -213,7 +237,7 @@ struct ISASim {
             uint8_t type   = (insn >> 6)  & 0xF;
 
             if (opcode == OP_NOP) {
-                cout << "[NOP]\n";
+                dlog << "[NOP]\n";
             } else if (opcode == OP_CFG_SET) {
                 // 這裡先 stub 成「依 type 塞一個假值」，真正硬體是從外面寫入
                 uint32_t value = 0;
@@ -224,21 +248,21 @@ struct ISASim {
                 case 3:  value = 0x00000000; break; // GLB_IFMAP_BASE
                 case 4:  value = 0x00001000; break; // GLB_WEIGHT_BASE
                 case 5:  value = 0x00002000; break; // GLB_OPSUM_BASE
-                case 6:  value = 2; break; // OF_SIZE
-                case 7:  value = 59; break; // IF_SIZE
-                case 8:  value = 1; break; // B_SIZE
-                case 9:  value = 2; break;   // K_SIZE
-                case 10: value = 4; break;    // N_SIZE
-                case 11: value = 64; break;    // M_SIZE
-                case 12: value = 1; break;    // MODE(FC)
-                case 13: value = 0; break;    // DATAFLOW 先不管
-                default: value = (uint32_t)type;     break;
+                case 6:  value = 2; break;          // OF_SIZE
+                case 7:  value = 59; break;         // IF_SIZE
+                case 8:  value = 1; break;          // B_SIZE
+                case 9:  value = 2; break;          // K_SIZE
+                case 10: value = 4; break;          // N_SIZE
+                case 11: value = 64; break;         // M_SIZE
+                case 12: value = 1; break;          // MODE(FC)
+                case 13: value = 0; break;          // DATAFLOW 先不管
+                default: value = (uint32_t)type;    break;
                 }
                 CSR[csr_id] = value;
-                cout << "[CFG_SET] CSR[" << (int)csr_id << "] <= type("
+                dlog << "[CFG_SET] CSR[" << (int)csr_id << "] <= type("
                      << (int)type << ") -> 0x" << hex << value << dec << "\n";
             } else {
-                cout << "\n";
+                dlog << "\n";
             }
             break;
         }
@@ -254,13 +278,13 @@ struct ISASim {
 
             // 啟動 DMA，並根據 size 設定 DMA 完成時間
             uint64_t latency = (uint64_t)size * (uint64_t)DMA_cycle;
-            if (latency == 0)dma_busy =false; // size=0 不啟動 DMA
-            else{
+            if (latency == 0) {
+                dma_busy = false; // size=0 不啟動 DMA
+            } else {
                 dma_busy = true;
                 dma_done_cycle = cur_cycle + latency;
                 stall_cycle = cur_cycle; // DMA 啟動時的 PC（debug 用）
-                } 
-           
+            }
 
             switch (opcode) {
             case OP_DMA_LOAD_IFMAP:
@@ -272,7 +296,7 @@ struct ISASim {
                 dma_write(addr, size);
                 break;
             default:
-                cout << "\n";
+                dlog << "\n";
                 break;
             }
             break;
@@ -289,13 +313,14 @@ struct ISASim {
 
             // 模擬 GLB ↔ PE 的 latency：size * GLB_cycle
             uint64_t latency = (uint64_t)size * (uint64_t)GLB_cycle;
-            if (latency == 0)glb_busy =false; // size=0 不啟動 DMA
-            else{
+            if (latency == 0) {
+                glb_busy = false; // size=0 不啟動 DMA
+            } else {
                 glb_busy = true;
                 glb_done_cycle = cur_cycle + latency;
-                stall_cycle = cur_cycle; // DMA 啟動時的 PC（debug 用）
-                } 
-           
+                stall_cycle = cur_cycle; // G2P/P2G 啟動時的 PC（debug 用）
+            }
+
             // 這裡 tagX/tagY 真正應該由 CPT_TAGXY 控、加 TAG[]，
             // 目前簡化先印 0
             uint8_t tagX = 0, tagY = 0;
@@ -305,7 +330,7 @@ struct ISASim {
             } else if (opcode == OP_P2G_OPSUM) {
                 pe_to_glb(addr, tagX, tagY, size);
             } else {
-                cout << "\n";
+                dlog << "\n";
             }
             break;
         }
@@ -320,7 +345,7 @@ struct ISASim {
 
             REG[rd] = (uint32_t)((int32_t)REG[rs] + imm);
 
-            cout << "[CPT_INDEX] REG[" << (int)rd << "] = REG[" << (int)rs
+            dlog << "[CPT_INDEX] REG[" << (int)rd << "] = REG[" << (int)rs
                  << "] + " << imm << " -> " << REG[rd] << "\n";
             break;
         }
@@ -337,7 +362,7 @@ struct ISASim {
             case 2: tagX_ipsum = tagX; tagY_ipsum = tagY; break;
             case 3: tagX_opsum = tagX; tagY_opsum = tagY; break;
             }
-            cout << "[CPT_TAGXY] type=" << (int)type
+            dlog << "[CPT_TAGXY] type=" << (int)type
                  << " tag=(" << (int)tagX << "," << (int)tagY << ")\n";
             break;
         }
@@ -351,7 +376,7 @@ struct ISASim {
             } else if (opcode == OP_SET_ID) {
                 set_id();
             } else {
-                cout << "\n";
+                dlog << "\n";
             }
             break;
         }
@@ -360,18 +385,16 @@ struct ISASim {
         case FMT_WAIT: {
             uint8_t type = (insn >> 6) & 0x3;
 
-           
-
             switch (type) {
             case 0:  // GLB
                 if (glb_busy) {
                     if (!glb_waiting) {
-                        cout << "[WAIT GLB] still busy, stall\n";
+                        dlog << "[WAIT GLB] still busy, stall\n";
                         glb_waiting = true;
                     }
                     nextPC = PC;  // stall
                 } else {
-                    cout << "[WAIT GLB] done, continue\n";
+                    dlog << "[WAIT GLB] done, continue\n";
                     glb_waiting = false;
                 }
                 break;
@@ -379,12 +402,12 @@ struct ISASim {
             case 1:  // DMA
                 if (dma_busy) {
                     if (!dma_waiting) {
-                        cout << "[WAIT DMA] still busy, stall\n";
+                        dlog << "[WAIT DMA] still busy, stall\n";
                         dma_waiting = true;
                     }
                     nextPC = PC;  // stall
                 } else {
-                    cout << "[WAIT DMA] done, continue\n";
+                    dlog << "[WAIT DMA] done, continue\n";
                     dma_waiting = false;
                 }
                 break;
@@ -394,12 +417,11 @@ struct ISASim {
                 break;
 
             default:
-                cout << "[WAIT] unknown type=" << (int)type << "\n";
+                dlog << "[WAIT] unknown type=" << (int)type << "\n";
                 break;
             }
             break;
         }
-
 
         // ---------------- FMT_JUMP ----------------
         case FMT_JUMP: {
@@ -408,7 +430,7 @@ struct ISASim {
             // 新版 spec: PC = PC + jump_addr，這裡用有號位移，方便往回跳
             int32_t off = sign_extend(raw, 26);
             nextPC = (uint32_t)((int32_t)PC + off);
-            cout << "[JUMP] PC += " << off << " -> " << nextPC << "\n";
+            dlog << "[JUMP] PC += " << off << " -> " << nextPC << "\n";
             break;
         }
 
@@ -429,7 +451,7 @@ struct ISASim {
                 nextPC = PC + 1;
             }
 
-            cout << "[LOOP] REG[" << (int)loopReg << "]+=" << offset
+            dlog << "[LOOP] REG[" << (int)loopReg << "]+=" << offset
                  << " -> " << REG[loopReg]
                  << ", nextPC=" << nextPC << "\n";
             break;
@@ -444,7 +466,7 @@ struct ISASim {
                 uint8_t rs = (insn >> 10) & 0xF;
                 uint8_t rd = (insn >> 6)  & 0xF;
                 REG[rd] = (uint32_t)((int32_t)REG[rs] + imm);
-                cout << "[ADDI] REG[" << (int)rd << "] = REG[" << (int)rs
+                dlog << "[ADDI] REG[" << (int)rd << "] = REG[" << (int)rs
                      << "] + " << imm << " -> " << REG[rd] << "\n";
             } else if (opcode == OP_ADD || opcode == OP_MUL) {
                 // FMT-ALU: 31:18 reserved, 17:14 rs2, 13:10 rs1, 9:6 rd, 5:0 op
@@ -453,28 +475,28 @@ struct ISASim {
                 uint8_t rd  = (insn >> 6)  & 0xF;
                 if (opcode == OP_ADD) {
                     REG[rd] = REG[rs1] + REG[rs2];
-                    cout << "[ADD] REG[" << (int)rd << "] = REG[" << (int)rs1
+                    dlog << "[ADD] REG[" << (int)rd << "] = REG[" << (int)rs1
                          << "] + REG[" << (int)rs2 << "] -> " << REG[rd] << "\n";
                 } else {
                     REG[rd] = REG[rs1] * REG[rs2];
-                    cout << "[MUL] REG[" << (int)rd << "] = REG[" << (int)rs1
+                    dlog << "[MUL] REG[" << (int)rd << "] = REG[" << (int)rs1
                          << "] * REG[" << (int)rs2 << "] -> " << REG[rd] << "\n";
                 }
             } else {
-                cout << "\n";
+                dlog << "\n";
             }
             break;
         }
 
         // ---------------- FMT_END ----------------
         case FMT_END: {
-            cout << "[END]\n";
+            dlog << "[END]\n";
             running = false;
             break;
         }
 
         default:
-            cerr << "Unknown format / opcode=" << (int)opcode << "\n";
+            dlog << "Unknown format / opcode=" << (int)opcode << "\n";
             running = false;
             break;
         }
@@ -483,31 +505,27 @@ struct ISASim {
     }
 
     void run(int max_steps = 10000000) {
-        //int steps = 0;
         while (running && cur_cycle < max_steps) {
-            cout << "cycle " << cur_cycle << ": ";
+            dlog << "cycle " << cur_cycle << ": ";
             step();
-            if (dma_waiting ){
+            if (dma_waiting) {
                 // 如果在 WAIT 狀態，cycle 也要繼續增加
-                cur_cycle=dma_done_cycle;
-            }
-            else if (glb_waiting ){
+                cur_cycle = dma_done_cycle;
+            } else if (glb_waiting) {
                 // 如果在 WAIT 狀態，cycle 也要繼續增加
-                cur_cycle=glb_done_cycle;
+                cur_cycle = glb_done_cycle;
+            } else {
+                ++cur_cycle;
             }
-            else ++cur_cycle;
-            
-            //++steps;
         }
         if (cur_cycle >= max_steps) {
-            cerr << "Max steps reached\n";
+            dlog << "Max steps reached\n";
         }
     }
 };
 
 int main() {
     ISASim sim;
-    //sim.load_program_txt("example.hex"); // assembler 出來的 program.hex 改名或直接用這個檔名
     sim.load_program_txt("controller.hex");
     sim.run();
     return 0;

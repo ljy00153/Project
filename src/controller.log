@@ -1,0 +1,1259 @@
+Loaded 74 instructions from controller.hex
+cycle 0: PC=0x0000 OPCODE=0x02 [SET_ID] (call PE array config module)
+cycle 1: PC=0x0001 OPCODE=0x01 [CFG_SET] CSR[0] <= type(0) -> 0x10000000
+cycle 2: PC=0x0002 OPCODE=0x01 [CFG_SET] CSR[1] <= type(1) -> 0x20000000
+cycle 3: PC=0x0003 OPCODE=0x01 [CFG_SET] CSR[2] <= type(2) -> 0x30000000
+cycle 4: PC=0x0004 OPCODE=0x01 [CFG_SET] CSR[3] <= type(3) -> 0x0
+cycle 5: PC=0x0005 OPCODE=0x01 [CFG_SET] CSR[4] <= type(4) -> 0x1000
+cycle 6: PC=0x0006 OPCODE=0x01 [CFG_SET] CSR[5] <= type(5) -> 0x2000
+cycle 7: PC=0x0007 OPCODE=0x01 [CFG_SET] CSR[6] <= type(6) -> 0x2
+cycle 8: PC=0x0008 OPCODE=0x01 [CFG_SET] CSR[7] <= type(7) -> 0x3b
+cycle 9: PC=0x0009 OPCODE=0x01 [CFG_SET] CSR[8] <= type(8) -> 0x1
+cycle 10: PC=0x000a OPCODE=0x01 [CFG_SET] CSR[9] <= type(9) -> 0x2
+cycle 11: PC=0x000b OPCODE=0x01 [CFG_SET] CSR[10] <= type(10) -> 0x4
+cycle 12: PC=0x000c OPCODE=0x01 [CFG_SET] CSR[11] <= type(11) -> 0x40
+cycle 13: PC=0x000d OPCODE=0x01 [CFG_SET] CSR[12] <= type(12) -> 0x1
+cycle 14: PC=0x000e OPCODE=0x01 [CFG_SET] CSR[13] <= type(13) -> 0x0
+cycle 15: PC=0x000f OPCODE=0x21 [ADDI] REG[1] = REG[0] + 0 -> 0
+cycle 16: PC=0x0010 OPCODE=0x21 [ADDI] REG[2] = REG[0] + 0 -> 0
+cycle 17: PC=0x0011 OPCODE=0x21 [ADDI] REG[3] = REG[0] + 0 -> 0
+cycle 18: PC=0x0012 OPCODE=0x21 [ADDI] REG[4] = REG[0] + 0 -> 0
+cycle 19: PC=0x0013 OPCODE=0x21 [ADDI] REG[5] = REG[0] + 0 -> 0
+cycle 20: PC=0x0014 OPCODE=0x21 [ADDI] REG[6] = REG[0] + 0 -> 0
+cycle 21: PC=0x0015 OPCODE=0x21 [ADDI] REG[8] = REG[0] + 0 -> 0
+cycle 22: PC=0x0016 OPCODE=0x21 [ADDI] REG[9] = REG[0] + 0 -> 0
+cycle 23: PC=0x0017 OPCODE=0x21 [ADDI] REG[10] = REG[0] + 0 -> 0
+cycle 24: PC=0x0018 OPCODE=0x21 [ADDI] REG[11] = REG[0] + 0 -> 0
+cycle 25: PC=0x0019 OPCODE=0x21 [ADDI] REG[12] = REG[0] + 0 -> 0
+cycle 26: PC=0x001a OPCODE=0x21 [ADDI] REG[13] = REG[0] + 0 -> 0
+cycle 27: PC=0x001b OPCODE=0x21 [ADDI] REG[14] = REG[0] + 0 -> 0
+cycle 28: PC=0x001c OPCODE=0x04 [DMA READ] addr=268435456 size=2304
+cycle 29: PC=0x001d OPCODE=0x1d [WAIT DMA] still busy, stall
+cycle 11548: PC=0x001d OPCODE=0x1d [WAIT DMA] done, continue
+cycle 11549: PC=0x001e OPCODE=0x05 [DMA READ] addr=536870912 size=4608
+cycle 11550: PC=0x001f OPCODE=0x1d [WAIT DMA] still busy, stall
+cycle 34589: PC=0x001f OPCODE=0x1d [WAIT DMA] done, continue
+cycle 34590: PC=0x0020 OPCODE=0x18 [CPT_TAGXY] type=1 tag=(0,0)
+cycle 34591: PC=0x0021 OPCODE=0x25 [MUL] REG[11] = REG[4] * REG[10] -> 0
+cycle 34592: PC=0x0022 OPCODE=0x24 [ADD] REG[11] = REG[11] + REG[5] -> 0
+cycle 34593: PC=0x0023 OPCODE=0x08 [G2P] addr=4096 tag=(0,0) size=576
+cycle 34594: PC=0x0024 OPCODE=0x1d [WAIT GLB] still busy, stall
+cycle 35745: PC=0x0024 OPCODE=0x1d [WAIT GLB] done, continue
+cycle 35746: PC=0x0025 OPCODE=0x18 [CPT_TAGXY] type=2 tag=(0,0)
+cycle 35747: PC=0x0026 OPCODE=0x25 [MUL] REG[12] = REG[3] * REG[10] -> 0
+cycle 35748: PC=0x0027 OPCODE=0x25 [MUL] REG[13] = REG[6] * REG[10] -> 0
+cycle 35749: PC=0x0028 OPCODE=0x24 [ADD] REG[12] = REG[12] + REG[5] -> 0
+cycle 35750: PC=0x0029 OPCODE=0x24 [ADD] REG[12] = REG[12] + REG[13] -> 0
+cycle 35751: PC=0x002a OPCODE=0x08 [G2P] addr=8192 tag=(0,0) size=32
+cycle 35752: PC=0x002b OPCODE=0x1d [WAIT GLB] still busy, stall
+cycle 35815: PC=0x002b OPCODE=0x1d [WAIT GLB] done, continue
+cycle 35816: PC=0x002c OPCODE=0x18 [CPT_TAGXY] type=0 tag=(0,0)
+cycle 35817: PC=0x002d OPCODE=0x25 [MUL] REG[14] = REG[6] * REG[9] -> 0
+cycle 35818: PC=0x002e OPCODE=0x08 [G2P] addr=0 tag=(0,0) size=18
+cycle 35819: PC=0x002f OPCODE=0x1d [WAIT GLB] still busy, stall
+cycle 35854: PC=0x002f OPCODE=0x1d [WAIT GLB] done, continue
+cycle 35855: PC=0x0030 OPCODE=0x1c [COMPUTE] valid_e=0
+cycle 35856: PC=0x0031 OPCODE=0x1d [WAIT PE_ARRAY]
+cycle 35857: PC=0x0032 OPCODE=0x18 [CPT_TAGXY] type=3 tag=(0,0)
+cycle 35858: PC=0x0033 OPCODE=0x09 [P2G] addr=8192 tag=(0,0) size=32
+cycle 35859: PC=0x0034 OPCODE=0x1f [LOOP] REG[6]+=1 -> 1, nextPC=37
+cycle 35860: PC=0x0025 OPCODE=0x18 [CPT_TAGXY] type=2 tag=(0,0)
+cycle 35861: PC=0x0026 OPCODE=0x25 [MUL] REG[12] = REG[3] * REG[10] -> 0
+cycle 35862: PC=0x0027 OPCODE=0x25 [MUL] REG[13] = REG[6] * REG[10] -> 0
+cycle 35863: PC=0x0028 OPCODE=0x24 [ADD] REG[12] = REG[12] + REG[5] -> 0
+cycle 35864: PC=0x0029 OPCODE=0x24 [ADD] REG[12] = REG[12] + REG[13] -> 0
+cycle 35865: PC=0x002a OPCODE=0x08 [G2P] addr=8192 tag=(0,0) size=32
+cycle 35866: PC=0x002b OPCODE=0x1d [WAIT GLB] still busy, stall
+cycle 35929: PC=0x002b OPCODE=0x1d [WAIT GLB] done, continue
+cycle 35930: PC=0x002c OPCODE=0x18 [CPT_TAGXY] type=0 tag=(0,0)
+cycle 35931: PC=0x002d OPCODE=0x25 [MUL] REG[14] = REG[6] * REG[9] -> 0
+cycle 35932: PC=0x002e OPCODE=0x08 [G2P] addr=0 tag=(0,0) size=18
+cycle 35933: PC=0x002f OPCODE=0x1d [WAIT GLB] still busy, stall
+cycle 35968: PC=0x002f OPCODE=0x1d [WAIT GLB] done, continue
+cycle 35969: PC=0x0030 OPCODE=0x1c [COMPUTE] valid_e=0
+cycle 35970: PC=0x0031 OPCODE=0x1d [WAIT PE_ARRAY]
+cycle 35971: PC=0x0032 OPCODE=0x18 [CPT_TAGXY] type=3 tag=(0,0)
+cycle 35972: PC=0x0033 OPCODE=0x09 [P2G] addr=8192 tag=(0,0) size=32
+cycle 35973: PC=0x0034 OPCODE=0x1f [LOOP] REG[6]+=1 -> 2, nextPC=37
+cycle 35974: PC=0x0025 OPCODE=0x18 [CPT_TAGXY] type=2 tag=(0,0)
+cycle 35975: PC=0x0026 OPCODE=0x25 [MUL] REG[12] = REG[3] * REG[10] -> 0
+cycle 35976: PC=0x0027 OPCODE=0x25 [MUL] REG[13] = REG[6] * REG[10] -> 0
+cycle 35977: PC=0x0028 OPCODE=0x24 [ADD] REG[12] = REG[12] + REG[5] -> 0
+cycle 35978: PC=0x0029 OPCODE=0x24 [ADD] REG[12] = REG[12] + REG[13] -> 0
+cycle 35979: PC=0x002a OPCODE=0x08 [G2P] addr=8192 tag=(0,0) size=32
+cycle 35980: PC=0x002b OPCODE=0x1d [WAIT GLB] still busy, stall
+cycle 36043: PC=0x002b OPCODE=0x1d [WAIT GLB] done, continue
+cycle 36044: PC=0x002c OPCODE=0x18 [CPT_TAGXY] type=0 tag=(0,0)
+cycle 36045: PC=0x002d OPCODE=0x25 [MUL] REG[14] = REG[6] * REG[9] -> 0
+cycle 36046: PC=0x002e OPCODE=0x08 [G2P] addr=0 tag=(0,0) size=18
+cycle 36047: PC=0x002f OPCODE=0x1d [WAIT GLB] still busy, stall
+cycle 36082: PC=0x002f OPCODE=0x1d [WAIT GLB] done, continue
+cycle 36083: PC=0x0030 OPCODE=0x1c [COMPUTE] valid_e=0
+cycle 36084: PC=0x0031 OPCODE=0x1d [WAIT PE_ARRAY]
+cycle 36085: PC=0x0032 OPCODE=0x18 [CPT_TAGXY] type=3 tag=(0,0)
+cycle 36086: PC=0x0033 OPCODE=0x09 [P2G] addr=8192 tag=(0,0) size=32
+cycle 36087: PC=0x0034 OPCODE=0x1f [LOOP] REG[6]+=1 -> 3, nextPC=37
+cycle 36088: PC=0x0025 OPCODE=0x18 [CPT_TAGXY] type=2 tag=(0,0)
+cycle 36089: PC=0x0026 OPCODE=0x25 [MUL] REG[12] = REG[3] * REG[10] -> 0
+cycle 36090: PC=0x0027 OPCODE=0x25 [MUL] REG[13] = REG[6] * REG[10] -> 0
+cycle 36091: PC=0x0028 OPCODE=0x24 [ADD] REG[12] = REG[12] + REG[5] -> 0
+cycle 36092: PC=0x0029 OPCODE=0x24 [ADD] REG[12] = REG[12] + REG[13] -> 0
+cycle 36093: PC=0x002a OPCODE=0x08 [G2P] addr=8192 tag=(0,0) size=32
+cycle 36094: PC=0x002b OPCODE=0x1d [WAIT GLB] still busy, stall
+cycle 36157: PC=0x002b OPCODE=0x1d [WAIT GLB] done, continue
+cycle 36158: PC=0x002c OPCODE=0x18 [CPT_TAGXY] type=0 tag=(0,0)
+cycle 36159: PC=0x002d OPCODE=0x25 [MUL] REG[14] = REG[6] * REG[9] -> 0
+cycle 36160: PC=0x002e OPCODE=0x08 [G2P] addr=0 tag=(0,0) size=18
+cycle 36161: PC=0x002f OPCODE=0x1d [WAIT GLB] still busy, stall
+cycle 36196: PC=0x002f OPCODE=0x1d [WAIT GLB] done, continue
+cycle 36197: PC=0x0030 OPCODE=0x1c [COMPUTE] valid_e=0
+cycle 36198: PC=0x0031 OPCODE=0x1d [WAIT PE_ARRAY]
+cycle 36199: PC=0x0032 OPCODE=0x18 [CPT_TAGXY] type=3 tag=(0,0)
+cycle 36200: PC=0x0033 OPCODE=0x09 [P2G] addr=8192 tag=(0,0) size=32
+cycle 36201: PC=0x0034 OPCODE=0x1f [LOOP] REG[6]+=1 -> 4, nextPC=37
+cycle 36202: PC=0x0025 OPCODE=0x18 [CPT_TAGXY] type=2 tag=(0,0)
+cycle 36203: PC=0x0026 OPCODE=0x25 [MUL] REG[12] = REG[3] * REG[10] -> 0
+cycle 36204: PC=0x0027 OPCODE=0x25 [MUL] REG[13] = REG[6] * REG[10] -> 0
+cycle 36205: PC=0x0028 OPCODE=0x24 [ADD] REG[12] = REG[12] + REG[5] -> 0
+cycle 36206: PC=0x0029 OPCODE=0x24 [ADD] REG[12] = REG[12] + REG[13] -> 0
+cycle 36207: PC=0x002a OPCODE=0x08 [G2P] addr=8192 tag=(0,0) size=32
+cycle 36208: PC=0x002b OPCODE=0x1d [WAIT GLB] still busy, stall
+cycle 36271: PC=0x002b OPCODE=0x1d [WAIT GLB] done, continue
+cycle 36272: PC=0x002c OPCODE=0x18 [CPT_TAGXY] type=0 tag=(0,0)
+cycle 36273: PC=0x002d OPCODE=0x25 [MUL] REG[14] = REG[6] * REG[9] -> 0
+cycle 36274: PC=0x002e OPCODE=0x08 [G2P] addr=0 tag=(0,0) size=18
+cycle 36275: PC=0x002f OPCODE=0x1d [WAIT GLB] still busy, stall
+cycle 36310: PC=0x002f OPCODE=0x1d [WAIT GLB] done, continue
+cycle 36311: PC=0x0030 OPCODE=0x1c [COMPUTE] valid_e=0
+cycle 36312: PC=0x0031 OPCODE=0x1d [WAIT PE_ARRAY]
+cycle 36313: PC=0x0032 OPCODE=0x18 [CPT_TAGXY] type=3 tag=(0,0)
+cycle 36314: PC=0x0033 OPCODE=0x09 [P2G] addr=8192 tag=(0,0) size=32
+cycle 36315: PC=0x0034 OPCODE=0x1f [LOOP] REG[6]+=1 -> 5, nextPC=37
+cycle 36316: PC=0x0025 OPCODE=0x18 [CPT_TAGXY] type=2 tag=(0,0)
+cycle 36317: PC=0x0026 OPCODE=0x25 [MUL] REG[12] = REG[3] * REG[10] -> 0
+cycle 36318: PC=0x0027 OPCODE=0x25 [MUL] REG[13] = REG[6] * REG[10] -> 0
+cycle 36319: PC=0x0028 OPCODE=0x24 [ADD] REG[12] = REG[12] + REG[5] -> 0
+cycle 36320: PC=0x0029 OPCODE=0x24 [ADD] REG[12] = REG[12] + REG[13] -> 0
+cycle 36321: PC=0x002a OPCODE=0x08 [G2P] addr=8192 tag=(0,0) size=32
+cycle 36322: PC=0x002b OPCODE=0x1d [WAIT GLB] still busy, stall
+cycle 36385: PC=0x002b OPCODE=0x1d [WAIT GLB] done, continue
+cycle 36386: PC=0x002c OPCODE=0x18 [CPT_TAGXY] type=0 tag=(0,0)
+cycle 36387: PC=0x002d OPCODE=0x25 [MUL] REG[14] = REG[6] * REG[9] -> 0
+cycle 36388: PC=0x002e OPCODE=0x08 [G2P] addr=0 tag=(0,0) size=18
+cycle 36389: PC=0x002f OPCODE=0x1d [WAIT GLB] still busy, stall
+cycle 36424: PC=0x002f OPCODE=0x1d [WAIT GLB] done, continue
+cycle 36425: PC=0x0030 OPCODE=0x1c [COMPUTE] valid_e=0
+cycle 36426: PC=0x0031 OPCODE=0x1d [WAIT PE_ARRAY]
+cycle 36427: PC=0x0032 OPCODE=0x18 [CPT_TAGXY] type=3 tag=(0,0)
+cycle 36428: PC=0x0033 OPCODE=0x09 [P2G] addr=8192 tag=(0,0) size=32
+cycle 36429: PC=0x0034 OPCODE=0x1f [LOOP] REG[6]+=1 -> 6, nextPC=37
+cycle 36430: PC=0x0025 OPCODE=0x18 [CPT_TAGXY] type=2 tag=(0,0)
+cycle 36431: PC=0x0026 OPCODE=0x25 [MUL] REG[12] = REG[3] * REG[10] -> 0
+cycle 36432: PC=0x0027 OPCODE=0x25 [MUL] REG[13] = REG[6] * REG[10] -> 0
+cycle 36433: PC=0x0028 OPCODE=0x24 [ADD] REG[12] = REG[12] + REG[5] -> 0
+cycle 36434: PC=0x0029 OPCODE=0x24 [ADD] REG[12] = REG[12] + REG[13] -> 0
+cycle 36435: PC=0x002a OPCODE=0x08 [G2P] addr=8192 tag=(0,0) size=32
+cycle 36436: PC=0x002b OPCODE=0x1d [WAIT GLB] still busy, stall
+cycle 36499: PC=0x002b OPCODE=0x1d [WAIT GLB] done, continue
+cycle 36500: PC=0x002c OPCODE=0x18 [CPT_TAGXY] type=0 tag=(0,0)
+cycle 36501: PC=0x002d OPCODE=0x25 [MUL] REG[14] = REG[6] * REG[9] -> 0
+cycle 36502: PC=0x002e OPCODE=0x08 [G2P] addr=0 tag=(0,0) size=18
+cycle 36503: PC=0x002f OPCODE=0x1d [WAIT GLB] still busy, stall
+cycle 36538: PC=0x002f OPCODE=0x1d [WAIT GLB] done, continue
+cycle 36539: PC=0x0030 OPCODE=0x1c [COMPUTE] valid_e=0
+cycle 36540: PC=0x0031 OPCODE=0x1d [WAIT PE_ARRAY]
+cycle 36541: PC=0x0032 OPCODE=0x18 [CPT_TAGXY] type=3 tag=(0,0)
+cycle 36542: PC=0x0033 OPCODE=0x09 [P2G] addr=8192 tag=(0,0) size=32
+cycle 36543: PC=0x0034 OPCODE=0x1f [LOOP] REG[6]+=1 -> 7, nextPC=37
+cycle 36544: PC=0x0025 OPCODE=0x18 [CPT_TAGXY] type=2 tag=(0,0)
+cycle 36545: PC=0x0026 OPCODE=0x25 [MUL] REG[12] = REG[3] * REG[10] -> 0
+cycle 36546: PC=0x0027 OPCODE=0x25 [MUL] REG[13] = REG[6] * REG[10] -> 0
+cycle 36547: PC=0x0028 OPCODE=0x24 [ADD] REG[12] = REG[12] + REG[5] -> 0
+cycle 36548: PC=0x0029 OPCODE=0x24 [ADD] REG[12] = REG[12] + REG[13] -> 0
+cycle 36549: PC=0x002a OPCODE=0x08 [G2P] addr=8192 tag=(0,0) size=32
+cycle 36550: PC=0x002b OPCODE=0x1d [WAIT GLB] still busy, stall
+cycle 36613: PC=0x002b OPCODE=0x1d [WAIT GLB] done, continue
+cycle 36614: PC=0x002c OPCODE=0x18 [CPT_TAGXY] type=0 tag=(0,0)
+cycle 36615: PC=0x002d OPCODE=0x25 [MUL] REG[14] = REG[6] * REG[9] -> 0
+cycle 36616: PC=0x002e OPCODE=0x08 [G2P] addr=0 tag=(0,0) size=18
+cycle 36617: PC=0x002f OPCODE=0x1d [WAIT GLB] still busy, stall
+cycle 36652: PC=0x002f OPCODE=0x1d [WAIT GLB] done, continue
+cycle 36653: PC=0x0030 OPCODE=0x1c [COMPUTE] valid_e=0
+cycle 36654: PC=0x0031 OPCODE=0x1d [WAIT PE_ARRAY]
+cycle 36655: PC=0x0032 OPCODE=0x18 [CPT_TAGXY] type=3 tag=(0,0)
+cycle 36656: PC=0x0033 OPCODE=0x09 [P2G] addr=8192 tag=(0,0) size=32
+cycle 36657: PC=0x0034 OPCODE=0x1f [LOOP] REG[6]+=1 -> 8, nextPC=37
+cycle 36658: PC=0x0025 OPCODE=0x18 [CPT_TAGXY] type=2 tag=(0,0)
+cycle 36659: PC=0x0026 OPCODE=0x25 [MUL] REG[12] = REG[3] * REG[10] -> 0
+cycle 36660: PC=0x0027 OPCODE=0x25 [MUL] REG[13] = REG[6] * REG[10] -> 0
+cycle 36661: PC=0x0028 OPCODE=0x24 [ADD] REG[12] = REG[12] + REG[5] -> 0
+cycle 36662: PC=0x0029 OPCODE=0x24 [ADD] REG[12] = REG[12] + REG[13] -> 0
+cycle 36663: PC=0x002a OPCODE=0x08 [G2P] addr=8192 tag=(0,0) size=32
+cycle 36664: PC=0x002b OPCODE=0x1d [WAIT GLB] still busy, stall
+cycle 36727: PC=0x002b OPCODE=0x1d [WAIT GLB] done, continue
+cycle 36728: PC=0x002c OPCODE=0x18 [CPT_TAGXY] type=0 tag=(0,0)
+cycle 36729: PC=0x002d OPCODE=0x25 [MUL] REG[14] = REG[6] * REG[9] -> 0
+cycle 36730: PC=0x002e OPCODE=0x08 [G2P] addr=0 tag=(0,0) size=18
+cycle 36731: PC=0x002f OPCODE=0x1d [WAIT GLB] still busy, stall
+cycle 36766: PC=0x002f OPCODE=0x1d [WAIT GLB] done, continue
+cycle 36767: PC=0x0030 OPCODE=0x1c [COMPUTE] valid_e=0
+cycle 36768: PC=0x0031 OPCODE=0x1d [WAIT PE_ARRAY]
+cycle 36769: PC=0x0032 OPCODE=0x18 [CPT_TAGXY] type=3 tag=(0,0)
+cycle 36770: PC=0x0033 OPCODE=0x09 [P2G] addr=8192 tag=(0,0) size=32
+cycle 36771: PC=0x0034 OPCODE=0x1f [LOOP] REG[6]+=1 -> 9, nextPC=37
+cycle 36772: PC=0x0025 OPCODE=0x18 [CPT_TAGXY] type=2 tag=(0,0)
+cycle 36773: PC=0x0026 OPCODE=0x25 [MUL] REG[12] = REG[3] * REG[10] -> 0
+cycle 36774: PC=0x0027 OPCODE=0x25 [MUL] REG[13] = REG[6] * REG[10] -> 0
+cycle 36775: PC=0x0028 OPCODE=0x24 [ADD] REG[12] = REG[12] + REG[5] -> 0
+cycle 36776: PC=0x0029 OPCODE=0x24 [ADD] REG[12] = REG[12] + REG[13] -> 0
+cycle 36777: PC=0x002a OPCODE=0x08 [G2P] addr=8192 tag=(0,0) size=32
+cycle 36778: PC=0x002b OPCODE=0x1d [WAIT GLB] still busy, stall
+cycle 36841: PC=0x002b OPCODE=0x1d [WAIT GLB] done, continue
+cycle 36842: PC=0x002c OPCODE=0x18 [CPT_TAGXY] type=0 tag=(0,0)
+cycle 36843: PC=0x002d OPCODE=0x25 [MUL] REG[14] = REG[6] * REG[9] -> 0
+cycle 36844: PC=0x002e OPCODE=0x08 [G2P] addr=0 tag=(0,0) size=18
+cycle 36845: PC=0x002f OPCODE=0x1d [WAIT GLB] still busy, stall
+cycle 36880: PC=0x002f OPCODE=0x1d [WAIT GLB] done, continue
+cycle 36881: PC=0x0030 OPCODE=0x1c [COMPUTE] valid_e=0
+cycle 36882: PC=0x0031 OPCODE=0x1d [WAIT PE_ARRAY]
+cycle 36883: PC=0x0032 OPCODE=0x18 [CPT_TAGXY] type=3 tag=(0,0)
+cycle 36884: PC=0x0033 OPCODE=0x09 [P2G] addr=8192 tag=(0,0) size=32
+cycle 36885: PC=0x0034 OPCODE=0x1f [LOOP] REG[6]+=1 -> 10, nextPC=37
+cycle 36886: PC=0x0025 OPCODE=0x18 [CPT_TAGXY] type=2 tag=(0,0)
+cycle 36887: PC=0x0026 OPCODE=0x25 [MUL] REG[12] = REG[3] * REG[10] -> 0
+cycle 36888: PC=0x0027 OPCODE=0x25 [MUL] REG[13] = REG[6] * REG[10] -> 0
+cycle 36889: PC=0x0028 OPCODE=0x24 [ADD] REG[12] = REG[12] + REG[5] -> 0
+cycle 36890: PC=0x0029 OPCODE=0x24 [ADD] REG[12] = REG[12] + REG[13] -> 0
+cycle 36891: PC=0x002a OPCODE=0x08 [G2P] addr=8192 tag=(0,0) size=32
+cycle 36892: PC=0x002b OPCODE=0x1d [WAIT GLB] still busy, stall
+cycle 36955: PC=0x002b OPCODE=0x1d [WAIT GLB] done, continue
+cycle 36956: PC=0x002c OPCODE=0x18 [CPT_TAGXY] type=0 tag=(0,0)
+cycle 36957: PC=0x002d OPCODE=0x25 [MUL] REG[14] = REG[6] * REG[9] -> 0
+cycle 36958: PC=0x002e OPCODE=0x08 [G2P] addr=0 tag=(0,0) size=18
+cycle 36959: PC=0x002f OPCODE=0x1d [WAIT GLB] still busy, stall
+cycle 36994: PC=0x002f OPCODE=0x1d [WAIT GLB] done, continue
+cycle 36995: PC=0x0030 OPCODE=0x1c [COMPUTE] valid_e=0
+cycle 36996: PC=0x0031 OPCODE=0x1d [WAIT PE_ARRAY]
+cycle 36997: PC=0x0032 OPCODE=0x18 [CPT_TAGXY] type=3 tag=(0,0)
+cycle 36998: PC=0x0033 OPCODE=0x09 [P2G] addr=8192 tag=(0,0) size=32
+cycle 36999: PC=0x0034 OPCODE=0x1f [LOOP] REG[6]+=1 -> 11, nextPC=37
+cycle 37000: PC=0x0025 OPCODE=0x18 [CPT_TAGXY] type=2 tag=(0,0)
+cycle 37001: PC=0x0026 OPCODE=0x25 [MUL] REG[12] = REG[3] * REG[10] -> 0
+cycle 37002: PC=0x0027 OPCODE=0x25 [MUL] REG[13] = REG[6] * REG[10] -> 0
+cycle 37003: PC=0x0028 OPCODE=0x24 [ADD] REG[12] = REG[12] + REG[5] -> 0
+cycle 37004: PC=0x0029 OPCODE=0x24 [ADD] REG[12] = REG[12] + REG[13] -> 0
+cycle 37005: PC=0x002a OPCODE=0x08 [G2P] addr=8192 tag=(0,0) size=32
+cycle 37006: PC=0x002b OPCODE=0x1d [WAIT GLB] still busy, stall
+cycle 37069: PC=0x002b OPCODE=0x1d [WAIT GLB] done, continue
+cycle 37070: PC=0x002c OPCODE=0x18 [CPT_TAGXY] type=0 tag=(0,0)
+cycle 37071: PC=0x002d OPCODE=0x25 [MUL] REG[14] = REG[6] * REG[9] -> 0
+cycle 37072: PC=0x002e OPCODE=0x08 [G2P] addr=0 tag=(0,0) size=18
+cycle 37073: PC=0x002f OPCODE=0x1d [WAIT GLB] still busy, stall
+cycle 37108: PC=0x002f OPCODE=0x1d [WAIT GLB] done, continue
+cycle 37109: PC=0x0030 OPCODE=0x1c [COMPUTE] valid_e=0
+cycle 37110: PC=0x0031 OPCODE=0x1d [WAIT PE_ARRAY]
+cycle 37111: PC=0x0032 OPCODE=0x18 [CPT_TAGXY] type=3 tag=(0,0)
+cycle 37112: PC=0x0033 OPCODE=0x09 [P2G] addr=8192 tag=(0,0) size=32
+cycle 37113: PC=0x0034 OPCODE=0x1f [LOOP] REG[6]+=1 -> 12, nextPC=37
+cycle 37114: PC=0x0025 OPCODE=0x18 [CPT_TAGXY] type=2 tag=(0,0)
+cycle 37115: PC=0x0026 OPCODE=0x25 [MUL] REG[12] = REG[3] * REG[10] -> 0
+cycle 37116: PC=0x0027 OPCODE=0x25 [MUL] REG[13] = REG[6] * REG[10] -> 0
+cycle 37117: PC=0x0028 OPCODE=0x24 [ADD] REG[12] = REG[12] + REG[5] -> 0
+cycle 37118: PC=0x0029 OPCODE=0x24 [ADD] REG[12] = REG[12] + REG[13] -> 0
+cycle 37119: PC=0x002a OPCODE=0x08 [G2P] addr=8192 tag=(0,0) size=32
+cycle 37120: PC=0x002b OPCODE=0x1d [WAIT GLB] still busy, stall
+cycle 37183: PC=0x002b OPCODE=0x1d [WAIT GLB] done, continue
+cycle 37184: PC=0x002c OPCODE=0x18 [CPT_TAGXY] type=0 tag=(0,0)
+cycle 37185: PC=0x002d OPCODE=0x25 [MUL] REG[14] = REG[6] * REG[9] -> 0
+cycle 37186: PC=0x002e OPCODE=0x08 [G2P] addr=0 tag=(0,0) size=18
+cycle 37187: PC=0x002f OPCODE=0x1d [WAIT GLB] still busy, stall
+cycle 37222: PC=0x002f OPCODE=0x1d [WAIT GLB] done, continue
+cycle 37223: PC=0x0030 OPCODE=0x1c [COMPUTE] valid_e=0
+cycle 37224: PC=0x0031 OPCODE=0x1d [WAIT PE_ARRAY]
+cycle 37225: PC=0x0032 OPCODE=0x18 [CPT_TAGXY] type=3 tag=(0,0)
+cycle 37226: PC=0x0033 OPCODE=0x09 [P2G] addr=8192 tag=(0,0) size=32
+cycle 37227: PC=0x0034 OPCODE=0x1f [LOOP] REG[6]+=1 -> 13, nextPC=37
+cycle 37228: PC=0x0025 OPCODE=0x18 [CPT_TAGXY] type=2 tag=(0,0)
+cycle 37229: PC=0x0026 OPCODE=0x25 [MUL] REG[12] = REG[3] * REG[10] -> 0
+cycle 37230: PC=0x0027 OPCODE=0x25 [MUL] REG[13] = REG[6] * REG[10] -> 0
+cycle 37231: PC=0x0028 OPCODE=0x24 [ADD] REG[12] = REG[12] + REG[5] -> 0
+cycle 37232: PC=0x0029 OPCODE=0x24 [ADD] REG[12] = REG[12] + REG[13] -> 0
+cycle 37233: PC=0x002a OPCODE=0x08 [G2P] addr=8192 tag=(0,0) size=32
+cycle 37234: PC=0x002b OPCODE=0x1d [WAIT GLB] still busy, stall
+cycle 37297: PC=0x002b OPCODE=0x1d [WAIT GLB] done, continue
+cycle 37298: PC=0x002c OPCODE=0x18 [CPT_TAGXY] type=0 tag=(0,0)
+cycle 37299: PC=0x002d OPCODE=0x25 [MUL] REG[14] = REG[6] * REG[9] -> 0
+cycle 37300: PC=0x002e OPCODE=0x08 [G2P] addr=0 tag=(0,0) size=18
+cycle 37301: PC=0x002f OPCODE=0x1d [WAIT GLB] still busy, stall
+cycle 37336: PC=0x002f OPCODE=0x1d [WAIT GLB] done, continue
+cycle 37337: PC=0x0030 OPCODE=0x1c [COMPUTE] valid_e=0
+cycle 37338: PC=0x0031 OPCODE=0x1d [WAIT PE_ARRAY]
+cycle 37339: PC=0x0032 OPCODE=0x18 [CPT_TAGXY] type=3 tag=(0,0)
+cycle 37340: PC=0x0033 OPCODE=0x09 [P2G] addr=8192 tag=(0,0) size=32
+cycle 37341: PC=0x0034 OPCODE=0x1f [LOOP] REG[6]+=1 -> 14, nextPC=37
+cycle 37342: PC=0x0025 OPCODE=0x18 [CPT_TAGXY] type=2 tag=(0,0)
+cycle 37343: PC=0x0026 OPCODE=0x25 [MUL] REG[12] = REG[3] * REG[10] -> 0
+cycle 37344: PC=0x0027 OPCODE=0x25 [MUL] REG[13] = REG[6] * REG[10] -> 0
+cycle 37345: PC=0x0028 OPCODE=0x24 [ADD] REG[12] = REG[12] + REG[5] -> 0
+cycle 37346: PC=0x0029 OPCODE=0x24 [ADD] REG[12] = REG[12] + REG[13] -> 0
+cycle 37347: PC=0x002a OPCODE=0x08 [G2P] addr=8192 tag=(0,0) size=32
+cycle 37348: PC=0x002b OPCODE=0x1d [WAIT GLB] still busy, stall
+cycle 37411: PC=0x002b OPCODE=0x1d [WAIT GLB] done, continue
+cycle 37412: PC=0x002c OPCODE=0x18 [CPT_TAGXY] type=0 tag=(0,0)
+cycle 37413: PC=0x002d OPCODE=0x25 [MUL] REG[14] = REG[6] * REG[9] -> 0
+cycle 37414: PC=0x002e OPCODE=0x08 [G2P] addr=0 tag=(0,0) size=18
+cycle 37415: PC=0x002f OPCODE=0x1d [WAIT GLB] still busy, stall
+cycle 37450: PC=0x002f OPCODE=0x1d [WAIT GLB] done, continue
+cycle 37451: PC=0x0030 OPCODE=0x1c [COMPUTE] valid_e=0
+cycle 37452: PC=0x0031 OPCODE=0x1d [WAIT PE_ARRAY]
+cycle 37453: PC=0x0032 OPCODE=0x18 [CPT_TAGXY] type=3 tag=(0,0)
+cycle 37454: PC=0x0033 OPCODE=0x09 [P2G] addr=8192 tag=(0,0) size=32
+cycle 37455: PC=0x0034 OPCODE=0x1f [LOOP] REG[6]+=1 -> 15, nextPC=37
+cycle 37456: PC=0x0025 OPCODE=0x18 [CPT_TAGXY] type=2 tag=(0,0)
+cycle 37457: PC=0x0026 OPCODE=0x25 [MUL] REG[12] = REG[3] * REG[10] -> 0
+cycle 37458: PC=0x0027 OPCODE=0x25 [MUL] REG[13] = REG[6] * REG[10] -> 0
+cycle 37459: PC=0x0028 OPCODE=0x24 [ADD] REG[12] = REG[12] + REG[5] -> 0
+cycle 37460: PC=0x0029 OPCODE=0x24 [ADD] REG[12] = REG[12] + REG[13] -> 0
+cycle 37461: PC=0x002a OPCODE=0x08 [G2P] addr=8192 tag=(0,0) size=32
+cycle 37462: PC=0x002b OPCODE=0x1d [WAIT GLB] still busy, stall
+cycle 37525: PC=0x002b OPCODE=0x1d [WAIT GLB] done, continue
+cycle 37526: PC=0x002c OPCODE=0x18 [CPT_TAGXY] type=0 tag=(0,0)
+cycle 37527: PC=0x002d OPCODE=0x25 [MUL] REG[14] = REG[6] * REG[9] -> 0
+cycle 37528: PC=0x002e OPCODE=0x08 [G2P] addr=0 tag=(0,0) size=18
+cycle 37529: PC=0x002f OPCODE=0x1d [WAIT GLB] still busy, stall
+cycle 37564: PC=0x002f OPCODE=0x1d [WAIT GLB] done, continue
+cycle 37565: PC=0x0030 OPCODE=0x1c [COMPUTE] valid_e=0
+cycle 37566: PC=0x0031 OPCODE=0x1d [WAIT PE_ARRAY]
+cycle 37567: PC=0x0032 OPCODE=0x18 [CPT_TAGXY] type=3 tag=(0,0)
+cycle 37568: PC=0x0033 OPCODE=0x09 [P2G] addr=8192 tag=(0,0) size=32
+cycle 37569: PC=0x0034 OPCODE=0x1f [LOOP] REG[6]+=1 -> 16, nextPC=37
+cycle 37570: PC=0x0025 OPCODE=0x18 [CPT_TAGXY] type=2 tag=(0,0)
+cycle 37571: PC=0x0026 OPCODE=0x25 [MUL] REG[12] = REG[3] * REG[10] -> 0
+cycle 37572: PC=0x0027 OPCODE=0x25 [MUL] REG[13] = REG[6] * REG[10] -> 0
+cycle 37573: PC=0x0028 OPCODE=0x24 [ADD] REG[12] = REG[12] + REG[5] -> 0
+cycle 37574: PC=0x0029 OPCODE=0x24 [ADD] REG[12] = REG[12] + REG[13] -> 0
+cycle 37575: PC=0x002a OPCODE=0x08 [G2P] addr=8192 tag=(0,0) size=32
+cycle 37576: PC=0x002b OPCODE=0x1d [WAIT GLB] still busy, stall
+cycle 37639: PC=0x002b OPCODE=0x1d [WAIT GLB] done, continue
+cycle 37640: PC=0x002c OPCODE=0x18 [CPT_TAGXY] type=0 tag=(0,0)
+cycle 37641: PC=0x002d OPCODE=0x25 [MUL] REG[14] = REG[6] * REG[9] -> 0
+cycle 37642: PC=0x002e OPCODE=0x08 [G2P] addr=0 tag=(0,0) size=18
+cycle 37643: PC=0x002f OPCODE=0x1d [WAIT GLB] still busy, stall
+cycle 37678: PC=0x002f OPCODE=0x1d [WAIT GLB] done, continue
+cycle 37679: PC=0x0030 OPCODE=0x1c [COMPUTE] valid_e=0
+cycle 37680: PC=0x0031 OPCODE=0x1d [WAIT PE_ARRAY]
+cycle 37681: PC=0x0032 OPCODE=0x18 [CPT_TAGXY] type=3 tag=(0,0)
+cycle 37682: PC=0x0033 OPCODE=0x09 [P2G] addr=8192 tag=(0,0) size=32
+cycle 37683: PC=0x0034 OPCODE=0x1f [LOOP] REG[6]+=1 -> 17, nextPC=37
+cycle 37684: PC=0x0025 OPCODE=0x18 [CPT_TAGXY] type=2 tag=(0,0)
+cycle 37685: PC=0x0026 OPCODE=0x25 [MUL] REG[12] = REG[3] * REG[10] -> 0
+cycle 37686: PC=0x0027 OPCODE=0x25 [MUL] REG[13] = REG[6] * REG[10] -> 0
+cycle 37687: PC=0x0028 OPCODE=0x24 [ADD] REG[12] = REG[12] + REG[5] -> 0
+cycle 37688: PC=0x0029 OPCODE=0x24 [ADD] REG[12] = REG[12] + REG[13] -> 0
+cycle 37689: PC=0x002a OPCODE=0x08 [G2P] addr=8192 tag=(0,0) size=32
+cycle 37690: PC=0x002b OPCODE=0x1d [WAIT GLB] still busy, stall
+cycle 37753: PC=0x002b OPCODE=0x1d [WAIT GLB] done, continue
+cycle 37754: PC=0x002c OPCODE=0x18 [CPT_TAGXY] type=0 tag=(0,0)
+cycle 37755: PC=0x002d OPCODE=0x25 [MUL] REG[14] = REG[6] * REG[9] -> 0
+cycle 37756: PC=0x002e OPCODE=0x08 [G2P] addr=0 tag=(0,0) size=18
+cycle 37757: PC=0x002f OPCODE=0x1d [WAIT GLB] still busy, stall
+cycle 37792: PC=0x002f OPCODE=0x1d [WAIT GLB] done, continue
+cycle 37793: PC=0x0030 OPCODE=0x1c [COMPUTE] valid_e=0
+cycle 37794: PC=0x0031 OPCODE=0x1d [WAIT PE_ARRAY]
+cycle 37795: PC=0x0032 OPCODE=0x18 [CPT_TAGXY] type=3 tag=(0,0)
+cycle 37796: PC=0x0033 OPCODE=0x09 [P2G] addr=8192 tag=(0,0) size=32
+cycle 37797: PC=0x0034 OPCODE=0x1f [LOOP] REG[6]+=1 -> 18, nextPC=37
+cycle 37798: PC=0x0025 OPCODE=0x18 [CPT_TAGXY] type=2 tag=(0,0)
+cycle 37799: PC=0x0026 OPCODE=0x25 [MUL] REG[12] = REG[3] * REG[10] -> 0
+cycle 37800: PC=0x0027 OPCODE=0x25 [MUL] REG[13] = REG[6] * REG[10] -> 0
+cycle 37801: PC=0x0028 OPCODE=0x24 [ADD] REG[12] = REG[12] + REG[5] -> 0
+cycle 37802: PC=0x0029 OPCODE=0x24 [ADD] REG[12] = REG[12] + REG[13] -> 0
+cycle 37803: PC=0x002a OPCODE=0x08 [G2P] addr=8192 tag=(0,0) size=32
+cycle 37804: PC=0x002b OPCODE=0x1d [WAIT GLB] still busy, stall
+cycle 37867: PC=0x002b OPCODE=0x1d [WAIT GLB] done, continue
+cycle 37868: PC=0x002c OPCODE=0x18 [CPT_TAGXY] type=0 tag=(0,0)
+cycle 37869: PC=0x002d OPCODE=0x25 [MUL] REG[14] = REG[6] * REG[9] -> 0
+cycle 37870: PC=0x002e OPCODE=0x08 [G2P] addr=0 tag=(0,0) size=18
+cycle 37871: PC=0x002f OPCODE=0x1d [WAIT GLB] still busy, stall
+cycle 37906: PC=0x002f OPCODE=0x1d [WAIT GLB] done, continue
+cycle 37907: PC=0x0030 OPCODE=0x1c [COMPUTE] valid_e=0
+cycle 37908: PC=0x0031 OPCODE=0x1d [WAIT PE_ARRAY]
+cycle 37909: PC=0x0032 OPCODE=0x18 [CPT_TAGXY] type=3 tag=(0,0)
+cycle 37910: PC=0x0033 OPCODE=0x09 [P2G] addr=8192 tag=(0,0) size=32
+cycle 37911: PC=0x0034 OPCODE=0x1f [LOOP] REG[6]+=1 -> 19, nextPC=37
+cycle 37912: PC=0x0025 OPCODE=0x18 [CPT_TAGXY] type=2 tag=(0,0)
+cycle 37913: PC=0x0026 OPCODE=0x25 [MUL] REG[12] = REG[3] * REG[10] -> 0
+cycle 37914: PC=0x0027 OPCODE=0x25 [MUL] REG[13] = REG[6] * REG[10] -> 0
+cycle 37915: PC=0x0028 OPCODE=0x24 [ADD] REG[12] = REG[12] + REG[5] -> 0
+cycle 37916: PC=0x0029 OPCODE=0x24 [ADD] REG[12] = REG[12] + REG[13] -> 0
+cycle 37917: PC=0x002a OPCODE=0x08 [G2P] addr=8192 tag=(0,0) size=32
+cycle 37918: PC=0x002b OPCODE=0x1d [WAIT GLB] still busy, stall
+cycle 37981: PC=0x002b OPCODE=0x1d [WAIT GLB] done, continue
+cycle 37982: PC=0x002c OPCODE=0x18 [CPT_TAGXY] type=0 tag=(0,0)
+cycle 37983: PC=0x002d OPCODE=0x25 [MUL] REG[14] = REG[6] * REG[9] -> 0
+cycle 37984: PC=0x002e OPCODE=0x08 [G2P] addr=0 tag=(0,0) size=18
+cycle 37985: PC=0x002f OPCODE=0x1d [WAIT GLB] still busy, stall
+cycle 38020: PC=0x002f OPCODE=0x1d [WAIT GLB] done, continue
+cycle 38021: PC=0x0030 OPCODE=0x1c [COMPUTE] valid_e=0
+cycle 38022: PC=0x0031 OPCODE=0x1d [WAIT PE_ARRAY]
+cycle 38023: PC=0x0032 OPCODE=0x18 [CPT_TAGXY] type=3 tag=(0,0)
+cycle 38024: PC=0x0033 OPCODE=0x09 [P2G] addr=8192 tag=(0,0) size=32
+cycle 38025: PC=0x0034 OPCODE=0x1f [LOOP] REG[6]+=1 -> 20, nextPC=37
+cycle 38026: PC=0x0025 OPCODE=0x18 [CPT_TAGXY] type=2 tag=(0,0)
+cycle 38027: PC=0x0026 OPCODE=0x25 [MUL] REG[12] = REG[3] * REG[10] -> 0
+cycle 38028: PC=0x0027 OPCODE=0x25 [MUL] REG[13] = REG[6] * REG[10] -> 0
+cycle 38029: PC=0x0028 OPCODE=0x24 [ADD] REG[12] = REG[12] + REG[5] -> 0
+cycle 38030: PC=0x0029 OPCODE=0x24 [ADD] REG[12] = REG[12] + REG[13] -> 0
+cycle 38031: PC=0x002a OPCODE=0x08 [G2P] addr=8192 tag=(0,0) size=32
+cycle 38032: PC=0x002b OPCODE=0x1d [WAIT GLB] still busy, stall
+cycle 38095: PC=0x002b OPCODE=0x1d [WAIT GLB] done, continue
+cycle 38096: PC=0x002c OPCODE=0x18 [CPT_TAGXY] type=0 tag=(0,0)
+cycle 38097: PC=0x002d OPCODE=0x25 [MUL] REG[14] = REG[6] * REG[9] -> 0
+cycle 38098: PC=0x002e OPCODE=0x08 [G2P] addr=0 tag=(0,0) size=18
+cycle 38099: PC=0x002f OPCODE=0x1d [WAIT GLB] still busy, stall
+cycle 38134: PC=0x002f OPCODE=0x1d [WAIT GLB] done, continue
+cycle 38135: PC=0x0030 OPCODE=0x1c [COMPUTE] valid_e=0
+cycle 38136: PC=0x0031 OPCODE=0x1d [WAIT PE_ARRAY]
+cycle 38137: PC=0x0032 OPCODE=0x18 [CPT_TAGXY] type=3 tag=(0,0)
+cycle 38138: PC=0x0033 OPCODE=0x09 [P2G] addr=8192 tag=(0,0) size=32
+cycle 38139: PC=0x0034 OPCODE=0x1f [LOOP] REG[6]+=1 -> 21, nextPC=37
+cycle 38140: PC=0x0025 OPCODE=0x18 [CPT_TAGXY] type=2 tag=(0,0)
+cycle 38141: PC=0x0026 OPCODE=0x25 [MUL] REG[12] = REG[3] * REG[10] -> 0
+cycle 38142: PC=0x0027 OPCODE=0x25 [MUL] REG[13] = REG[6] * REG[10] -> 0
+cycle 38143: PC=0x0028 OPCODE=0x24 [ADD] REG[12] = REG[12] + REG[5] -> 0
+cycle 38144: PC=0x0029 OPCODE=0x24 [ADD] REG[12] = REG[12] + REG[13] -> 0
+cycle 38145: PC=0x002a OPCODE=0x08 [G2P] addr=8192 tag=(0,0) size=32
+cycle 38146: PC=0x002b OPCODE=0x1d [WAIT GLB] still busy, stall
+cycle 38209: PC=0x002b OPCODE=0x1d [WAIT GLB] done, continue
+cycle 38210: PC=0x002c OPCODE=0x18 [CPT_TAGXY] type=0 tag=(0,0)
+cycle 38211: PC=0x002d OPCODE=0x25 [MUL] REG[14] = REG[6] * REG[9] -> 0
+cycle 38212: PC=0x002e OPCODE=0x08 [G2P] addr=0 tag=(0,0) size=18
+cycle 38213: PC=0x002f OPCODE=0x1d [WAIT GLB] still busy, stall
+cycle 38248: PC=0x002f OPCODE=0x1d [WAIT GLB] done, continue
+cycle 38249: PC=0x0030 OPCODE=0x1c [COMPUTE] valid_e=0
+cycle 38250: PC=0x0031 OPCODE=0x1d [WAIT PE_ARRAY]
+cycle 38251: PC=0x0032 OPCODE=0x18 [CPT_TAGXY] type=3 tag=(0,0)
+cycle 38252: PC=0x0033 OPCODE=0x09 [P2G] addr=8192 tag=(0,0) size=32
+cycle 38253: PC=0x0034 OPCODE=0x1f [LOOP] REG[6]+=1 -> 22, nextPC=37
+cycle 38254: PC=0x0025 OPCODE=0x18 [CPT_TAGXY] type=2 tag=(0,0)
+cycle 38255: PC=0x0026 OPCODE=0x25 [MUL] REG[12] = REG[3] * REG[10] -> 0
+cycle 38256: PC=0x0027 OPCODE=0x25 [MUL] REG[13] = REG[6] * REG[10] -> 0
+cycle 38257: PC=0x0028 OPCODE=0x24 [ADD] REG[12] = REG[12] + REG[5] -> 0
+cycle 38258: PC=0x0029 OPCODE=0x24 [ADD] REG[12] = REG[12] + REG[13] -> 0
+cycle 38259: PC=0x002a OPCODE=0x08 [G2P] addr=8192 tag=(0,0) size=32
+cycle 38260: PC=0x002b OPCODE=0x1d [WAIT GLB] still busy, stall
+cycle 38323: PC=0x002b OPCODE=0x1d [WAIT GLB] done, continue
+cycle 38324: PC=0x002c OPCODE=0x18 [CPT_TAGXY] type=0 tag=(0,0)
+cycle 38325: PC=0x002d OPCODE=0x25 [MUL] REG[14] = REG[6] * REG[9] -> 0
+cycle 38326: PC=0x002e OPCODE=0x08 [G2P] addr=0 tag=(0,0) size=18
+cycle 38327: PC=0x002f OPCODE=0x1d [WAIT GLB] still busy, stall
+cycle 38362: PC=0x002f OPCODE=0x1d [WAIT GLB] done, continue
+cycle 38363: PC=0x0030 OPCODE=0x1c [COMPUTE] valid_e=0
+cycle 38364: PC=0x0031 OPCODE=0x1d [WAIT PE_ARRAY]
+cycle 38365: PC=0x0032 OPCODE=0x18 [CPT_TAGXY] type=3 tag=(0,0)
+cycle 38366: PC=0x0033 OPCODE=0x09 [P2G] addr=8192 tag=(0,0) size=32
+cycle 38367: PC=0x0034 OPCODE=0x1f [LOOP] REG[6]+=1 -> 23, nextPC=37
+cycle 38368: PC=0x0025 OPCODE=0x18 [CPT_TAGXY] type=2 tag=(0,0)
+cycle 38369: PC=0x0026 OPCODE=0x25 [MUL] REG[12] = REG[3] * REG[10] -> 0
+cycle 38370: PC=0x0027 OPCODE=0x25 [MUL] REG[13] = REG[6] * REG[10] -> 0
+cycle 38371: PC=0x0028 OPCODE=0x24 [ADD] REG[12] = REG[12] + REG[5] -> 0
+cycle 38372: PC=0x0029 OPCODE=0x24 [ADD] REG[12] = REG[12] + REG[13] -> 0
+cycle 38373: PC=0x002a OPCODE=0x08 [G2P] addr=8192 tag=(0,0) size=32
+cycle 38374: PC=0x002b OPCODE=0x1d [WAIT GLB] still busy, stall
+cycle 38437: PC=0x002b OPCODE=0x1d [WAIT GLB] done, continue
+cycle 38438: PC=0x002c OPCODE=0x18 [CPT_TAGXY] type=0 tag=(0,0)
+cycle 38439: PC=0x002d OPCODE=0x25 [MUL] REG[14] = REG[6] * REG[9] -> 0
+cycle 38440: PC=0x002e OPCODE=0x08 [G2P] addr=0 tag=(0,0) size=18
+cycle 38441: PC=0x002f OPCODE=0x1d [WAIT GLB] still busy, stall
+cycle 38476: PC=0x002f OPCODE=0x1d [WAIT GLB] done, continue
+cycle 38477: PC=0x0030 OPCODE=0x1c [COMPUTE] valid_e=0
+cycle 38478: PC=0x0031 OPCODE=0x1d [WAIT PE_ARRAY]
+cycle 38479: PC=0x0032 OPCODE=0x18 [CPT_TAGXY] type=3 tag=(0,0)
+cycle 38480: PC=0x0033 OPCODE=0x09 [P2G] addr=8192 tag=(0,0) size=32
+cycle 38481: PC=0x0034 OPCODE=0x1f [LOOP] REG[6]+=1 -> 24, nextPC=37
+cycle 38482: PC=0x0025 OPCODE=0x18 [CPT_TAGXY] type=2 tag=(0,0)
+cycle 38483: PC=0x0026 OPCODE=0x25 [MUL] REG[12] = REG[3] * REG[10] -> 0
+cycle 38484: PC=0x0027 OPCODE=0x25 [MUL] REG[13] = REG[6] * REG[10] -> 0
+cycle 38485: PC=0x0028 OPCODE=0x24 [ADD] REG[12] = REG[12] + REG[5] -> 0
+cycle 38486: PC=0x0029 OPCODE=0x24 [ADD] REG[12] = REG[12] + REG[13] -> 0
+cycle 38487: PC=0x002a OPCODE=0x08 [G2P] addr=8192 tag=(0,0) size=32
+cycle 38488: PC=0x002b OPCODE=0x1d [WAIT GLB] still busy, stall
+cycle 38551: PC=0x002b OPCODE=0x1d [WAIT GLB] done, continue
+cycle 38552: PC=0x002c OPCODE=0x18 [CPT_TAGXY] type=0 tag=(0,0)
+cycle 38553: PC=0x002d OPCODE=0x25 [MUL] REG[14] = REG[6] * REG[9] -> 0
+cycle 38554: PC=0x002e OPCODE=0x08 [G2P] addr=0 tag=(0,0) size=18
+cycle 38555: PC=0x002f OPCODE=0x1d [WAIT GLB] still busy, stall
+cycle 38590: PC=0x002f OPCODE=0x1d [WAIT GLB] done, continue
+cycle 38591: PC=0x0030 OPCODE=0x1c [COMPUTE] valid_e=0
+cycle 38592: PC=0x0031 OPCODE=0x1d [WAIT PE_ARRAY]
+cycle 38593: PC=0x0032 OPCODE=0x18 [CPT_TAGXY] type=3 tag=(0,0)
+cycle 38594: PC=0x0033 OPCODE=0x09 [P2G] addr=8192 tag=(0,0) size=32
+cycle 38595: PC=0x0034 OPCODE=0x1f [LOOP] REG[6]+=1 -> 25, nextPC=37
+cycle 38596: PC=0x0025 OPCODE=0x18 [CPT_TAGXY] type=2 tag=(0,0)
+cycle 38597: PC=0x0026 OPCODE=0x25 [MUL] REG[12] = REG[3] * REG[10] -> 0
+cycle 38598: PC=0x0027 OPCODE=0x25 [MUL] REG[13] = REG[6] * REG[10] -> 0
+cycle 38599: PC=0x0028 OPCODE=0x24 [ADD] REG[12] = REG[12] + REG[5] -> 0
+cycle 38600: PC=0x0029 OPCODE=0x24 [ADD] REG[12] = REG[12] + REG[13] -> 0
+cycle 38601: PC=0x002a OPCODE=0x08 [G2P] addr=8192 tag=(0,0) size=32
+cycle 38602: PC=0x002b OPCODE=0x1d [WAIT GLB] still busy, stall
+cycle 38665: PC=0x002b OPCODE=0x1d [WAIT GLB] done, continue
+cycle 38666: PC=0x002c OPCODE=0x18 [CPT_TAGXY] type=0 tag=(0,0)
+cycle 38667: PC=0x002d OPCODE=0x25 [MUL] REG[14] = REG[6] * REG[9] -> 0
+cycle 38668: PC=0x002e OPCODE=0x08 [G2P] addr=0 tag=(0,0) size=18
+cycle 38669: PC=0x002f OPCODE=0x1d [WAIT GLB] still busy, stall
+cycle 38704: PC=0x002f OPCODE=0x1d [WAIT GLB] done, continue
+cycle 38705: PC=0x0030 OPCODE=0x1c [COMPUTE] valid_e=0
+cycle 38706: PC=0x0031 OPCODE=0x1d [WAIT PE_ARRAY]
+cycle 38707: PC=0x0032 OPCODE=0x18 [CPT_TAGXY] type=3 tag=(0,0)
+cycle 38708: PC=0x0033 OPCODE=0x09 [P2G] addr=8192 tag=(0,0) size=32
+cycle 38709: PC=0x0034 OPCODE=0x1f [LOOP] REG[6]+=1 -> 26, nextPC=37
+cycle 38710: PC=0x0025 OPCODE=0x18 [CPT_TAGXY] type=2 tag=(0,0)
+cycle 38711: PC=0x0026 OPCODE=0x25 [MUL] REG[12] = REG[3] * REG[10] -> 0
+cycle 38712: PC=0x0027 OPCODE=0x25 [MUL] REG[13] = REG[6] * REG[10] -> 0
+cycle 38713: PC=0x0028 OPCODE=0x24 [ADD] REG[12] = REG[12] + REG[5] -> 0
+cycle 38714: PC=0x0029 OPCODE=0x24 [ADD] REG[12] = REG[12] + REG[13] -> 0
+cycle 38715: PC=0x002a OPCODE=0x08 [G2P] addr=8192 tag=(0,0) size=32
+cycle 38716: PC=0x002b OPCODE=0x1d [WAIT GLB] still busy, stall
+cycle 38779: PC=0x002b OPCODE=0x1d [WAIT GLB] done, continue
+cycle 38780: PC=0x002c OPCODE=0x18 [CPT_TAGXY] type=0 tag=(0,0)
+cycle 38781: PC=0x002d OPCODE=0x25 [MUL] REG[14] = REG[6] * REG[9] -> 0
+cycle 38782: PC=0x002e OPCODE=0x08 [G2P] addr=0 tag=(0,0) size=18
+cycle 38783: PC=0x002f OPCODE=0x1d [WAIT GLB] still busy, stall
+cycle 38818: PC=0x002f OPCODE=0x1d [WAIT GLB] done, continue
+cycle 38819: PC=0x0030 OPCODE=0x1c [COMPUTE] valid_e=0
+cycle 38820: PC=0x0031 OPCODE=0x1d [WAIT PE_ARRAY]
+cycle 38821: PC=0x0032 OPCODE=0x18 [CPT_TAGXY] type=3 tag=(0,0)
+cycle 38822: PC=0x0033 OPCODE=0x09 [P2G] addr=8192 tag=(0,0) size=32
+cycle 38823: PC=0x0034 OPCODE=0x1f [LOOP] REG[6]+=1 -> 27, nextPC=37
+cycle 38824: PC=0x0025 OPCODE=0x18 [CPT_TAGXY] type=2 tag=(0,0)
+cycle 38825: PC=0x0026 OPCODE=0x25 [MUL] REG[12] = REG[3] * REG[10] -> 0
+cycle 38826: PC=0x0027 OPCODE=0x25 [MUL] REG[13] = REG[6] * REG[10] -> 0
+cycle 38827: PC=0x0028 OPCODE=0x24 [ADD] REG[12] = REG[12] + REG[5] -> 0
+cycle 38828: PC=0x0029 OPCODE=0x24 [ADD] REG[12] = REG[12] + REG[13] -> 0
+cycle 38829: PC=0x002a OPCODE=0x08 [G2P] addr=8192 tag=(0,0) size=32
+cycle 38830: PC=0x002b OPCODE=0x1d [WAIT GLB] still busy, stall
+cycle 38893: PC=0x002b OPCODE=0x1d [WAIT GLB] done, continue
+cycle 38894: PC=0x002c OPCODE=0x18 [CPT_TAGXY] type=0 tag=(0,0)
+cycle 38895: PC=0x002d OPCODE=0x25 [MUL] REG[14] = REG[6] * REG[9] -> 0
+cycle 38896: PC=0x002e OPCODE=0x08 [G2P] addr=0 tag=(0,0) size=18
+cycle 38897: PC=0x002f OPCODE=0x1d [WAIT GLB] still busy, stall
+cycle 38932: PC=0x002f OPCODE=0x1d [WAIT GLB] done, continue
+cycle 38933: PC=0x0030 OPCODE=0x1c [COMPUTE] valid_e=0
+cycle 38934: PC=0x0031 OPCODE=0x1d [WAIT PE_ARRAY]
+cycle 38935: PC=0x0032 OPCODE=0x18 [CPT_TAGXY] type=3 tag=(0,0)
+cycle 38936: PC=0x0033 OPCODE=0x09 [P2G] addr=8192 tag=(0,0) size=32
+cycle 38937: PC=0x0034 OPCODE=0x1f [LOOP] REG[6]+=1 -> 28, nextPC=37
+cycle 38938: PC=0x0025 OPCODE=0x18 [CPT_TAGXY] type=2 tag=(0,0)
+cycle 38939: PC=0x0026 OPCODE=0x25 [MUL] REG[12] = REG[3] * REG[10] -> 0
+cycle 38940: PC=0x0027 OPCODE=0x25 [MUL] REG[13] = REG[6] * REG[10] -> 0
+cycle 38941: PC=0x0028 OPCODE=0x24 [ADD] REG[12] = REG[12] + REG[5] -> 0
+cycle 38942: PC=0x0029 OPCODE=0x24 [ADD] REG[12] = REG[12] + REG[13] -> 0
+cycle 38943: PC=0x002a OPCODE=0x08 [G2P] addr=8192 tag=(0,0) size=32
+cycle 38944: PC=0x002b OPCODE=0x1d [WAIT GLB] still busy, stall
+cycle 39007: PC=0x002b OPCODE=0x1d [WAIT GLB] done, continue
+cycle 39008: PC=0x002c OPCODE=0x18 [CPT_TAGXY] type=0 tag=(0,0)
+cycle 39009: PC=0x002d OPCODE=0x25 [MUL] REG[14] = REG[6] * REG[9] -> 0
+cycle 39010: PC=0x002e OPCODE=0x08 [G2P] addr=0 tag=(0,0) size=18
+cycle 39011: PC=0x002f OPCODE=0x1d [WAIT GLB] still busy, stall
+cycle 39046: PC=0x002f OPCODE=0x1d [WAIT GLB] done, continue
+cycle 39047: PC=0x0030 OPCODE=0x1c [COMPUTE] valid_e=0
+cycle 39048: PC=0x0031 OPCODE=0x1d [WAIT PE_ARRAY]
+cycle 39049: PC=0x0032 OPCODE=0x18 [CPT_TAGXY] type=3 tag=(0,0)
+cycle 39050: PC=0x0033 OPCODE=0x09 [P2G] addr=8192 tag=(0,0) size=32
+cycle 39051: PC=0x0034 OPCODE=0x1f [LOOP] REG[6]+=1 -> 29, nextPC=37
+cycle 39052: PC=0x0025 OPCODE=0x18 [CPT_TAGXY] type=2 tag=(0,0)
+cycle 39053: PC=0x0026 OPCODE=0x25 [MUL] REG[12] = REG[3] * REG[10] -> 0
+cycle 39054: PC=0x0027 OPCODE=0x25 [MUL] REG[13] = REG[6] * REG[10] -> 0
+cycle 39055: PC=0x0028 OPCODE=0x24 [ADD] REG[12] = REG[12] + REG[5] -> 0
+cycle 39056: PC=0x0029 OPCODE=0x24 [ADD] REG[12] = REG[12] + REG[13] -> 0
+cycle 39057: PC=0x002a OPCODE=0x08 [G2P] addr=8192 tag=(0,0) size=32
+cycle 39058: PC=0x002b OPCODE=0x1d [WAIT GLB] still busy, stall
+cycle 39121: PC=0x002b OPCODE=0x1d [WAIT GLB] done, continue
+cycle 39122: PC=0x002c OPCODE=0x18 [CPT_TAGXY] type=0 tag=(0,0)
+cycle 39123: PC=0x002d OPCODE=0x25 [MUL] REG[14] = REG[6] * REG[9] -> 0
+cycle 39124: PC=0x002e OPCODE=0x08 [G2P] addr=0 tag=(0,0) size=18
+cycle 39125: PC=0x002f OPCODE=0x1d [WAIT GLB] still busy, stall
+cycle 39160: PC=0x002f OPCODE=0x1d [WAIT GLB] done, continue
+cycle 39161: PC=0x0030 OPCODE=0x1c [COMPUTE] valid_e=0
+cycle 39162: PC=0x0031 OPCODE=0x1d [WAIT PE_ARRAY]
+cycle 39163: PC=0x0032 OPCODE=0x18 [CPT_TAGXY] type=3 tag=(0,0)
+cycle 39164: PC=0x0033 OPCODE=0x09 [P2G] addr=8192 tag=(0,0) size=32
+cycle 39165: PC=0x0034 OPCODE=0x1f [LOOP] REG[6]+=1 -> 30, nextPC=37
+cycle 39166: PC=0x0025 OPCODE=0x18 [CPT_TAGXY] type=2 tag=(0,0)
+cycle 39167: PC=0x0026 OPCODE=0x25 [MUL] REG[12] = REG[3] * REG[10] -> 0
+cycle 39168: PC=0x0027 OPCODE=0x25 [MUL] REG[13] = REG[6] * REG[10] -> 0
+cycle 39169: PC=0x0028 OPCODE=0x24 [ADD] REG[12] = REG[12] + REG[5] -> 0
+cycle 39170: PC=0x0029 OPCODE=0x24 [ADD] REG[12] = REG[12] + REG[13] -> 0
+cycle 39171: PC=0x002a OPCODE=0x08 [G2P] addr=8192 tag=(0,0) size=32
+cycle 39172: PC=0x002b OPCODE=0x1d [WAIT GLB] still busy, stall
+cycle 39235: PC=0x002b OPCODE=0x1d [WAIT GLB] done, continue
+cycle 39236: PC=0x002c OPCODE=0x18 [CPT_TAGXY] type=0 tag=(0,0)
+cycle 39237: PC=0x002d OPCODE=0x25 [MUL] REG[14] = REG[6] * REG[9] -> 0
+cycle 39238: PC=0x002e OPCODE=0x08 [G2P] addr=0 tag=(0,0) size=18
+cycle 39239: PC=0x002f OPCODE=0x1d [WAIT GLB] still busy, stall
+cycle 39274: PC=0x002f OPCODE=0x1d [WAIT GLB] done, continue
+cycle 39275: PC=0x0030 OPCODE=0x1c [COMPUTE] valid_e=0
+cycle 39276: PC=0x0031 OPCODE=0x1d [WAIT PE_ARRAY]
+cycle 39277: PC=0x0032 OPCODE=0x18 [CPT_TAGXY] type=3 tag=(0,0)
+cycle 39278: PC=0x0033 OPCODE=0x09 [P2G] addr=8192 tag=(0,0) size=32
+cycle 39279: PC=0x0034 OPCODE=0x1f [LOOP] REG[6]+=1 -> 31, nextPC=37
+cycle 39280: PC=0x0025 OPCODE=0x18 [CPT_TAGXY] type=2 tag=(0,0)
+cycle 39281: PC=0x0026 OPCODE=0x25 [MUL] REG[12] = REG[3] * REG[10] -> 0
+cycle 39282: PC=0x0027 OPCODE=0x25 [MUL] REG[13] = REG[6] * REG[10] -> 0
+cycle 39283: PC=0x0028 OPCODE=0x24 [ADD] REG[12] = REG[12] + REG[5] -> 0
+cycle 39284: PC=0x0029 OPCODE=0x24 [ADD] REG[12] = REG[12] + REG[13] -> 0
+cycle 39285: PC=0x002a OPCODE=0x08 [G2P] addr=8192 tag=(0,0) size=32
+cycle 39286: PC=0x002b OPCODE=0x1d [WAIT GLB] still busy, stall
+cycle 39349: PC=0x002b OPCODE=0x1d [WAIT GLB] done, continue
+cycle 39350: PC=0x002c OPCODE=0x18 [CPT_TAGXY] type=0 tag=(0,0)
+cycle 39351: PC=0x002d OPCODE=0x25 [MUL] REG[14] = REG[6] * REG[9] -> 0
+cycle 39352: PC=0x002e OPCODE=0x08 [G2P] addr=0 tag=(0,0) size=18
+cycle 39353: PC=0x002f OPCODE=0x1d [WAIT GLB] still busy, stall
+cycle 39388: PC=0x002f OPCODE=0x1d [WAIT GLB] done, continue
+cycle 39389: PC=0x0030 OPCODE=0x1c [COMPUTE] valid_e=0
+cycle 39390: PC=0x0031 OPCODE=0x1d [WAIT PE_ARRAY]
+cycle 39391: PC=0x0032 OPCODE=0x18 [CPT_TAGXY] type=3 tag=(0,0)
+cycle 39392: PC=0x0033 OPCODE=0x09 [P2G] addr=8192 tag=(0,0) size=32
+cycle 39393: PC=0x0034 OPCODE=0x1f [LOOP] REG[6]+=1 -> 32, nextPC=37
+cycle 39394: PC=0x0025 OPCODE=0x18 [CPT_TAGXY] type=2 tag=(0,0)
+cycle 39395: PC=0x0026 OPCODE=0x25 [MUL] REG[12] = REG[3] * REG[10] -> 0
+cycle 39396: PC=0x0027 OPCODE=0x25 [MUL] REG[13] = REG[6] * REG[10] -> 0
+cycle 39397: PC=0x0028 OPCODE=0x24 [ADD] REG[12] = REG[12] + REG[5] -> 0
+cycle 39398: PC=0x0029 OPCODE=0x24 [ADD] REG[12] = REG[12] + REG[13] -> 0
+cycle 39399: PC=0x002a OPCODE=0x08 [G2P] addr=8192 tag=(0,0) size=32
+cycle 39400: PC=0x002b OPCODE=0x1d [WAIT GLB] still busy, stall
+cycle 39463: PC=0x002b OPCODE=0x1d [WAIT GLB] done, continue
+cycle 39464: PC=0x002c OPCODE=0x18 [CPT_TAGXY] type=0 tag=(0,0)
+cycle 39465: PC=0x002d OPCODE=0x25 [MUL] REG[14] = REG[6] * REG[9] -> 0
+cycle 39466: PC=0x002e OPCODE=0x08 [G2P] addr=0 tag=(0,0) size=18
+cycle 39467: PC=0x002f OPCODE=0x1d [WAIT GLB] still busy, stall
+cycle 39502: PC=0x002f OPCODE=0x1d [WAIT GLB] done, continue
+cycle 39503: PC=0x0030 OPCODE=0x1c [COMPUTE] valid_e=0
+cycle 39504: PC=0x0031 OPCODE=0x1d [WAIT PE_ARRAY]
+cycle 39505: PC=0x0032 OPCODE=0x18 [CPT_TAGXY] type=3 tag=(0,0)
+cycle 39506: PC=0x0033 OPCODE=0x09 [P2G] addr=8192 tag=(0,0) size=32
+cycle 39507: PC=0x0034 OPCODE=0x1f [LOOP] REG[6]+=1 -> 33, nextPC=37
+cycle 39508: PC=0x0025 OPCODE=0x18 [CPT_TAGXY] type=2 tag=(0,0)
+cycle 39509: PC=0x0026 OPCODE=0x25 [MUL] REG[12] = REG[3] * REG[10] -> 0
+cycle 39510: PC=0x0027 OPCODE=0x25 [MUL] REG[13] = REG[6] * REG[10] -> 0
+cycle 39511: PC=0x0028 OPCODE=0x24 [ADD] REG[12] = REG[12] + REG[5] -> 0
+cycle 39512: PC=0x0029 OPCODE=0x24 [ADD] REG[12] = REG[12] + REG[13] -> 0
+cycle 39513: PC=0x002a OPCODE=0x08 [G2P] addr=8192 tag=(0,0) size=32
+cycle 39514: PC=0x002b OPCODE=0x1d [WAIT GLB] still busy, stall
+cycle 39577: PC=0x002b OPCODE=0x1d [WAIT GLB] done, continue
+cycle 39578: PC=0x002c OPCODE=0x18 [CPT_TAGXY] type=0 tag=(0,0)
+cycle 39579: PC=0x002d OPCODE=0x25 [MUL] REG[14] = REG[6] * REG[9] -> 0
+cycle 39580: PC=0x002e OPCODE=0x08 [G2P] addr=0 tag=(0,0) size=18
+cycle 39581: PC=0x002f OPCODE=0x1d [WAIT GLB] still busy, stall
+cycle 39616: PC=0x002f OPCODE=0x1d [WAIT GLB] done, continue
+cycle 39617: PC=0x0030 OPCODE=0x1c [COMPUTE] valid_e=0
+cycle 39618: PC=0x0031 OPCODE=0x1d [WAIT PE_ARRAY]
+cycle 39619: PC=0x0032 OPCODE=0x18 [CPT_TAGXY] type=3 tag=(0,0)
+cycle 39620: PC=0x0033 OPCODE=0x09 [P2G] addr=8192 tag=(0,0) size=32
+cycle 39621: PC=0x0034 OPCODE=0x1f [LOOP] REG[6]+=1 -> 34, nextPC=37
+cycle 39622: PC=0x0025 OPCODE=0x18 [CPT_TAGXY] type=2 tag=(0,0)
+cycle 39623: PC=0x0026 OPCODE=0x25 [MUL] REG[12] = REG[3] * REG[10] -> 0
+cycle 39624: PC=0x0027 OPCODE=0x25 [MUL] REG[13] = REG[6] * REG[10] -> 0
+cycle 39625: PC=0x0028 OPCODE=0x24 [ADD] REG[12] = REG[12] + REG[5] -> 0
+cycle 39626: PC=0x0029 OPCODE=0x24 [ADD] REG[12] = REG[12] + REG[13] -> 0
+cycle 39627: PC=0x002a OPCODE=0x08 [G2P] addr=8192 tag=(0,0) size=32
+cycle 39628: PC=0x002b OPCODE=0x1d [WAIT GLB] still busy, stall
+cycle 39691: PC=0x002b OPCODE=0x1d [WAIT GLB] done, continue
+cycle 39692: PC=0x002c OPCODE=0x18 [CPT_TAGXY] type=0 tag=(0,0)
+cycle 39693: PC=0x002d OPCODE=0x25 [MUL] REG[14] = REG[6] * REG[9] -> 0
+cycle 39694: PC=0x002e OPCODE=0x08 [G2P] addr=0 tag=(0,0) size=18
+cycle 39695: PC=0x002f OPCODE=0x1d [WAIT GLB] still busy, stall
+cycle 39730: PC=0x002f OPCODE=0x1d [WAIT GLB] done, continue
+cycle 39731: PC=0x0030 OPCODE=0x1c [COMPUTE] valid_e=0
+cycle 39732: PC=0x0031 OPCODE=0x1d [WAIT PE_ARRAY]
+cycle 39733: PC=0x0032 OPCODE=0x18 [CPT_TAGXY] type=3 tag=(0,0)
+cycle 39734: PC=0x0033 OPCODE=0x09 [P2G] addr=8192 tag=(0,0) size=32
+cycle 39735: PC=0x0034 OPCODE=0x1f [LOOP] REG[6]+=1 -> 35, nextPC=37
+cycle 39736: PC=0x0025 OPCODE=0x18 [CPT_TAGXY] type=2 tag=(0,0)
+cycle 39737: PC=0x0026 OPCODE=0x25 [MUL] REG[12] = REG[3] * REG[10] -> 0
+cycle 39738: PC=0x0027 OPCODE=0x25 [MUL] REG[13] = REG[6] * REG[10] -> 0
+cycle 39739: PC=0x0028 OPCODE=0x24 [ADD] REG[12] = REG[12] + REG[5] -> 0
+cycle 39740: PC=0x0029 OPCODE=0x24 [ADD] REG[12] = REG[12] + REG[13] -> 0
+cycle 39741: PC=0x002a OPCODE=0x08 [G2P] addr=8192 tag=(0,0) size=32
+cycle 39742: PC=0x002b OPCODE=0x1d [WAIT GLB] still busy, stall
+cycle 39805: PC=0x002b OPCODE=0x1d [WAIT GLB] done, continue
+cycle 39806: PC=0x002c OPCODE=0x18 [CPT_TAGXY] type=0 tag=(0,0)
+cycle 39807: PC=0x002d OPCODE=0x25 [MUL] REG[14] = REG[6] * REG[9] -> 0
+cycle 39808: PC=0x002e OPCODE=0x08 [G2P] addr=0 tag=(0,0) size=18
+cycle 39809: PC=0x002f OPCODE=0x1d [WAIT GLB] still busy, stall
+cycle 39844: PC=0x002f OPCODE=0x1d [WAIT GLB] done, continue
+cycle 39845: PC=0x0030 OPCODE=0x1c [COMPUTE] valid_e=0
+cycle 39846: PC=0x0031 OPCODE=0x1d [WAIT PE_ARRAY]
+cycle 39847: PC=0x0032 OPCODE=0x18 [CPT_TAGXY] type=3 tag=(0,0)
+cycle 39848: PC=0x0033 OPCODE=0x09 [P2G] addr=8192 tag=(0,0) size=32
+cycle 39849: PC=0x0034 OPCODE=0x1f [LOOP] REG[6]+=1 -> 36, nextPC=37
+cycle 39850: PC=0x0025 OPCODE=0x18 [CPT_TAGXY] type=2 tag=(0,0)
+cycle 39851: PC=0x0026 OPCODE=0x25 [MUL] REG[12] = REG[3] * REG[10] -> 0
+cycle 39852: PC=0x0027 OPCODE=0x25 [MUL] REG[13] = REG[6] * REG[10] -> 0
+cycle 39853: PC=0x0028 OPCODE=0x24 [ADD] REG[12] = REG[12] + REG[5] -> 0
+cycle 39854: PC=0x0029 OPCODE=0x24 [ADD] REG[12] = REG[12] + REG[13] -> 0
+cycle 39855: PC=0x002a OPCODE=0x08 [G2P] addr=8192 tag=(0,0) size=32
+cycle 39856: PC=0x002b OPCODE=0x1d [WAIT GLB] still busy, stall
+cycle 39919: PC=0x002b OPCODE=0x1d [WAIT GLB] done, continue
+cycle 39920: PC=0x002c OPCODE=0x18 [CPT_TAGXY] type=0 tag=(0,0)
+cycle 39921: PC=0x002d OPCODE=0x25 [MUL] REG[14] = REG[6] * REG[9] -> 0
+cycle 39922: PC=0x002e OPCODE=0x08 [G2P] addr=0 tag=(0,0) size=18
+cycle 39923: PC=0x002f OPCODE=0x1d [WAIT GLB] still busy, stall
+cycle 39958: PC=0x002f OPCODE=0x1d [WAIT GLB] done, continue
+cycle 39959: PC=0x0030 OPCODE=0x1c [COMPUTE] valid_e=0
+cycle 39960: PC=0x0031 OPCODE=0x1d [WAIT PE_ARRAY]
+cycle 39961: PC=0x0032 OPCODE=0x18 [CPT_TAGXY] type=3 tag=(0,0)
+cycle 39962: PC=0x0033 OPCODE=0x09 [P2G] addr=8192 tag=(0,0) size=32
+cycle 39963: PC=0x0034 OPCODE=0x1f [LOOP] REG[6]+=1 -> 37, nextPC=37
+cycle 39964: PC=0x0025 OPCODE=0x18 [CPT_TAGXY] type=2 tag=(0,0)
+cycle 39965: PC=0x0026 OPCODE=0x25 [MUL] REG[12] = REG[3] * REG[10] -> 0
+cycle 39966: PC=0x0027 OPCODE=0x25 [MUL] REG[13] = REG[6] * REG[10] -> 0
+cycle 39967: PC=0x0028 OPCODE=0x24 [ADD] REG[12] = REG[12] + REG[5] -> 0
+cycle 39968: PC=0x0029 OPCODE=0x24 [ADD] REG[12] = REG[12] + REG[13] -> 0
+cycle 39969: PC=0x002a OPCODE=0x08 [G2P] addr=8192 tag=(0,0) size=32
+cycle 39970: PC=0x002b OPCODE=0x1d [WAIT GLB] still busy, stall
+cycle 40033: PC=0x002b OPCODE=0x1d [WAIT GLB] done, continue
+cycle 40034: PC=0x002c OPCODE=0x18 [CPT_TAGXY] type=0 tag=(0,0)
+cycle 40035: PC=0x002d OPCODE=0x25 [MUL] REG[14] = REG[6] * REG[9] -> 0
+cycle 40036: PC=0x002e OPCODE=0x08 [G2P] addr=0 tag=(0,0) size=18
+cycle 40037: PC=0x002f OPCODE=0x1d [WAIT GLB] still busy, stall
+cycle 40072: PC=0x002f OPCODE=0x1d [WAIT GLB] done, continue
+cycle 40073: PC=0x0030 OPCODE=0x1c [COMPUTE] valid_e=0
+cycle 40074: PC=0x0031 OPCODE=0x1d [WAIT PE_ARRAY]
+cycle 40075: PC=0x0032 OPCODE=0x18 [CPT_TAGXY] type=3 tag=(0,0)
+cycle 40076: PC=0x0033 OPCODE=0x09 [P2G] addr=8192 tag=(0,0) size=32
+cycle 40077: PC=0x0034 OPCODE=0x1f [LOOP] REG[6]+=1 -> 38, nextPC=37
+cycle 40078: PC=0x0025 OPCODE=0x18 [CPT_TAGXY] type=2 tag=(0,0)
+cycle 40079: PC=0x0026 OPCODE=0x25 [MUL] REG[12] = REG[3] * REG[10] -> 0
+cycle 40080: PC=0x0027 OPCODE=0x25 [MUL] REG[13] = REG[6] * REG[10] -> 0
+cycle 40081: PC=0x0028 OPCODE=0x24 [ADD] REG[12] = REG[12] + REG[5] -> 0
+cycle 40082: PC=0x0029 OPCODE=0x24 [ADD] REG[12] = REG[12] + REG[13] -> 0
+cycle 40083: PC=0x002a OPCODE=0x08 [G2P] addr=8192 tag=(0,0) size=32
+cycle 40084: PC=0x002b OPCODE=0x1d [WAIT GLB] still busy, stall
+cycle 40147: PC=0x002b OPCODE=0x1d [WAIT GLB] done, continue
+cycle 40148: PC=0x002c OPCODE=0x18 [CPT_TAGXY] type=0 tag=(0,0)
+cycle 40149: PC=0x002d OPCODE=0x25 [MUL] REG[14] = REG[6] * REG[9] -> 0
+cycle 40150: PC=0x002e OPCODE=0x08 [G2P] addr=0 tag=(0,0) size=18
+cycle 40151: PC=0x002f OPCODE=0x1d [WAIT GLB] still busy, stall
+cycle 40186: PC=0x002f OPCODE=0x1d [WAIT GLB] done, continue
+cycle 40187: PC=0x0030 OPCODE=0x1c [COMPUTE] valid_e=0
+cycle 40188: PC=0x0031 OPCODE=0x1d [WAIT PE_ARRAY]
+cycle 40189: PC=0x0032 OPCODE=0x18 [CPT_TAGXY] type=3 tag=(0,0)
+cycle 40190: PC=0x0033 OPCODE=0x09 [P2G] addr=8192 tag=(0,0) size=32
+cycle 40191: PC=0x0034 OPCODE=0x1f [LOOP] REG[6]+=1 -> 39, nextPC=37
+cycle 40192: PC=0x0025 OPCODE=0x18 [CPT_TAGXY] type=2 tag=(0,0)
+cycle 40193: PC=0x0026 OPCODE=0x25 [MUL] REG[12] = REG[3] * REG[10] -> 0
+cycle 40194: PC=0x0027 OPCODE=0x25 [MUL] REG[13] = REG[6] * REG[10] -> 0
+cycle 40195: PC=0x0028 OPCODE=0x24 [ADD] REG[12] = REG[12] + REG[5] -> 0
+cycle 40196: PC=0x0029 OPCODE=0x24 [ADD] REG[12] = REG[12] + REG[13] -> 0
+cycle 40197: PC=0x002a OPCODE=0x08 [G2P] addr=8192 tag=(0,0) size=32
+cycle 40198: PC=0x002b OPCODE=0x1d [WAIT GLB] still busy, stall
+cycle 40261: PC=0x002b OPCODE=0x1d [WAIT GLB] done, continue
+cycle 40262: PC=0x002c OPCODE=0x18 [CPT_TAGXY] type=0 tag=(0,0)
+cycle 40263: PC=0x002d OPCODE=0x25 [MUL] REG[14] = REG[6] * REG[9] -> 0
+cycle 40264: PC=0x002e OPCODE=0x08 [G2P] addr=0 tag=(0,0) size=18
+cycle 40265: PC=0x002f OPCODE=0x1d [WAIT GLB] still busy, stall
+cycle 40300: PC=0x002f OPCODE=0x1d [WAIT GLB] done, continue
+cycle 40301: PC=0x0030 OPCODE=0x1c [COMPUTE] valid_e=0
+cycle 40302: PC=0x0031 OPCODE=0x1d [WAIT PE_ARRAY]
+cycle 40303: PC=0x0032 OPCODE=0x18 [CPT_TAGXY] type=3 tag=(0,0)
+cycle 40304: PC=0x0033 OPCODE=0x09 [P2G] addr=8192 tag=(0,0) size=32
+cycle 40305: PC=0x0034 OPCODE=0x1f [LOOP] REG[6]+=1 -> 40, nextPC=37
+cycle 40306: PC=0x0025 OPCODE=0x18 [CPT_TAGXY] type=2 tag=(0,0)
+cycle 40307: PC=0x0026 OPCODE=0x25 [MUL] REG[12] = REG[3] * REG[10] -> 0
+cycle 40308: PC=0x0027 OPCODE=0x25 [MUL] REG[13] = REG[6] * REG[10] -> 0
+cycle 40309: PC=0x0028 OPCODE=0x24 [ADD] REG[12] = REG[12] + REG[5] -> 0
+cycle 40310: PC=0x0029 OPCODE=0x24 [ADD] REG[12] = REG[12] + REG[13] -> 0
+cycle 40311: PC=0x002a OPCODE=0x08 [G2P] addr=8192 tag=(0,0) size=32
+cycle 40312: PC=0x002b OPCODE=0x1d [WAIT GLB] still busy, stall
+cycle 40375: PC=0x002b OPCODE=0x1d [WAIT GLB] done, continue
+cycle 40376: PC=0x002c OPCODE=0x18 [CPT_TAGXY] type=0 tag=(0,0)
+cycle 40377: PC=0x002d OPCODE=0x25 [MUL] REG[14] = REG[6] * REG[9] -> 0
+cycle 40378: PC=0x002e OPCODE=0x08 [G2P] addr=0 tag=(0,0) size=18
+cycle 40379: PC=0x002f OPCODE=0x1d [WAIT GLB] still busy, stall
+cycle 40414: PC=0x002f OPCODE=0x1d [WAIT GLB] done, continue
+cycle 40415: PC=0x0030 OPCODE=0x1c [COMPUTE] valid_e=0
+cycle 40416: PC=0x0031 OPCODE=0x1d [WAIT PE_ARRAY]
+cycle 40417: PC=0x0032 OPCODE=0x18 [CPT_TAGXY] type=3 tag=(0,0)
+cycle 40418: PC=0x0033 OPCODE=0x09 [P2G] addr=8192 tag=(0,0) size=32
+cycle 40419: PC=0x0034 OPCODE=0x1f [LOOP] REG[6]+=1 -> 41, nextPC=37
+cycle 40420: PC=0x0025 OPCODE=0x18 [CPT_TAGXY] type=2 tag=(0,0)
+cycle 40421: PC=0x0026 OPCODE=0x25 [MUL] REG[12] = REG[3] * REG[10] -> 0
+cycle 40422: PC=0x0027 OPCODE=0x25 [MUL] REG[13] = REG[6] * REG[10] -> 0
+cycle 40423: PC=0x0028 OPCODE=0x24 [ADD] REG[12] = REG[12] + REG[5] -> 0
+cycle 40424: PC=0x0029 OPCODE=0x24 [ADD] REG[12] = REG[12] + REG[13] -> 0
+cycle 40425: PC=0x002a OPCODE=0x08 [G2P] addr=8192 tag=(0,0) size=32
+cycle 40426: PC=0x002b OPCODE=0x1d [WAIT GLB] still busy, stall
+cycle 40489: PC=0x002b OPCODE=0x1d [WAIT GLB] done, continue
+cycle 40490: PC=0x002c OPCODE=0x18 [CPT_TAGXY] type=0 tag=(0,0)
+cycle 40491: PC=0x002d OPCODE=0x25 [MUL] REG[14] = REG[6] * REG[9] -> 0
+cycle 40492: PC=0x002e OPCODE=0x08 [G2P] addr=0 tag=(0,0) size=18
+cycle 40493: PC=0x002f OPCODE=0x1d [WAIT GLB] still busy, stall
+cycle 40528: PC=0x002f OPCODE=0x1d [WAIT GLB] done, continue
+cycle 40529: PC=0x0030 OPCODE=0x1c [COMPUTE] valid_e=0
+cycle 40530: PC=0x0031 OPCODE=0x1d [WAIT PE_ARRAY]
+cycle 40531: PC=0x0032 OPCODE=0x18 [CPT_TAGXY] type=3 tag=(0,0)
+cycle 40532: PC=0x0033 OPCODE=0x09 [P2G] addr=8192 tag=(0,0) size=32
+cycle 40533: PC=0x0034 OPCODE=0x1f [LOOP] REG[6]+=1 -> 42, nextPC=37
+cycle 40534: PC=0x0025 OPCODE=0x18 [CPT_TAGXY] type=2 tag=(0,0)
+cycle 40535: PC=0x0026 OPCODE=0x25 [MUL] REG[12] = REG[3] * REG[10] -> 0
+cycle 40536: PC=0x0027 OPCODE=0x25 [MUL] REG[13] = REG[6] * REG[10] -> 0
+cycle 40537: PC=0x0028 OPCODE=0x24 [ADD] REG[12] = REG[12] + REG[5] -> 0
+cycle 40538: PC=0x0029 OPCODE=0x24 [ADD] REG[12] = REG[12] + REG[13] -> 0
+cycle 40539: PC=0x002a OPCODE=0x08 [G2P] addr=8192 tag=(0,0) size=32
+cycle 40540: PC=0x002b OPCODE=0x1d [WAIT GLB] still busy, stall
+cycle 40603: PC=0x002b OPCODE=0x1d [WAIT GLB] done, continue
+cycle 40604: PC=0x002c OPCODE=0x18 [CPT_TAGXY] type=0 tag=(0,0)
+cycle 40605: PC=0x002d OPCODE=0x25 [MUL] REG[14] = REG[6] * REG[9] -> 0
+cycle 40606: PC=0x002e OPCODE=0x08 [G2P] addr=0 tag=(0,0) size=18
+cycle 40607: PC=0x002f OPCODE=0x1d [WAIT GLB] still busy, stall
+cycle 40642: PC=0x002f OPCODE=0x1d [WAIT GLB] done, continue
+cycle 40643: PC=0x0030 OPCODE=0x1c [COMPUTE] valid_e=0
+cycle 40644: PC=0x0031 OPCODE=0x1d [WAIT PE_ARRAY]
+cycle 40645: PC=0x0032 OPCODE=0x18 [CPT_TAGXY] type=3 tag=(0,0)
+cycle 40646: PC=0x0033 OPCODE=0x09 [P2G] addr=8192 tag=(0,0) size=32
+cycle 40647: PC=0x0034 OPCODE=0x1f [LOOP] REG[6]+=1 -> 43, nextPC=37
+cycle 40648: PC=0x0025 OPCODE=0x18 [CPT_TAGXY] type=2 tag=(0,0)
+cycle 40649: PC=0x0026 OPCODE=0x25 [MUL] REG[12] = REG[3] * REG[10] -> 0
+cycle 40650: PC=0x0027 OPCODE=0x25 [MUL] REG[13] = REG[6] * REG[10] -> 0
+cycle 40651: PC=0x0028 OPCODE=0x24 [ADD] REG[12] = REG[12] + REG[5] -> 0
+cycle 40652: PC=0x0029 OPCODE=0x24 [ADD] REG[12] = REG[12] + REG[13] -> 0
+cycle 40653: PC=0x002a OPCODE=0x08 [G2P] addr=8192 tag=(0,0) size=32
+cycle 40654: PC=0x002b OPCODE=0x1d [WAIT GLB] still busy, stall
+cycle 40717: PC=0x002b OPCODE=0x1d [WAIT GLB] done, continue
+cycle 40718: PC=0x002c OPCODE=0x18 [CPT_TAGXY] type=0 tag=(0,0)
+cycle 40719: PC=0x002d OPCODE=0x25 [MUL] REG[14] = REG[6] * REG[9] -> 0
+cycle 40720: PC=0x002e OPCODE=0x08 [G2P] addr=0 tag=(0,0) size=18
+cycle 40721: PC=0x002f OPCODE=0x1d [WAIT GLB] still busy, stall
+cycle 40756: PC=0x002f OPCODE=0x1d [WAIT GLB] done, continue
+cycle 40757: PC=0x0030 OPCODE=0x1c [COMPUTE] valid_e=0
+cycle 40758: PC=0x0031 OPCODE=0x1d [WAIT PE_ARRAY]
+cycle 40759: PC=0x0032 OPCODE=0x18 [CPT_TAGXY] type=3 tag=(0,0)
+cycle 40760: PC=0x0033 OPCODE=0x09 [P2G] addr=8192 tag=(0,0) size=32
+cycle 40761: PC=0x0034 OPCODE=0x1f [LOOP] REG[6]+=1 -> 44, nextPC=37
+cycle 40762: PC=0x0025 OPCODE=0x18 [CPT_TAGXY] type=2 tag=(0,0)
+cycle 40763: PC=0x0026 OPCODE=0x25 [MUL] REG[12] = REG[3] * REG[10] -> 0
+cycle 40764: PC=0x0027 OPCODE=0x25 [MUL] REG[13] = REG[6] * REG[10] -> 0
+cycle 40765: PC=0x0028 OPCODE=0x24 [ADD] REG[12] = REG[12] + REG[5] -> 0
+cycle 40766: PC=0x0029 OPCODE=0x24 [ADD] REG[12] = REG[12] + REG[13] -> 0
+cycle 40767: PC=0x002a OPCODE=0x08 [G2P] addr=8192 tag=(0,0) size=32
+cycle 40768: PC=0x002b OPCODE=0x1d [WAIT GLB] still busy, stall
+cycle 40831: PC=0x002b OPCODE=0x1d [WAIT GLB] done, continue
+cycle 40832: PC=0x002c OPCODE=0x18 [CPT_TAGXY] type=0 tag=(0,0)
+cycle 40833: PC=0x002d OPCODE=0x25 [MUL] REG[14] = REG[6] * REG[9] -> 0
+cycle 40834: PC=0x002e OPCODE=0x08 [G2P] addr=0 tag=(0,0) size=18
+cycle 40835: PC=0x002f OPCODE=0x1d [WAIT GLB] still busy, stall
+cycle 40870: PC=0x002f OPCODE=0x1d [WAIT GLB] done, continue
+cycle 40871: PC=0x0030 OPCODE=0x1c [COMPUTE] valid_e=0
+cycle 40872: PC=0x0031 OPCODE=0x1d [WAIT PE_ARRAY]
+cycle 40873: PC=0x0032 OPCODE=0x18 [CPT_TAGXY] type=3 tag=(0,0)
+cycle 40874: PC=0x0033 OPCODE=0x09 [P2G] addr=8192 tag=(0,0) size=32
+cycle 40875: PC=0x0034 OPCODE=0x1f [LOOP] REG[6]+=1 -> 45, nextPC=37
+cycle 40876: PC=0x0025 OPCODE=0x18 [CPT_TAGXY] type=2 tag=(0,0)
+cycle 40877: PC=0x0026 OPCODE=0x25 [MUL] REG[12] = REG[3] * REG[10] -> 0
+cycle 40878: PC=0x0027 OPCODE=0x25 [MUL] REG[13] = REG[6] * REG[10] -> 0
+cycle 40879: PC=0x0028 OPCODE=0x24 [ADD] REG[12] = REG[12] + REG[5] -> 0
+cycle 40880: PC=0x0029 OPCODE=0x24 [ADD] REG[12] = REG[12] + REG[13] -> 0
+cycle 40881: PC=0x002a OPCODE=0x08 [G2P] addr=8192 tag=(0,0) size=32
+cycle 40882: PC=0x002b OPCODE=0x1d [WAIT GLB] still busy, stall
+cycle 40945: PC=0x002b OPCODE=0x1d [WAIT GLB] done, continue
+cycle 40946: PC=0x002c OPCODE=0x18 [CPT_TAGXY] type=0 tag=(0,0)
+cycle 40947: PC=0x002d OPCODE=0x25 [MUL] REG[14] = REG[6] * REG[9] -> 0
+cycle 40948: PC=0x002e OPCODE=0x08 [G2P] addr=0 tag=(0,0) size=18
+cycle 40949: PC=0x002f OPCODE=0x1d [WAIT GLB] still busy, stall
+cycle 40984: PC=0x002f OPCODE=0x1d [WAIT GLB] done, continue
+cycle 40985: PC=0x0030 OPCODE=0x1c [COMPUTE] valid_e=0
+cycle 40986: PC=0x0031 OPCODE=0x1d [WAIT PE_ARRAY]
+cycle 40987: PC=0x0032 OPCODE=0x18 [CPT_TAGXY] type=3 tag=(0,0)
+cycle 40988: PC=0x0033 OPCODE=0x09 [P2G] addr=8192 tag=(0,0) size=32
+cycle 40989: PC=0x0034 OPCODE=0x1f [LOOP] REG[6]+=1 -> 46, nextPC=37
+cycle 40990: PC=0x0025 OPCODE=0x18 [CPT_TAGXY] type=2 tag=(0,0)
+cycle 40991: PC=0x0026 OPCODE=0x25 [MUL] REG[12] = REG[3] * REG[10] -> 0
+cycle 40992: PC=0x0027 OPCODE=0x25 [MUL] REG[13] = REG[6] * REG[10] -> 0
+cycle 40993: PC=0x0028 OPCODE=0x24 [ADD] REG[12] = REG[12] + REG[5] -> 0
+cycle 40994: PC=0x0029 OPCODE=0x24 [ADD] REG[12] = REG[12] + REG[13] -> 0
+cycle 40995: PC=0x002a OPCODE=0x08 [G2P] addr=8192 tag=(0,0) size=32
+cycle 40996: PC=0x002b OPCODE=0x1d [WAIT GLB] still busy, stall
+cycle 41059: PC=0x002b OPCODE=0x1d [WAIT GLB] done, continue
+cycle 41060: PC=0x002c OPCODE=0x18 [CPT_TAGXY] type=0 tag=(0,0)
+cycle 41061: PC=0x002d OPCODE=0x25 [MUL] REG[14] = REG[6] * REG[9] -> 0
+cycle 41062: PC=0x002e OPCODE=0x08 [G2P] addr=0 tag=(0,0) size=18
+cycle 41063: PC=0x002f OPCODE=0x1d [WAIT GLB] still busy, stall
+cycle 41098: PC=0x002f OPCODE=0x1d [WAIT GLB] done, continue
+cycle 41099: PC=0x0030 OPCODE=0x1c [COMPUTE] valid_e=0
+cycle 41100: PC=0x0031 OPCODE=0x1d [WAIT PE_ARRAY]
+cycle 41101: PC=0x0032 OPCODE=0x18 [CPT_TAGXY] type=3 tag=(0,0)
+cycle 41102: PC=0x0033 OPCODE=0x09 [P2G] addr=8192 tag=(0,0) size=32
+cycle 41103: PC=0x0034 OPCODE=0x1f [LOOP] REG[6]+=1 -> 47, nextPC=37
+cycle 41104: PC=0x0025 OPCODE=0x18 [CPT_TAGXY] type=2 tag=(0,0)
+cycle 41105: PC=0x0026 OPCODE=0x25 [MUL] REG[12] = REG[3] * REG[10] -> 0
+cycle 41106: PC=0x0027 OPCODE=0x25 [MUL] REG[13] = REG[6] * REG[10] -> 0
+cycle 41107: PC=0x0028 OPCODE=0x24 [ADD] REG[12] = REG[12] + REG[5] -> 0
+cycle 41108: PC=0x0029 OPCODE=0x24 [ADD] REG[12] = REG[12] + REG[13] -> 0
+cycle 41109: PC=0x002a OPCODE=0x08 [G2P] addr=8192 tag=(0,0) size=32
+cycle 41110: PC=0x002b OPCODE=0x1d [WAIT GLB] still busy, stall
+cycle 41173: PC=0x002b OPCODE=0x1d [WAIT GLB] done, continue
+cycle 41174: PC=0x002c OPCODE=0x18 [CPT_TAGXY] type=0 tag=(0,0)
+cycle 41175: PC=0x002d OPCODE=0x25 [MUL] REG[14] = REG[6] * REG[9] -> 0
+cycle 41176: PC=0x002e OPCODE=0x08 [G2P] addr=0 tag=(0,0) size=18
+cycle 41177: PC=0x002f OPCODE=0x1d [WAIT GLB] still busy, stall
+cycle 41212: PC=0x002f OPCODE=0x1d [WAIT GLB] done, continue
+cycle 41213: PC=0x0030 OPCODE=0x1c [COMPUTE] valid_e=0
+cycle 41214: PC=0x0031 OPCODE=0x1d [WAIT PE_ARRAY]
+cycle 41215: PC=0x0032 OPCODE=0x18 [CPT_TAGXY] type=3 tag=(0,0)
+cycle 41216: PC=0x0033 OPCODE=0x09 [P2G] addr=8192 tag=(0,0) size=32
+cycle 41217: PC=0x0034 OPCODE=0x1f [LOOP] REG[6]+=1 -> 48, nextPC=37
+cycle 41218: PC=0x0025 OPCODE=0x18 [CPT_TAGXY] type=2 tag=(0,0)
+cycle 41219: PC=0x0026 OPCODE=0x25 [MUL] REG[12] = REG[3] * REG[10] -> 0
+cycle 41220: PC=0x0027 OPCODE=0x25 [MUL] REG[13] = REG[6] * REG[10] -> 0
+cycle 41221: PC=0x0028 OPCODE=0x24 [ADD] REG[12] = REG[12] + REG[5] -> 0
+cycle 41222: PC=0x0029 OPCODE=0x24 [ADD] REG[12] = REG[12] + REG[13] -> 0
+cycle 41223: PC=0x002a OPCODE=0x08 [G2P] addr=8192 tag=(0,0) size=32
+cycle 41224: PC=0x002b OPCODE=0x1d [WAIT GLB] still busy, stall
+cycle 41287: PC=0x002b OPCODE=0x1d [WAIT GLB] done, continue
+cycle 41288: PC=0x002c OPCODE=0x18 [CPT_TAGXY] type=0 tag=(0,0)
+cycle 41289: PC=0x002d OPCODE=0x25 [MUL] REG[14] = REG[6] * REG[9] -> 0
+cycle 41290: PC=0x002e OPCODE=0x08 [G2P] addr=0 tag=(0,0) size=18
+cycle 41291: PC=0x002f OPCODE=0x1d [WAIT GLB] still busy, stall
+cycle 41326: PC=0x002f OPCODE=0x1d [WAIT GLB] done, continue
+cycle 41327: PC=0x0030 OPCODE=0x1c [COMPUTE] valid_e=0
+cycle 41328: PC=0x0031 OPCODE=0x1d [WAIT PE_ARRAY]
+cycle 41329: PC=0x0032 OPCODE=0x18 [CPT_TAGXY] type=3 tag=(0,0)
+cycle 41330: PC=0x0033 OPCODE=0x09 [P2G] addr=8192 tag=(0,0) size=32
+cycle 41331: PC=0x0034 OPCODE=0x1f [LOOP] REG[6]+=1 -> 49, nextPC=37
+cycle 41332: PC=0x0025 OPCODE=0x18 [CPT_TAGXY] type=2 tag=(0,0)
+cycle 41333: PC=0x0026 OPCODE=0x25 [MUL] REG[12] = REG[3] * REG[10] -> 0
+cycle 41334: PC=0x0027 OPCODE=0x25 [MUL] REG[13] = REG[6] * REG[10] -> 0
+cycle 41335: PC=0x0028 OPCODE=0x24 [ADD] REG[12] = REG[12] + REG[5] -> 0
+cycle 41336: PC=0x0029 OPCODE=0x24 [ADD] REG[12] = REG[12] + REG[13] -> 0
+cycle 41337: PC=0x002a OPCODE=0x08 [G2P] addr=8192 tag=(0,0) size=32
+cycle 41338: PC=0x002b OPCODE=0x1d [WAIT GLB] still busy, stall
+cycle 41401: PC=0x002b OPCODE=0x1d [WAIT GLB] done, continue
+cycle 41402: PC=0x002c OPCODE=0x18 [CPT_TAGXY] type=0 tag=(0,0)
+cycle 41403: PC=0x002d OPCODE=0x25 [MUL] REG[14] = REG[6] * REG[9] -> 0
+cycle 41404: PC=0x002e OPCODE=0x08 [G2P] addr=0 tag=(0,0) size=18
+cycle 41405: PC=0x002f OPCODE=0x1d [WAIT GLB] still busy, stall
+cycle 41440: PC=0x002f OPCODE=0x1d [WAIT GLB] done, continue
+cycle 41441: PC=0x0030 OPCODE=0x1c [COMPUTE] valid_e=0
+cycle 41442: PC=0x0031 OPCODE=0x1d [WAIT PE_ARRAY]
+cycle 41443: PC=0x0032 OPCODE=0x18 [CPT_TAGXY] type=3 tag=(0,0)
+cycle 41444: PC=0x0033 OPCODE=0x09 [P2G] addr=8192 tag=(0,0) size=32
+cycle 41445: PC=0x0034 OPCODE=0x1f [LOOP] REG[6]+=1 -> 50, nextPC=37
+cycle 41446: PC=0x0025 OPCODE=0x18 [CPT_TAGXY] type=2 tag=(0,0)
+cycle 41447: PC=0x0026 OPCODE=0x25 [MUL] REG[12] = REG[3] * REG[10] -> 0
+cycle 41448: PC=0x0027 OPCODE=0x25 [MUL] REG[13] = REG[6] * REG[10] -> 0
+cycle 41449: PC=0x0028 OPCODE=0x24 [ADD] REG[12] = REG[12] + REG[5] -> 0
+cycle 41450: PC=0x0029 OPCODE=0x24 [ADD] REG[12] = REG[12] + REG[13] -> 0
+cycle 41451: PC=0x002a OPCODE=0x08 [G2P] addr=8192 tag=(0,0) size=32
+cycle 41452: PC=0x002b OPCODE=0x1d [WAIT GLB] still busy, stall
+cycle 41515: PC=0x002b OPCODE=0x1d [WAIT GLB] done, continue
+cycle 41516: PC=0x002c OPCODE=0x18 [CPT_TAGXY] type=0 tag=(0,0)
+cycle 41517: PC=0x002d OPCODE=0x25 [MUL] REG[14] = REG[6] * REG[9] -> 0
+cycle 41518: PC=0x002e OPCODE=0x08 [G2P] addr=0 tag=(0,0) size=18
+cycle 41519: PC=0x002f OPCODE=0x1d [WAIT GLB] still busy, stall
+cycle 41554: PC=0x002f OPCODE=0x1d [WAIT GLB] done, continue
+cycle 41555: PC=0x0030 OPCODE=0x1c [COMPUTE] valid_e=0
+cycle 41556: PC=0x0031 OPCODE=0x1d [WAIT PE_ARRAY]
+cycle 41557: PC=0x0032 OPCODE=0x18 [CPT_TAGXY] type=3 tag=(0,0)
+cycle 41558: PC=0x0033 OPCODE=0x09 [P2G] addr=8192 tag=(0,0) size=32
+cycle 41559: PC=0x0034 OPCODE=0x1f [LOOP] REG[6]+=1 -> 51, nextPC=37
+cycle 41560: PC=0x0025 OPCODE=0x18 [CPT_TAGXY] type=2 tag=(0,0)
+cycle 41561: PC=0x0026 OPCODE=0x25 [MUL] REG[12] = REG[3] * REG[10] -> 0
+cycle 41562: PC=0x0027 OPCODE=0x25 [MUL] REG[13] = REG[6] * REG[10] -> 0
+cycle 41563: PC=0x0028 OPCODE=0x24 [ADD] REG[12] = REG[12] + REG[5] -> 0
+cycle 41564: PC=0x0029 OPCODE=0x24 [ADD] REG[12] = REG[12] + REG[13] -> 0
+cycle 41565: PC=0x002a OPCODE=0x08 [G2P] addr=8192 tag=(0,0) size=32
+cycle 41566: PC=0x002b OPCODE=0x1d [WAIT GLB] still busy, stall
+cycle 41629: PC=0x002b OPCODE=0x1d [WAIT GLB] done, continue
+cycle 41630: PC=0x002c OPCODE=0x18 [CPT_TAGXY] type=0 tag=(0,0)
+cycle 41631: PC=0x002d OPCODE=0x25 [MUL] REG[14] = REG[6] * REG[9] -> 0
+cycle 41632: PC=0x002e OPCODE=0x08 [G2P] addr=0 tag=(0,0) size=18
+cycle 41633: PC=0x002f OPCODE=0x1d [WAIT GLB] still busy, stall
+cycle 41668: PC=0x002f OPCODE=0x1d [WAIT GLB] done, continue
+cycle 41669: PC=0x0030 OPCODE=0x1c [COMPUTE] valid_e=0
+cycle 41670: PC=0x0031 OPCODE=0x1d [WAIT PE_ARRAY]
+cycle 41671: PC=0x0032 OPCODE=0x18 [CPT_TAGXY] type=3 tag=(0,0)
+cycle 41672: PC=0x0033 OPCODE=0x09 [P2G] addr=8192 tag=(0,0) size=32
+cycle 41673: PC=0x0034 OPCODE=0x1f [LOOP] REG[6]+=1 -> 52, nextPC=37
+cycle 41674: PC=0x0025 OPCODE=0x18 [CPT_TAGXY] type=2 tag=(0,0)
+cycle 41675: PC=0x0026 OPCODE=0x25 [MUL] REG[12] = REG[3] * REG[10] -> 0
+cycle 41676: PC=0x0027 OPCODE=0x25 [MUL] REG[13] = REG[6] * REG[10] -> 0
+cycle 41677: PC=0x0028 OPCODE=0x24 [ADD] REG[12] = REG[12] + REG[5] -> 0
+cycle 41678: PC=0x0029 OPCODE=0x24 [ADD] REG[12] = REG[12] + REG[13] -> 0
+cycle 41679: PC=0x002a OPCODE=0x08 [G2P] addr=8192 tag=(0,0) size=32
+cycle 41680: PC=0x002b OPCODE=0x1d [WAIT GLB] still busy, stall
+cycle 41743: PC=0x002b OPCODE=0x1d [WAIT GLB] done, continue
+cycle 41744: PC=0x002c OPCODE=0x18 [CPT_TAGXY] type=0 tag=(0,0)
+cycle 41745: PC=0x002d OPCODE=0x25 [MUL] REG[14] = REG[6] * REG[9] -> 0
+cycle 41746: PC=0x002e OPCODE=0x08 [G2P] addr=0 tag=(0,0) size=18
+cycle 41747: PC=0x002f OPCODE=0x1d [WAIT GLB] still busy, stall
+cycle 41782: PC=0x002f OPCODE=0x1d [WAIT GLB] done, continue
+cycle 41783: PC=0x0030 OPCODE=0x1c [COMPUTE] valid_e=0
+cycle 41784: PC=0x0031 OPCODE=0x1d [WAIT PE_ARRAY]
+cycle 41785: PC=0x0032 OPCODE=0x18 [CPT_TAGXY] type=3 tag=(0,0)
+cycle 41786: PC=0x0033 OPCODE=0x09 [P2G] addr=8192 tag=(0,0) size=32
+cycle 41787: PC=0x0034 OPCODE=0x1f [LOOP] REG[6]+=1 -> 53, nextPC=37
+cycle 41788: PC=0x0025 OPCODE=0x18 [CPT_TAGXY] type=2 tag=(0,0)
+cycle 41789: PC=0x0026 OPCODE=0x25 [MUL] REG[12] = REG[3] * REG[10] -> 0
+cycle 41790: PC=0x0027 OPCODE=0x25 [MUL] REG[13] = REG[6] * REG[10] -> 0
+cycle 41791: PC=0x0028 OPCODE=0x24 [ADD] REG[12] = REG[12] + REG[5] -> 0
+cycle 41792: PC=0x0029 OPCODE=0x24 [ADD] REG[12] = REG[12] + REG[13] -> 0
+cycle 41793: PC=0x002a OPCODE=0x08 [G2P] addr=8192 tag=(0,0) size=32
+cycle 41794: PC=0x002b OPCODE=0x1d [WAIT GLB] still busy, stall
+cycle 41857: PC=0x002b OPCODE=0x1d [WAIT GLB] done, continue
+cycle 41858: PC=0x002c OPCODE=0x18 [CPT_TAGXY] type=0 tag=(0,0)
+cycle 41859: PC=0x002d OPCODE=0x25 [MUL] REG[14] = REG[6] * REG[9] -> 0
+cycle 41860: PC=0x002e OPCODE=0x08 [G2P] addr=0 tag=(0,0) size=18
+cycle 41861: PC=0x002f OPCODE=0x1d [WAIT GLB] still busy, stall
+cycle 41896: PC=0x002f OPCODE=0x1d [WAIT GLB] done, continue
+cycle 41897: PC=0x0030 OPCODE=0x1c [COMPUTE] valid_e=0
+cycle 41898: PC=0x0031 OPCODE=0x1d [WAIT PE_ARRAY]
+cycle 41899: PC=0x0032 OPCODE=0x18 [CPT_TAGXY] type=3 tag=(0,0)
+cycle 41900: PC=0x0033 OPCODE=0x09 [P2G] addr=8192 tag=(0,0) size=32
+cycle 41901: PC=0x0034 OPCODE=0x1f [LOOP] REG[6]+=1 -> 54, nextPC=37
+cycle 41902: PC=0x0025 OPCODE=0x18 [CPT_TAGXY] type=2 tag=(0,0)
+cycle 41903: PC=0x0026 OPCODE=0x25 [MUL] REG[12] = REG[3] * REG[10] -> 0
+cycle 41904: PC=0x0027 OPCODE=0x25 [MUL] REG[13] = REG[6] * REG[10] -> 0
+cycle 41905: PC=0x0028 OPCODE=0x24 [ADD] REG[12] = REG[12] + REG[5] -> 0
+cycle 41906: PC=0x0029 OPCODE=0x24 [ADD] REG[12] = REG[12] + REG[13] -> 0
+cycle 41907: PC=0x002a OPCODE=0x08 [G2P] addr=8192 tag=(0,0) size=32
+cycle 41908: PC=0x002b OPCODE=0x1d [WAIT GLB] still busy, stall
+cycle 41971: PC=0x002b OPCODE=0x1d [WAIT GLB] done, continue
+cycle 41972: PC=0x002c OPCODE=0x18 [CPT_TAGXY] type=0 tag=(0,0)
+cycle 41973: PC=0x002d OPCODE=0x25 [MUL] REG[14] = REG[6] * REG[9] -> 0
+cycle 41974: PC=0x002e OPCODE=0x08 [G2P] addr=0 tag=(0,0) size=18
+cycle 41975: PC=0x002f OPCODE=0x1d [WAIT GLB] still busy, stall
+cycle 42010: PC=0x002f OPCODE=0x1d [WAIT GLB] done, continue
+cycle 42011: PC=0x0030 OPCODE=0x1c [COMPUTE] valid_e=0
+cycle 42012: PC=0x0031 OPCODE=0x1d [WAIT PE_ARRAY]
+cycle 42013: PC=0x0032 OPCODE=0x18 [CPT_TAGXY] type=3 tag=(0,0)
+cycle 42014: PC=0x0033 OPCODE=0x09 [P2G] addr=8192 tag=(0,0) size=32
+cycle 42015: PC=0x0034 OPCODE=0x1f [LOOP] REG[6]+=1 -> 55, nextPC=37
+cycle 42016: PC=0x0025 OPCODE=0x18 [CPT_TAGXY] type=2 tag=(0,0)
+cycle 42017: PC=0x0026 OPCODE=0x25 [MUL] REG[12] = REG[3] * REG[10] -> 0
+cycle 42018: PC=0x0027 OPCODE=0x25 [MUL] REG[13] = REG[6] * REG[10] -> 0
+cycle 42019: PC=0x0028 OPCODE=0x24 [ADD] REG[12] = REG[12] + REG[5] -> 0
+cycle 42020: PC=0x0029 OPCODE=0x24 [ADD] REG[12] = REG[12] + REG[13] -> 0
+cycle 42021: PC=0x002a OPCODE=0x08 [G2P] addr=8192 tag=(0,0) size=32
+cycle 42022: PC=0x002b OPCODE=0x1d [WAIT GLB] still busy, stall
+cycle 42085: PC=0x002b OPCODE=0x1d [WAIT GLB] done, continue
+cycle 42086: PC=0x002c OPCODE=0x18 [CPT_TAGXY] type=0 tag=(0,0)
+cycle 42087: PC=0x002d OPCODE=0x25 [MUL] REG[14] = REG[6] * REG[9] -> 0
+cycle 42088: PC=0x002e OPCODE=0x08 [G2P] addr=0 tag=(0,0) size=18
+cycle 42089: PC=0x002f OPCODE=0x1d [WAIT GLB] still busy, stall
+cycle 42124: PC=0x002f OPCODE=0x1d [WAIT GLB] done, continue
+cycle 42125: PC=0x0030 OPCODE=0x1c [COMPUTE] valid_e=0
+cycle 42126: PC=0x0031 OPCODE=0x1d [WAIT PE_ARRAY]
+cycle 42127: PC=0x0032 OPCODE=0x18 [CPT_TAGXY] type=3 tag=(0,0)
+cycle 42128: PC=0x0033 OPCODE=0x09 [P2G] addr=8192 tag=(0,0) size=32
+cycle 42129: PC=0x0034 OPCODE=0x1f [LOOP] REG[6]+=1 -> 56, nextPC=37
+cycle 42130: PC=0x0025 OPCODE=0x18 [CPT_TAGXY] type=2 tag=(0,0)
+cycle 42131: PC=0x0026 OPCODE=0x25 [MUL] REG[12] = REG[3] * REG[10] -> 0
+cycle 42132: PC=0x0027 OPCODE=0x25 [MUL] REG[13] = REG[6] * REG[10] -> 0
+cycle 42133: PC=0x0028 OPCODE=0x24 [ADD] REG[12] = REG[12] + REG[5] -> 0
+cycle 42134: PC=0x0029 OPCODE=0x24 [ADD] REG[12] = REG[12] + REG[13] -> 0
+cycle 42135: PC=0x002a OPCODE=0x08 [G2P] addr=8192 tag=(0,0) size=32
+cycle 42136: PC=0x002b OPCODE=0x1d [WAIT GLB] still busy, stall
+cycle 42199: PC=0x002b OPCODE=0x1d [WAIT GLB] done, continue
+cycle 42200: PC=0x002c OPCODE=0x18 [CPT_TAGXY] type=0 tag=(0,0)
+cycle 42201: PC=0x002d OPCODE=0x25 [MUL] REG[14] = REG[6] * REG[9] -> 0
+cycle 42202: PC=0x002e OPCODE=0x08 [G2P] addr=0 tag=(0,0) size=18
+cycle 42203: PC=0x002f OPCODE=0x1d [WAIT GLB] still busy, stall
+cycle 42238: PC=0x002f OPCODE=0x1d [WAIT GLB] done, continue
+cycle 42239: PC=0x0030 OPCODE=0x1c [COMPUTE] valid_e=0
+cycle 42240: PC=0x0031 OPCODE=0x1d [WAIT PE_ARRAY]
+cycle 42241: PC=0x0032 OPCODE=0x18 [CPT_TAGXY] type=3 tag=(0,0)
+cycle 42242: PC=0x0033 OPCODE=0x09 [P2G] addr=8192 tag=(0,0) size=32
+cycle 42243: PC=0x0034 OPCODE=0x1f [LOOP] REG[6]+=1 -> 57, nextPC=37
+cycle 42244: PC=0x0025 OPCODE=0x18 [CPT_TAGXY] type=2 tag=(0,0)
+cycle 42245: PC=0x0026 OPCODE=0x25 [MUL] REG[12] = REG[3] * REG[10] -> 0
+cycle 42246: PC=0x0027 OPCODE=0x25 [MUL] REG[13] = REG[6] * REG[10] -> 0
+cycle 42247: PC=0x0028 OPCODE=0x24 [ADD] REG[12] = REG[12] + REG[5] -> 0
+cycle 42248: PC=0x0029 OPCODE=0x24 [ADD] REG[12] = REG[12] + REG[13] -> 0
+cycle 42249: PC=0x002a OPCODE=0x08 [G2P] addr=8192 tag=(0,0) size=32
+cycle 42250: PC=0x002b OPCODE=0x1d [WAIT GLB] still busy, stall
+cycle 42313: PC=0x002b OPCODE=0x1d [WAIT GLB] done, continue
+cycle 42314: PC=0x002c OPCODE=0x18 [CPT_TAGXY] type=0 tag=(0,0)
+cycle 42315: PC=0x002d OPCODE=0x25 [MUL] REG[14] = REG[6] * REG[9] -> 0
+cycle 42316: PC=0x002e OPCODE=0x08 [G2P] addr=0 tag=(0,0) size=18
+cycle 42317: PC=0x002f OPCODE=0x1d [WAIT GLB] still busy, stall
+cycle 42352: PC=0x002f OPCODE=0x1d [WAIT GLB] done, continue
+cycle 42353: PC=0x0030 OPCODE=0x1c [COMPUTE] valid_e=0
+cycle 42354: PC=0x0031 OPCODE=0x1d [WAIT PE_ARRAY]
+cycle 42355: PC=0x0032 OPCODE=0x18 [CPT_TAGXY] type=3 tag=(0,0)
+cycle 42356: PC=0x0033 OPCODE=0x09 [P2G] addr=8192 tag=(0,0) size=32
+cycle 42357: PC=0x0034 OPCODE=0x1f [LOOP] REG[6]+=1 -> 58, nextPC=37
+cycle 42358: PC=0x0025 OPCODE=0x18 [CPT_TAGXY] type=2 tag=(0,0)
+cycle 42359: PC=0x0026 OPCODE=0x25 [MUL] REG[12] = REG[3] * REG[10] -> 0
+cycle 42360: PC=0x0027 OPCODE=0x25 [MUL] REG[13] = REG[6] * REG[10] -> 0
+cycle 42361: PC=0x0028 OPCODE=0x24 [ADD] REG[12] = REG[12] + REG[5] -> 0
+cycle 42362: PC=0x0029 OPCODE=0x24 [ADD] REG[12] = REG[12] + REG[13] -> 0
+cycle 42363: PC=0x002a OPCODE=0x08 [G2P] addr=8192 tag=(0,0) size=32
+cycle 42364: PC=0x002b OPCODE=0x1d [WAIT GLB] still busy, stall
+cycle 42427: PC=0x002b OPCODE=0x1d [WAIT GLB] done, continue
+cycle 42428: PC=0x002c OPCODE=0x18 [CPT_TAGXY] type=0 tag=(0,0)
+cycle 42429: PC=0x002d OPCODE=0x25 [MUL] REG[14] = REG[6] * REG[9] -> 0
+cycle 42430: PC=0x002e OPCODE=0x08 [G2P] addr=0 tag=(0,0) size=18
+cycle 42431: PC=0x002f OPCODE=0x1d [WAIT GLB] still busy, stall
+cycle 42466: PC=0x002f OPCODE=0x1d [WAIT GLB] done, continue
+cycle 42467: PC=0x0030 OPCODE=0x1c [COMPUTE] valid_e=0
+cycle 42468: PC=0x0031 OPCODE=0x1d [WAIT PE_ARRAY]
+cycle 42469: PC=0x0032 OPCODE=0x18 [CPT_TAGXY] type=3 tag=(0,0)
+cycle 42470: PC=0x0033 OPCODE=0x09 [P2G] addr=8192 tag=(0,0) size=32
+cycle 42471: PC=0x0034 OPCODE=0x1f [LOOP] REG[6]+=1 -> 59, nextPC=37
+cycle 42472: PC=0x0025 OPCODE=0x18 [CPT_TAGXY] type=2 tag=(0,0)
+cycle 42473: PC=0x0026 OPCODE=0x25 [MUL] REG[12] = REG[3] * REG[10] -> 0
+cycle 42474: PC=0x0027 OPCODE=0x25 [MUL] REG[13] = REG[6] * REG[10] -> 0
+cycle 42475: PC=0x0028 OPCODE=0x24 [ADD] REG[12] = REG[12] + REG[5] -> 0
+cycle 42476: PC=0x0029 OPCODE=0x24 [ADD] REG[12] = REG[12] + REG[13] -> 0
+cycle 42477: PC=0x002a OPCODE=0x08 [G2P] addr=8192 tag=(0,0) size=32
+cycle 42478: PC=0x002b OPCODE=0x1d [WAIT GLB] still busy, stall
+cycle 42541: PC=0x002b OPCODE=0x1d [WAIT GLB] done, continue
+cycle 42542: PC=0x002c OPCODE=0x18 [CPT_TAGXY] type=0 tag=(0,0)
+cycle 42543: PC=0x002d OPCODE=0x25 [MUL] REG[14] = REG[6] * REG[9] -> 0
+cycle 42544: PC=0x002e OPCODE=0x08 [G2P] addr=0 tag=(0,0) size=18
+cycle 42545: PC=0x002f OPCODE=0x1d [WAIT GLB] still busy, stall
+cycle 42580: PC=0x002f OPCODE=0x1d [WAIT GLB] done, continue
+cycle 42581: PC=0x0030 OPCODE=0x1c [COMPUTE] valid_e=0
+cycle 42582: PC=0x0031 OPCODE=0x1d [WAIT PE_ARRAY]
+cycle 42583: PC=0x0032 OPCODE=0x18 [CPT_TAGXY] type=3 tag=(0,0)
+cycle 42584: PC=0x0033 OPCODE=0x09 [P2G] addr=8192 tag=(0,0) size=32
+cycle 42585: PC=0x0034 OPCODE=0x1f [LOOP] REG[6]+=1 -> 60, nextPC=37
+cycle 42586: PC=0x0025 OPCODE=0x18 [CPT_TAGXY] type=2 tag=(0,0)
+cycle 42587: PC=0x0026 OPCODE=0x25 [MUL] REG[12] = REG[3] * REG[10] -> 0
+cycle 42588: PC=0x0027 OPCODE=0x25 [MUL] REG[13] = REG[6] * REG[10] -> 0
+cycle 42589: PC=0x0028 OPCODE=0x24 [ADD] REG[12] = REG[12] + REG[5] -> 0
+cycle 42590: PC=0x0029 OPCODE=0x24 [ADD] REG[12] = REG[12] + REG[13] -> 0
+cycle 42591: PC=0x002a OPCODE=0x08 [G2P] addr=8192 tag=(0,0) size=32
+cycle 42592: PC=0x002b OPCODE=0x1d [WAIT GLB] still busy, stall
+cycle 42655: PC=0x002b OPCODE=0x1d [WAIT GLB] done, continue
+cycle 42656: PC=0x002c OPCODE=0x18 [CPT_TAGXY] type=0 tag=(0,0)
+cycle 42657: PC=0x002d OPCODE=0x25 [MUL] REG[14] = REG[6] * REG[9] -> 0
+cycle 42658: PC=0x002e OPCODE=0x08 [G2P] addr=0 tag=(0,0) size=18
+cycle 42659: PC=0x002f OPCODE=0x1d [WAIT GLB] still busy, stall
+cycle 42694: PC=0x002f OPCODE=0x1d [WAIT GLB] done, continue
+cycle 42695: PC=0x0030 OPCODE=0x1c [COMPUTE] valid_e=0
+cycle 42696: PC=0x0031 OPCODE=0x1d [WAIT PE_ARRAY]
+cycle 42697: PC=0x0032 OPCODE=0x18 [CPT_TAGXY] type=3 tag=(0,0)
+cycle 42698: PC=0x0033 OPCODE=0x09 [P2G] addr=8192 tag=(0,0) size=32
+cycle 42699: PC=0x0034 OPCODE=0x1f [LOOP] REG[6]+=1 -> 61, nextPC=37
+cycle 42700: PC=0x0025 OPCODE=0x18 [CPT_TAGXY] type=2 tag=(0,0)
+cycle 42701: PC=0x0026 OPCODE=0x25 [MUL] REG[12] = REG[3] * REG[10] -> 0
+cycle 42702: PC=0x0027 OPCODE=0x25 [MUL] REG[13] = REG[6] * REG[10] -> 0
+cycle 42703: PC=0x0028 OPCODE=0x24 [ADD] REG[12] = REG[12] + REG[5] -> 0
+cycle 42704: PC=0x0029 OPCODE=0x24 [ADD] REG[12] = REG[12] + REG[13] -> 0
+cycle 42705: PC=0x002a OPCODE=0x08 [G2P] addr=8192 tag=(0,0) size=32
+cycle 42706: PC=0x002b OPCODE=0x1d [WAIT GLB] still busy, stall
+cycle 42769: PC=0x002b OPCODE=0x1d [WAIT GLB] done, continue
+cycle 42770: PC=0x002c OPCODE=0x18 [CPT_TAGXY] type=0 tag=(0,0)
+cycle 42771: PC=0x002d OPCODE=0x25 [MUL] REG[14] = REG[6] * REG[9] -> 0
+cycle 42772: PC=0x002e OPCODE=0x08 [G2P] addr=0 tag=(0,0) size=18
+cycle 42773: PC=0x002f OPCODE=0x1d [WAIT GLB] still busy, stall
+cycle 42808: PC=0x002f OPCODE=0x1d [WAIT GLB] done, continue
+cycle 42809: PC=0x0030 OPCODE=0x1c [COMPUTE] valid_e=0
+cycle 42810: PC=0x0031 OPCODE=0x1d [WAIT PE_ARRAY]
+cycle 42811: PC=0x0032 OPCODE=0x18 [CPT_TAGXY] type=3 tag=(0,0)
+cycle 42812: PC=0x0033 OPCODE=0x09 [P2G] addr=8192 tag=(0,0) size=32
+cycle 42813: PC=0x0034 OPCODE=0x1f [LOOP] REG[6]+=1 -> 62, nextPC=37
+cycle 42814: PC=0x0025 OPCODE=0x18 [CPT_TAGXY] type=2 tag=(0,0)
+cycle 42815: PC=0x0026 OPCODE=0x25 [MUL] REG[12] = REG[3] * REG[10] -> 0
+cycle 42816: PC=0x0027 OPCODE=0x25 [MUL] REG[13] = REG[6] * REG[10] -> 0
+cycle 42817: PC=0x0028 OPCODE=0x24 [ADD] REG[12] = REG[12] + REG[5] -> 0
+cycle 42818: PC=0x0029 OPCODE=0x24 [ADD] REG[12] = REG[12] + REG[13] -> 0
+cycle 42819: PC=0x002a OPCODE=0x08 [G2P] addr=8192 tag=(0,0) size=32
+cycle 42820: PC=0x002b OPCODE=0x1d [WAIT GLB] still busy, stall
+cycle 42883: PC=0x002b OPCODE=0x1d [WAIT GLB] done, continue
+cycle 42884: PC=0x002c OPCODE=0x18 [CPT_TAGXY] type=0 tag=(0,0)
+cycle 42885: PC=0x002d OPCODE=0x25 [MUL] REG[14] = REG[6] * REG[9] -> 0
+cycle 42886: PC=0x002e OPCODE=0x08 [G2P] addr=0 tag=(0,0) size=18
+cycle 42887: PC=0x002f OPCODE=0x1d [WAIT GLB] still busy, stall
+cycle 42922: PC=0x002f OPCODE=0x1d [WAIT GLB] done, continue
+cycle 42923: PC=0x0030 OPCODE=0x1c [COMPUTE] valid_e=0
+cycle 42924: PC=0x0031 OPCODE=0x1d [WAIT PE_ARRAY]
+cycle 42925: PC=0x0032 OPCODE=0x18 [CPT_TAGXY] type=3 tag=(0,0)
+cycle 42926: PC=0x0033 OPCODE=0x09 [P2G] addr=8192 tag=(0,0) size=32
+cycle 42927: PC=0x0034 OPCODE=0x1f [LOOP] REG[6]+=1 -> 63, nextPC=37
+cycle 42928: PC=0x0025 OPCODE=0x18 [CPT_TAGXY] type=2 tag=(0,0)
+cycle 42929: PC=0x0026 OPCODE=0x25 [MUL] REG[12] = REG[3] * REG[10] -> 0
+cycle 42930: PC=0x0027 OPCODE=0x25 [MUL] REG[13] = REG[6] * REG[10] -> 0
+cycle 42931: PC=0x0028 OPCODE=0x24 [ADD] REG[12] = REG[12] + REG[5] -> 0
+cycle 42932: PC=0x0029 OPCODE=0x24 [ADD] REG[12] = REG[12] + REG[13] -> 0
+cycle 42933: PC=0x002a OPCODE=0x08 [G2P] addr=8192 tag=(0,0) size=32
+cycle 42934: PC=0x002b OPCODE=0x1d [WAIT GLB] still busy, stall
+cycle 42997: PC=0x002b OPCODE=0x1d [WAIT GLB] done, continue
+cycle 42998: PC=0x002c OPCODE=0x18 [CPT_TAGXY] type=0 tag=(0,0)
+cycle 42999: PC=0x002d OPCODE=0x25 [MUL] REG[14] = REG[6] * REG[9] -> 0
+cycle 43000: PC=0x002e OPCODE=0x08 [G2P] addr=0 tag=(0,0) size=18
+cycle 43001: PC=0x002f OPCODE=0x1d [WAIT GLB] still busy, stall
+cycle 43036: PC=0x002f OPCODE=0x1d [WAIT GLB] done, continue
+cycle 43037: PC=0x0030 OPCODE=0x1c [COMPUTE] valid_e=0
+cycle 43038: PC=0x0031 OPCODE=0x1d [WAIT PE_ARRAY]
+cycle 43039: PC=0x0032 OPCODE=0x18 [CPT_TAGXY] type=3 tag=(0,0)
+cycle 43040: PC=0x0033 OPCODE=0x09 [P2G] addr=8192 tag=(0,0) size=32
+cycle 43041: PC=0x0034 OPCODE=0x1f [LOOP] REG[6]+=1 -> 64, nextPC=53
+cycle 43042: PC=0x0035 OPCODE=0x1f [LOOP] REG[5]+=32 -> 32, nextPC=54
+cycle 43043: PC=0x0036 OPCODE=0x1f [LOOP] REG[4]+=18 -> 18, nextPC=55
+cycle 43044: PC=0x0037 OPCODE=0x21 [ADDI] REG[10] = REG[3] + 64 -> 64
+cycle 43045: PC=0x0038 OPCODE=0x25 [MUL] REG[10] = REG[10] * REG[7] -> 0
+cycle 43046: PC=0x0039 OPCODE=0x21 [ADDI] REG[10] = REG[10] + 2 -> 2
+cycle 43047: PC=0x003a OPCODE=0x04 [DMA READ] addr=268435458 size=2304
+cycle 43048: PC=0x003b OPCODE=0x1d [WAIT DMA] still busy, stall
+cycle 54567: PC=0x003b OPCODE=0x1d [WAIT DMA] done, continue
+cycle 54568: PC=0x003c OPCODE=0x1f [LOOP] REG[3]+=64 -> 64, nextPC=61
+cycle 54569: PC=0x003d OPCODE=0x21 [ADDI] REG[9] = REG[2] + 36 -> 36
+cycle 54570: PC=0x003e OPCODE=0x25 [MUL] REG[9] = REG[9] * REG[6] -> 2304
+cycle 54571: PC=0x003f OPCODE=0x21 [ADDI] REG[9] = REG[9] + 128 -> 2432
+cycle 54572: PC=0x0040 OPCODE=0x05 [DMA READ] addr=536873344 size=4608
+cycle 54573: PC=0x0041 OPCODE=0x1d [WAIT DMA] still busy, stall
+cycle 77612: PC=0x0041 OPCODE=0x1d [WAIT DMA] done, continue
+cycle 77613: PC=0x0042 OPCODE=0x1f [LOOP] REG[2]+=36 -> 36, nextPC=32
+cycle 77614: PC=0x0020 OPCODE=0x18 [CPT_TAGXY] type=1 tag=(0,0)
+cycle 77615: PC=0x0021 OPCODE=0x25 [MUL] REG[11] = REG[4] * REG[10] -> 36
+cycle 77616: PC=0x0022 OPCODE=0x24 [ADD] REG[11] = REG[11] + REG[5] -> 68
+cycle 77617: PC=0x0023 OPCODE=0x08 [G2P] addr=4164 tag=(0,0) size=576
+cycle 77618: PC=0x0024 OPCODE=0x1d [WAIT GLB] still busy, stall
+cycle 78769: PC=0x0024 OPCODE=0x1d [WAIT GLB] done, continue
+cycle 78770: PC=0x0025 OPCODE=0x18 [CPT_TAGXY] type=2 tag=(0,0)
+cycle 78771: PC=0x0026 OPCODE=0x25 [MUL] REG[12] = REG[3] * REG[10] -> 128
+cycle 78772: PC=0x0027 OPCODE=0x25 [MUL] REG[13] = REG[6] * REG[10] -> 128
+cycle 78773: PC=0x0028 OPCODE=0x24 [ADD] REG[12] = REG[12] + REG[5] -> 160
+cycle 78774: PC=0x0029 OPCODE=0x24 [ADD] REG[12] = REG[12] + REG[13] -> 288
+cycle 78775: PC=0x002a OPCODE=0x08 [G2P] addr=8480 tag=(0,0) size=32
+cycle 78776: PC=0x002b OPCODE=0x1d [WAIT GLB] still busy, stall
+cycle 78839: PC=0x002b OPCODE=0x1d [WAIT GLB] done, continue
+cycle 78840: PC=0x002c OPCODE=0x18 [CPT_TAGXY] type=0 tag=(0,0)
+cycle 78841: PC=0x002d OPCODE=0x25 [MUL] REG[14] = REG[6] * REG[9] -> 155648
+cycle 78842: PC=0x002e OPCODE=0x08 [G2P] addr=155648 tag=(0,0) size=18
+cycle 78843: PC=0x002f OPCODE=0x1d [WAIT GLB] still busy, stall
+cycle 78878: PC=0x002f OPCODE=0x1d [WAIT GLB] done, continue
+cycle 78879: PC=0x0030 OPCODE=0x1c [COMPUTE] valid_e=0
+cycle 78880: PC=0x0031 OPCODE=0x1d [WAIT PE_ARRAY]
+cycle 78881: PC=0x0032 OPCODE=0x18 [CPT_TAGXY] type=3 tag=(0,0)
+cycle 78882: PC=0x0033 OPCODE=0x09 [P2G] addr=8480 tag=(0,0) size=32
+cycle 78883: PC=0x0034 OPCODE=0x1f [LOOP] REG[6]+=1 -> 65, nextPC=53
+cycle 78884: PC=0x0035 OPCODE=0x1f [LOOP] REG[5]+=32 -> 64, nextPC=54
+cycle 78885: PC=0x0036 OPCODE=0x1f [LOOP] REG[4]+=18 -> 36, nextPC=55
+cycle 78886: PC=0x0037 OPCODE=0x21 [ADDI] REG[10] = REG[3] + 64 -> 128
+cycle 78887: PC=0x0038 OPCODE=0x25 [MUL] REG[10] = REG[10] * REG[7] -> 0
+cycle 78888: PC=0x0039 OPCODE=0x21 [ADDI] REG[10] = REG[10] + 2 -> 2
+cycle 78889: PC=0x003a OPCODE=0x04 [DMA READ] addr=268435458 size=2304
+cycle 78890: PC=0x003b OPCODE=0x1d [WAIT DMA] still busy, stall
+cycle 90409: PC=0x003b OPCODE=0x1d [WAIT DMA] done, continue
+cycle 90410: PC=0x003c OPCODE=0x1f [LOOP] REG[3]+=64 -> 128, nextPC=61
+cycle 90411: PC=0x003d OPCODE=0x21 [ADDI] REG[9] = REG[2] + 36 -> 72
+cycle 90412: PC=0x003e OPCODE=0x25 [MUL] REG[9] = REG[9] * REG[6] -> 4680
+cycle 90413: PC=0x003f OPCODE=0x21 [ADDI] REG[9] = REG[9] + 128 -> 4808
+cycle 90414: PC=0x0040 OPCODE=0x05 [DMA READ] addr=536875720 size=4608
+cycle 90415: PC=0x0041 OPCODE=0x1d [WAIT DMA] still busy, stall
+cycle 113454: PC=0x0041 OPCODE=0x1d [WAIT DMA] done, continue
+cycle 113455: PC=0x0042 OPCODE=0x1f [LOOP] REG[2]+=36 -> 72, nextPC=67
+cycle 113456: PC=0x0043 OPCODE=0x18 [CPT_TAGXY] type=3 tag=(0,0)
+cycle 113457: PC=0x0044 OPCODE=0x07 [DMA WRITE] addr=805306368 size=12288
+cycle 113458: PC=0x0045 OPCODE=0x1d [WAIT DMA] still busy, stall
+cycle 174897: PC=0x0045 OPCODE=0x1d [WAIT DMA] done, continue
+cycle 174898: PC=0x0046 OPCODE=0x21 [ADDI] REG[8] = REG[1] + 128 -> 128
+cycle 174899: PC=0x0047 OPCODE=0x06 [DMA READ] addr=805306496 size=12288
+cycle 174900: PC=0x0048 OPCODE=0x1d [WAIT DMA] still busy, stall
+cycle 236339: PC=0x0048 OPCODE=0x1d [WAIT DMA] done, continue
+cycle 236340: PC=0x0049 OPCODE=0x1f [LOOP] REG[1]+=128 -> 128, nextPC=74
+cycle 236341: PC out of range
