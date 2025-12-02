@@ -26,7 +26,7 @@ CSR_MAP = {
 }
 
 LOOP_REG_MAP = {
-    'x0':   0,
+    'x0' : 0,
     'outf': 1,
     'inf':  2,
     'b':    3,
@@ -450,11 +450,13 @@ def encode(program, labels):
         if op == "LOADI":
             check_operands(op, operands, 2, lineno, original_line)
             trd, rd = parse_operand(operands[0])
+            rs = 0
             timm, imm = parse_operand(operands[1])
             instr = enc32(
-                opcode=(0, OPC['LOADI']),
+                opcode=(0, OPC['ADDI']),
                 rd=(6, rd & 0xF),
-                imm=(10, imm & 0x3FFFF),
+                rs=(10, rs & 0xF),
+                imm=(14, imm & 0x3FFFF),
             )
             out.append(instr)
             continue

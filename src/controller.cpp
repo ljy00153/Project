@@ -123,11 +123,11 @@ struct ISASim {
     // DMA 狀態
     bool dma_busy = false;
     uint64_t dma_done_cycle = 0; // DMA 完成的 cycle
-
+    bool dma_waiting = false;
     // GLB 狀態（給 G2P / P2G 用）
     bool glb_busy = false;
     uint64_t glb_done_cycle = 0; // GLB 完成的 cycle
-
+    bool glb_waiting = false;
     vector<uint32_t> program; // 指令記憶體
 
     bool load_program_txt(const string& filename) {
@@ -229,7 +229,7 @@ struct ISASim {
                 case 8:  value = 1; break; // B_SIZE
                 case 9:  value = 2; break;   // K_SIZE
                 case 10: value = 4; break;    // N_SIZE
-                case 11: value = 32; break;    // M_SIZE
+                case 11: value = 64; break;    // M_SIZE
                 case 12: value = 1; break;    // MODE(FC)
                 case 13: value = 0; break;    // DATAFLOW 先不管
                 default: value = (uint32_t)type;     break;
@@ -358,41 +358,48 @@ struct ISASim {
 
         // ---------------- FMT_WAIT ----------------
         case FMT_WAIT: {
-            // 31:8 reserved, 7:6 type(2 bits), 5:0 opcode
             uint8_t type = (insn >> 6) & 0x3;
-            
+
+           
+
             switch (type) {
             case 0:  // GLB
-                wait_glb_msg();
                 if (glb_busy) {
-                    cout << "    [WAIT GLB] still busy, stall at cycle "
-                         << stall_cycle << "\n";
-                    nextPC = PC; // 停在同一條
+                    if (!glb_waiting) {
+                        cout << "[WAIT GLB] still busy, stall\n";
+                        glb_waiting = true;
+                    }
+                    nextPC = PC;  // stall
                 } else {
-                    cout << "    [WAIT GLB] done, continue\n";
+                    cout << "[WAIT GLB] done, continue\n";
+                    glb_waiting = false;
                 }
                 break;
+
             case 1:  // DMA
-                wait_dma_msg();
                 if (dma_busy) {
-                    // 還沒 done → 停在同一條指令，不前進 PC
-                    cout << "    [WAIT DMA] still busy, stall at cycle "
-                         << stall_cycle << "\n";
-                    nextPC = PC; // 不變
+                    if (!dma_waiting) {
+                        cout << "[WAIT DMA] still busy, stall\n";
+                        dma_waiting = true;
+                    }
+                    nextPC = PC;  // stall
                 } else {
-                    // 已經 done → 正常往下一條
-                    cout << "    [WAIT DMA] done, continue\n";
+                    cout << "[WAIT DMA] done, continue\n";
+                    dma_waiting = false;
                 }
                 break;
-            case 2:  // PE_ARRAY
+
+            case 2:  // PE ARRAY（你還沒做 busy/done，所以就照原本印）
                 wait_pe_array();
                 break;
+
             default:
                 cout << "[WAIT] unknown type=" << (int)type << "\n";
                 break;
             }
             break;
         }
+
 
         // ---------------- FMT_JUMP ----------------
         case FMT_JUMP: {
@@ -476,14 +483,23 @@ struct ISASim {
     }
 
     void run(int max_steps = 10000000) {
-        int steps = 0;
-        while (running && steps < max_steps) {
+        //int steps = 0;
+        while (running && cur_cycle < max_steps) {
             cout << "cycle " << cur_cycle << ": ";
             step();
-            ++cur_cycle;
-            ++steps;
+            if (dma_waiting ){
+                // 如果在 WAIT 狀態，cycle 也要繼續增加
+                cur_cycle=dma_done_cycle;
+            }
+            else if (glb_waiting ){
+                // 如果在 WAIT 狀態，cycle 也要繼續增加
+                cur_cycle=glb_done_cycle;
+            }
+            else ++cur_cycle;
+            
+            //++steps;
         }
-        if (steps >= max_steps) {
+        if (cur_cycle >= max_steps) {
             cerr << "Max steps reached\n";
         }
     }
@@ -491,7 +507,8 @@ struct ISASim {
 
 int main() {
     ISASim sim;
-    sim.load_program_txt("example.hex"); // assembler 出來的 program.hex 改名或直接用這個檔名
+    //sim.load_program_txt("example.hex"); // assembler 出來的 program.hex 改名或直接用這個檔名
+    sim.load_program_txt("controller.hex");
     sim.run();
     return 0;
 }

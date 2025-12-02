@@ -64,7 +64,7 @@ ADDI outf,x0,  0
 D2G_WEIGHT_LOOP:
 
     # D2G_WEIGHT
-    DMA_LOAD_WEIGHT  DRAM_WEIGHT_BASE, x0,18432   
+    DMA_LOAD_WEIGHT  DRAM_WEIGHT_BASE, x0,4608   
     WAIT DMA 
 
     ADDI inf, x0, 0
@@ -73,7 +73,7 @@ D2G_IFM_LOOP_inf:
                
 D2G_IFM_LOOP_b:
     # D2G_IFM
-    DMA_LOAD_IFMAP   DRAM_IFMAP_BASE, x0, 4608     
+    DMA_LOAD_IFMAP   DRAM_IFMAP_BASE, x0, 1152    
     WAIT DMA                                   
 
                                        
