@@ -75,10 +75,11 @@ OP_LOOP                     = 6'b011111 // loop counter += offset, if loop count
 //10000x
 OP_LOADI                    = 6'b100000 // rd = imm
 OP_ADDI                     = 6'b100001 // rd = rs + imm
+OP_MULI                     = 6'b100010 // rd = rs1 * imm (unsigned)
 
 //1001xx
 OP_ADD                      = 6'b100100 // rd = rs1 + rs2
-OP_MUL                      = 6'b100101 // rd = rs1 * rs2
+
 
 //111111
 OP_END                      = 6'b111111 // program end
@@ -234,6 +235,7 @@ Syntax: LOADI rd, imm = ADDI rd, REG[0], imm
         rd = REG[0] + imm16
 Syntax: ADDI  rd, rs, imm      
         rd = rs + imm16
+Syntax: MULI rd, rs1, imm  
 
 FMT-ALU
 31        18 17    14 13     10 9     6 5       0
@@ -241,7 +243,7 @@ FMT-ALU
 |  reserve  |  rs2  |   rs1   |   rd   | opcode |
 +-----------+-------+---------+--------+--------+
 Syntax: ADD rd, rs1, rs2   
-Syntax: MUL rd, rs1, rs2   
+ 
 
 FMT-END
 31                           6 5      0

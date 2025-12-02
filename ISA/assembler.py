@@ -68,9 +68,9 @@ OPC = {
 
     'LOADI':            0b100000,
     'ADDI':             0b100001,
+    'MULI':              0b100010,
 
     'ADD':              0b100100,
-    'MUL':              0b100101,
 
     'END':              0b111111,
 }
@@ -445,6 +445,7 @@ def encode(program, labels):
         # FMT-ALU-I
         # Syntax: LOADI rd imm   
         #         ADDI  rd rs imm  
+        #         MULI  rd rs imm  
         # ------------------------------
         if op == "LOADI":
             check_operands(op, operands, 2, lineno, original_line)
@@ -460,32 +461,33 @@ def encode(program, labels):
             out.append(instr)
             continue
 
-        if op == "ADDI":
+        if op == "ADDI" or op == "MULI":
             check_operands(op, operands, 3, lineno, original_line)
             trd, rd = parse_operand(operands[0])
             trs, rs = parse_operand(operands[1])
             timm, imm = parse_operand(operands[2])
             instr = enc32(
-                opcode=(0, OPC['ADDI']),
+                opcode=(0, OPC[op]),
                 rd=(6, rd & 0xF),
                 rs=(10, rs & 0xF),
                 imm=(14, imm & 0x3FFFF),
             )
             out.append(instr)
             continue
+
         # ------------------------------
         # ADD / MUL
         # FMT-ALU
         # Syntax: ADD rd rs1 rs2   
         #         MUL rd rs1 rs2  
         # ------------------------------
-        if op == "ADD" or op == "MUL":
+        if op == "ADD":
             check_operands(op, operands, 3, lineno, original_line)
             trd, rd = parse_operand(operands[0])
             trs1, rs1 = parse_operand(operands[1])
             trs2, rs2 = parse_operand(operands[2])
             instr = enc32(
-                opcode=(0, OPC[op]),
+                opcode=(0, OPC["ADD"]),
                 rd=(6, rd & 0xF),
                 rs1=(10, rs1 & 0xF),
                 rs2=(14, rs2 & 0xF),
