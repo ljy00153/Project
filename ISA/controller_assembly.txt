@@ -51,80 +51,66 @@ LOADI REG[10], 0
 LOADI REG[11], 0
 LOADI REG[12], 0
 LOADI REG[13], 0
-LOADI REG[14], 0
-
-#load IFMAP to GLB
-DMA_LOAD_IFMAP   DRAM_IFMAP_BASE,    outf, DRAM_IFMAP_SIZE
-WAIT DMA
-#load WEIGHT to GLB
-DMA_LOAD_WEIGHT  DRAM_WEIGHT_BASE,   outf, DRAM_IFMAP_SIZE
-WAIT DMA
-#load PSUM to GLB
-DMA_LOAD_PSUM    DRAM_OFMAP_BASE,    outf, DRAM_OPSUM_SIZE
-WAIT DMA
+#LOADI REG[14], 0
 
 # Output feature tiles
 loop_outf:
+    #load PSUM to GLB
+    DMA_LOAD_PSUM DRAM_OFMAP_BASE, outf, DRAM_OPSUM_SIZE
+    WAIT DMA
     loop_inf:
+        #load WEIGHT to GLB
+        #compute index
+        MULI REG[8], REG[8], OF
+        ADD REG[8], REG[8], outf #REG[8] = (inf * out_features + outf);
+        DMA_LOAD_WEIGHT DRAM_WEIGHT_BASE, REG[8], DRAM_WEIGHT_SIZE
+        WAIT DMA
         loop_b:
+            #load IFMAP to GLB
+            #compute index
+            MULI REG[9], b, IF
+            ADD REG[9], REG[9], inf #REG[9] = (b * in_feature + inf);
+            DMA_LOAD_IFMAP DRAM_IFMAP_BASE, REG[9], DRAM_IFMAP_SIZE
+            WAIT DMA
             loop_k:
                 loop_n:
                     #load weight to pe array
                     CPT_TAGXY WEIGHT
                     #compute index
-                    MULI REG[11], k, N
-                    ADD REG[11], REG[11], n
-                    G2P GLB_WEIGHT_BASE, REG[11], PE_ARRAY_WEIGHT_SIZE
+                    MULI REG[10], k, N
+                    ADD REG[10], REG[10], n
+                    G2P GLB_WEIGHT_BASE, REG[10], PE_ARRAY_WEIGHT_SIZE
                     WAIT GLB
                     loop_m:
                         #load ipsum to pe array
                         CPT_TAGXY IPSUM
                         #compute index
-                        MULI REG[12], b, N
-                        MULI REG[13], m, N
-                        ADD REG[12], REG[12], n
-                        ADD REG[12], REG[12], REG[13]
-                        G2P GLB_OPSUM_BASE, REG[12], PE_ARRAY_IPSUM_SIZE
+                        MULI REG[11], b, N
+                        MULI REG[12], m, N
+                        ADD REG[11], REG[11], n
+                        ADD REG[11], REG[11], REG[12]
+                        G2P GLB_OPSUM_BASE, REG[11], PE_ARRAY_IPSUM_SIZE
                         WAIT GLB
                         #load ifmap to pe array
                         CPT_TAGXY IFMAP
                         #compute index
-                        MULI REG[14], m, K
-                        G2P GLB_IFMAP_BASE, REG[14], PE_ARRAY_IFMAP_SIZE
+                        MULI REG[13], m, K
+                        G2P GLB_IFMAP_BASE, REG[13], PE_ARRAY_IFMAP_SIZE
                         WAIT GLB
                         #start pe array
                         COMPUTE
                         WAIT PE_ARRAY
                         #write to GLB
                         CPT_TAGXY OPSUM
-                        P2G_OPSUM GLB_OPSUM_BASE, REG[12], PE_ARRAY_IPSUM_SIZE
+                        P2G_OPSUM GLB_OPSUM_BASE, REG[11], PE_ARRAY_IPSUM_SIZE
                         LOOP M_SIZE, m, loop_m, m_offest
                     LOOP N_SIZE, n, loop_n, n_offest
                 LOOP K_SIZE, k, loop_k, k_offest
-            #load IFMAP to GLB
-            #compute index
-            ADDI REG[10], b, b_offest
-            MULI REG[10], REG[10], IF
-            ADDI REG[10], REG[10], inf #REG[10] = ((b + b_offest) * in_feature + inf);
-            DMA_LOAD_IFMAP DRAM_IFMAP_BASE, REG[10], DRAM_IFMAP_SIZE
-            WAIT DMA
             LOOP B_SIZE, b, loop_b, b_offest
-        #load WEIGHT to GLB
-        #compute index
-        ADDI REG[9], inf, inf_offest
-        MULI REG[9], REG[9], OF
-        ADDI REG[9], REG[9], outf_offest #REG[9] = ((inf + inf_offest) * out_features + outf);
-        DMA_LOAD_WEIGHT DRAM_WEIGHT_BASE, REG[9], DRAM_WEIGHT_SIZE
-        WAIT DMA
         LOOP IF_SIZE, inf, loop_inf, inf_offest
     #write opsum to DRAM
     CPT_TAGXY OPSUM
     DMA_STORE_OFMAP DRAM_OFMAP_BASE, outf, DRAM_OPSUM_SIZE
-    WAIT DMA
-    #load PSUM to GLB
-    #compute index
-    ADDI REG[8], outf, outf_offest #REG[8] = (outf + outf_offest);
-    DMA_LOAD_PSUM DRAM_OFMAP_BASE, REG[8], DRAM_OPSUM_SIZE
     WAIT DMA
     LOOP OF_SIZE, outf, loop_outf, outf_offest
     
