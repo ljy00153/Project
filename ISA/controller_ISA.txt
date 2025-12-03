@@ -222,8 +222,8 @@ FMT-LOOP
 | offset | target6 |  csr_id | loopReg | opcode |
 +--------+---------+---------+---------+--------+
 Syntax: LOOP csr_id, loopReg, target, offset
-    REG[loopReg] += sign_extend(offset)
-    if (REG[loopReg] < CSR[csr_id]) PC = target
+    REG[loopReg] += offset
+    if (REG[loopReg] < CSR[csr_id]) PC = target, REG[loopReg] = 0
     else PC = PC + 1
 
 FMT-ALU-I
