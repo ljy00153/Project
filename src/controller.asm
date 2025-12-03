@@ -4,12 +4,12 @@
 #out feature = 256
 
 #set constant
-.set IF, 8192 # 8192 / 4
+.set IF, 8192 
 .set OF, 256
 .set B, 64
 .set M, 64
-.set K, 144 # 12 * 3
-.set N, 128 # 32 * 4
+.set K, 144 # K * 3 * 4
+.set N, 128 # N * 4
 .set outf_offest, 128 # N * 4
 .set inf_offest, 144 # K * 3 * 4 
 .set b_offest, 64 # M
