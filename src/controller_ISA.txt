@@ -1,3 +1,4 @@
+
 #Register
     CSR 32bit
         CSR[0]: DRAM_IFMAP_BASE
@@ -29,7 +30,7 @@
         compute:
             REG[7]: valid_e 
         General Register
-            REG[8] ~ REG[15]
+            REG[8] ~ REG[16]
     TAG 3bit
         TAG[0]: count_ifmap_y
         TAG[1]: count_ifmap_x
@@ -76,9 +77,9 @@ OP_LOOP                     = 6'b011111 // loop counter += offset, if loop count
 OP_LOADI                    = 6'b100000 // rd = imm
 OP_ADDI                     = 6'b100001 // rd = rs + imm
 OP_MULI                     = 6'b100010 // rd = rs1 * imm (unsigned)
-
 //1001xx
 OP_ADD                      = 6'b100100 // rd = rs1 + rs2
+OP_MUL                      = 6'b100101 // rd = rs1 * rs2 (unsigned)
 
 
 //111111
@@ -217,15 +218,14 @@ Syntax: JUMP label
     PC = PC + jump_addr
 
 FMT-LOOP
-31     20 29     14 13     10 9       6 5       0
+31     30 29     14 13     10 9       6 5       0
 +--------+---------+---------+---------+--------+
 | offset | target6 |  csr_id | loopReg | opcode |
 +--------+---------+---------+---------+--------+
 Syntax: LOOP csr_id, loopReg, target, offset
-    REG[loopReg] += sign_extend(offset) 
-    if (REG[loopReg] < CSR[csr_id]) PC = target
+    REG[loopReg] += offset
+    if (REG[loopReg] < CSR[csr_id]) PC = target, REG[loopReg] = 0
     else PC = PC + 1
-   
 
 FMT-ALU-I
 31           14 13    10 9     6 5      0

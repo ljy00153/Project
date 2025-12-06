@@ -72,7 +72,7 @@ OPC = {
     'MULI':              0b100010,
 
     'ADD':              0b100100,
-
+    'MUL':              0b100101,
     'END':              0b111111,
 }
 
@@ -495,7 +495,19 @@ def encode(program, labels):
             )
             out.append(instr)
             continue
-
+        if op == "MUL":
+            check_operands(op, operands, 3, lineno, original_line)
+            trd, rd = parse_operand(operands[0])
+            trs1, rs1 = parse_operand(operands[1])
+            trs2, rs2 = parse_operand(operands[2])
+            instr = enc32(
+                opcode=(0, OPC["MUL"]),
+                rd=(6, rd & 0xF),
+                rs1=(10, rs1 & 0xF),
+                rs2=(14, rs2 & 0xF),
+            )
+            out.append(instr)
+            continue
         raise Exception(f"Unknown instruction {op} at line {lineno + 1}")
 
     return out
