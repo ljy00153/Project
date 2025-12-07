@@ -235,8 +235,8 @@ class EyerissMapper_base
                     << mappings.tn << ","
                     << mappings.mode << ","
                     << mappings.M << ","
-                    << mappings.N << ","
-                    << mappings.K
+                    << mappings.K << ","
+                    << mappings.N
                     << "\n";
 
                 csv.close();
@@ -297,8 +297,8 @@ class EyerissMapper_base
                     << best_mapping.tn << ","
                     << best_mapping.mode << ","
                     << best_mapping.M << ","
-                    << best_mapping.N << ","
-                    << best_mapping.K
+                    << best_mapping.K << ","
+                    << best_mapping.N
                     << "\n";
 
                 csv.close();
