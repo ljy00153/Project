@@ -65,7 +65,7 @@ enum Opcode : uint8_t {
 
     // 1001xx
     OP_ADD                = 0b100100, // rd = rs1 + rs2
-
+    OP_MUL                = 0b100101, // rd = rs1 * rs2 (unsigned)
     // 111111
     OP_END                = 0b111111  // program end
 };
@@ -125,7 +125,7 @@ InstrFormat get_format(uint8_t op) {
     if (op == OP_LOADI || op == OP_ADDI || op == OP_MULI)
         return FMT_ALU_I;
 
-    if (op == OP_ADD)
+    if (op == OP_ADD || op == OP_MUL)
         return FMT_ALU_R;
 
     return FMT_UNKNOWN;
@@ -160,6 +160,10 @@ struct ISASim {
     bool glb_busy = false;
     uint64_t glb_done_cycle = 0;
     bool glb_waiting = false;
+    // PE 狀態
+    bool pe_busy = false;
+    uint64_t PE_done_cycle = 0;
+    bool pe_waiting = false;
 
     vector<uint32_t> program; // 指令記憶體
 
@@ -325,6 +329,7 @@ struct ISASim {
             } else {
                 glb_busy = true;
                 glb_done_cycle = cur_cycle + latency;
+                PE_done_cycle = glb_done_cycle + 48; // PE 也要等 GLB 完成
                 stall_cycle = cur_cycle;
             }
 
@@ -422,7 +427,14 @@ struct ISASim {
                 break;
 
             case 2:  // PE ARRAY
-                wait_pe_array();
+                if (cur_cycle != PE_done_cycle) {
+                    dlog << "[WAIT PE_ARRAY] still busy, stall\n";
+                    nextPC = PC;  // stall
+                    pe_waiting = true;
+                } else {
+                    dlog << "[WAIT PE_ARRAY] done, continue\n";
+                    pe_waiting = false;
+                }
                 break;
 
             default:
@@ -451,6 +463,10 @@ struct ISASim {
             uint8_t csr_id   = (insn >> 10) & 0xF;
             uint8_t loopReg  = (insn >> 6)  & 0xF;
             
+            dlog << "[LOOP] REG[" << (int)loopReg << "]<=" << CSR[csr_id]
+                 << " ? target=" << (int)target
+                 << " : PC+1, after += " << offset
+                 << " -> REG=" << REG[loopReg] + offset << "\n";
             //先更新Loop index
             REG[loopReg] = (uint32_t)((int32_t)REG[loopReg] + offset);
 
@@ -459,14 +475,11 @@ struct ISASim {
                 nextPC = target;
             } else {
                 nextPC = PC + 1;
+                REG[loopReg] = 0; // 超過目標後歸零
             }
 
 
-            dlog << "[LOOP] REG[" << (int)loopReg << "]<=" << CSR[csr_id]
-                 << " ? target=" << (int)target
-                 << " : PC+1, after += " << offset
-                 << " -> REG=" << REG[loopReg]
-                 << ", nextPC=" << nextPC << "\n";
+           
             break;
         }
 
@@ -505,11 +518,24 @@ struct ISASim {
             uint8_t rs2 = (insn >> 14) & 0xF;
             uint8_t rs1 = (insn >> 10) & 0xF;
             uint8_t rd  = (insn >> 6)  & 0xF;
-
-            REG[rd] = REG[rs1] + REG[rs2];
-            dlog << "[ADD] REG[" << (int)rd << "] = REG[" << (int)rs1
-                 << "] + REG[" << (int)rs2 << "] -> " << REG[rd] << "\n";
-            break;
+            if(opcode == OP_ADD){
+                // 無號乘法：rd = rs1 * rs2
+                REG[rd] = REG[rs1] + REG[rs2];
+                dlog << "[ADD] REG[" << (int)rd << "] = REG[" << (int)rs1
+                    << "] + REG[" << (int)rs2 << "] -> " << REG[rd] << "\n";
+                break;
+            }
+            else if(opcode == OP_MUL){
+                // 無號乘法：rd = rs1 * rs2
+                REG[rd] = REG[rs1] * REG[rs2];
+                dlog << "[MUL] REG[" << (int)rd << "] = REG[" << (int)rs1
+                    << "] * REG[" << (int)rs2 << "] -> " << REG[rd] << "\n";
+                break;
+            }
+            else{
+                dlog << "\n";
+                break;
+            }
         }
 
         // ---------------- FMT_END ----------------
@@ -536,13 +562,16 @@ struct ISASim {
                 cur_cycle = dma_done_cycle;
             } else if (glb_waiting) {
                 cur_cycle = glb_done_cycle;
-            } else {
-                ++cur_cycle;
+            } else if (pe_waiting) {
+                cur_cycle = PE_done_cycle;
             }
+            else {
+                cur_cycle++;
         }
         if (cur_cycle >= max_steps) {
             dlog << "Max steps reached\n";
         }
+    }
     }
 };
 

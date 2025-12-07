@@ -3,25 +3,25 @@
 #out feature = 256
 
 #set constant
-.set IF, 2048 # 8192 / 4
+.set IF, 8192
 .set OF, 256
 .set B, 64
 .set M, 64
-.set K, 36 # 12 * 3
+.set K, 144 # 12 * 3
 .set N, 128 # 32 * 4
-.set outf_offest, 48 # N * 4
-.set inf_offest, 96 # K * 3
+.set outf_offest, 128 # N * 4
+.set inf_offest, 144 # K * 3
 .set b_offest, 64 # M
-.set k_offest, 18 # tk * 3
+.set k_offest, 72 # tk * 3
 .set n_offest, 32 # tn * 4
 .set m_offest, 1  # mode
 
-.set PE_ARRAY_WEIGHT_SIZE, 576  # 48 * 12
-.set PE_ARRAY_IPSUM_SIZE, 32    # 8 * 1 * 4
-.set PE_ARRAY_IFMAP_SIZE, 144   # 48 * 3
-.set DRAM_IFMAP_SIZE, 8192      # M * K * 12
+.set PE_ARRAY_WEIGHT_SIZE, 2304 # 48 * 12 * 4
+.set PE_ARRAY_IPSUM_SIZE, 128   # 8 * 1 * 4 * 4
+.set PE_ARRAY_IFMAP_SIZE, 72    # 6 * 3 * 4
+.set DRAM_IFMAP_SIZE, 9216      # M * K * 12
 .set DRAM_WEIGHT_SIZE, 18432    # K * N * 48
-.set DRAM_OPSUM_SIZE, 12288     # B * N * 16
+.set DRAM_OPSUM_SIZE, 32768     # B * N * 16
 
 SET_ID
 CFG_SET DRAM_IFMAP_BASE,     0
@@ -113,5 +113,5 @@ loop_outf:
     DMA_STORE_OFMAP DRAM_OFMAP_BASE, outf, DRAM_OPSUM_SIZE
     WAIT DMA
     LOOP OF_SIZE, outf, loop_outf, outf_offest
-    
+END
 
