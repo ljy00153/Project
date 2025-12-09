@@ -69,12 +69,6 @@ loop_outf:
     loop_inf:
         #load WEIGHT to GLB
         #compute index
-
-        #MULI REG[8],inf, OF
-        #ADD REG[8], REG[8], outf #REG[8] = (inf * out_features + outf);
-        #DMA_LOAD_WEIGHT DRAM_WEIGHT_BASE, REG[8], DRAM_WEIGHT_SIZE
-        #WAIT DMA
-
         ADD REG[8], k, inf
         MULI REG[8], REG[8] , OF
         ADD REG[8], REG[8], outf
@@ -96,16 +90,26 @@ loop_outf:
 
                     ##############################
                     #prefetch weight pseudo code:
-                    #if (next_n == N_SIZE) {
-                    #   next_n=0;
-                    #   next_k+=k_offest
-                    #   if(next_k == K_SIZE) {
-                    #       next_k=0;
-                    #       jump after_prefetch
+                    #if (b==0){ 只有b==0需要預取weight
+                        #if (next_n == N_SIZE) {
+                        #   next_n=0;
+                        #   next_k+=k_offest;
+                        #   if(next_k == K_SIZE) {
+                        #       next_k=0;
+                        #       next_inf+=inf_offest;
+                        #       if(next_inf == IF_SIZE){ inf、outf還沒有做，因為REG不夠
+                        #           next_inf=0;
+                        #           next_outf+=outf_offest;
+                        #           if(next_outf == OF_SIZE){
+                        #               next_outf=0;
+                        #               jump after_prefetch
+                    #           }
+                    #       }
                     #   }
-                    #   prefetch:
                     # }
-                    #   after_prefetch:                   
+                    #  prefetch:
+                    #  DRAM_LOAD
+                    #  after_prefetch:                   
                     ##############################
                     ADDI REG[15], n, n_offest #next_n
                     LOOP N_SIZE, REG[15], prefetch,0 

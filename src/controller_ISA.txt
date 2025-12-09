@@ -218,13 +218,13 @@ Syntax: JUMP label
     PC = PC + jump_addr
 
 FMT-LOOP
-31     30 29     14 13     10 9       6 5       0
+31     20 19     14 13     10 9       6 5       0
 +--------+---------+---------+---------+--------+
 | offset | target6 |  csr_id | loopReg | opcode |
 +--------+---------+---------+---------+--------+
 Syntax: LOOP csr_id, loopReg, target, offset
     REG[loopReg] += offset
-    if (REG[loopReg] < CSR[csr_id]) PC = target, REG[loopReg] = 0
+    if (REG[loopReg] < CSR[csr_id]) PC = target,//REG[loopReg] = 0
     else PC = PC + 1
 
 FMT-ALU-I

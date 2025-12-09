@@ -132,8 +132,8 @@ InstrFormat get_format(uint8_t op) {
 }
 
 struct ISASim {
-    static const int CSR_NUM = 32;
-    static const int REG_NUM = 32;
+    static const int CSR_NUM = 16;
+    static const int REG_NUM = 16;
 
     vector<uint32_t> CSR = vector<uint32_t>(CSR_NUM, 0);
     vector<uint32_t> REG = vector<uint32_t>(REG_NUM, 0);
@@ -577,7 +577,7 @@ struct ISASim {
 
 int main() {
     ISASim sim;
-    sim.load_program_txt("controller.hex");
+    sim.load_program_txt("controller_assembly.hex");
     sim.run();
     return 0;
 }
