@@ -10,13 +10,16 @@ module Regfile(
     output logic [31:0] rdata1,
     //read port 2
     input logic [3:0] rs2_index,
-    output logic [31:0] rdata2
+    output logic [31:0] rdata2,
+    // loop
+    output logic [31:0] loop_reg
 );
     reg [31:0] regfile [0:15]; // 16 registers of 32 bits
 
     always_comb begin 
         rdata1 = regfile[rs1_index];
         rdata2 = regfile[rs2_index];
+        loop_reg = regfile[rs2_index]; // assuming register 0 is used for loop counter
     end
 
     
@@ -28,9 +31,7 @@ module Regfile(
             end
         end else if ( wb_en ) begin
             regfile[rd_index] <= wdata;
-        end else begin 
-            regfile[rd_index] <= regfile[rd_index]; // hold value
-        end
+        end 
     end
     
 endmodule

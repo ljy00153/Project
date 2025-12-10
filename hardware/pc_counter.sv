@@ -1,5 +1,5 @@
 module pc_counter(
-    parameter pc_WIDTH = 8
+    parameter pc_WIDTH = 16
 )(
     input clk,
     input rst,

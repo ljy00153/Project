@@ -1,25 +1,31 @@
+`include "AXI_define.svh"
+`include "ASIC.svh"
+`include "../include/ISA.svh"
 module signal_controller(
+     parameter tk = 72,tn = 32
+)(
     input  logic clk,
     input  logic rst,
     input  logic asic_en,
     output logic asic_done,
 
     /* MMIO */
-    input  logic [`AXI_ADDR_BITS-1:0] DRAM_IFMAP_BASE,
-    input  logic [`AXI_ADDR_BITS-1:0] DRAM_WEIGHT_BASE,
-    input  logic [`AXI_ADDR_BITS-1:0] DRAM_OFMAP_BASE,
-    input  logic [`GLB_ADDR_BITS-1:0] GLB_IFMAP_BASE,
-    input  logic [`GLB_ADDR_BITS-1:0] GLB_WEIGHT_BASE,
-    input  logic [`GLB_ADDR_BITS-1:0] GLB_OPSUM_BASE,
-    input  logic [31:0] OF_SIZE,
-    input  logic [31:0] IF_SIZE,
-    input  logic [31:0] B_SIZE,
-    input  logic [31:0] K_SIZE,
-    input  logic [31:0] N_SIZE,
-    input  logic [31:0] M_SIZE,
-    input  logic [31:0]  MODE,//1,2,3,6
-    input  logic [31:0]  DATA_FLOW,
-    // ---------------- DMA  ------------------------------
+    output logic [3:0] mmio_sel,
+    output logic csr_wen,
+    input logic [31:0] DRAM_ifmap_base,
+    input logic [31:0] DRAM_weight_base,
+    input logic [31:0] DRAM_ofmap_base,
+    input logic [31:0] GLB_ifmap_base,
+    input logic [31:0] GLB_weight_base,
+    input logic [31:0] GLB_opsum_base,
+    input logic [31:0] OF_SIZE,
+    input logic [31:0] IF_SIZE,
+    input logic [31:0] B_SIZE,
+    input logic [31:0] K_SIZE,
+    input logic [31:0] N_SIZE,
+    input logic [31:0] M_SIZE,
+    input logic [31:0] DATAFLOW,
+    // ---------------- DMA LOOPER------------------------------
     output logic                    DMA_en,
     output logic [1:0]              DMA_mode,       // IFMAP:0, Filter:1, BIAS:2, OFMAP: 3
     output logic [`AXI_ADDR_BITS-1:0] DMA_DRAM_ADDR,
@@ -30,53 +36,78 @@ module signal_controller(
 
     //-----------------PE ID config--------------------------------------------------
     output logic                  ID_sender_en,
-    
+    output logic                  ID_sender_tag_en,
     output logic PEA_ifmap_valid,
-    input PEA_ifmap_ready,
+    input logic PEA_ifmap_ready,
 
     output logic PEA_filter_valid,
-    input PEA_filter_ready,
+    input logic PEA_filter_ready,
 
     output logic PEA_ipsum_valid,
-    input PEA_ipsum_ready,
+    input logic PEA_ipsum_ready,
 
-    input PEA_opsum_valid,
+    input logic PEA_opsum_valid,
     output logic PEA_opsum_ready,
+    
+    input logic PE_finish[5:0],
     //------------PE Array----------------------
     output logic [`PE_ARRAY_H*`PE_ARRAY_W-1:0] PE_en,
     output logic [10:0]                        PE_config,
     //------------GLB----------------------
-    output logic                  GLB_EN,
-    output logic                  GLB_WEB,
-    output logic                  GLB_MODE,
+    output logic GLB_EN,
+    output logic GLB_WEB,
+    output logic GLB_MODE,
     output logic [`GLB_ADDR_BITS-1:0] GLB_A,
+    output logic GLB_mux,
+    output logic GLB_DI_select,
+    output logic GLB_DO_select,
+
+
+    //------------PPU-----------------------
     output logic                  relu_sel,
     output logic                  Maxpool_en,
     output logic                  Maxpool_init,
     //------------ALU-----------------------
-    input [31:0]ALU_result,                  ,
+    input [31:0]ALU_result,                  
 
     //------------control signal--------------------
     //decoder
     input [5:0]opcode,
     input [3:0]CSR_index,
     input [3:0]CFG_TYPE,
+    input [1:0]type,
     input [31:0]imm,
     //
+    input logic branch_result,
     output logic [31:0] CSR_output,
-
+    
     /* PC counter control */
     output logic pc_hold,       // 1: PC 不加一（WAIT）
-    output logic next_pc_sel    // 0: pc+1, 1: 分支/loop/jump target（假定由別處決定）
+    output logic next_pc_sel,    // 0: pc+1, 1: 分支/loop/jump target（假定由別處決定）
+    output logic alu_op1_sel,
+    output logic alu_op2_sel
 );
-
-    logic [31:0] CSR [0:15]; // 16 CSR registers of 32 bits
-
+    // --------------------------------
+    // internal registers / wires
+    // --------------------------------
+    logic [31:0] CSR [0:15]; //16 CSR registers
     logic [2:0]cs,ns;
-
+    logic [`GLB_ADDR_BITS-1:0] glb_addr; //16 bits
+    logic DMA_busy,GLB_busy,PE_busy;
+    logic valid_e [2:0]
     localparam IDLE  = 3'b000,
                RUN = 3'b001,
                DONE  = 3'b010;
+    // --------------------------------
+    // simple assigns
+    // --------------------------------
+    assign next_pc_sel = (branch_result||opcode==`OP_JUMP)? 1'b1 : 1'b0; //branch_result from ALU
+    assign pc_hold = (opcode == `OP_WAIT || DMA_busy || GLB_busy ||PE_busy)? 1'b1 : 1'b0;
+    assign alu_op1_sel = (opcode[5:2]==`DMA_type || opcode[5:1]==`STREAM_type || opcode == `OP_LOOP)? 1'b0 : 1'b1; // 0 for CSR file,1 for reg
+    assign alu_op2_sel = (opcode==`OP_ADDI || opcode==`OP_MULI || opcode == `OP_LOOP)? 1'b1 : 1'b0; // 0 for reg file,1 for imm
+    assign csr_wen = (opcode==`OP_CFG_SET)? 1'b1 : 1'b0;
+    assign mmio_sel = (opcode==`OP_CFG_SET)? CFG_TYPE : 4'b0000;
+
     
     always_ff @( posedge clk ) begin
         if ( rst ) begin
@@ -97,7 +128,7 @@ module signal_controller(
                 end
             end
             RUN: begin
-                if ( DMA_done ) begin
+                if ( opcode==`OP_END ) begin
                     ns = DONE;
                 end else begin
                     ns = RUN;
@@ -110,96 +141,136 @@ module signal_controller(
         endcase
     end
 
-    // CSR input
+    //mmio mux
+    logic [31:0] mmio_mux_out;
+    always_comb begin
+        case (mmio_sel)
+            4'b0000: mmio_mux_out = DRAM_ifmap_base;
+            4'b0001: mmio_mux_out = DRAM_weight_base;
+            4'b0010: mmio_mux_out = DRAM_ofmap_base;
+            4'b0011: mmio_mux_out = GLB_ifmap_base;
+            4'b0100: mmio_mux_out = GLB_weight_base;
+            4'b0101: mmio_mux_out = GLB_opsum_base;
+            4'b0110: mmio_mux_out = OF_SIZE;
+            4'b0111: mmio_mux_out = IF_SIZE;
+            4'b1000: mmio_mux_out = B_SIZE;
+            4'b1001: mmio_mux_out = K_SIZE;
+            4'b1010: mmio_mux_out = N_SIZE;
+            4'b1011: mmio_mux_out = M_SIZE;
+            4'b1100: mmio_mux_out = DATAFLOW;
+            default: mmio_mux_out = 32'b0;
+        endcase
+    end
+
+    //csr input
     always_ff @( posedge clk ) begin
         if ( rst ) begin
-            // reset all CSR registers to 0
             for ( int i = 0; i < 16; i++ ) begin
                 CSR[i] <= 32'b0;
             end
-        end else begin
-            if(opcode == `OP_CFG_SET) begin
-                unique case ( CFG_TYPE )
-                    // Load configuration into CSR registers
-                    4'd0: CSR[CSR_index] <= DRAM_IFMAP_BASE;
-                    4'd1: CSR[CSR_index] <= DRAM_WEIGHT_BASE;
-                    4'd2: CSR[CSR_index] <= DRAM_OFMAP_BASE;
-                    4'd3: CSR[CSR_index] <= GLB_IFMAP_BASE;
-                    4'd4: CSR[CSR_index] <= GLB_WEIGHT_BASE;
-                    4'd5: CSR[CSR_index] <= GLB_OPSUM_BASE;
-                    4'd6: CSR[CSR_index] <= OF_SIZE;
-                    4'd7: CSR[CSR_index] <= IF_SIZE;
-                    4'd8: CSR[CSR_index] <= B_SIZE;
-                    4'd9: CSR[CSR_index] <= K_SIZE;
-                    4'd10: CSR[CSR_index] <= N_SIZE;
-                    4'd11: CSR[CSR_index] <= M_SIZE;
-                    4'd12: CSR[CSR_index] <= MODE;
-                    4'd13: CSR[CSR_index] <= DATA_FLOW;
-                    default: CSR[CSR_index] <= CSR[CSR_index];
-                endcase
-            end
-        end
+        end else if ( csr_wen ) begin
+            CSR[CSR_index] <= mmio_mux_out;
+        end 
     end
+
+    //csr output
+    assign CSR_output = CSR[CSR_index];
+
 
     //combinational logic for output signals
     always_comb begin
         // Default values
-        CSR_output = CSR[CSR_index];
+        PE_en={`PE_ARRAY_H*`PE_ARRAY_W{1'b0}};
+        ID_sender_tag_en = 1'b0;
         DMA_en = 1'b0;
+        DMA_mode = 2'b00;
+        DMA_DRAM_ADDR = 32'b0;
+        DMA_GLB_ADDR = 32'b0;
+        DMA_len = 32'b0;
+        DMA_byte_bias = 2'b00;
+        GLB_EN = 1'b0;
+        GLB_WEB = 1'b0;
+        GLB_MODE = 1'b0;
+        GLB_A = '0;
+        GLB_mux = 1'b0;
+        GLB_DI_select = 1'b0;
+        GLB_DO_select = 1'b0;
         ID_sender_en = 1'b0;
         asic_done = 1'b0;
-        pc_hold = 1'b0;
-        next_pc_sel = 1'b0; 
-        PEA_opsum_ready = 1'b0;
+        relu_sel     = 1'b0;
+        Maxpool_en   = 1'b0;
+        Maxpool_init = 1'b0;        
         unique case ( cs )
             IDLE: begin
                 // Do nothing
             end
             RUN: begin
                 unique case( opcode )
-                    `OP_DMA_LOAD_IFMAP begin
+                    `OP_SET_ID: begin
+                        ID_sender_en = 1'b1;
+                    end
+                    `OP_DMA_LOAD_IFMAP: begin
                         DMA_en = 1'b1;
                         DMA_mode = 2'b00; // IFMAP
                         DMA_DRAM_ADDR = ALU_result; // DRAM_IFMAP_BASE
                         DMA_GLB_ADDR = CSR[3];  // GLB_IFMAP_BASE
-                        DMA_len = CSR[7];       // IF_SIZE
+                        DMA_len = imm[17:0];       // IF_SIZE
                         DMA_byte_bias = 2'b00;  // assuming 4 bytes per data
                     end
-                    `OP_DMA_LOAD_WEIGHT begin
+                    `OP_DMA_LOAD_WEIGHT: begin
                         DMA_en = 1'b1;
                         DMA_mode = 2'b01; // WEIGHT
-                        DMA_DRAM_ADDR = CSR[1]; // DRAM_WEIGHT_BASE
+                        DMA_DRAM_ADDR = ALU_result; // DRAM_WEIGHT_BASE
                         DMA_GLB_ADDR = CSR[4];  // GLB_WEIGHT_BASE
-                        DMA_len = CSR[9];       // N_SIZE * CSR[8]; // K_SIZE
+                        DMA_len = imm[17:0];       // N_SIZE * CSR[8]; // K_SIZE
                         DMA_byte_bias = 2'b00;  // assuming 4 bytes per data
                     end
-                    `OP_DMA_LOAD_PSUM begin
+                    `OP_DMA_LOAD_PSUM: begin
                         DMA_en = 1'b1;
                         DMA_mode = 2'b10; // PSUM
-                        DMA_DRAM_ADDR = CSR[2]; // DRAM_OFMAP_BASE
+                        DMA_DRAM_ADDR = ALU_result; // DRAM_OFMAP_BASE
                         DMA_GLB_ADDR = CSR[5];  // GLB_OPSUM_BASE
-                        DMA_len = CSR[10];      // M_SIZE * CSR[8]; // K_SIZE
+                        DMA_len = imm[17:0];      // M_SIZE * CSR[8]; // K_SIZE
                         DMA_byte_bias = 2'b00;  // assuming 4 bytes per data
                     end
-                    `OP_DMA_STORE_OFMAP begin
+                    `OP_DMA_STORE_OFMAP: begin
                         DMA_en = 1'b1;
                         DMA_mode = 2'b11; // OFMAP
-                        DMA_DRAM_ADDR = CSR[2]; // DRAM_OFMAP_BASE
-                        DMA_GLB_ADDR = CSR[3];  // GLB_IFMAP_BASE
-                        DMA_len = CSR[6];       // OF_SIZE
+                        DMA_DRAM_ADDR = ALU_result; // DRAM_OFMAP_BASE
+                        DMA_GLB_ADDR = CSR[5];  // GLB_IFMAP_BASE
+                        DMA_len = imm[17:0];       // OF_SIZE
                         DMA_byte_bias = 2'b00;  // assuming 4 bytes per data
                     end
+                    `OP_G2P: begin
+                        GLB_EN= 1'b1;
+                        GLB_WEB= 1'b0;
+                        GLB_MODE=`WORD_MODE;
+                        //GLB_A=
+                    end
+                    `OP_P2G: begin
+                        GLB_EN= 1'b1;
+                        GLB_WEB= 1'b1;
+                        GLB_MODE=`WORD_MODE;
+                        //GLB_A=
+                    end
                     `OP_CPT_TAGXY: begin
-                        ID_sender_en = 1'b1;
+                        ID_sender_tag_en = 1'b1;
                     end
-                    `OP_WAIT: begin
-                        pc_hold = 1'b1;
+                    `OP_COMPUTE:begin
+                        valid_e = ALU_result[2:0];
+                        case(valid_e)
+                            'd0: PE_en = {6{8'b00000000}};
+                            'd1: PE_en = {1{8'b11111111}, 5{8'b00000000}};
+                            'd2: PE_en = {2{8'b11111111}, 4{8'b00000000}};
+                            'd3: PE_en = {3{8'b11111111}, 3{8'b00000000}};
+                            'd4: PE_en = {4{8'b11111111}, 2{8'b00000000}};
+                            'd5: PE_en = {5{8'b11111111}, 1{8'b00000000}};
+                            'd6: PE_en = {6{8'b11111111}};
+                        endcase
+                        PE_config = {1'b1,2'b11,CSR[11][5:0],2'b11};
                     end
-                    `OP_JUMP: begin
-                        next_pc_sel = 1'b1;
-                    end
+                    
                     `OP_LOOP: begin
-                        next_pc_sel = branch_result; //branch_result from ALU
                     end
                     default: begin
                         // Do nothing
@@ -214,4 +285,158 @@ module signal_controller(
             end
         endcase
     end
+
+    // alu_result store   
+
+    always_ff @(posedge clk) begin
+    if (rst)
+        glb_addr_reg <= 32'b0;
+    else if (cs==RUN && opcode[5:2]==`STREAM_type)
+        glb_addr_reg <= ALU_result;
+    end
+
+    //glb type 
+    logic [1:0]glb_type;
+    always_ff @( posedge clk ) begin
+        if(rst) glb_type <= 2'b0;
+        else if(cs==RUN && opcode[5:0]==`OP_CPT_TAGXY) begin
+            glb_type <= type;
+        end
+    end
+    /*
+    // determine GLB_Addr
+    logic [31:0]count_k;
+    logic [31:0]count_m;
+    logic [31:0]count_n;
+    logic [31:0]count_row;    
+
+    //count_k 
+    always_ff @( posedge clk ) begin
+        if(rst) count_k <= 32'b0;
+        else if(cs==RUN && opcode[5:1]==`STREAM_type) begin
+            case(glb_type)
+                `MODE_IFMAP: begin
+                    if(count_k < tk) count_k <= count_k + 4;
+                    else count_k <= 32'b0; 
+                end
+                `MODE_FILTER: begin
+                    if(count_k == ) begin
+                    if(count_k == 2) count_k <= 32'b0;
+                    else count_k <= count_k + 1;
+                end
+                default: begin
+                    count_k <= count_k;
+                end
+            endcase
+        end
+    end
+    //count_n
+    always_ff @( posedge clk ) begin
+        if(rst) count_n <= 32'b0;
+        else if(cs==RUN && opcode[5:1]==`STREAM_type) begin
+            case(glb_type)
+                `MODE_FILTER: begin
+                    if(count_n == tn - 1 && count_k==2 ) count_n <= 32'b0;
+                    else begin
+                        if(count_k == 2) count_n <= count_n + 1;
+                        else count_n <= count_n;
+                    end 
+                end
+                `MODE_BIAS, `MODE_OFMAP: begin
+                    if(count_n < tn-1) count_n <= count_n + 4;
+                    else count_n <= 32'b0;
+                end
+                default: begin
+                    count_n <= count_n;
+                end
+            endcase
+        end
+    end
+    
+    //glb_addr
+    always_comb begin
+        unique case ( glb_type )
+            `MODE_IFMAP: GLB_A = glb_addr_reg + count_k; // IFMAP
+            `MODE_FILTER: GLB_A = glb_addr_reg + (count_n<<2) + (count_k<<2) * CSR[10]; // FILTER
+            `MODE_BIAS: GLB_A = glb_addr_reg + count_n ; // BIAS
+            `MODE_OFMAP: GLB_A =  glb_addr_reg + count_n ;  // OFMAP
+        endcase
+
+    end 
+    */
+    //valid ready handshake for PEA
+    always_ff@(posedge clk) begin
+        if(rst) begin
+            PEA_ifmap_valid <= 1'b0;
+            PEA_filter_valid <= 1'b0;
+            PEA_ipsum_valid <= 1'b0;
+            PEA_opsum_ready <= 1'b0;
+        end else begin
+            if(cs==RUN && opcode==`OP_CPT_TAGXY) begin
+                case(type)
+                    `MODE_IFMAP:begin
+                        if(PEA_ifmap_ready)begin
+                            PEA_ifmap_valid <= 1'b1;
+                        end
+                        else PEA_ifmap_valid <= 1'b0;
+                    end
+                    `MODE_FILTER:begin
+                        if(PEA_filter_ready)begin
+                            PEA_filter_valid <= 1'b1;
+                        end
+                        else PEA_filter_valid <= 1'b0;
+                    end
+                    `MODE_BIAS:begin
+                        if(PEA_ipsum_ready)begin
+                            PEA_ipsum_valid <= 1'b1;
+                        end
+                        else PEA_ipsum_valid <= 1'b0;
+                    end
+                    `MODE_OFMAP:begin
+                        if(PEA_opsum_valid)begin
+                            PEA_opsum_ready <= 1'b1;
+                        end
+                        else PEA_opsum_ready <= 1'b0;
+                    end
+                    
+                endcase
+            end
+            else if(glb_done) begin
+                PEA_ifmap_valid <= 1'b0;
+                PEA_filter_valid <= 1'b0;
+                PEA_ipsum_valid <= 1'b0;
+                PEA_opsum_ready <= 1'b0;
+            end
+        end
+    end
+
+    //busy signal
+    always_ff @( posedge clk ) begin
+        if ( rst ) begin
+            DMA_busy <= 1'b0;
+            GLB_busy <= 1'b0;
+            PE_busy  <= 1'b0;
+        end else begin
+            if ( DMA_en ) begin
+                DMA_busy <= 1'b1;
+            end else if ( DMA_done ) begin
+                DMA_busy <= 1'b0;
+            end
+
+            if ( GLB_EN ) begin
+                GLB_busy <= 1'b1;
+            end else if ( glb_done ) begin
+                GLB_busy <= 1'b0;
+            end
+
+            if (!GLB_busy && glb_type == `MODE_IFMAP ) begin//讀完GLB ifmap 開始算
+                PE_busy <= 1'b1;
+            end else if ( PE_finish=6'b111111 ) begin
+                PE_busy <= 1'b0;
+            end
+        end
+    end
+
+
+
 endmodule

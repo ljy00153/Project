@@ -4,7 +4,7 @@
 `define OP_NOP                      = 6'b000000 // no operation
 `define OP_CFG_SET                  = 6'b000001 // SET CSR
 `define OP_SET_ID                   = 6'b000010 // SET_LN、SET_XID、SET_YID
-
+`define OP_SET_PE_EN_CONFIG         = 6'b000011 // SET PE enable
 //0001xx
 `define OP_DMA_LOAD_IFMAP           = 6'b000100 // DMA read ifmap
 `define OP_DMA_LOAD_WEIGHT          = 6'b000101 // DMA read weights

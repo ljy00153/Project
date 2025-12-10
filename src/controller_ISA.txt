@@ -85,8 +85,8 @@ OP_MUL                      = 6'b100101 // rd = rs1 * rs2 (unsigned)
 //111111
 OP_END                      = 6'b111111 // program end
 
-CSR[31:0] [3:0]//size, number
-REG[31:0] [3:0]//size, number
+CSR[31:0] [15:0]//size, number
+REG[31:0] [15:0]//size, number
 TAG[2:0]  [2:0]//size, number
 
 FMT-CFG
@@ -224,8 +224,8 @@ FMT-LOOP
 +--------+---------+---------+---------+--------+
 Syntax: LOOP csr_id, loopReg, target, offset
     REG[loopReg] += offset
-    if (REG[loopReg] < CSR[csr_id]) PC = target,//REG[loopReg] = 0
-    else PC = PC + 1
+    if (REG[loopReg] < CSR[csr_id]) PC = target
+    else PC = PC + 1,REG[loopReg] = 0
 
 FMT-ALU-I
 31           14 13    10 9     6 5      0

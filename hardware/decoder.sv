@@ -76,8 +76,19 @@ always_comb begin
             csr_index = instr[13:10];           
             rs_index1 = 4'b0;
             rs_index2 = instr[9:6];
-            rd_index   = 4'b0;
+            rd_index  = instr[9:6];
             imm = { 14'b0,instr[31:14]};
+        
+        end
+        `OP_COMPUTE: begin
+            type = 2'b0;
+            cfg_type = 4'b0;
+            csr_index = 4'b0;           
+            rs_index1 = 4'b0;
+            rs_index2 = 4'd7;
+            rd_index  = 4'b0;
+            imm = 32'b0;
+        
         end 
         default:  result = 32'b0;
 
