@@ -198,17 +198,19 @@ class GEMM_base
             
             pe_array = dut_pe_array;
             // 3. 準備測試資料
-            vector<DataType> in_features;
-            vector<DataType> weights;
-            vector<DataType> psum_dut(linear.B * linear.out_features, 0);
-            vector<DataType> golden;
+            vector<uint8_t> in_features;
+            vector<int8_t> weights;
+            vector<int32_t> ipsums;
+            vector<int32_t> psum_dut(linear.B * linear.out_features, 0);
+            vector<int32_t> golden;
 
             cout << "[Testbench] Loading Test Data..." << endl;
             
             string base_path = "Pattern/" + pattern + "/";
-            load_data(in_features, base_path + "A.txt");
-            load_data(weights, base_path + "B.txt");
-            load_data(golden, base_path + "C_golden.txt");
+            load_ifmap(in_features, base_path + "A.txt");
+            load_weight(weights, base_path + "B.txt");
+            load_ipsum_golden(ipsums, base_path + "ipsum.txt");
+            load_ipsum_golden(golden, base_path + "C_golden.txt");
 
             /* if padding is needed
             int padded_in_size = ((linear.in_features / 4 + 17 * mapper.best_result.mode) / 18) * 18;
@@ -248,7 +250,7 @@ class GEMM_base
             cout << "    N: " << map.N << endl;
             DRAM = vector<DataType>(); // clear DRAM
             GLB = vector<DataType>(GLB_SIZE, 0); // reset GLB
-            size_t total_size = in_features.size() + weights.size() + linear.B * linear.out_features;
+            size_t total_size = in_features.size() + weights.size() + ipsums.size() + linear.B * linear.out_features;
             DRAM.resize(total_size, 0);   // 先分配好整塊空間
             
 
@@ -258,7 +260,9 @@ class GEMM_base
             // copy weights 到 in_features 後面
             copy(weights.begin(), weights.end(), DRAM.begin() + in_features.size());
 
-            run_simulation(in_features, weights, psum_dut);
+            copy(ipsums.begin(), ipsums.end(), DRAM.begin() + in_features.size() + weights.size());
+
+            run_simulation();
 
             // 5. 報告與驗證
             cout << "=======================================" << endl;
@@ -287,9 +291,10 @@ class GEMM_base
                 
                 for(size_t i=0; i < linear.B * linear.out_features; i++) 
                 {
-                    if (DRAM[i + in_features.size() + weights.size()] != golden[i]) 
+                    if (DRAM[i + in_features.size() + weights.size() + ipsums.size()] != golden[i]) 
                     {
-                        cout << "Mismatch at index " << i << ": DUT=" << DRAM[i + in_features.size() + weights.size()] << ", Golden=" << golden[i] << endl;
+                        cout << "Mismatch at index " << i << ": DUT=" 
+                        << DRAM[i + in_features.size() + weights.size() + ipsums.size()] << ", Golden=" << golden[i] << endl;
                     }
                 }
             }
@@ -302,12 +307,68 @@ class GEMM_base
         }
 
         //costmized simulation function
-        virtual void run_simulation(const std::vector<DataType>& all_in_features,
-                                    const std::vector<DataType>& all_weights,
-                                    std::vector<DataType>& final_psums) = 0;
+        virtual void run_simulation() = 0;
 };
 
-void load_data(std::vector<DataType> &mem, const std::string &filename)
+void load_ifmap(vector<uint8_t> &mem, const string &filename)
+{
+    ifstream file(filename);
+    if (!file.is_open()) 
+    {
+        cerr << "   Error opening file: " << filename << endl;
+        return;
+    }
+    else
+        cout << "   Successfully open file: " << filename << endl;
+    string line;
+    while (getline(file, line)) 
+    {
+        if (line.empty()) continue;
+        uint8_t val;
+        stringstream ss(line);
+        ss >> hex >> val;
+        if (ss.fail()) 
+        {
+            cerr << "⚠️  Invalid line in " << filename << ": " << line << endl;
+            continue;
+        }
+        //cout << "load value: " << val << endl;
+        mem.push_back(val);
+    }
+
+    file.close();
+}
+
+void load_weight(vector<int8_t> &mem, const string &filename)
+{
+    ifstream file(filename);
+    if (!file.is_open()) 
+    {
+        cerr << "   Error opening file: " << filename << endl;
+        return;
+    }
+    else
+        cout << "   Successfully open file: " << filename << endl;
+    string line;
+    while (getline(file, line)) 
+    {
+        if (line.empty()) continue;
+        int8_t val;
+        stringstream ss(line);
+        ss >> hex >> val;
+        if (ss.fail()) 
+        {
+            cerr << "⚠️  Invalid line in " << filename << ": " << line << endl;
+            continue;
+        }
+        //cout << "load value: " << val << endl;
+        mem.push_back(val);
+    }
+
+    file.close();
+}
+
+void load_ipsum_golden(vector<int32_t> &mem, const string &filename)
 {
     ifstream file(filename);
     if (!file.is_open()) 
