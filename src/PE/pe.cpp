@@ -89,7 +89,7 @@ class PE
         {
             for(int i = 0; i < IFMAP_SIZE; i++) 
             {
-                array<uint8_t, 4> in_feature_byte = get_bytes(in_feature_spad[i]);
+                array<int8_t, 4> in_feature_byte = get_bytes_deq(in_feature_spad[i]);
                 //in_feature_byte[0] = (in_feature_byte[i] >> 0)  & 0xFF;  // 取最低 8 bit
                 //in_feature_byte[1] = (in_feature_byte[i] >> 8)  & 0xFF;  // 取第 8~15 bit
                 //in_feature_byte[2] = (in_feature_byte[i] >> 16) & 0xFF;  // 取第 16~23 bit
@@ -97,7 +97,7 @@ class PE
 
                 for(int j = 0; j <= WEIGHT_SIZE / 4; j++)
                 {
-                    array<uint8_t, 4> weight_byte = get_bytes(weight_spad[i * PSUM_SIZE + j]);
+                    array<int8_t, 4> weight_byte = get_bytes_no_deq(weight_spad[i * PSUM_SIZE + j]);
                     //weight_byte[0] =(weight_byte[i + j * 3] >> 0)  & 0xFF;  // 取最低 8 bit
                     //weight_byte[1] =(weight_byte[i + j * 3] >> 8)  & 0xFF;  // 取第 8~15 bit
                     //weight_byte[2] =(weight_byte[i + j * 3] >> 16) & 0xFF;  // 取第 16~23 bit
@@ -133,9 +133,9 @@ class PE
             int j = weight_idx;
             int k = cal_idx;
             
-            array<uint8_t, 4> in_feature_byte = get_bytes(in_feature_spad[i]);
+            array<int8_t, 4> in_feature_byte = get_bytes_deq(in_feature_spad[i]);
 
-            array<uint8_t, 4> weight_byte = get_bytes(weight_spad[i * PSUM_SIZE + j]);
+            array<int8_t, 4> weight_byte = get_bytes_no_deq(weight_spad[i * PSUM_SIZE + j]);
 
             psum_spad[weight_idx] += in_feature_byte[k] * weight_byte[k];
             //cout<<"cal_idx "<<cal_idx<<endl;
@@ -189,9 +189,21 @@ class PE
             psum_spad[ip_idx] += psum_input;
         }
 
-        array<uint8_t, 4> get_bytes(int32_t value) 
+        array<int8_t, 4> get_bytes_deq(int32_t value) 
         {
-            array<uint8_t, 4> bytes{};
+            array<int8_t, 4> bytes{};
+            for (int i = 0; i < 4; ++i)
+            {
+                bytes[i] = (value >> (8 * i)) & 0xFF;
+                bytes[i] ^= 0x80;
+            }
+            //may need to dequantize here
+            return bytes;
+        }
+
+        array<int8_t, 4> get_bytes_no_deq(int32_t value) 
+        {
+            array<int8_t, 4> bytes{};
             for (int i = 0; i < 4; ++i)
                 bytes[i] = (value >> (8 * i)) & 0xFF;
             //may need to dequantize here
