@@ -1,0 +1,14 @@
+/home/users/yves6512/Project/hardware/ALU.sv
+/home/users/yves6512/Project/hardware/ID_SENDER.sv
+/home/users/yves6512/Project/hardware/SRAM.sv
+/home/users/yves6512/Project/hardware/controller_tb.sv
+/home/users/yves6512/Project/hardware/controller_top.sv
+/home/users/yves6512/Project/hardware/decoder.sv
+/home/users/yves6512/Project/hardware/mux.sv
+/home/users/yves6512/Project/hardware/pc_adder.sv
+/home/users/yves6512/Project/hardware/pc_counter.sv
+/home/users/yves6512/Project/hardware/regfile.sv
+/home/users/yves6512/Project/hardware/signal_controller.sv
+/home/users/yves6512/Project/include/ASIC.svh
+/home/users/yves6512/Project/include/AXI_define.svh
+/home/users/yves6512/Project/include/ISA.svh

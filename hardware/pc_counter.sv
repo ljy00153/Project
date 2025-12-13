@@ -1,4 +1,4 @@
-module pc_counter(
+module pc_counter#(
     parameter pc_WIDTH = 16
 )(
     input clk,

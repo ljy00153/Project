@@ -1,4 +1,4 @@
-module Regfile(
+module regfile(
     input logic clk,
     input logic rst,
     //write port

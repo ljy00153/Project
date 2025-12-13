@@ -1,7 +1,7 @@
 `include "AXI_define.svh"
 `include "ASIC.svh"
-`include "../include/ISA.svh"
-module signal_controller(
+`include "ISA.svh"
+module signal_controller#(
      parameter tk = 72,tn = 32
 )(
     input  logic clk,
@@ -36,33 +36,30 @@ module signal_controller(
 
     //-----------------PE ID config--------------------------------------------------
     output logic                  ID_sender_en,
-    output logic                  ID_sender_tag_en,
-    output logic PEA_ifmap_valid,
     input logic PEA_ifmap_ready,
-
-    output logic PEA_filter_valid,
     input logic PEA_filter_ready,
-
-    output logic PEA_ipsum_valid,
     input logic PEA_ipsum_ready,
-
     input logic PEA_opsum_valid,
-    output logic PEA_opsum_ready,
     
-    input logic PE_finish[5:0],
+    input logic [5:0]PE_finish,
     //------------PE Array----------------------
     output logic [`PE_ARRAY_H*`PE_ARRAY_W-1:0] PE_en,
     output logic [10:0]                        PE_config,
-    //------------GLB----------------------
-    output logic GLB_EN,
-    output logic GLB_WEB,
-    output logic GLB_MODE,
-    output logic [`GLB_ADDR_BITS-1:0] GLB_A,
+    //------------GLB nux----------------------
+
     output logic GLB_mux,
     output logic GLB_DI_select,
     output logic GLB_DO_select,
 
-
+    //------------GLB_addr------------------
+    output logic glb_addr_gen_en,
+    output logic [31:0]glb_addr_base,
+    output logic [1:0]glb_type,
+    output logic GLB_EN,
+    output logic GLB_WEB,
+    output logic GLB_MODE,
+    output  logic [31:0] K_bytes,
+    input logic glb_done,
     //------------PPU-----------------------
     output logic                  relu_sel,
     output logic                  Maxpool_en,
@@ -75,7 +72,7 @@ module signal_controller(
     input [5:0]opcode,
     input [3:0]CSR_index,
     input [3:0]CFG_TYPE,
-    input [1:0]type,
+    input [1:0]inst_type,
     input [31:0]imm,
     //
     input logic branch_result,
@@ -85,7 +82,8 @@ module signal_controller(
     output logic pc_hold,       // 1: PC 不加一（WAIT）
     output logic next_pc_sel,    // 0: pc+1, 1: 分支/loop/jump target（假定由別處決定）
     output logic alu_op1_sel,
-    output logic alu_op2_sel
+    output logic alu_op2_sel,
+    output logic reg_wb_en
 );
     // --------------------------------
     // internal registers / wires
@@ -94,7 +92,7 @@ module signal_controller(
     logic [2:0]cs,ns;
     logic [`GLB_ADDR_BITS-1:0] glb_addr; //16 bits
     logic DMA_busy,GLB_busy,PE_busy;
-    logic valid_e [2:0]
+    logic [2:0] valid_e ;
     localparam IDLE  = 3'b000,
                RUN = 3'b001,
                DONE  = 3'b010;
@@ -107,8 +105,7 @@ module signal_controller(
     assign alu_op2_sel = (opcode==`OP_ADDI || opcode==`OP_MULI || opcode == `OP_LOOP)? 1'b1 : 1'b0; // 0 for reg file,1 for imm
     assign csr_wen = (opcode==`OP_CFG_SET)? 1'b1 : 1'b0;
     assign mmio_sel = (opcode==`OP_CFG_SET)? CFG_TYPE : 4'b0000;
-
-    
+    assign reg_wb_en = (opcode==`OP_ADD||opcode==`OP_ADDI||opcode==`OP_MULI||opcode==`OP_MUL||opcode==`OP_LOOP)? 1'b1 : 1'b0;
     always_ff @( posedge clk ) begin
         if ( rst ) begin
             cs <= IDLE;
@@ -176,12 +173,21 @@ module signal_controller(
     //csr output
     assign CSR_output = CSR[CSR_index];
 
+    
+    //glb type reg 因為OP_CPT_TAGXY傳進來type只有1 cycle 要存起來才能等到OP_G2P 傳出去
+    logic [1:0]glb_type_reg;
+    always_ff @( posedge clk ) begin
+        if(rst) glb_type_reg <= 2'b0;
+        else if(cs==RUN && opcode[5:0]==`OP_CPT_TAGXY) begin
+            glb_type_reg <= inst_type;
+        end
+    end
+    
 
     //combinational logic for output signals
     always_comb begin
         // Default values
         PE_en={`PE_ARRAY_H*`PE_ARRAY_W{1'b0}};
-        ID_sender_tag_en = 1'b0;
         DMA_en = 1'b0;
         DMA_mode = 2'b00;
         DMA_DRAM_ADDR = 32'b0;
@@ -191,7 +197,6 @@ module signal_controller(
         GLB_EN = 1'b0;
         GLB_WEB = 1'b0;
         GLB_MODE = 1'b0;
-        GLB_A = '0;
         GLB_mux = 1'b0;
         GLB_DI_select = 1'b0;
         GLB_DO_select = 1'b0;
@@ -245,26 +250,33 @@ module signal_controller(
                         GLB_EN= 1'b1;
                         GLB_WEB= 1'b0;
                         GLB_MODE=`WORD_MODE;
-                        //GLB_A=
+                        glb_addr_gen_en=1'b1;
+                        glb_addr_base=ALU_result;
+                        glb_type=glb_type_reg;
+                        K_bytes=CSR[9];
                     end
-                    `OP_P2G: begin
+                    `OP_P2G_OPSUM: begin
                         GLB_EN= 1'b1;
                         GLB_WEB= 1'b1;
                         GLB_MODE=`WORD_MODE;
-                        //GLB_A=
+                        glb_addr_gen_en=1'b1;
+                        glb_addr_base=ALU_result;
+                        glb_type=glb_type_reg;
+                        K_bytes=CSR[9];
+
                     end
                     `OP_CPT_TAGXY: begin
-                        ID_sender_tag_en = 1'b1;
+                        ID_sender_en = 1'b1;
                     end
                     `OP_COMPUTE:begin
                         valid_e = ALU_result[2:0];
                         case(valid_e)
                             'd0: PE_en = {6{8'b00000000}};
-                            'd1: PE_en = {1{8'b11111111}, 5{8'b00000000}};
-                            'd2: PE_en = {2{8'b11111111}, 4{8'b00000000}};
-                            'd3: PE_en = {3{8'b11111111}, 3{8'b00000000}};
-                            'd4: PE_en = {4{8'b11111111}, 2{8'b00000000}};
-                            'd5: PE_en = {5{8'b11111111}, 1{8'b00000000}};
+                            'd1: PE_en = {{1{8'b11111111}}, {5{8'b00000000}}};
+                            'd2: PE_en = {{2{8'b11111111}}, {4{8'b00000000}}};
+                            'd3: PE_en = {{3{8'b11111111}}, {3{8'b00000000}}};
+                            'd4: PE_en = {{4{8'b11111111}}, {2{8'b00000000}}};
+                            'd5: PE_en = {{5{8'b11111111}}, {1{8'b00000000}}};
                             'd6: PE_en = {6{8'b11111111}};
                         endcase
                         PE_config = {1'b1,2'b11,CSR[11][5:0],2'b11};
@@ -286,129 +298,11 @@ module signal_controller(
         endcase
     end
 
-    // alu_result store   
-
-    always_ff @(posedge clk) begin
-    if (rst)
-        glb_addr_reg <= 32'b0;
-    else if (cs==RUN && opcode[5:2]==`STREAM_type)
-        glb_addr_reg <= ALU_result;
-    end
-
-    //glb type 
-    logic [1:0]glb_type;
-    always_ff @( posedge clk ) begin
-        if(rst) glb_type <= 2'b0;
-        else if(cs==RUN && opcode[5:0]==`OP_CPT_TAGXY) begin
-            glb_type <= type;
-        end
-    end
-    /*
-    // determine GLB_Addr
-    logic [31:0]count_k;
-    logic [31:0]count_m;
-    logic [31:0]count_n;
-    logic [31:0]count_row;    
-
-    //count_k 
-    always_ff @( posedge clk ) begin
-        if(rst) count_k <= 32'b0;
-        else if(cs==RUN && opcode[5:1]==`STREAM_type) begin
-            case(glb_type)
-                `MODE_IFMAP: begin
-                    if(count_k < tk) count_k <= count_k + 4;
-                    else count_k <= 32'b0; 
-                end
-                `MODE_FILTER: begin
-                    if(count_k == ) begin
-                    if(count_k == 2) count_k <= 32'b0;
-                    else count_k <= count_k + 1;
-                end
-                default: begin
-                    count_k <= count_k;
-                end
-            endcase
-        end
-    end
-    //count_n
-    always_ff @( posedge clk ) begin
-        if(rst) count_n <= 32'b0;
-        else if(cs==RUN && opcode[5:1]==`STREAM_type) begin
-            case(glb_type)
-                `MODE_FILTER: begin
-                    if(count_n == tn - 1 && count_k==2 ) count_n <= 32'b0;
-                    else begin
-                        if(count_k == 2) count_n <= count_n + 1;
-                        else count_n <= count_n;
-                    end 
-                end
-                `MODE_BIAS, `MODE_OFMAP: begin
-                    if(count_n < tn-1) count_n <= count_n + 4;
-                    else count_n <= 32'b0;
-                end
-                default: begin
-                    count_n <= count_n;
-                end
-            endcase
-        end
-    end
     
-    //glb_addr
-    always_comb begin
-        unique case ( glb_type )
-            `MODE_IFMAP: GLB_A = glb_addr_reg + count_k; // IFMAP
-            `MODE_FILTER: GLB_A = glb_addr_reg + (count_n<<2) + (count_k<<2) * CSR[10]; // FILTER
-            `MODE_BIAS: GLB_A = glb_addr_reg + count_n ; // BIAS
-            `MODE_OFMAP: GLB_A =  glb_addr_reg + count_n ;  // OFMAP
-        endcase
 
-    end 
-    */
-    //valid ready handshake for PEA
-    always_ff@(posedge clk) begin
-        if(rst) begin
-            PEA_ifmap_valid <= 1'b0;
-            PEA_filter_valid <= 1'b0;
-            PEA_ipsum_valid <= 1'b0;
-            PEA_opsum_ready <= 1'b0;
-        end else begin
-            if(cs==RUN && opcode==`OP_CPT_TAGXY) begin
-                case(type)
-                    `MODE_IFMAP:begin
-                        if(PEA_ifmap_ready)begin
-                            PEA_ifmap_valid <= 1'b1;
-                        end
-                        else PEA_ifmap_valid <= 1'b0;
-                    end
-                    `MODE_FILTER:begin
-                        if(PEA_filter_ready)begin
-                            PEA_filter_valid <= 1'b1;
-                        end
-                        else PEA_filter_valid <= 1'b0;
-                    end
-                    `MODE_BIAS:begin
-                        if(PEA_ipsum_ready)begin
-                            PEA_ipsum_valid <= 1'b1;
-                        end
-                        else PEA_ipsum_valid <= 1'b0;
-                    end
-                    `MODE_OFMAP:begin
-                        if(PEA_opsum_valid)begin
-                            PEA_opsum_ready <= 1'b1;
-                        end
-                        else PEA_opsum_ready <= 1'b0;
-                    end
-                    
-                endcase
-            end
-            else if(glb_done) begin
-                PEA_ifmap_valid <= 1'b0;
-                PEA_filter_valid <= 1'b0;
-                PEA_ipsum_valid <= 1'b0;
-                PEA_opsum_ready <= 1'b0;
-            end
-        end
-    end
+  
+    
+    
 
     //busy signal
     always_ff @( posedge clk ) begin
@@ -429,14 +323,13 @@ module signal_controller(
                 GLB_busy <= 1'b0;
             end
 
-            if (!GLB_busy && glb_type == `MODE_IFMAP ) begin//讀完GLB ifmap 開始算
+            if (!GLB_busy && glb_type_reg == `MODE_IFMAP ) begin//讀完GLB ifmap 開始算
                 PE_busy <= 1'b1;
-            end else if ( PE_finish=6'b111111 ) begin
+            end else if ( PE_finish==6'b111111 ) begin
                 PE_busy <= 1'b0;
-            end
+            end 
         end
     end
-
 
 
 endmodule

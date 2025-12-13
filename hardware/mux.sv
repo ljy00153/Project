@@ -12,3 +12,4 @@ module mux (
             1: out = in1;
         endcase
     end
+endmodule

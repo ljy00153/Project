@@ -12,7 +12,7 @@ always_comb begin
     r_data[23:16] = memory[addr + 2];   
     r_data[31:24] = memory[addr + 3];
 end
-
+/* IM不用寫入
 always_ff @(posedge clk) begin
     if (w_en) begin
         memory[addr] <= w_data[7:0];
@@ -27,6 +27,6 @@ always_ff @(posedge clk) begin
         memory[addr + 3] <= memory[addr + 3];
     end
 end
-
+*/
 
 endmodule
