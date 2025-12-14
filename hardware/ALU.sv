@@ -8,7 +8,10 @@ module ALU(
     output logic [31:0] result,
     output logic branch_result
 );
+
+    logic [31:0]next_loop;
 always_comb begin
+    branch_result = 1'b0;
     case (opcode)
         `OP_DMA_LOAD_IFMAP,
         `OP_DMA_LOAD_WEIGHT,
@@ -19,28 +22,20 @@ always_comb begin
         `OP_ADD,
         `OP_ADDI: begin
             result = rs1_src + rs2_src;
-            branch_result = 1'b0;
+            
         end 
         `OP_MULI: begin
             result = rs1_src[15:0] * rs2_src[15:0];
-            branch_result=1'b0;
         end
         `OP_LOOP:begin
-            result = loop_reg_src + rs2_src;
-            branch_result = (result<rs1_src); //小於的話branch
-            if(branch_result) begin
-                result = result; //branch taken , loop_reg + offset
-            end else begin
-                result = 32'b0; // branch not taken,pc+4,loop reg 歸零
-            end
+            next_loop = loop_reg_src + rs2_src;
+            branch_result = (next_loop<rs1_src); //小於的話branch
+            result = (branch_result)?next_loop:32'b0;
         end 
         `OP_COMPUTE: begin
             result = rs2_src; // no ALU operation
-            branch_result=1'b0;
         end
         default:  begin
-            branch_result = 1'b0;
-            result = 32'b0;
         end
     endcase
 end

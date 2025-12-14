@@ -162,7 +162,7 @@ BASH_FUNC_ml%%=() {  module ml "$@"_}
 1765704382 SRAM.sv
 1765611925 regfile.sv
 1765736068 decoder.sv
-1765737293 ALU.sv
+1765737688 ALU.sv
 1765736327 controller_top.sv
 1765728289 controller_tb.sv
 1700048491 /usr/cad/synopsys/verdi/2023.12/share/PLI/VCS/LINUX64/verdi.tab
@@ -172,5 +172,5 @@ BASH_FUNC_ml%%=() {  module ml "$@"_}
 1701103518 /usr/cad/synopsys/vcs/2023.12/linux64/lib/liberrorinf.so
 1701103440 /usr/cad/synopsys/vcs/2023.12/linux64/lib/libsnpsmalloc.so
 1701103511 /usr/cad/synopsys/vcs/2023.12/linux64/lib/libvfs.so
-1765737298 simv.daidir
+1765737697 simv.daidir
 -1 partitionlib

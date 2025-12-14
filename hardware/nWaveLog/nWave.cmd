@@ -117839,3 +117839,9 @@ wvGetSignalClose -win $_nWave1
 wvResizeWindow -win $_nWave1 0 23 1920 1009
 wvReloadFile -win $_nWave1
 wvSetCursor -win $_nWave1 163892757.477801 -snap {("G1" 40)}
+wvDisplayGridCount -win $_nWave1 -off
+wvResizeWindow -win $_nWave1 0 23 1920 1009
+wvCloseGetStreamsDialog -win $_nWave1
+wvGetSignalClose -win $_nWave1
+wvResizeWindow -win $_nWave1 0 23 1920 1009
+wvReloadFile -win $_nWave1

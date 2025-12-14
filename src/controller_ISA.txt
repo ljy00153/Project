@@ -79,7 +79,7 @@ OP_ADDI                     = 6'b100001 // rd = rs + imm
 OP_MULI                     = 6'b100010 // rd = rs1 * imm (unsigned)
 //1001xx
 OP_ADD                      = 6'b100100 // rd = rs1 + rs2
-OP_MUL                      = 6'b100101 // rd = rs1 * rs2 (unsigned)
+//OP_MUL                      = 6'b100101 // rd = rs1 * rs2 (unsigned)
 
 
 //111111

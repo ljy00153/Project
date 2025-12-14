@@ -1,7 +1,7 @@
 Command: /home/users/yves6512/Project/hardware/./simv +HEX=tb4.hex -l run.log
 Chronologic VCS simulator copyright 1991-2023
 Contains Synopsys proprietary information.
-Compiler version V-2023.12_Full64; Runtime version V-2023.12_Full64;  Dec 14 13:34 2025
+Compiler version V-2023.12_Full64; Runtime version V-2023.12_Full64;  Dec 14 13:41 2025
 *Verdi* Loading libsscore_vcs202312.so
 FSDB Dumper for VCS, Release Verdi_V-2023.12, Linux x86_64/64bit, 11/15/2023
 (C) 1996 - 2023 by Synopsys, Inc.
@@ -16413,4 +16413,4 @@ $finish at simulation time            163915000
            V C S   S i m u l a t i o n   R e p o r t 
 Time: 163915000 ps
 CPU Time:      0.330 seconds;       Data structure size:   0.0Mb
-Sun Dec 14 13:35:06 2025
+Sun Dec 14 13:41:43 2025
