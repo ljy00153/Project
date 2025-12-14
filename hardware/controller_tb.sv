@@ -15,7 +15,9 @@ module controller_tb;
   // ----------------------------
   logic asic_en;
   logic asic_done;
-
+  logic        im_init_en;
+  logic [15:0] im_init_addr;
+  logic [31:0] im_init_wdata;
   logic [31:0] DRAM_ifmap_base;
   logic [31:0] DRAM_weight_base;
   logic [31:0] DRAM_ofmap_base;
@@ -34,7 +36,9 @@ module controller_tb;
     .rst(rst),
     .asic_en(asic_en),
     .asic_done(asic_done),
-
+    .im_init_en(im_init_en),
+    .im_init_addr(im_init_addr),
+    .im_init_wdata(im_init_wdata),
     .DRAM_ifmap_base(DRAM_ifmap_base),
     .DRAM_weight_base(DRAM_weight_base),
     .DRAM_ofmap_base(DRAM_ofmap_base),
@@ -71,18 +75,11 @@ task automatic load_hex_words(input logic [1023:0] filename);
   logic [31:0] w;
   begin
     fd = $fopen(filename, "r");
-    if (fd == 0) begin
-      $fatal(1, "[TB] Cannot open %s", filename);
-    end
+    if (fd == 0) $fatal(1, "[TB] Cannot open %s", filename);
 
     word_idx = 0;
-    // fscanf 會自動跳過空白/換行，所以不需要處理空行
     while ($fscanf(fd, "%h", w) == 1) begin
-      // little-endian mapping to byte memory
-      dut.im.memory[word_idx*4 + 0] = w[7:0];
-      dut.im.memory[word_idx*4 + 1] = w[15:8];
-      dut.im.memory[word_idx*4 + 2] = w[23:16];
-      dut.im.memory[word_idx*4 + 3] = w[31:24];
+      im_write32_port(word_idx*4, w);  // byte address = word_idx*4
       word_idx++;
     end
 
@@ -91,15 +88,26 @@ task automatic load_hex_words(input logic [1023:0] filename);
   end
 endtask
 
-
-
+task automatic im_write32_port(input int unsigned byte_addr, input logic [31:0] word);
+  begin
+    im_init_en    <= 1'b1;
+    im_init_addr  <= byte_addr[15:0];
+    im_init_wdata <= word;
+    @(negedge clk);
+    im_init_en    <= 1'b0;
+  end
+endtask
   // ---------------------------------------------------------
   // Optional: dump waves
   // ---------------------------------------------------------
   initial begin
-    $dumpfile("controller_tb.vcd");
-    $dumpvars(0, dut);
+    $fsdbDumpfile("wave.fsdb");
+    $fsdbDumpvars(0, controller_tb);   // 你的 TB module 名稱
+    $fsdbDumpvars(0, dut);      // DUT instance（通常叫 dut）
+    // 如果你要更狠：整棵設計都 dump
+    $fsdbDumpvars(0, "+all");
   end
+
 
   // ---------------------------------------------------------
   // Test scenario
@@ -107,6 +115,7 @@ endtask
   logic [1023:0] hexfile;
 
   initial begin
+   
     // defaults
     asic_en = 1'b0;
     glb_done = 1'b0;
@@ -125,29 +134,31 @@ endtask
     N_SIZE    = 32'd144;
     M_SIZE    = 32'd64;
     DATAFLOW  = 32'd0;
-
+    im_init_en    = 1'b0;
+    im_init_addr  = 16'd0;
+    im_init_wdata = 32'd0;
     // reset
     rst = 1'b1;
-    repeat (5) @(posedge clk);
+
+    // 先決定 hex 檔名
+    if (!$value$plusargs("HEX=%s", hexfile)) hexfile = "tb1.hex";
+    $display("[TB] Using HEX file: %s", hexfile);
+
+    // reset 期間灌 IM
+    load_hex_words(hexfile);
+
+    // 再放開 reset
+    //repeat (2) @(negedge clk);
+    im_init_en    = 1'b0;
+    im_init_addr  = 16'b0;
+    im_init_wdata = 32'b0;
     rst = 1'b0;
 
     // ---------------------------------------
     // Load instruction memory
     // ---------------------------------------
     
-
-    // Load instruction memory
-    if (!$value$plusargs("HEX=%s", hexfile)) begin
-      hexfile = "tb1.hex";   // 你的預設檔名
-    end
-    $display("[TB] Using HEX file: %s", hexfile);
-    load_hex_words(hexfile);
-    $display("[TB] IM bytes @0..15 = %02h %02h %02h %02h  %02h %02h %02h %02h  %02h %02h %02h %02h  %02h %02h %02h %02h",
-  dut.im.memory[0], dut.im.memory[1], dut.im.memory[2], dut.im.memory[3],
-  dut.im.memory[4], dut.im.memory[5], dut.im.memory[6], dut.im.memory[7],
-  dut.im.memory[8], dut.im.memory[9], dut.im.memory[10],dut.im.memory[11],
-  dut.im.memory[12],dut.im.memory[13],dut.im.memory[14],dut.im.memory[15]
-);
+    
 
 
     // 讓 PC 跑一點
@@ -161,26 +172,19 @@ endtask
     // ---------------------------------------
     // 如果你的 signal_controller 會等 glb_done，就在這裡打一個 done pulse
     // ---------------------------------------
+    /*
     repeat (30) @(posedge clk);
     glb_done = 1'b1;
     @(posedge clk);
     glb_done = 1'b0;
-
-    // wait for done (加個 timeout 避免卡死)
-    fork
-      begin
-        wait (asic_done === 1'b1);
-        $display("[%0t] asic_done asserted!", $time);
-      end
-      begin
-        repeat (500) @(posedge clk);
-        $display("[%0t] TIMEOUT: asic_done not asserted", $time);
-      end
-    join_any
-    disable fork;
-
-    repeat (10) @(posedge clk);
+*/
+    repeat (4) @(posedge clk);
+        // wait for done (收到 asic_done 就停)
+    wait (asic_done === 1'b1);
+    $display("[%0t] asic_done asserted! stop simulation.", $time);
+    $fsdbDumpflush;
     $finish;
+
   end
 
   // ---------------------------------------------------------

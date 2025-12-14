@@ -54,17 +54,17 @@ pc_adder.sv
 mux.sv
 signal_controller.sv
 ID_SENDER.sv
-91
+93
 which_declare=declare -f
 __ETC_PROFILE_NIX_SOURCED=1
 _CONDA_ROOT=/home/users/yves6512/miniconda3
 _CONDA_EXE=/home/users/yves6512/miniconda3/bin/conda
 XLOCALEDIR=/usr/cad/synopsys/icc2/2024.09/etc/locale
-XDG_SESSION_ID=252
+XDG_SESSION_ID=426
 XDG_RUNTIME_DIR=/run/user/1033
 XDG_DATA_DIRS=/home/users/yves6512/.local/share/flatpak/exports/share:/var/lib/flatpak/exports/share:/usr/local/share:/usr/share:/home/users/yves6512/.nix-profile/share:/nix/var/nix/profiles/default/share:/var/lib/snapd/desktop
-VSCODE_NONCE=5a8a1bd8-2082-4afe-8f92-a1226f7571c4
-VSCODE_IPC_HOOK_CLI=/run/user/1033/vscode-ipc-d9c4b5bd-1e65-4523-a6b2-afe95a0f2bbc.sock
+VSCODE_NONCE=a24662a4-0527-4b1e-acec-87527250bae8
+VSCODE_IPC_HOOK_CLI=/run/user/1033/vscode-ipc-c52e3df2-c4ec-4800-a045-28ac10d80d40.sock
 VSCODE_GIT_IPC_HANDLE=/run/user/1033/vscode-git-1fc8b60cf2.sock
 VSCODE_GIT_ASKPASS_NODE=/home/users/yves6512/.vscode-server/cli/servers/Stable-618725e67565b290ba4da6fe2d29f8fa1d4e3622/server/node
 VSCODE_GIT_ASKPASS_MAIN=/home/users/yves6512/.vscode-server/cli/servers/Stable-618725e67565b290ba4da6fe2d29f8fa1d4e3622/server/extensions/git/dist/askpass-main.js
@@ -95,8 +95,8 @@ SYNOPSYS_LC_ROOT=/usr/cad/synopsys/lc/cur
 SYNOPSYS=/usr/cad/synopsys/formality/cur
 SSL_CERT_FILE=/etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem
 SSL_CERT_DIR=/etc/pki/tls/certs
-SSH_CONNECTION=140.116.20.150 50057 140.116.178.186 3175
-SSH_CLIENT=140.116.20.150 50057 3175
+SSH_CONNECTION=140.116.178.165 1633 140.116.178.186 3175
+SSH_CLIENT=140.116.178.165 1633 3175
 SSH_ASKPASS=/usr/libexec/openssh/gnome-ssh-askpass
 SNPS_VCS_PYTHON3=/usr/cad/synopsys/vcs/2023.12/linux64/bin/Python-3.6.1/bin/python3
 SNPS_VCS_CLANG_PATH=/usr/cad/synopsys/vcs/2023.12/linux64/clang
@@ -121,10 +121,11 @@ MGC_TMPDIR=/tmp
 MGC_LOCATION_MAP=NO_MAP
 MGC_HOME=/usr/cad/mentor/calibre/aok_cal_2022.1_36.16
 MFLAGS=
-MAKE_TERMOUT=/dev/pts/37
-MAKE_TERMERR=/dev/pts/37
+MAKE_TERMOUT=/dev/pts/39
+MAKE_TERMERR=/dev/pts/39
+MAKEOVERRIDES=${-*-command-variables-*-}
 MAKELEVEL=1
-MAKEFLAGS=
+MAKEFLAGS= -- HEX=tb4.hex
 Laker_TCL_ToolBox=1
 Laker_TCL_L3=1
 LOADEDMODULES=
@@ -133,6 +134,7 @@ LC_ALL=C
 KDEDIRS=/usr
 HOSTTYPE=x86_64-linux
 HISTCONTROL=ignoredups
+HEX=tb4.hex
 GROUP=intern
 GIT_ASKPASS=/home/users/yves6512/.vscode-server/cli/servers/Stable-618725e67565b290ba4da6fe2d29f8fa1d4e3622/server/extensions/git/dist/askpass.sh
 FORMALITY=/usr/cad/synopsys/formality/cur
@@ -153,16 +155,16 @@ BASH_FUNC_ml%%=() {  module ml "$@"_}
 1765182664 ../include/AXI_define.svh
 1765613911 ../include/ISA.svh
 1765614210 ID_SENDER.sv
-1765615938 signal_controller.sv
+1765721585 signal_controller.sv
 1765612918 mux.sv
 1763806884 pc_adder.sv
-1765612609 pc_counter.sv
-1765615672 SRAM.sv
+1765702510 pc_counter.sv
+1765704382 SRAM.sv
 1765611925 regfile.sv
-1765613817 decoder.sv
-1765612380 ALU.sv
-1765614560 controller_top.sv
-1765616206 controller_tb.sv
+1765736068 decoder.sv
+1765737293 ALU.sv
+1765736327 controller_top.sv
+1765728289 controller_tb.sv
 1700048491 /usr/cad/synopsys/verdi/2023.12/share/PLI/VCS/LINUX64/verdi.tab
 1701102734 /usr/cad/synopsys/vcs/2023.12/linux64/lib/vcsdp_lite.tab
 4
@@ -170,5 +172,5 @@ BASH_FUNC_ml%%=() {  module ml "$@"_}
 1701103518 /usr/cad/synopsys/vcs/2023.12/linux64/lib/liberrorinf.so
 1701103440 /usr/cad/synopsys/vcs/2023.12/linux64/lib/libsnpsmalloc.so
 1701103511 /usr/cad/synopsys/vcs/2023.12/linux64/lib/libvfs.so
-1765616211 simv.daidir
+1765737298 simv.daidir
 -1 partitionlib

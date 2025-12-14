@@ -19,22 +19,29 @@ always_comb begin
         `OP_ADD,
         `OP_ADDI: begin
             result = rs1_src + rs2_src;
+            branch_result = 1'b0;
         end 
         `OP_MULI: begin
             result = rs1_src[15:0] * rs2_src[15:0];
+            branch_result=1'b0;
         end
         `OP_LOOP:begin
-            branch_result = (loop_reg_src<rs1_src); //小於的話branch
+            result = loop_reg_src + rs2_src;
+            branch_result = (result<rs1_src); //小於的話branch
             if(branch_result) begin
-                result = loop_reg_src + rs2_src; //branch taken , loop_reg + offset
+                result = result; //branch taken , loop_reg + offset
             end else begin
                 result = 32'b0; // branch not taken,pc+4,loop reg 歸零
             end
         end 
         `OP_COMPUTE: begin
             result = rs2_src; // no ALU operation
+            branch_result=1'b0;
         end
-        default:  result = 32'b0;
+        default:  begin
+            branch_result = 1'b0;
+            result = 32'b0;
+        end
     endcase
 end
 

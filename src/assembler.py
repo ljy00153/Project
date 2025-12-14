@@ -429,7 +429,7 @@ def encode(program, labels):
             if label not in labels:
                 raise Exception(f"Unknown label {label}")
 
-            target = labels[label] & 0x3F
+            target = (labels[label]*4) & 0x3F
 
             instr = enc32(
                 opcode=(0, OPC['LOOP']),

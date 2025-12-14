@@ -322,9 +322,9 @@ module signal_controller#(
             end else if ( glb_done ) begin
                 GLB_busy <= 1'b0;
             end
-
+            
             if (!GLB_busy && glb_type_reg == `MODE_IFMAP ) begin//讀完GLB ifmap 開始算
-                PE_busy <= 1'b1;
+                PE_busy <= 1'b0;
             end else if ( PE_finish==6'b111111 ) begin
                 PE_busy <= 1'b0;
             end 

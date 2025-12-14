@@ -8,6 +8,10 @@ module controller_top #(
     input  logic rst,
     input  logic asic_en,
     output logic asic_done,
+    //tb write instruction to IM
+    input  logic        im_init_en,
+    input  logic [15:0] im_init_addr,
+    input  logic [31:0] im_init_wdata,
 
     // (drawio: AXI_SlaveASIC_MMIO / CSR bank 這些值餵進 Controller)
     input  logic [31:0] DRAM_ifmap_base,
@@ -48,15 +52,20 @@ module controller_top #(
         .pc_out (pc_plus_4)
     );
     
-
+    logic im_wen;
+    logic [15:0]im_addr;
+    logic [31:0]im_wdata;
+    assign im_wen   = im_init_en;
+    assign im_addr  = im_init_en ? im_init_addr : pc[15:0];
+    assign im_wdata = im_init_wdata;
     
     // Instruction memory (drawio: IM)
     logic [31:0] instr;
     SRAM im (
         .clk   (clk),
-        .w_en  (1'b0),
-        .addr  (pc[15:0]),
-        .w_data(32'b0),
+        .w_en  (im_wen),
+        .addr  (im_addr),
+        .w_data(im_wdata),
         .r_data(instr)
     );
 
@@ -67,7 +76,7 @@ module controller_top #(
     logic [31:0] imm;
     logic [5:0]  opcode;
     logic [1:0]  type_wire;
-
+    logic [5:0] target;
     decoder dec (
         .instr     (instr),
         .csr_index (csr_index),
@@ -77,7 +86,8 @@ module controller_top #(
         .imm       (imm),
         .opcode    (opcode),
         .inst_type      (type_wire),
-        .cfg_type  (cfg_type)
+        .cfg_type  (cfg_type),
+        .target (target)
     );
 
     // ----------------------------
@@ -85,14 +95,14 @@ module controller_top #(
     // ----------------------------
     logic [31:0] rs1_data, rs2_data, loop_reg;
     logic        reg_wb_en;
-    logic [31:0] reg_wb_data;
+    logic [31:0] alu_result;
 
     regfile rf (
         .clk      (clk),
         .rst      (rst),
         .wb_en    (reg_wb_en),
         .rd_index (rd_index),
-        .wdata    (reg_wb_data),
+        .wdata    (alu_result),
         .rs1_index(rs_index1),
         .rdata1   (rs1_data),
         .rs2_index(rs_index2),
@@ -105,7 +115,7 @@ module controller_top #(
     // 這裡用最常見的 branch/jump target = imm
     // ----------------------------
     logic [PC_WIDTH-1:0] target_or_jump;
-    assign target_or_jump = imm[PC_WIDTH-1:0];
+    assign target_or_jump = (opcode==`OP_LOOP)?{10'b0,target}:imm[21:6];
 
     // PC mux (drawio: PCmux)
     assign next_pc = (next_pc_sel) ? target_or_jump : pc_plus_4 ; 
@@ -126,7 +136,6 @@ module controller_top #(
     // ----------------------------
     // ALU
     // ----------------------------
-    logic [31:0] alu_result;
     logic        branch_result;
 
     ALU u_alu (

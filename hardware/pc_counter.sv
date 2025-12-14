@@ -8,7 +8,7 @@ module pc_counter#(
     output logic [pc_WIDTH-1:0] pc
 );
 
-    always_ff @( posedge clk ) begin
+    always_ff @( posedge clk) begin
         if (rst) pc <= '0;
         else begin
             if (pc_hold) pc <= pc;
