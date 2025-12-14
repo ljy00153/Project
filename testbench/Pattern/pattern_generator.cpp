@@ -38,7 +38,7 @@ uniform_int_distribution<int32_t> dist_ipsum(-32, 32);//數字隨機範圍
 int main()
 {
     int pattern_id = 3;//放在第幾個資料夾
-    int m = 256; //GEMM now
+    int m = 64; //GEMM now
     int n = 128 * 8 * 8;
     int p = 256;
     //int n_div4 = n / 4;
@@ -124,14 +124,23 @@ int main()
     for (int i = 0; i < p; i++) 
         for (int j = 0; j < n; j++)
             fb << setw(2) << (int)(uint8_t)Bt[i * n + j] << "\n";
+    array<uint8_t, 4> bytes{};
+    for (int i = 0; i < m; i++) 
+        for (int j = 0; j < p; j++)
+        {
+            bytes = get_bytes(ipsum[i * p + j]);
+            for(int k = 0; k < 4; k++)
+                fi << setw(2) << (int)(uint8_t)bytes[k] << "\n";
+        }
+            
 
     for (int i = 0; i < m; i++) 
         for (int j = 0; j < p; j++)
-            fi << setw(8) << ipsum[i * p + j] << "\n";
-
-    for (int i = 0; i < m; i++) 
-        for (int j = 0; j < p; j++)
-            fc << setw(8) << C_golden[i * p + j] << "\n";
+        {
+            bytes = get_bytes(C_golden[i * p + j]);
+            for(int k = 0; k < 4; k++)
+                fc << setw(2) << (int)(uint8_t)bytes[k] << "\n";
+        }
     
 
     fa.close();

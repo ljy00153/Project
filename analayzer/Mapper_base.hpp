@@ -155,7 +155,7 @@ class EyerissMapper_base
                         for (int N = tn; N <= 1024; N++) 
                         {
                             int used_bytes =  M * K * IFMAP_PER_PE * 4 
-                                            + K * IFMAP_PER_PE * N * WEIGHT_PER_PE * 4
+                                            + K * IFMAP_PER_PE * N * WEIGHT_PER_PE * 4 * 4
                                             + analyzer->linear_shape.B * N * 4 * 4;
 
                             if (used_bytes < GLB_LIMIT) 

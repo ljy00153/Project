@@ -66,14 +66,14 @@ class PE
             for (int i = 0; i < IFMAP_SIZE; i++) 
             {
                 for(int j = 0; j < 4; j++)
-                    cout << setw(10) << (int)((in_feature_spad[i] >> 8*j)  & 0xFF);
+                    cout << setw(10) << (int32_t)(int8_t(uint8_t((in_feature_spad[i] >> 8*j) & 0xFF) ^ 0x80));
                 cout << "\n";
             }
             cout << "\nFILTER:"<< "\n";
             for (int i = 0; i < WEIGHT_SIZE; i++) 
             {
                 for(int j = 0; j < 4; j++)
-                    cout << setw(10) << (int)((weight_spad[i] >> 8*j)  & 0xFF);
+                    cout << setw(10) << (int32_t)(int8_t((weight_spad[i] >> 8*j)  & 0xFF));
                 cout << "\n";
             }
             cout << "\nPSUM:  "<< "\n";
@@ -90,12 +90,16 @@ class PE
             for(int i = 0; i < IFMAP_SIZE; i++) 
             {
                 array<int8_t, 4> in_feature_byte = get_bytes_deq(in_feature_spad[i]);
+                //cout<<"in_feature_byte: ";
+                //for(int b =0; b<4; b++)
+                //    cout<<static_cast<int>(in_feature_byte[b])<<" ";
+                //cout<<endl;
                 //in_feature_byte[0] = (in_feature_byte[i] >> 0)  & 0xFF;  // 取最低 8 bit
                 //in_feature_byte[1] = (in_feature_byte[i] >> 8)  & 0xFF;  // 取第 8~15 bit
                 //in_feature_byte[2] = (in_feature_byte[i] >> 16) & 0xFF;  // 取第 16~23 bit
                 //in_feature_byte[3] = (in_feature_byte[i] >> 24) & 0xFF;  // 取最高 8 bit
 
-                for(int j = 0; j <= WEIGHT_SIZE / 4; j++)
+                for(int j = 0; j <= WEIGHT_SIZE / WEIGHT_H; j++)
                 {
                     array<int8_t, 4> weight_byte = get_bytes_no_deq(weight_spad[i * PSUM_SIZE + j]);
                     //weight_byte[0] =(weight_byte[i + j * 3] >> 0)  & 0xFF;  // 取最低 8 bit
@@ -106,6 +110,11 @@ class PE
                     for(int k = 0; k < 4; k++)
                     {
                         int prod = in_feature_byte[k] * weight_byte[k];
+                        //cout << "in_feature_byte[" << k << "] = " << static_cast<int>(in_feature_byte[k]) 
+                        //     << ", weight_byte[" << k << "] = " << static_cast<int>(weight_byte[k]) << endl;
+                        //cout << "prod: " << prod << endl;
+                        //cout << "psum_spad[" << j << "] before: " << psum_spad[j] << endl;
+                        //cout << "Adding " << static_cast<int>(in_feature_byte[k]) << " * " << static_cast<int>(weight_byte[k]) << " to psum_spad[" << j << "]\n";
                         psum_spad[j] += prod;
                         cycle++;
                     }
@@ -195,7 +204,7 @@ class PE
             for (int i = 0; i < 4; ++i)
             {
                 bytes[i] = (value >> (8 * i)) & 0xFF;
-                bytes[i] ^= 0x80;
+                bytes[i] = int8_t(uint8_t(bytes[i]) ^ 0x80);
             }
             //may need to dequantize here
             return bytes;
@@ -205,7 +214,7 @@ class PE
         {
             array<int8_t, 4> bytes{};
             for (int i = 0; i < 4; ++i)
-                bytes[i] = (value >> (8 * i)) & 0xFF;
+                bytes[i] = int8_t((value >> (8 * i)) & 0xFF);
             //may need to dequantize here
             return bytes;
         }

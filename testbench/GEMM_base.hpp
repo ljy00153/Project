@@ -11,7 +11,9 @@
 
 using namespace std;
 using DataType = int32_t;
-void load_data(std::vector<DataType> &mem, const std::string &filename);
+void load_ifmap(vector<int32_t> &mem, const string &filename);
+void load_weight(vector<int32_t> &mem, const string &filename);
+void load_ipsum_golden(vector<int32_t> &mem, const string &filename);
 
 class GEMM_base  
 {
@@ -24,6 +26,10 @@ class GEMM_base
 
         vector<DataType> DRAM;
         vector<DataType> GLB;
+        vector<int32_t> in_features;
+        vector<int32_t> weights;
+        vector<int32_t> ipsums;
+        vector<int32_t> golden;
 
         unique_ptr<EyerissMapper_base> mapper;  // <-- 抽象化 mapper
 
@@ -62,7 +68,11 @@ class GEMM_base
                         size_t size)
         {
             if (glb_addr + size > GLB.size())
+            {
+                cout << "glb_addr: " << glb_addr << ", size: " << size << ", GLB.size(): " << GLB.size() << endl;
                 throw runtime_error("GLB overflow!");
+            }
+                
 
             // 計算 DRAM 可用 bytes
             size_t dram_available = 0;
@@ -90,10 +100,15 @@ class GEMM_base
                           size_t size)
         {
             if (dram_addr + size > DRAM.size())
+            {
+                cout << "dram_addr: " << dram_addr << ", size: " << size << ", DRAM.size(): " << DRAM.size() << endl;
                 throw runtime_error("DRAM overflow!");
-
+            }
             if (glb_addr + size > GLB.size())
+            {
+                cout << "glb_addr: " << glb_addr << ", size: " << size << ", GLB.size(): " << GLB.size() << endl;
                 throw runtime_error("GLB overflow!");
+            }
 
             memcpy(&DRAM[dram_addr], &GLB[glb_addr], size * sizeof(int));
         }
@@ -105,14 +120,20 @@ class GEMM_base
                                     size_t DRAM_PSUM_idx,
                                     size_t size)
         {
+            size_t size_min = min(size_t(size), size_t(shape.out_features * 4));
             for(int l = 0; l < shape.B; l++)
             {
                 DMA_load( GLB,
-                          glb_addr + l * map.N * PE::WEIGHT_H,
+                          glb_addr + l * map.N * PE::WEIGHT_H * 4,
                           DRAM,
-                          DRAM_PSUM_base + l * shape.out_features + DRAM_PSUM_idx,
-                          size);
+                          DRAM_PSUM_base + l * shape.out_features * 4 + DRAM_PSUM_idx,
+                          size_min);
+                //cout << "glb_addr: " << glb_addr + l * map.N * PE::WEIGHT_H * 4;
+                //cout << "  dram_addr: " << DRAM_PSUM_base + l * shape.out_features + DRAM_PSUM_idx;
+                //cout << "  size: " << size_min << endl;
             }
+            //for(int i = 216 + 128 * 72; i < 216 + 128 * 72 + 3 * 12 * 4; i++)
+            //  cout << dec << "GLB[" << i << "]: " << hex << GLB[i] << endl;
         }
 
         virtual void DMA_load_IFMAP( vector<DataType>& GLB,
@@ -125,12 +146,18 @@ class GEMM_base
             int in_div4 = ceil(double(shape.in_features) / 4);
             for(int l = 0; l < map.M; l++)
             {
+                size_t size_min = min(size_t(size), size_t(shape.in_features));
                 DMA_load( GLB,
-                          glb_addr + l * map.K * PE::IFMAP_SIZE,
+                          glb_addr + l * map.K * PE::IFMAP_SIZE * 4,
                           DRAM,
-                          DRAM_IFMAP_base + l * in_div4 + DRAM_IFMAP_idx,
-                          size);
+                          DRAM_IFMAP_base + l * shape.in_features + DRAM_IFMAP_idx,
+                          size_min);
+                //cout << "glb_addr: " << glb_addr + l * map.K * PE::IFMAP_SIZE * 4;
+                //cout << "  dram_addr: " << DRAM_IFMAP_base + l * shape.in_features + DRAM_IFMAP_idx;
+                //cout << "  size: " << size_min << endl;
             }
+            //for(int i = 0; i < 216; i++)
+            //  cout << dec << "GLB[" << i << "]: " << hex << GLB[i] << endl;
         }
 
         virtual void DMA_load_WEIGHT( vector<DataType>& GLB,
@@ -140,14 +167,23 @@ class GEMM_base
                                      size_t DRAM_WEIGHT_idx,
                                      size_t size)
         {
-            for(int l = 0; l < map.K * PE::IFMAP_SIZE; l++)
+            size_t size_min = min(size_t(size), size_t(shape.out_features));
+            size_t size_min2 = min(size_t(size), size_t(shape.in_features));
+            size_t k_min = min(size_t(map.K * PE::IFMAP_SIZE * 4), size_t(shape.in_features));
+            size_t n_min = min(size_t(map.N * PE::WEIGHT_H), size_t(shape.out_features));
+            for(int l = 0; l < n_min; l++)
             {
                 DMA_load( GLB,
-                          glb_addr + l * map.N * PE::WEIGHT_H,
+                          glb_addr + l * map.K * PE::IFMAP_SIZE * 4,
                           DRAM,
-                          DRAM_WEIGHT_base + l * shape.out_features + DRAM_WEIGHT_idx,
-                          size);
+                          DRAM_WEIGHT_base + l * shape.in_features + DRAM_WEIGHT_idx,
+                          size_min2);
+                //cout << "glb_addr: " << l * map.K * PE::IFMAP_SIZE * 4;
+                //cout << "  dram_addr: " << l * shape.in_features + DRAM_WEIGHT_idx;
+                //cout << "  size: " << size_min2 << endl;
             }
+            //for(int i = map.M * map.K * 3 * 4; i < map.M * map.K * 3 + map.K * 3 * 4 * map.N * 4 * 4; i++)
+            //    cout << dec << "GLB[" << i << "]: " << hex << GLB[i] << endl;
         }
 
         virtual void DMA_write_PSUM( vector<DataType>& DRAM,
@@ -157,14 +193,23 @@ class GEMM_base
                                      size_t glb_addr,
                                      size_t size)
         {
+            size_t size_min = min(size_t(size), size_t(shape.out_features * 4));
             for(int l = 0; l < shape.B; l++)
             {
                 DMA_write( DRAM,
-                           DRAM_PSUM_base + l * shape.out_features + DRAM_PSUM_idx,
+                           DRAM_PSUM_base + l * shape.out_features * 4 + DRAM_PSUM_idx,
                            GLB,
-                           glb_addr + l * map.N * PE::WEIGHT_H,
-                           size);
+                           glb_addr + l * map.N * PE::WEIGHT_H * 4,
+                           size_min);
+                //cout << dec <<"glb_addr: " << glb_addr + l * map.N * PE::WEIGHT_H * 4;
+                //cout << "  dram_addr: " << DRAM_PSUM_base + l * shape.out_features * 4+ DRAM_PSUM_idx;
+                //cout << "  size: " << size_min << endl;
+                //for(int i = 0; i < size_min; i++)
+                //    cout << "  GLB[" << glb_addr + l * map.N * PE::WEIGHT_H * 4 + i << "] = " 
+                //         << GLB[glb_addr + l * map.N * PE::WEIGHT_H * 4 + i] << endl;
             }
+            //for(int i = 60; i < 60 + 36; i++)
+            //    cout << dec << "DRAM[" << i << "]: " << hex << DRAM[i] << endl;
         }
 
         void reset_cycle()
@@ -198,11 +243,10 @@ class GEMM_base
             
             pe_array = dut_pe_array;
             // 3. 準備測試資料
-            vector<uint8_t> in_features;
-            vector<int8_t> weights;
-            vector<int32_t> ipsums;
-            vector<int32_t> psum_dut(linear.B * linear.out_features, 0);
-            vector<int32_t> golden;
+            in_features = vector<int32_t>();
+            weights = vector<int32_t>();
+            ipsums = vector<int32_t>();
+            golden = vector<int32_t>();
 
             cout << "[Testbench] Loading Test Data..." << endl;
             
@@ -250,7 +294,7 @@ class GEMM_base
             cout << "    N: " << map.N << endl;
             DRAM = vector<DataType>(); // clear DRAM
             GLB = vector<DataType>(GLB_SIZE, 0); // reset GLB
-            size_t total_size = in_features.size() + weights.size() + ipsums.size() + linear.B * linear.out_features;
+            size_t total_size = in_features.size() + weights.size() + ipsums.size();
             DRAM.resize(total_size, 0);   // 先分配好整塊空間
             
 
@@ -286,15 +330,15 @@ class GEMM_base
             {
                 cout << "index[" << i << "]:  DUT=" << psum_dut[i] << ", Golden=" << golden[i] << endl;
             }*/
-            if (!pass) 
+            if(!pass) 
             {
                 
-                for(size_t i=0; i < linear.B * linear.out_features; i++) 
+                for(size_t i=0; i < linear.B * linear.out_features * 4; i++) 
                 {
-                    if (DRAM[i + in_features.size() + weights.size() + ipsums.size()] != golden[i]) 
+                    if (DRAM[i + in_features.size() + weights.size()] != golden[i]) 
                     {
                         cout << "Mismatch at index " << i << ": DUT=" 
-                        << DRAM[i + in_features.size() + weights.size() + ipsums.size()] << ", Golden=" << golden[i] << endl;
+                        << dec << DRAM[i + in_features.size() + weights.size()] << ", Golden=" << golden[i] << endl;
                     }
                 }
             }
@@ -310,7 +354,7 @@ class GEMM_base
         virtual void run_simulation() = 0;
 };
 
-void load_ifmap(vector<uint8_t> &mem, const string &filename)
+void load_ifmap(vector<int32_t> &mem, const string &filename)
 {
     ifstream file(filename);
     if (!file.is_open()) 
@@ -324,22 +368,23 @@ void load_ifmap(vector<uint8_t> &mem, const string &filename)
     while (getline(file, line)) 
     {
         if (line.empty()) continue;
-        uint8_t val;
+        int tmp;
         stringstream ss(line);
-        ss >> hex >> val;
+        ss >> hex >> tmp;
         if (ss.fail()) 
         {
             cerr << "⚠️  Invalid line in " << filename << ": " << line << endl;
             continue;
         }
-        //cout << "load value: " << val << endl;
-        mem.push_back(val);
+        uint8_t val = static_cast<uint8_t>(tmp);
+        //cout << "load value: " << static_cast<int32_t>(val) << endl;
+        mem.push_back(static_cast<int32_t>(val));
     }
 
     file.close();
 }
 
-void load_weight(vector<int8_t> &mem, const string &filename)
+void load_weight(vector<int32_t> &mem, const string &filename)
 {
     ifstream file(filename);
     if (!file.is_open()) 
@@ -353,16 +398,17 @@ void load_weight(vector<int8_t> &mem, const string &filename)
     while (getline(file, line)) 
     {
         if (line.empty()) continue;
-        int8_t val;
+        int tmp;
         stringstream ss(line);
-        ss >> hex >> val;
+        ss >> hex >> tmp;
         if (ss.fail()) 
         {
             cerr << "⚠️  Invalid line in " << filename << ": " << line << endl;
             continue;
         }
-        //cout << "load value: " << val << endl;
-        mem.push_back(val);
+        int8_t val = static_cast<int8_t>(tmp);
+        //cout << "load value: " << int32_t(val) << endl;
+        mem.push_back(static_cast<int32_t>(val));
     }
 
     file.close();
@@ -382,14 +428,16 @@ void load_ipsum_golden(vector<int32_t> &mem, const string &filename)
     while (getline(file, line)) 
     {
         if (line.empty()) continue;
+        uint32_t tmp;
         int32_t val;
         stringstream ss(line);
-        ss >> hex >> val;
+        ss >> hex >> tmp;
         if (ss.fail()) 
         {
             cerr << "⚠️  Invalid line in " << filename << ": " << line << endl;
             continue;
         }
+        val = static_cast<int32_t>(tmp);
         //cout << "load value: " << val << endl;
         mem.push_back(val);
     }

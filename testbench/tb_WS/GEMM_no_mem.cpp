@@ -19,10 +19,9 @@ class WS_Based_no_mem_Simulator : public GEMM_base
         }
 
     protected:
-        void run_simulation(const vector<DataType>& all_in_features,
-                            const vector<DataType>& all_weights,
-                            vector<DataType>& final_psums) override
+        void run_simulation() override
         {
+            vector<int32_t> final_psums;
             total_cycles = 0;
             setup_pe_bases();
             cout << "\n=== Start GEMM Tile Simulation ===" << endl;
@@ -59,7 +58,7 @@ class WS_Based_no_mem_Simulator : public GEMM_base
                                         cerr << "pe_index out of range: " << pe_index << endl;
                                         exit(1);
                                     }
-                                    if (weight_index >= all_weights.size()) 
+                                    if (weight_index >= weights.size()) 
                                     {
                                         weight_data = 0;
                                         //cout << "weight_index out of range: " << weight_index << endl;
@@ -68,7 +67,7 @@ class WS_Based_no_mem_Simulator : public GEMM_base
                                     }
                                     else
                                     {
-                                        weight_data = all_weights[weight_index];
+                                        weight_data = weights[weight_index];
                                     }
                                     //cout << "PE[" << pe_index << "] load weight from index[" << weight_index << "]\n";
                                     pe_array.pe[pe_index].weight_spad[l % PE::WEIGHT_SIZE] = weight_data;
@@ -130,7 +129,7 @@ class WS_Based_no_mem_Simulator : public GEMM_base
                                                 cerr << "pe_index out of range: " << pe_index << endl;
                                                 exit(1);
                                             }
-                                            if (inf_index >= all_in_features.size()) 
+                                            if (inf_index >= in_features.size()) 
                                             {
                                                 in_data = 0;
                                                 //cout << "inf_index out of range: " << inf_index << endl;
@@ -139,7 +138,7 @@ class WS_Based_no_mem_Simulator : public GEMM_base
                                             }
                                             else
                                             {
-                                                in_data = all_in_features[inf_index];
+                                                in_data = in_features[inf_index];
                                             }
                                             
                                             //cout << "PE[" << pe_index << "]" <<".[" << l % PE::IFMAP_SIZE << "] " << "load in_feature from index[" << inf_index << "]\n";
