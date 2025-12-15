@@ -26,7 +26,8 @@ RTL_SRCS = \
   pc_adder.sv \
   mux.sv \
   signal_controller.sv \
-  ID_SENDER.sv
+  ID_SENDER.sv \
+  glb_addr_generator.sv
 
 # Testbench file
 TB_SRCS  = controller_tb.sv

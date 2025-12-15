@@ -1,0 +1,7 @@
+Command exited with non-zero status 255
+{"vcs1":{"timestamp_begin":1765821196.884523255, "rt":0.81, "ut":0.05, "st":0.02}}
+{"SNPS_VCS_INTERNAL_ROOT_START_TIME": 1765821196.572791315}
+{"VCS_COMP_START_TIME": 1765821196.572791315}
+{"VCS_COMP_END_TIME": 1765821197.738086230}
+{"VCS_USER_OPTIONS": "-full64 -sverilog +incdir+../include -debug_access+all -timescale=1ns/1ps -l compile.log -top controller_tb controller_tb.sv controller_top.sv ALU.sv decoder.sv regfile.sv SRAM.sv pc_counter.sv pc_adder.sv mux.sv signal_controller.sv ID_SENDER.sv -o simv"}
+{"vcs1": {"peak_mem": 383224}}

@@ -1,4 +1,7 @@
 `timescale 1ns/1ps
+`include "../include/ISA.svh"
+`include "../include/ASIC.svh"
+`include "../include/AXI_define.svh"
 
 module controller_tb;
 
@@ -27,6 +30,68 @@ module controller_tb;
   logic [31:0] OF_SIZE, IF_SIZE, B_SIZE, K_SIZE, N_SIZE, M_SIZE, DATAFLOW;
 
   logic glb_done;
+  // ============================================================
+  // GLB control
+  // ============================================================
+  logic GLB_EN;
+  logic GLB_WEB;
+  logic GLB_MODE;
+
+  // ============================================================
+  // PEA XID scan
+  // ============================================================
+  logic                        set_XID;
+  logic [`XID_BITS-1:0]        ifmap_XID_scan_in;
+  logic [`XID_BITS-1:0]        weight_XID_scan_in;
+  logic [`XID_BITS-1:0]        ipsum_XID_scan_in;
+  logic [`XID_BITS-1:0]        opsum_XID_scan_in;
+
+  // ============================================================
+  // PEA YID scan
+  // ============================================================
+  logic                        set_YID;
+  logic [`YID_BITS-1:0]        ifmap_YID_scan_in;
+  logic [`YID_BITS-1:0]        weight_YID_scan_in;
+  logic [`YID_BITS-1:0]        ipsum_YID_scan_in;
+  logic [`YID_BITS-1:0]        opsum_YID_scan_in;
+
+  // ============================================================
+  // PEA LN config
+  // ============================================================
+  logic                        set_LN;
+  logic [`PE_ARRAY_H-2:0]      LN_config_in;
+
+  // ============================================================
+  // PEA ifmap handshake + tag
+  // ============================================================
+  logic                        PEA_ifmap_valid;
+  logic                        PEA_ifmap_ready;
+  logic [`XID_BITS-1:0]        ifmap_tag_X;
+  logic [`YID_BITS-1:0]        ifmap_tag_Y;
+
+  // ============================================================
+  // PEA weight handshake + tag
+  // ============================================================
+  logic                        PEA_weight_valid;
+  logic                        PEA_weight_ready;
+  logic [`XID_BITS-1:0]        weight_tag_X;
+  logic [`YID_BITS-1:0]        weight_tag_Y;
+
+  // ============================================================
+  // PEA ipsum handshake + tag
+  // ============================================================
+  logic                        PEA_ipsum_valid;
+  logic                        PEA_ipsum_ready;
+  logic [`XID_BITS-1:0]        ipsum_tag_X;
+  logic [`YID_BITS-1:0]        ipsum_tag_Y;
+
+  // ============================================================
+  // PEA opsum handshake + tag
+  // ============================================================
+  logic                        PEA_opsum_valid;
+  logic                        PEA_opsum_ready;
+  logic [`XID_BITS-1:0]        opsum_tag_X;
+  logic [`YID_BITS-1:0]        opsum_tag_Y;
 
   // ----------------------------
   // Instantiate DUT
@@ -36,9 +101,11 @@ module controller_tb;
     .rst(rst),
     .asic_en(asic_en),
     .asic_done(asic_done),
+    //instruction write from tb
     .im_init_en(im_init_en),
     .im_init_addr(im_init_addr),
     .im_init_wdata(im_init_wdata),
+    //MMIO
     .DRAM_ifmap_base(DRAM_ifmap_base),
     .DRAM_weight_base(DRAM_weight_base),
     .DRAM_ofmap_base(DRAM_ofmap_base),
@@ -52,8 +119,68 @@ module controller_tb;
     .N_SIZE(N_SIZE),
     .M_SIZE(M_SIZE),
     .DATAFLOW(DATAFLOW),
+        // ----------------------------
+    // GLB control
+    // ----------------------------
+    .GLB_EN                (GLB_EN),
+    .GLB_WEB               (GLB_WEB),
+    .GLB_MODE              (GLB_MODE),
 
-    .glb_done(glb_done)
+    // ----------------------------
+    // PEA XID scan
+    // ----------------------------
+    .set_XID               (set_XID),
+    .ifmap_XID_scan_in     (ifmap_XID_scan_in),
+    .weight_XID_scan_in    (weight_XID_scan_in),
+    .ipsum_XID_scan_in     (ipsum_XID_scan_in),
+    .opsum_XID_scan_in     (opsum_XID_scan_in),
+
+    // ----------------------------
+    // PEA YID scan
+    // ----------------------------
+    .set_YID               (set_YID),
+    .ifmap_YID_scan_in     (ifmap_YID_scan_in),
+    .weight_YID_scan_in    (weight_YID_scan_in),
+    .ipsum_YID_scan_in     (ipsum_YID_scan_in),
+    .opsum_YID_scan_in     (opsum_YID_scan_in),
+
+    // ----------------------------
+    // PEA LN config
+    // ----------------------------
+    .set_LN                (set_LN),
+    .LN_config_in          (LN_config_in),
+
+    // ----------------------------
+    // PEA ifmap handshake + tag
+    // ----------------------------
+    .PEA_ifmap_valid       (PEA_ifmap_valid),
+    .PEA_ifmap_ready       (PEA_ifmap_ready),
+    .ifmap_tag_X           (ifmap_tag_X),
+    .ifmap_tag_Y           (ifmap_tag_Y),
+
+    // ----------------------------
+    // PEA weight handshake + tag
+    // ----------------------------
+    .PEA_weight_valid      (PEA_weight_valid),
+    .PEA_weight_ready      (PEA_weight_ready),
+    .weight_tag_X          (weight_tag_X),
+    .weight_tag_Y          (weight_tag_Y),
+
+    // ----------------------------
+    // PEA ipsum handshake + tag
+    // ----------------------------
+    .PEA_ipsum_valid       (PEA_ipsum_valid),
+    .PEA_ipsum_ready       (PEA_ipsum_ready),
+    .ipsum_tag_X           (ipsum_tag_X),
+    .ipsum_tag_Y           (ipsum_tag_Y),
+
+    // ----------------------------
+    // PEA opsum handshake + tag
+    // ----------------------------
+    .PEA_opsum_valid       (PEA_opsum_valid),
+    .PEA_opsum_ready       (PEA_opsum_ready),
+    .opsum_tag_X           (opsum_tag_X),
+    .opsum_tag_Y           (opsum_tag_Y)
   );
 
   // ---------------------------------------------------------

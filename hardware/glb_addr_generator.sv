@@ -10,7 +10,6 @@ module glb_addr_generator #(
     input  logic clk,
     input  logic rst,
     input  logic en,
-    output logic GLB_en,
     input  logic [31:0] base_in,           // usually ALU_result
     input  logic [1:0] type_in,            // MODE_IFMAP/FILTER/BIAS/OFMAP
     // CSR[9]
@@ -23,6 +22,10 @@ module glb_addr_generator #(
     //output logic [31:0] count_n_bytes,
     //output logic [31:0] count_kk
 );
+    // determine GLB_Addr
+    logic [31:0]count_k;
+    logic [31:0]count_kk;
+    logic [31:0]count_n;
 
     logic [31:0] base_reg;
     logic [1:0]  type_reg;
@@ -77,11 +80,7 @@ module glb_addr_generator #(
         end
     end
 
-      // determine GLB_Addr
-    logic [31:0]count_k;
-    logic [31:0]count_kk;
-    logic [31:0]count_n;
-
+ 
     //count_k 
     always_ff @( posedge clk ) begin
         if(rst) count_k <= 32'b0;

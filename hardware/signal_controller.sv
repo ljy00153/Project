@@ -25,6 +25,7 @@ module signal_controller#(
     input logic [31:0] N_SIZE,
     input logic [31:0] M_SIZE,
     input logic [31:0] DATAFLOW,
+    
     // ---------------- DMA LOOPER------------------------------
     output logic                    DMA_en,
     output logic [1:0]              DMA_mode,       // IFMAP:0, Filter:1, BIAS:2, OFMAP: 3
@@ -35,7 +36,7 @@ module signal_controller#(
     input  logic                    DMA_done,
 
     //-----------------PE ID config--------------------------------------------------
-    output logic                  ID_sender_en,
+    output logic ID_sender_en,
     input logic PEA_ifmap_ready,
     input logic PEA_filter_ready,
     input logic PEA_ipsum_ready,
@@ -55,11 +56,12 @@ module signal_controller#(
     output logic glb_addr_gen_en,
     output logic [31:0]glb_addr_base,
     output logic [1:0]glb_type,
+    output logic [31:0] K_bytes,
+    input logic glb_done,
+    //-------------GLB----------------------
     output logic GLB_EN,
     output logic GLB_WEB,
     output logic GLB_MODE,
-    output  logic [31:0] K_bytes,
-    input logic glb_done,
     //------------PPU-----------------------
     output logic                  relu_sel,
     output logic                  Maxpool_en,

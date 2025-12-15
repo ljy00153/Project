@@ -1,10 +1,10 @@
 Command: vcs -full64 -sverilog +incdir+../include -debug_access+all -timescale=1ns/1ps \
 -l compile.log -top controller_tb controller_tb.sv controller_top.sv ALU.sv decoder.sv \
 regfile.sv SRAM.sv pc_counter.sv pc_adder.sv mux.sv signal_controller.sv ID_SENDER.sv \
--o simv
+glb_addr_generator.sv -o simv
 *** Using c compiler gcc instead of cc ...
                          Chronologic VCS (TM)
-         Version V-2023.12_Full64 -- Sun Dec 14 13:41:34 2025
+         Version V-2023.12_Full64 -- Mon Dec 15 12:57:30 2025
 
                     Copyright (c) 1991 - 2023 Synopsys, Inc.
    This software and the associated documentation are proprietary to Synopsys,
@@ -23,6 +23,12 @@ regfile.sv SRAM.sv pc_counter.sv pc_adder.sv mux.sv signal_controller.sv ID_SEND
                         https://solvnetplus.synopsys.com)
 
 Parsing design file 'controller_tb.sv'
+Parsing included file '../include/ISA.svh'.
+Back to file 'controller_tb.sv'.
+Parsing included file '../include/ASIC.svh'.
+Back to file 'controller_tb.sv'.
+Parsing included file '../include/AXI_define.svh'.
+Back to file 'controller_tb.sv'.
 Parsing design file 'controller_top.sv'
 Parsing included file '../include/ISA.svh'.
 Back to file 'controller_top.sv'.
@@ -45,13 +51,20 @@ Back to file 'signal_controller.sv'.
 Parsing included file '../include/ISA.svh'.
 Back to file 'signal_controller.sv'.
 Parsing design file 'ID_SENDER.sv'
+Parsing design file 'glb_addr_generator.sv'
+Parsing included file '../include/AXI_define.svh'.
+Back to file 'glb_addr_generator.sv'.
+Parsing included file '../include/ASIC.svh'.
+Back to file 'glb_addr_generator.sv'.
+Parsing included file '../include/ISA.svh'.
+Back to file 'glb_addr_generator.sv'.
 Top Level Modules:
        controller_tb
 TimeScale is 1 ns / 1 ps
 
 Warning-[TFIPC] Too few instance port connections
-controller_top.sv, 165
-controller_top, "signal_controller u_ctrl( .clk (clk),  .rst (rst),  .asic_en (asic_en),  .asic_done (asic_done),  .mmio_sel (mmio_sel),  .csr_wen (csr_wen),  .DRAM_ifmap_base (DRAM_ifmap_base),  .DRAM_weight_base (DRAM_weight_base),  .DRAM_ofmap_base (DRAM_ofmap_base),  .GLB_ifmap_base (GLB_ifmap_base),  .GLB_weight_base (GLB_weight_base),  .GLB_opsum_base (GLB_opsum_base),  .OF_SIZE (OF_SIZE),  .IF_SIZE (IF_SIZE),  .B_SIZE (B_SIZE),  .K_SIZE (K_SIZE),  .N_SIZE (N_SIZE),  .M_SIZE (M_SIZE),  .DATAFLOW (DATAFLOW),  .DMA_done (1'b0),  .GLB_DI_select (GLB_DI_select),  .GLB_DO_select (GLB_DO_select),  .glb_addr_gen_en (glb_addr_gen_en),  .glb_addr_base (glb_addr_base),  .glb_type (glb_type),  .GLB_EN (GLB_EN),  .GLB_WEB (GLB_WEB),  .GLB_MODE (GLB_MODE),  .K_bytes (K_bytes), ... "
+controller_top.sv, 208
+controller_top, "signal_controller ctrl( .clk (clk),  .rst (rst),  .asic_en (asic_en),  .asic_done (asic_done),  .mmio_sel (mmio_sel),  .csr_wen (csr_wen),  .DRAM_ifmap_base (DRAM_ifmap_base),  .DRAM_weight_base (DRAM_weight_base),  .DRAM_ofmap_base (DRAM_ofmap_base),  .GLB_ifmap_base (GLB_ifmap_base),  .GLB_weight_base (GLB_weight_base),  .GLB_opsum_base (GLB_opsum_base),  .OF_SIZE (OF_SIZE),  .IF_SIZE (IF_SIZE),  .B_SIZE (B_SIZE),  .K_SIZE (K_SIZE),  .N_SIZE (N_SIZE),  .M_SIZE (M_SIZE),  .DATAFLOW (DATAFLOW),  .DMA_done (1'b0),  .ID_sender_en (id_en),  .glb_addr_gen_en (glb_addr_gen_en),  .glb_addr_base (glb_addr_base),  .glb_type (glb_type),  .K_bytes (K_bytes),  .glb_done (glb_done),  .GLB_EN (GLB_EN_wire),  .GLB_WEB (GLB_WEB_wire),  .GLB_MODE (GLB_MODE_wire),  .rel ... "
   The above instance has fewer port connections than the module definition.
   Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
   ports.
@@ -59,14 +72,15 @@ controller_top, "signal_controller u_ctrl( .clk (clk),  .rst (rst),  .asic_en (a
 Starting vcs inline pass...
 
 2 modules and 0 UDP read.
+recompiling module controller_tb
 recompiling module controller_top
-	However, due to incremental compilation, only 1 module needs to be compiled. 
+Both modules done.
 make[1]: Entering directory '/home/users/yves6512/Project/hardware/csrc'
 rm -f _cuarc*.so _csrc*.so pre_vcsobj_*.so share_vcsobj_*.so
 if [ -x ../simv ]; then chmod a-x ../simv; fi
 g++  -o ../simv      -rdynamic  -Wl,-rpath='$ORIGIN'/simv.daidir -Wl,-rpath=./simv.daidir \
 -Wl,-rpath=/usr/cad/synopsys/vcs/2023.12/linux64/lib -L/usr/cad/synopsys/vcs/2023.12/linux64/lib \
--Wl,-rpath-link=./  /usr/lib64/libnuma.so.1   objs/amcQw_d.o   _670851_archive_1.so \
+-Wl,-rpath-link=./  /usr/lib64/libnuma.so.1   objs/amcQw_d.o   _1892219_archive_1.so \
 _prev_archive_1.so   SIM_l.o      rmapats_mop.o rmapats.o rmar.o rmar_nd.o  rmar_llvm_0_1.o \
 rmar_llvm_0_0.o            -lvirsim -lerrorinf -lsnpsmalloc -lvfs    -lvcsnew -lsimprofile \
 -luclinative /usr/cad/synopsys/vcs/2023.12/linux64/lib/vcs_tls.o   -Wl,-whole-archive \
@@ -75,4 +89,4 @@ rmar_llvm_0_0.o            -lvirsim -lerrorinf -lsnpsmalloc -lvfs    -lvcsnew -l
 -ldl 
 ../simv up to date
 make[1]: Leaving directory '/home/users/yves6512/Project/hardware/csrc'
-CPU time: .267 seconds to compile + .183 seconds to elab + .168 seconds to link
+CPU time: .302 seconds to compile + .220 seconds to elab + .169 seconds to link

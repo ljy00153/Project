@@ -28,8 +28,49 @@ module controller_top #(
     input  logic [31:0] M_SIZE,
     input  logic [31:0] DATAFLOW,
 
-    // 你 signal_controller 需要的外部 done（先當作外部輸入）
-    input  logic glb_done
+    // GLB
+    output logic GLB_EN, 
+    output logic GLB_WEB, 
+    output logic GLB_MODE, 
+
+    //PEA
+    output logic                        set_XID,
+    output logic [`XID_BITS-1:0]        ifmap_XID_scan_in,
+    output logic [`XID_BITS-1:0]        weight_XID_scan_in,
+    output logic [`XID_BITS-1:0]        ipsum_XID_scan_in,
+    output logic [`XID_BITS-1:0]        opsum_XID_scan_in,
+
+    output logic                        set_YID,
+    output logic [`YID_BITS-1:0]        ifmap_YID_scan_in,
+    output logic [`YID_BITS-1:0]        weight_YID_scan_in,
+    output logic [`YID_BITS-1:0]        ipsum_YID_scan_in,
+    output logic [`YID_BITS-1:0]        opsum_YID_scan_in,
+
+    output logic                        set_LN,
+    output logic [`PE_ARRAY_H-2:0]      LN_config_in,
+
+    // PEA handshake + tag
+    output logic                        PEA_ifmap_valid,
+    input  logic                        PEA_ifmap_ready,
+    output logic [`XID_BITS-1:0]        ifmap_tag_X,
+    output logic [`YID_BITS-1:0]        ifmap_tag_Y,
+
+    output logic                        PEA_weight_valid,
+    input  logic                        PEA_weight_ready,
+    output logic [`XID_BITS-1:0]        weight_tag_X,
+    output logic [`YID_BITS-1:0]        weight_tag_Y,
+
+    output logic                        PEA_ipsum_valid,
+    input  logic                        PEA_ipsum_ready,
+    output logic [`XID_BITS-1:0]        ipsum_tag_X,
+    output logic [`YID_BITS-1:0]        ipsum_tag_Y,
+
+    input  logic                        PEA_opsum_valid,
+    output logic                        PEA_opsum_ready,
+    output logic [`XID_BITS-1:0]        opsum_tag_X,
+    output logic [`YID_BITS-1:0]        opsum_tag_Y
+
+
 );
 
     // ----------------------------
@@ -138,7 +179,7 @@ module controller_top #(
     // ----------------------------
     logic        branch_result;
 
-    ALU u_alu (
+    ALU alu (
         .rs1_src      (alu_op1),
         .rs2_src      (alu_op2),
         .opcode       (opcode),
@@ -158,11 +199,13 @@ module controller_top #(
     logic GLB_DI_select, GLB_DO_select, glb_addr_gen_en;
     logic [31:0] glb_addr_base;
     logic [1:0]  glb_type;
-    logic GLB_EN, GLB_WEB, GLB_MODE;
+    logic GLB_EN_wire, GLB_WEB_wire, GLB_MODE_wire;
     logic [31:0] K_bytes;
     logic relu_sel, Maxpool_en, Maxpool_init;
+    logic glb_done;
+    logic        id_en;
 
-    signal_controller u_ctrl (
+    signal_controller ctrl (
         .clk            (clk),
         .rst            (rst),
         .asic_en        (asic_en),
@@ -192,16 +235,24 @@ module controller_top #(
         .DMA_GLB_ADDR     (),
         .DMA_done        (1'b0), // 目前沒 DMA，先綁 0（你之後要改）
 
-        .GLB_DI_select   (GLB_DI_select),
-        .GLB_DO_select   (GLB_DO_select),
+        .ID_sender_en (id_en),
+        .PEA_ifmap_ready(),
+        .PEA_filter_ready(),
+        .PEA_ipsum_ready(),
+        .PEA_opsum_valid(),
+    
+        .PE_finish (),
+        //.GLB_DI_select   (GLB_DI_select),
+        //.GLB_DO_select   (GLB_DO_select),
         .glb_addr_gen_en (glb_addr_gen_en),
         .glb_addr_base   (glb_addr_base),
         .glb_type        (glb_type),
-        .GLB_EN          (GLB_EN),
-        .GLB_WEB         (GLB_WEB),
-        .GLB_MODE        (GLB_MODE),
         .K_bytes         (K_bytes),
         .glb_done        (glb_done),
+
+        .GLB_EN          (GLB_EN_wire),
+        .GLB_WEB         (GLB_WEB_wire),
+        .GLB_MODE        (GLB_MODE_wire),
 
         .relu_sel        (relu_sel),
         .Maxpool_en      (Maxpool_en),
@@ -212,21 +263,100 @@ module controller_top #(
         .opcode          (opcode),
         .CSR_index       (csr_index),
         .CFG_TYPE        (cfg_type),
-        .inst_type            (type_wire),
+        .inst_type       (type_wire),
         .imm             (imm),
         .branch_result   (branch_result),
-
         .CSR_output      (CSR_output),
 
         .pc_hold         (pc_hold),
         .next_pc_sel     (next_pc_sel),
         .alu_op1_sel     (alu_op1_sel),
         .alu_op2_sel     (alu_op2_sel),
-        .reg_wb_en (reg_wb_en)
+        .reg_wb_en       (reg_wb_en)
     );
     
     assign alu_op1 = (alu_op1_sel) ? rs1_data : CSR_output ;
     assign alu_op2 = (alu_op2_sel) ? imm : rs2_data;
    
+    assign GLB_EN = GLB_EN_wire ;
+    assign GLB_WEB = GLB_WEB_wire ;
+    assign GLB_MODE = GLB_MODE_wire ;
+    
+
+    // ----------------------------
+    // glb_addr_generator signals
+    // ----------------------------
+    logic [`GLB_ADDR_BITS-1:0]    glb_a;
+
+    glb_addr_generator #(
+    .tk              (72),
+    .tn              (32),
+    .KK_STRIDE_BYTES (12)
+    ) glb_addr_generator (
+        .clk      (clk),
+        .rst      (rst),
+        .en       (glb_addr_gen_en),
+        .base_in  (glb_addr_base),
+        .type_in  (glb_type),
+        .K_bytes  (K_bytes),
+        .glb_a    (glb_a),
+        .done     (glb_done)
+    );
+
+   
+
+    // ----------------------------
+    // ID_SENDER signals
+    // ----------------------------
+    logic [1:0]  tag_type;
+
+    
+
+
+    ID_SENDER u_id_sender (
+        .clk                  (clk),
+        .rst                  (rst),
+        .en                   (id_en),
+        .tag_type             (glb_type),
+
+        .set_XID              (set_XID),
+        .ifmap_XID_scan_in    (ifmap_XID_scan_in),
+        .weight_XID_scan_in   (weight_XID_scan_in),
+        .ipsum_XID_scan_in    (ipsum_XID_scan_in),
+        .opsum_XID_scan_in    (opsum_XID_scan_in),
+
+        .set_YID              (set_YID),
+        .ifmap_YID_scan_in    (ifmap_YID_scan_in),
+        .weight_YID_scan_in   (weight_YID_scan_in),
+        .ipsum_YID_scan_in    (ipsum_YID_scan_in),
+        .opsum_YID_scan_in    (opsum_YID_scan_in),
+
+        .set_LN               (set_LN),
+        .LN_config_in         (LN_config_in),
+
+        .PEA_ifmap_valid      (PEA_ifmap_valid),
+        .PEA_ifmap_ready      (PEA_ifmap_ready),
+        .ifmap_tag_X          (ifmap_tag_X),
+        .ifmap_tag_Y          (ifmap_tag_Y),
+
+        .PEA_weight_valid     (PEA_weight_valid),
+        .PEA_weight_ready     (PEA_weight_ready),
+        .weight_tag_X         (weight_tag_X),
+        .weight_tag_Y         (weight_tag_Y),
+
+        .PEA_ipsum_valid      (PEA_ipsum_valid),
+        .PEA_ipsum_ready      (PEA_ipsum_ready),
+        .ipsum_tag_X          (ipsum_tag_X),
+        .ipsum_tag_Y          (ipsum_tag_Y),
+
+        .PEA_opsum_valid      (PEA_opsum_valid),
+        .PEA_opsum_ready      (PEA_opsum_ready),
+        .opsum_tag_X          (opsum_tag_X),
+        .opsum_tag_Y          (opsum_tag_Y)
+    );
+
+//abc
+
+
 
 endmodule

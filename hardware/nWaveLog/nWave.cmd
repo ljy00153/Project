@@ -117845,3 +117845,9 @@ wvCloseGetStreamsDialog -win $_nWave1
 wvGetSignalClose -win $_nWave1
 wvResizeWindow -win $_nWave1 0 23 1920 1009
 wvReloadFile -win $_nWave1
+wvScrollDown -win $_nWave1 1
+wvScrollDown -win $_nWave1 1
+wvScrollDown -win $_nWave1 1
+wvScrollUp -win $_nWave1 1
+wvScrollUp -win $_nWave1 1
+wvScrollUp -win $_nWave1 1
