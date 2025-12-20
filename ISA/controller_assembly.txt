@@ -88,27 +88,29 @@ loop_outf:
                         ADD REG[11], REG[11], n
                         ADD REG[11], REG[11], REG[12]
                         #------loop------#
-                        G2P GLB_OPSUM_BASE, REG[11], PE_ARRAY_IPSUM_SIZE
                         #load ipsum to pe array
                         CPT_TAGXY IPSUM
-                        #------loop------#
+                        G2P GLB_OPSUM_BASE, REG[11], PE_ARRAY_IPSUM_SIZE
                         WAIT GLB
+                        
                         #compute index
                         MULI REG[13], m, K
                         #------loop------#
                         #load ifmap to pe array
                         CPT_TAGXY IFMAP
                         G2P GLB_IFMAP_BASE, REG[13], PE_ARRAY_IFMAP_SIZE
-                        #------loop------#
                         WAIT GLB
+                        #------loop finish------#
+
                         #start pe array
                         COMPUTE
                         WAIT PE_ARRAY
+                        
                         #------loop------#
                         #write to GLB
-                        P2G_OPSUM GLB_OPSUM_BASE, REG[11], PE_ARRAY_IPSUM_SIZE
                         CPT_TAGXY OPSUM
-                        #------loop------#
+                        P2G_OPSUM GLB_OPSUM_BASE, REG[11], PE_ARRAY_IPSUM_SIZE
+                        #------loop finish------#
                         LOOP M_SIZE, m, loop_m, m_offest
                         NOP
                     LOOP N_SIZE, n, loop_n, n_offest
