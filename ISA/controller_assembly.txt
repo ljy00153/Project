@@ -82,36 +82,48 @@ loop_outf:
                     G2P GLB_WEIGHT_BASE, REG[10], PE_ARRAY_WEIGHT_SIZE
                     WAIT GLB
                     loop_m:
-                        #load ipsum to pe array
-                        CPT_TAGXY IPSUM
                         #compute index
                         MULI REG[11], b, N
                         MULI REG[12], m, N
                         ADD REG[11], REG[11], n
                         ADD REG[11], REG[11], REG[12]
+                        #------loop------#
                         G2P GLB_OPSUM_BASE, REG[11], PE_ARRAY_IPSUM_SIZE
+                        #load ipsum to pe array
+                        CPT_TAGXY IPSUM
+                        #------loop------#
                         WAIT GLB
-                        #load ifmap to pe array
-                        CPT_TAGXY IFMAP
                         #compute index
                         MULI REG[13], m, K
+                        #------loop------#
+                        #load ifmap to pe array
+                        CPT_TAGXY IFMAP
                         G2P GLB_IFMAP_BASE, REG[13], PE_ARRAY_IFMAP_SIZE
+                        #------loop------#
                         WAIT GLB
                         #start pe array
                         COMPUTE
                         WAIT PE_ARRAY
+                        #------loop------#
                         #write to GLB
-                        CPT_TAGXY OPSUM
                         P2G_OPSUM GLB_OPSUM_BASE, REG[11], PE_ARRAY_IPSUM_SIZE
+                        CPT_TAGXY OPSUM
+                        #------loop------#
                         LOOP M_SIZE, m, loop_m, m_offest
+                        NOP
                     LOOP N_SIZE, n, loop_n, n_offest
+                    NOP
                 LOOP K_SIZE, k, loop_k, k_offest
+                NOP
             LOOP B_SIZE, b, loop_b, b_offest
+            NOP
         LOOP IF_SIZE, inf, loop_inf, inf_offest
+        NOP
     #write opsum to DRAM
     CPT_TAGXY OPSUM
     DMA_STORE_OFMAP DRAM_OFMAP_BASE, outf, DRAM_OPSUM_SIZE
     WAIT DMA
     LOOP OF_SIZE, outf, loop_outf, outf_offest
+    NOP
 END
 

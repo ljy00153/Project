@@ -143,7 +143,7 @@ class GEMM_base
                                      size_t DRAM_IFMAP_idx,
                                      size_t size)
         {
-            int in_div4 = ceil(double(shape.in_features) / 4);
+            //int in_div4 = ceil(double(shape.in_features) / 4);
             for(int l = 0; l < map.M; l++)
             {
                 size_t size_min = min(size_t(size), size_t(shape.in_features));
