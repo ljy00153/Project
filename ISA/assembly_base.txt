@@ -1,30 +1,3 @@
-#in feature = 128 * 8 * 8 = 8192
-#batch = 64
-#out feature = 256
-
-#set constant
-.set IF, 8192
-.set OF, 256
-.set B, 64
-#mapping parameter
-.set M, 64
-.set K, 144 # 12 * 3 * 4
-.set N, 64 # 16 * 4
-.set N_times_4, 256 # 16 * 4 * 4
-.set outf_offest, 64 # N * 4
-.set inf_offest, 144 # 12 * 3 * 4
-.set b_offest, 64 # M
-.set k_offest, 72 # tk * 3 * 4
-.set n_offest, 32 # tn * 4
-.set m_offest, 1  # mode
-
-.set PE_ARRAY_WEIGHT_SIZE, 2304 # 48 * 12 * 4
-.set PE_ARRAY_IPSUM_SIZE, 128   # 8 * 1 * 4 * 4
-.set PE_ARRAY_IFMAP_SIZE, 72    # 6 * 3 * 4
-.set DRAM_IFMAP_SIZE, 9216      # M * K * 12
-.set DRAM_WEIGHT_SIZE, 36384    # K * 3 * N * 4 * 16
-.set DRAM_OPSUM_SIZE, 16384     # B * N * 16
-
 SET_ID
 CFG_SET DRAM_IFMAP_BASE,     0
 CFG_SET DRAM_WEIGHT_BASE,    1
@@ -135,4 +108,3 @@ loop_outf:
     LOOP OF_SIZE, outf, loop_outf, outf_offest
     NOP
 END
-

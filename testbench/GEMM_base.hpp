@@ -346,6 +346,7 @@ class GEMM_base
             {
                 mapper->best_result.cycles = total_cycles;
                 mapper->mapping_to_csv_with_cycle(log_path);
+                mapper->generate_assembly("../ISA", log_path);
             }
             cout << "=======================================\n" << endl;
         }

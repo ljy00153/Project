@@ -32,8 +32,8 @@ int main()
     GEMM.in_features = 128 * 8 * 8;
     GEMM.out_features = 256;
     string pattern = "Pattern3";
-    string GEMV_log_path = "../log/GEMV.csv";
-    string GEMM_log_path = "../log/GEMM.csv";
+    string GEMV_log_path = "../log";
+    string GEMM_log_path = "../log";
 
     
     /*
