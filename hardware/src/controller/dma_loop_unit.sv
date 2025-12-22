@@ -23,11 +23,11 @@ module DMA_Loop_Unit(
     input [31:0] B, N, M, K,
     input [31:0] in_features, out_features
 );
-
-
+    
     localparam IFMAP_SIZE = 32'd3;
     localparam WEIGHT_H   = 32'd4;
-
+    logic [`GLB_ADDR_BITS-1:0] CTRL_DMA_len_reg;
+    logic [1:0] DMA_mode_reg;
     logic [`AXI_ADDR_BITS-1:0] dram_addr;
     logic [`GLB_ADDR_BITS-1:0] glb_addr;
     logic [`AXI_ADDR_BITS-1:0] dram_stride;
@@ -36,9 +36,7 @@ module DMA_Loop_Unit(
     logic loop_finish;
     logic [31:0] loop_cnt;
     logic [31:0] loop_max;
-
-    assign loop_finish = (loop_cnt == loop_max - 32'd1);
-
+    logic [`GLB_ADDR_BITS-1:0] count_length;
     
     // FSM states
     typedef enum logic [1:0] {
@@ -48,6 +46,16 @@ module DMA_Loop_Unit(
     } state_t;
 
     state_t cs, ns;
+
+    /* output logic */
+    //assign DMA_en = (cs==LOOP);
+    assign DMA_DRAM_ADDR = dram_addr;
+    assign DMA_GLB_ADDR = glb_addr;
+    assign DMA_len = glb_stride; 
+    assign CTRL_DMA_done = (cs == FINISH) ;
+
+    /* last loop finish then jump to FINISH STATE */
+    assign loop_finish = (count_length == CTRL_DMA_len_reg - glb_stride && DMA_done);
 
     always_ff @(posedge clk ) begin
         if (rst) begin
@@ -81,9 +89,12 @@ module DMA_Loop_Unit(
     // Update loop reg
     always_ff @(posedge clk) begin
         if (rst) begin
-            loop_cnt  <= 0;
-            dram_addr <= 0;
-            glb_addr  <= 0;
+            loop_cnt  <= '0;
+            dram_addr <= '0;
+            glb_addr  <= '0;
+            DMA_mode_reg <= '0;
+            CTRL_DMA_len_reg <= '0;
+
         end 
         else begin
             case (cs)
@@ -91,9 +102,10 @@ module DMA_Loop_Unit(
                     loop_cnt <= 0;
                     if(CTRL_DMA_en)begin
                     // Load addr
-                        loop_cnt  <= 0;
                         dram_addr <= CTRL_DMA_DRAM_ADDR;
                         glb_addr  <= CTRL_DMA_GLB_ADDR;
+                        DMA_mode_reg <= CTRL_DMA_mode;
+                        CTRL_DMA_len_reg <=  CTRL_DMA_len;
                     end
                 end
                 
@@ -111,13 +123,13 @@ module DMA_Loop_Unit(
         end
     end
 
-    // Calculate addr
+    // Calculate stride
     always_comb begin
         loop_max    = 0;
         dram_stride = 0;
         glb_stride  = 0;
 
-        case (CTRL_DMA_mode)
+        case (DMA_mode_reg)
             `MODE_IFMAP: begin // OP_DMA_LOAD_IFMAP
                 loop_max = M;
                 dram_stride = in_features; 
@@ -126,7 +138,7 @@ module DMA_Loop_Unit(
             end
 
             `MODE_FILTER: begin // OP_DMA_LOAD_WEIGHT
-                loop_max = N; 
+                loop_max = N<<2; 
                 dram_stride = in_features; 
                 // glb_addr + l * map.K * PE::IFMAP_SIZE * 4
                 glb_stride = (K * IFMAP_SIZE) << 2;
@@ -142,33 +154,47 @@ module DMA_Loop_Unit(
             default: ;
         endcase
     end
-
-    // output logic
-    always_comb begin
-        DMA_DRAM_ADDR = dram_addr;
-        DMA_GLB_ADDR  = glb_addr;
-        DMA_en        = (cs == LOOP);
-        DMA_mode      = CTRL_DMA_mode;
-        CTRL_DMA_done = (cs == FINISH);
-
-        case (CTRL_DMA_mode)
-            `MODE_IFMAP, `MODE_FILTER: begin
-                // DMA_len = min(Total_Len / loop_max, in_features)
-                DMA_len = ((CTRL_DMA_len / loop_max) < in_features) ? 
-                          (CTRL_DMA_len / loop_max) : in_features;
+    always_ff@(posedge clk)begin
+        if(rst)begin
+            DMA_mode<='0;
+        end else begin
+            if(cs==LOOP)begin
+                case(DMA_mode_reg)
+                    `MODE_IFMAP:DMA_mode<=2'b0;
+                    `MODE_FILTER:DMA_mode<=2'b1;
+                    `MODE_BIAS:DMA_mode<=2'b10;
+                    `MODE_OFMAP:DMA_mode<=2'b11;
+                endcase
             end
-            
-            `MODE_BIAS, `MODE_OFMAP: begin
-                // DMA_len = min(Total_Len / loop_max, out_features * 4)
-                DMA_len = ((CTRL_DMA_len / loop_max) < (out_features << 2)) ? 
-                          (CTRL_DMA_len / loop_max) : (out_features << 2);
-            end
-            
-            default: begin
-                DMA_len = CTRL_DMA_len / loop_max;
-            end
-        endcase
+        end
     end
 
- 
+    always_ff@(posedge clk)begin
+        if(rst) DMA_en <= 1'b0;
+
+        else begin
+            if(CTRL_DMA_en) DMA_en <=1'b1;
+            else if (cs==LOOP && DMA_done && count_length != CTRL_DMA_len_reg - glb_stride)DMA_en <=1'b1;
+            else DMA_en<=1'b0;
+        end
+
+    end
+       
+    always_ff@(posedge clk)begin
+        if(rst)begin
+            count_length<='0;
+        end else begin
+            if(cs==LOOP && DMA_done)begin
+                count_length <= count_length + glb_stride;
+            end else if (cs==FINISH)begin
+                count_length <=  '0;
+            end
+        end
+
+    end
+
+    
+       
+        
+
 endmodule

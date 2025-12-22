@@ -175,6 +175,7 @@ maxproc		2060033
 (Special)Runtime environment variables:
 
 Runtime environment variables:
+VSCODE_GIT_ASKPASS_MAIN=/home/users/yves6512/.vscode-server/cli/servers/Stable-994fd12f8d3a5aa16f17d42c041e5809167e845a/server/extensions/git/dist/askpass-main.js
 MODULEPATH=/etc/scl/modulefiles:/etc/scl/modulefiles:/usr/share/Modules/modulefiles:/etc/modulefiles:/usr/share/modulefiles
 SHELL=/bin/sh
 __ETC_PROFILE_NIX_SOURCED=1
@@ -187,30 +188,31 @@ VCS_STATIC_HOME=/usr/cad/synopsys/vcs/2023.12/vcfca
 LESSOPEN=||/usr/bin/lesspipe.sh %s
 MODULES_RUN_QUARANTINE=LD_LIBRARY_PATH LD_PRELOAD
 MGC_LOCATION_MAP=NO_MAP
-SSH_CONNECTION=140.116.178.165 10316 140.116.178.186 3175
-PATH=/usr/cad/cadence/XCELIUM/XCELIUM_24.03.002/tools/bin/64bit:/usr/cad/cadence/XCELIUM/XCELIUM_24.03.002/tools/bin:/usr/cad/synopsys/synthesis/2024.09/amd64/syn/bin:/usr/cad/synopsys/lc/cur/bin:/usr/cad/synopsys/lc/2024.09/bin:/usr/cad/synopsys/vcs/2023.12/bin:/usr/cad/synopsys/vcs/2023.12/vcfca/bin:/usr/cad/synopsys/vcs/2023.12/amd64/bin:/usr/cad/synopsys/verdi/2023.12/bin:/usr/cad/synopsys/verdi/cur/bin:/usr/cad/synopsys/verdi/cur/nLint/bin:/usr/cad/synopsys/verdi/2023.12/bin:/usr/cad/mentor/calibre/aok_cal_2022.1_36.16/bin:/usr/cad/synopsys/laker_oa/2024.09-1//bin:/usr/cad/synopsys/spyglass/2023.12/SPYGLASS_HOME/bin:/usr/cad/synopsys/formality/2024.09/amd64/fm/bin:/usr/cad/synopsys/vc_formal/cur/bin:/usr/cad/synopsys/primepower/2024.09/bin:/usr/cad/synopsys/primetime/2024.09/amd64/syn/bin:/usr/cad/synopsys/milkyway/2024.09/bin/linux64:/usr/cad/synopsys/icc2/2024.09/bin:/usr/cad/synopsys/icc/2023.12//amd64/syn/bin:/usr/cad/synopsys/dsoai/2024.09/bin:/usr/cad/synopsys/lc/2024.09/bin:/usr/cad/synopsys/synthesis/2024.09/amd64/syn/bin:/usr/cad/synopsys/lc/cur/bin:/usr/cad/synopsys/verdi/cur/bin:/usr/cad/synopsys/verdi/cur/nLint/bin:/usr/cad/synopsys/verdi/2023.12/bin:/usr/cad/synopsys/verdi/2023.12/bin:/usr/cad/synopsys/vcs/2023.12/bin:/usr/cad/synopsys/vcs/2023.12/vcfca/bin:/usr/cad/synopsys/vcs/2023.12/amd64/bin:/usr/cad/cadence/JASPER/jasper_2024.03p002/bin:/usr/cad/cadence/INNOVUS/INNOVUS_21.19.000/tools/bin/64bit:/usr/cad/cadence/INNOVUS/INNOVUS_21.19.000/tools/bin:/usr/cad/cadence/GENUS/GENUS_21.18.000/tools/bin/64bit:/usr/cad/cadence/GENUS/GENUS_21.18.000/tools/bin:/usr/cad/cadence/XCELIUM/XCELIUM_24.03.002/tools/bin/64bit:/usr/cad/cadence/XCELIUM/XCELIUM_24.03.002/tools/bin:/home/users/yves6512/.nix-profile/bin:/nix/var/nix/profiles/default/bin:/usr/share/Modules/bin:/usr/lib64/ccache:/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/var/lib/snapd/snap/bin
+SSH_CONNECTION=140.116.178.165 11600 140.116.178.186 3175
+PATH=/usr/cad/cadence/XCELIUM/XCELIUM_24.03.002/tools/bin/64bit:/usr/cad/cadence/XCELIUM/XCELIUM_24.03.002/tools/bin:/usr/cad/synopsys/synthesis/2024.09/amd64/syn/bin:/usr/cad/synopsys/lc/cur/bin:/usr/cad/synopsys/lc/2024.09/bin:/usr/cad/synopsys/vcs/2023.12/bin:/usr/cad/synopsys/vcs/2023.12/vcfca/bin:/usr/cad/synopsys/vcs/2023.12/amd64/bin:/usr/cad/synopsys/verdi/2023.12/bin:/usr/cad/synopsys/verdi/cur/bin:/usr/cad/synopsys/verdi/cur/nLint/bin:/usr/cad/synopsys/verdi/2023.12/bin:/usr/cad/mentor/calibre/aok_cal_2022.1_36.16/bin:/usr/cad/synopsys/laker_oa/2024.09-1//bin:/usr/cad/synopsys/spyglass/2023.12/SPYGLASS_HOME/bin:/usr/cad/synopsys/formality/2024.09/amd64/fm/bin:/usr/cad/synopsys/vc_formal/cur/bin:/usr/cad/synopsys/primepower/2024.09/bin:/usr/cad/synopsys/primetime/2024.09/amd64/syn/bin:/usr/cad/synopsys/milkyway/2024.09/bin/linux64:/usr/cad/synopsys/icc2/2024.09/bin:/usr/cad/synopsys/icc/2023.12//amd64/syn/bin:/usr/cad/synopsys/dsoai/2024.09/bin:/usr/cad/synopsys/lc/2024.09/bin:/usr/cad/synopsys/synthesis/2024.09/amd64/syn/bin:/usr/cad/synopsys/lc/cur/bin:/usr/cad/synopsys/verdi/cur/bin:/usr/cad/synopsys/verdi/cur/nLint/bin:/usr/cad/synopsys/verdi/2023.12/bin:/usr/cad/synopsys/verdi/2023.12/bin:/usr/cad/synopsys/vcs/2023.12/bin:/usr/cad/synopsys/vcs/2023.12/vcfca/bin:/usr/cad/synopsys/vcs/2023.12/amd64/bin:/usr/cad/cadence/JASPER/jasper_2024.03p002/bin:/usr/cad/cadence/INNOVUS/INNOVUS_21.19.000/tools/bin/64bit:/usr/cad/cadence/INNOVUS/INNOVUS_21.19.000/tools/bin:/usr/cad/cadence/GENUS/GENUS_21.18.000/tools/bin/64bit:/usr/cad/cadence/GENUS/GENUS_21.18.000/tools/bin:/usr/cad/cadence/XCELIUM/XCELIUM_24.03.002/tools/bin/64bit:/usr/cad/cadence/XCELIUM/XCELIUM_24.03.002/tools/bin:/home/users/yves6512/.vscode-server/data/User/globalStorage/github.copilot-chat/debugCommand:/home/users/yves6512/.vscode-server/data/User/globalStorage/github.copilot-chat/copilotCli:/home/users/yves6512/.vscode-server/cli/servers/Stable-994fd12f8d3a5aa16f17d42c041e5809167e845a/server/bin/remote-cli:/home/users/yves6512/.nix-profile/bin:/nix/var/nix/profiles/default/bin:/usr/share/Modules/bin:/usr/lib64/ccache:/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/var/lib/snapd/snap/bin
 LM_LICENSE_FILE=5280@lstn:26585@lstn:1717@lstn:
-SSH_TTY=/dev/pts/38
 XDG_RUNTIME_DIR=/run/user/1033
 MODULES_CMD=/usr/share/Modules/libexec/modulecmd.tcl
 VENDOR=unknown
 SELINUX_USE_CURRENT_RANGE=
 MGC_TMPDIR=/tmp
-LS_COLORS=rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=01;05;37;41:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=01;36:*.au=01;36:*.flac=01;36:*.m4a=01;36:*.mid=01;36:*.midi=01;36:*.mka=01;36:*.mp3=01;36:*.mpc=01;36:*.ogg=01;36:*.ra=01;36:*.wav=01;36:*.oga=01;36:*.opus=01;36:*.spx=01;36:*.xspf=01;36:
+LS_COLORS=rs=0:di=38;5;33:ln=38;5;51:mh=00:pi=40;38;5;11:so=38;5;13:do=38;5;5:bd=48;5;232;38;5;11:cd=48;5;232;38;5;3:or=48;5;232;38;5;9:mi=01;05;37;41:su=48;5;196;38;5;15:sg=48;5;11;38;5;16:ca=48;5;196;38;5;226:tw=48;5;10;38;5;16:ow=48;5;10;38;5;21:st=48;5;21;38;5;15:ex=38;5;40:*.tar=38;5;9:*.tgz=38;5;9:*.arc=38;5;9:*.arj=38;5;9:*.taz=38;5;9:*.lha=38;5;9:*.lz4=38;5;9:*.lzh=38;5;9:*.lzma=38;5;9:*.tlz=38;5;9:*.txz=38;5;9:*.tzo=38;5;9:*.t7z=38;5;9:*.zip=38;5;9:*.z=38;5;9:*.dz=38;5;9:*.gz=38;5;9:*.lrz=38;5;9:*.lz=38;5;9:*.lzo=38;5;9:*.xz=38;5;9:*.zst=38;5;9:*.tzst=38;5;9:*.bz2=38;5;9:*.bz=38;5;9:*.tbz=38;5;9:*.tbz2=38;5;9:*.tz=38;5;9:*.deb=38;5;9:*.rpm=38;5;9:*.jar=38;5;9:*.war=38;5;9:*.ear=38;5;9:*.sar=38;5;9:*.rar=38;5;9:*.alz=38;5;9:*.ace=38;5;9:*.zoo=38;5;9:*.cpio=38;5;9:*.7z=38;5;9:*.rz=38;5;9:*.cab=38;5;9:*.wim=38;5;9:*.swm=38;5;9:*.dwm=38;5;9:*.esd=38;5;9:*.jpg=38;5;13:*.jpeg=38;5;13:*.mjpg=38;5;13:*.mjpeg=38;5;13:*.gif=38;5;13:*.bmp=38;5;13:*.pbm=38;5;13:*.pgm=38;5;13:*.ppm=38;5;13:*.tga=38;5;13:*.xbm=38;5;13:*.xpm=38;5;13:*.tif=38;5;13:*.tiff=38;5;13:*.png=38;5;13:*.svg=38;5;13:*.svgz=38;5;13:*.mng=38;5;13:*.pcx=38;5;13:*.mov=38;5;13:*.mpg=38;5;13:*.mpeg=38;5;13:*.m2v=38;5;13:*.mkv=38;5;13:*.webm=38;5;13:*.ogm=38;5;13:*.mp4=38;5;13:*.m4v=38;5;13:*.mp4v=38;5;13:*.vob=38;5;13:*.qt=38;5;13:*.nuv=38;5;13:*.wmv=38;5;13:*.asf=38;5;13:*.rm=38;5;13:*.rmvb=38;5;13:*.flc=38;5;13:*.avi=38;5;13:*.fli=38;5;13:*.flv=38;5;13:*.gl=38;5;13:*.dl=38;5;13:*.xcf=38;5;13:*.xwd=38;5;13:*.yuv=38;5;13:*.cgm=38;5;13:*.emf=38;5;13:*.ogv=38;5;13:*.ogx=38;5;13:*.aac=38;5;45:*.au=38;5;45:*.flac=38;5;45:*.m4a=38;5;45:*.mid=38;5;45:*.midi=38;5;45:*.mka=38;5;45:*.mp3=38;5;45:*.mpc=38;5;45:*.ogg=38;5;45:*.ra=38;5;45:*.wav=38;5;45:*.oga=38;5;45:*.opus=38;5;45:*.spx=38;5;45:*.xspf=38;5;45:
 SHLIB_PATH=/usr/cad/synopsys/verdi/2023.12/etc/lib/libstdc++/LINUX64/:/usr/cad/synopsys/verdi/2023.12/share/PLI/lib/LINUX64/:/usr/cad/synopsys/verdi/2023.12/share/PLI/VCS/LINUX64/::/usr/cad/synopsys/verdi/cur/etc/lib/libstdc++/LINUX64/:/usr/cad/synopsys/verdi/2023.12/etc/lib/libstdc++/LINUX64/:/usr/cad/synopsys/verdi/2023.12/share/PLI/lib/LINUX64/:/usr/cad/synopsys/verdi/2023.12/share/PLI/VCS/LINUX64/::/usr/cad/synopsys/verdi/cur/etc/lib/libstdc++/LINUX64/:/usr/cad/synopsys/verdi/2023.12/etc/lib/libstdc++/LINUX64/:/usr/cad/synopsys/verdi/2023.12/share/PLI/lib/LINUX64/:/usr/cad/synopsys/verdi/2023.12/share/PLI/VCS/LINUX64/::/usr/cad/synopsys/verdi/2023.12/etc/lib/libstdc++/LINUX64/:/usr/cad/synopsys/verdi/2023.12/share/PLI/lib/LINUX64/:/usr/cad/synopsys/verdi/2023.12/share/PLI/VCS/LINUX64/:
 KDEDIRS=/usr
-DISPLAY=localhost:18.0
 CONDA_EXE=/home/users/yves6512/miniconda3/bin/conda
 which_declare=declare -f
 MGC_HOME=/usr/cad/mentor/calibre/aok_cal_2022.1_36.16
 NIX_SSL_CERT_FILE=/etc/ssl/certs/ca-bundle.crt
+SSL_CERT_FILE=/etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem
 HOME=/home/users/yves6512
 VCS_HOME=/usr/cad/synopsys/vcs/2023.12
 PWD=/home/users/yves6512/Project/hardware/testbench/controller
+VSCODE_IPC_HOOK_CLI=/run/user/1033/vscode-ipc-f4ed3141-d23d-4ca2-9da3-725f17fa5c4b.sock
+VSCODE_NONCE=7daada33-8240-44a6-8dec-eef4ff6824bc
 CALIBRE_HOME=/usr/cad/mentor/calibre/aok_cal_2022.1_36.16
 VERDI_HOME=/usr/cad/synopsys/verdi/2023.12
 MANPATH=/usr/share/man::/usr/cad/synopsys/vcs/2023.12/doc/man:/usr/cad/synopsys/synthesis/2024.09/doc/syn/man:/usr/cad/synopsys/lc/2024.09/doc/lc/man:/usr/cad/synopsys/vcs/2023.12/doc/man:/usr/cad/synopsys/lc/2024.09/doc/lc/man:/usr/cad/synopsys/synthesis/2024.09/doc/syn/man
-DBUS_SESSION_BUS_ADDRESS=unix:abstract=/tmp/dbus-jGHP7MyGet,guid=91b46e3ca0bf7ca5a80ddfb16947c54d
+DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1033/bus
 SYNOPSYS=/usr/cad/synopsys/formality/cur
 LD_LIBRARY_PATH=/usr/cad/cadence/XCELIUM/XCELIUM_24.03.002/tools/lib/64bit:/usr/cad/cadence/XCELIUM/XCELIUM_24.03.002/tools/lib64:/usr/cad/cadence/XCELIUM/XCELIUM_24.03.002/tools/lib::::/usr/cad/synopsys/verdi/cur/share/PLI/VCS/LINUX64::/lib64:/usr/lib64:/usr/local/lib64:/usr/cad/synopsys/verdi/2023.12/etc/lib/libstdc++/LINUX64/:/usr/cad/synopsys/verdi/2023.12/share/PLI/lib/LINUX64/:/usr/cad/synopsys/verdi/2023.12/share/PLI/VCS/LINUX64/::/usr/cad/synopsys/verdi/cur/etc/lib/libstdc++/LINUX64/:/usr/cad/synopsys/verdi/cur/share/PLI/IUS/LINUX64/://usr/cad/synopsys/verdi/2023.12/etc/lib/libstdc++/LINUX64/:/usr/cad/synopsys/verdi/2023.12/share/PLI/lib/LINUX64/:/usr/cad/synopsys/verdi/2023.12/share/PLI/VCS/LINUX64/::::::::/usr/cad/synopsys/milkyway/2024.09/lib/linux64/:::::::/usr/cad/synopsys/verdi/cur/etc/lib/libstdc++/LINUX64/:/usr/cad/synopsys/verdi/cur/share/PLI/IUS/LINUX64/://usr/cad/synopsys/verdi/2023.12/etc/lib/libstdc++/LINUX64/:/usr/cad/synopsys/verdi/2023.12/share/PLI/lib/LINUX64/:/usr/cad/synopsys/verdi/2023.12/share/PLI/VCS/LINUX64/::/usr/cad/synopsys/verdi/2023.12/etc/lib/libstdc++/LINUX64/:/usr/cad/synopsys/verdi/2023.12/share/PLI/lib/LINUX64/:/usr/cad/synopsys/verdi/2023.12/share/PLI/VCS/LINUX64/::/usr/cad/synopsys/verdi/cur/share/PLI/VCS/LINUX64::/lib64:/usr/lib64:/usr/local/lib64::/usr/cad/cadence/INNOVUS/INNOVUS_21.19.000/tools/lib/64bit:/usr/cad/cadence/INNOVUS/INNOVUS_21.19.000/tools/lib64:/usr/cad/cadence/INNOVUS/INNOVUS_21.19.000/tools/lib::/usr/cad/cadence/GENUS/GENUS_21.18.000/tools/lib/64bit:/usr/cad/cadence/GENUS/GENUS_21.18.000/tools/lib64:/usr/cad/cadence/GENUS/GENUS_21.18.000/tools/lib::/usr/cad/cadence/XCELIUM/XCELIUM_24.03.002/tools/lib/64bit:/usr/cad/cadence/XCELIUM/XCELIUM_24.03.002/tools/lib64:/usr/cad/cadence/XCELIUM/XCELIUM_24.03.002/tools/lib:
 MODULEPATH_modshare=/usr/share/Modules/modulefiles:2:/etc/modulefiles:2:/usr/share/modulefiles:2
@@ -220,10 +222,12 @@ LOGNAME=yves6512
 SELINUX_LEVEL_REQUESTED=
 VCS_CC=gcc
 HOSTNAME=aislab-eda-server
+VSCODE_GIT_IPC_HANDLE=/run/user/1033/vscode-git-1fc8b60cf2.sock
 SSH_ASKPASS=/usr/libexec/openssh/gnome-ssh-askpass
+COLORTERM=truecolor
 XLOCALEDIR=/usr/cad/synopsys/icc2/2024.09/etc/locale
 OSTYPE=linux
-SHLVL=2
+SHLVL=6
 HEX=tb6.hex
 NIX_PROFILES=/nix/var/nix/profiles/default /home/users/yves6512/.nix-profile
 MAKEOVERRIDES=${-*-command-variables-*-}
@@ -251,40 +255,20 @@ BASH_FUNC_switchml%%=() {  swfound=1;
  return 1;
  fi
 }
-XDG_SESSION_ID=2007
+XDG_SESSION_ID=2413
 USER=yves6512
 CONDA_SHLVL=0
 Laker_TCL_L3=1
 SYNOPSYS_LC_ROOT=/usr/cad/synopsys/lc/cur
+OLDPWD=/home/users/yves6512
+VSCODE_GIT_ASKPASS_EXTRA_ARGS=
 VC_STATIC_HOME=/usr/cad/synopsys/vc_formal/cur/
 FORMALITY=/usr/cad/synopsys/formality/cur
+TERM_PROGRAM=vscode
 BASH_FUNC_ml%%=() {  module ml "$@"
 }
-BASH_FUNC_module%%=() {  _module_raw "$@" 2>&1
-}
-MAKEFLAGS= -- HEX=tb6.hex
-MFLAGS=
-SSH_CLIENT=140.116.178.165 10316 3175
-MAIL=/var/spool/mail/yves6512
-LOADEDMODULES=
-GDK_BACKEND=x11
-MAKE_TERMOUT=/dev/pts/38
-BASH_FUNC_which%%=() {  ( alias;
- eval ${which_declare} ) | /usr/bin/which --tty-only --read-alias --read-functions --show-tilde --show-dot $@
-}
-S_COLORS=auto
-_CONDA_ROOT=/home/users/yves6512/miniconda3
-Laker_TCL_ToolBox=1
-CONDA_PYTHON_EXE=/home/users/yves6512/miniconda3/bin/python
-HOSTTYPE=x86_64-linux
-SELINUX_ROLE_REQUESTED=
-HISTSIZE=1000
-GROUP=intern
-REMOTEHOST=140.116.178.165
-MAKE_TERMERR=/dev/pts/38
-LANG=en_US.UTF-8
-TERM=xterm
-BASH_FUNC__module_raw%%=() {  unset _mlshdbg;
+VSCODE_GIT_ASKPASS_NODE=/home/users/yves6512/.vscode-server/cli/servers/Stable-994fd12f8d3a5aa16f17d42c041e5809167e845a/server/node
+BASH_FUNC_module%%=() {  unset _mlshdbg;
  if [ "${MODULES_SILENT_SHELL_DEBUG:-0}" = '1' ]; then
  case "$-" in 
  *v*x*)
@@ -337,6 +321,30 @@ BASH_FUNC__module_raw%%=() {  unset _mlshdbg;
  unset _mlshdbg;
  return $_mlstatus
 }
+MAKEFLAGS= -- HEX=tb6.hex
+MFLAGS=
+SSH_CLIENT=140.116.178.165 11600 3175
+TERM_PROGRAM_VERSION=1.107.1
+MAIL=/var/spool/mail/yves6512
+LOADEDMODULES=
+MAKE_TERMOUT=/dev/pts/48
+BROWSER=/home/users/yves6512/.vscode-server/cli/servers/Stable-994fd12f8d3a5aa16f17d42c041e5809167e845a/server/bin/helpers/browser.sh
+BASH_FUNC_which%%=() {  ( alias;
+ eval ${which_declare} ) | /usr/bin/which --tty-only --read-alias --read-functions --show-tilde --show-dot $@
+}
+S_COLORS=auto
+_CONDA_ROOT=/home/users/yves6512/miniconda3
+GIT_ASKPASS=/home/users/yves6512/.vscode-server/cli/servers/Stable-994fd12f8d3a5aa16f17d42c041e5809167e845a/server/extensions/git/dist/askpass.sh
+CONDA_PYTHON_EXE=/home/users/yves6512/miniconda3/bin/python
+Laker_TCL_ToolBox=1
+HOSTTYPE=x86_64-linux
+SSL_CERT_DIR=/etc/pki/tls/certs
+SELINUX_ROLE_REQUESTED=
+HISTSIZE=1000
+GROUP=intern
+MAKE_TERMERR=/dev/pts/48
+LANG=en_US.UTF-8
+TERM=xterm-256color
 HOST=aislab-eda-server
 MAKELEVEL=1
 VCS_PATHMAP_PRELOAD_DONE=1
@@ -351,151 +359,153 @@ argv[0]=./simv
 argv[1]=+HEX=tb6.hex
 argv[2]=-l
 argv[3]=run.log
-275 profile - 100
-          CPU/Mem usage: 0.030 sys,  0.150 user,  310.43M mem
-276 Elapsed time:    0:00:01    Sun Dec 21 05:00:56 2025
-277 User CPU time used: 0 seconds
-278 System CPU time used: 0 seconds
-279 pliAppInit
-280 [SC]Init: MemoryConsumed=0.00MB ElapsedTime=0hour 0min. 0sec.
-281 FSDB_GATE is set.
-282 FSDB_RTL is set.
-283 FSDB_PACKED_MODE is enabled.
-284 FSDB_GATE_PACKED is enabled.
-285 FSDB_ALIAS_ARRAY_ELEM is set to 4294967295.
-286 Enable Parallel Dumping.
-287 pliAppMiscSet: New Sim Round
-288 pliEntryInit
-289 LIBSSCORE=found /usr/cad/synopsys/verdi/2023.12/share/PLI/lib/LINUXAMD64/libsscore_vcs202312.so through $NOVAS_HOME setting.
-290 FSDB Dumper for VCS, Release Verdi_V-2023.12, Linux x86_64/64bit, 11/15/2023
-291 (C) 1996 - 2023 by Synopsys, Inc.
-292 sps_call_fsdbDumpfile_main at 0 : controller_tb.sv(248)
-293 argv[0]: (wave.fsdb)
-294 *Verdi* FSDB WARNING: The FSDB file already exists. Overwriting the FSDB file may crash the programs that are using this file.
-295 *Verdi* : Create FSDB file 'wave.fsdb'
-296 [spi_vcs_vd_ppi_create_root]: no upf option
-297 compile option from '/home/users/yves6512/Project/hardware/testbench/controller/simv.daidir/vcs_rebuild'.
-298   "vcs '-full64' '-sverilog' '+incdir+../../include' '-debug_access+all' '-timescale=1ns/1ps' '-l' 'compile.log' '-top' 'controller_tb' 'controller_tb.sv' '../../src/ASIC.sv' '../../src/top.sv' '../../src/controller/ALU.sv' '../../src/controller/controller_top.sv' '../../src/controller/decoder.sv' '../../src/controller/dma_loop_unit.sv' '../../src/controller/glb_addr_generator.sv' '../../src/controller/ID_SENDER.sv' '../../src/controller/mux.sv' '../../src/controller/pc_adder.sv' '../../src/controller/pc_counter.sv' '../../src/controller/regfile.sv' '../../src/controller/signal_controller.sv' '../../src/controller/SRAM.sv' '../../src/GLB/GLB.sv' '../../src/GLB/SRAM_rtl.sv' '../../src/PE_array/PE_array.sv' '../../src/PE_array/PE.sv' '../../src/PE_array/GIN/GIN_Bus.sv' '../../src/PE_array/GIN/GIN_MulticastController.sv' '../../src/PE_array/GIN/GIN.sv' '../../src/PE_array/GON/GON_Bus.sv' '../../src/PE_array/GON/GON_MulticastController.sv' '../../src/PE_array/GON/GON.sv' '-o' 'simv' 2>&1"
-299 DVDI_is_vir_unload_enabled is enable
-300 FSDB_VCS_ENABLE_NATIVE_VC is enable
-301 sps_call_fsdbDumpvars_vd_main at 0 : controller_tb.sv(249)
-302 argv[0]: (0)
-303 argv[1]: (handle) controller_tb
-304 *Verdi* : Begin traversing the scope (controller_tb), layer (0).
-305 *Verdi* : End of traversing.
-306 pliAppHDL_DumpVarComplete traverse var: profile - 
-          CPU/Mem usage: 0.040 sys,  0.150 user,  410.04M mem
-                   incr: 0.010 sys,  0.000 user,  7.35M mem
-                   accu: 0.010 sys,  0.000 user,  7.35M mem
-              accu incr: 0.010 sys,  0.000 user,  7.35M mem
+284 profile - 100
+          CPU/Mem usage: 0.020 sys,  0.150 user,  312.55M mem
+285 Elapsed time:    0:00:01    Mon Dec 22 13:30:02 2025
+286 User CPU time used: 0 seconds
+287 System CPU time used: 0 seconds
+288 pliAppInit
+289 [SC]Init: MemoryConsumed=0.00MB ElapsedTime=0hour 0min. 0sec.
+290 FSDB_GATE is set.
+291 FSDB_RTL is set.
+292 FSDB_PACKED_MODE is enabled.
+293 FSDB_GATE_PACKED is enabled.
+294 FSDB_ALIAS_ARRAY_ELEM is set to 4294967295.
+295 Enable Parallel Dumping.
+296 pliAppMiscSet: New Sim Round
+297 pliEntryInit
+298 LIBSSCORE=found /usr/cad/synopsys/verdi/2023.12/share/PLI/lib/LINUXAMD64/libsscore_vcs202312.so through $NOVAS_HOME setting.
+299 FSDB Dumper for VCS, Release Verdi_V-2023.12, Linux x86_64/64bit, 11/15/2023
+300 (C) 1996 - 2023 by Synopsys, Inc.
+301 sps_call_fsdbDumpfile_main at 0 : controller_tb.sv(232)
+302 argv[0]: (wave.fsdb)
+303 *Verdi* FSDB WARNING: The FSDB file already exists. Overwriting the FSDB file may crash the programs that are using this file.
+304 *Verdi* : Create FSDB file 'wave.fsdb'
+305 [spi_vcs_vd_ppi_create_root]: no upf option
+306 compile option from '/home/users/yves6512/Project/hardware/testbench/controller/simv.daidir/vcs_rebuild'.
+307   "vcs '-full64' '-sverilog' '+incdir+../../include' '-debug_access+all' '-timescale=1ns/1ps' '-l' 'compile.log' '-top' 'controller_tb' 'controller_tb.sv' '../../src/ASIC.sv' '../../src/top.sv' '../../src/controller/ALU.sv' '../../src/controller/controller_top.sv' '../../src/controller/decoder.sv' '../../src/controller/dma_loop_unit.sv' '../../src/controller/glb_addr_generator.sv' '../../src/controller/ID_SENDER.sv' '../../src/controller/mux.sv' '../../src/controller/pc_adder.sv' '../../src/controller/pc_counter.sv' '../../src/controller/regfile.sv' '../../src/controller/signal_controller.sv' '../../src/controller/SRAM.sv' '../../src/GLB/GLB.sv' '../../src/GLB/SRAM_rtl.sv' '../../src/PE_array/PE_array.sv' '../../src/PE_array/PE.sv' '../../src/PE_array/GIN/GIN_Bus.sv' '../../src/PE_array/GIN/GIN_MulticastController.sv' '../../src/PE_array/GIN/GIN.sv' '../../src/PE_array/GON/GON_Bus.sv' '../../src/PE_array/GON/GON_MulticastController.sv' '../../src/PE_array/GON/GON.sv' '-o' 'simv' 2>&1"
+308 DVDI_is_vir_unload_enabled is enable
+309 FSDB_VCS_ENABLE_NATIVE_VC is enable
+310 sps_call_fsdbDumpvars_vd_main at 0 : controller_tb.sv(233)
+311 argv[0]: (0)
+312 argv[1]: (handle) controller_tb
+313 *Verdi* : Begin traversing the scope (controller_tb), layer (0).
+314 *Verdi* : End of traversing.
+315 pliAppHDL_DumpVarComplete traverse var: profile - 
+          CPU/Mem usage: 0.030 sys,  0.150 user,  412.16M mem
+                   incr: 0.000 sys,  0.000 user,  7.35M mem
+                   accu: 0.000 sys,  0.000 user,  7.35M mem
+              accu incr: 0.000 sys,  0.000 user,  7.35M mem
 
-          Count usage: 391 var,  400 idcode,  135 callback
-                 incr: 391 var,  400 idcode,  135 callback
-                 accu: 391 var,  400 idcode,  135 callback
-            accu incr: 391 var,  400 idcode,  135 callback
-307 Elapsed time:    0:00:01    Sun Dec 21 05:00:56 2025
-308 User CPU time used: 0 seconds
-309 System CPU time used: 0 seconds
-310 pliAppHDL_DumpVarComplete: profile - 
-          CPU/Mem usage: 0.040 sys,  0.150 user,  411.09M mem
+          Count usage: 397 var,  405 idcode,  142 callback
+                 incr: 397 var,  405 idcode,  142 callback
+                 accu: 397 var,  405 idcode,  142 callback
+            accu incr: 397 var,  405 idcode,  142 callback
+316 Elapsed time:    0:00:01    Mon Dec 22 13:30:02 2025
+317 User CPU time used: 0 seconds
+318 System CPU time used: 0 seconds
+319 pliAppHDL_DumpVarComplete: profile - 
+          CPU/Mem usage: 0.030 sys,  0.150 user,  413.21M mem
                    incr: 0.000 sys,  0.000 user,  1.05M mem
-                   accu: 0.010 sys,  0.000 user,  8.40M mem
+                   accu: 0.000 sys,  0.000 user,  8.40M mem
               accu incr: 0.000 sys,  0.000 user,  1.05M mem
 
-          Count usage: 391 var,  400 idcode,  135 callback
+          Count usage: 397 var,  405 idcode,  142 callback
                  incr: 0 var,  0 idcode,  0 callback
-                 accu: 391 var,  400 idcode,  135 callback
+                 accu: 397 var,  405 idcode,  142 callback
             accu incr: 0 var,  0 idcode,  0 callback
-311 Elapsed time:    0:00:01    Sun Dec 21 05:00:56 2025
-312 User CPU time used: 0 seconds
-313 System CPU time used: 0 seconds
-314 sps_call_fsdbDumpvars_vd_main at 0 : controller_tb.sv(250)
-315 argv[0]: (0)
-316 argv[1]: (handle) controller_tb.dut
-317 *Verdi* : Begin traversing the scope (controller_tb.dut), layer (0).
-318 *Verdi* : End of traversing.
-319 pliAppHDL_DumpVarComplete traverse var: profile - 
-          CPU/Mem usage: 0.040 sys,  0.150 user,  411.09M mem
-                   incr: 0.000 sys,  0.000 user,  0.00M mem
-                   accu: 0.000 sys,  0.000 user,  0.00M mem
-              accu incr: 0.000 sys,  0.000 user,  0.00M mem
-
-          Count usage: 722 var,  400 idcode,  135 callback
-                 incr: 331 var,  0 idcode,  0 callback
-                 accu: 331 var,  0 idcode,  0 callback
-            accu incr: 331 var,  0 idcode,  0 callback
-320 Elapsed time:    0:00:01    Sun Dec 21 05:00:56 2025
+320 Elapsed time:    0:00:01    Mon Dec 22 13:30:02 2025
 321 User CPU time used: 0 seconds
 322 System CPU time used: 0 seconds
-323 pliAppHDL_DumpVarComplete: profile - 
-          CPU/Mem usage: 0.040 sys,  0.150 user,  411.09M mem
+323 sps_call_fsdbDumpvars_vd_main at 0 : controller_tb.sv(234)
+324 argv[0]: (0)
+325 argv[1]: (handle) controller_tb.dut
+326 *Verdi* : Begin traversing the scope (controller_tb.dut), layer (0).
+327 *Verdi* : End of traversing.
+328 pliAppHDL_DumpVarComplete traverse var: profile - 
+          CPU/Mem usage: 0.030 sys,  0.150 user,  413.21M mem
                    incr: 0.000 sys,  0.000 user,  0.00M mem
                    accu: 0.000 sys,  0.000 user,  0.00M mem
               accu incr: 0.000 sys,  0.000 user,  0.00M mem
 
-          Count usage: 722 var,  400 idcode,  135 callback
-                 incr: 0 var,  0 idcode,  0 callback
-                 accu: 331 var,  0 idcode,  0 callback
-            accu incr: 0 var,  0 idcode,  0 callback
-324 Elapsed time:    0:00:01    Sun Dec 21 05:00:56 2025
-325 User CPU time used: 0 seconds
-326 System CPU time used: 0 seconds
-327 sps_call_fsdbDumpvars_vd_main at 0 : controller_tb.sv(252)
-328 argv[0]: (0)
-329 argv[1]: (+all)
-330 *Verdi* : Begin traversing the scopes, layer (0).
-331 *Verdi* : Enable +all dumping.
-332 *Verdi* : End of traversing.
-333 pliAppHDL_DumpVarComplete traverse var: profile - 
-          CPU/Mem usage: 0.040 sys,  0.170 user,  414.67M mem
-                   incr: 0.000 sys,  0.020 user,  3.58M mem
-                   accu: 0.000 sys,  0.020 user,  3.58M mem
-              accu incr: 0.000 sys,  0.020 user,  3.58M mem
+          Count usage: 731 var,  405 idcode,  142 callback
+                 incr: 334 var,  0 idcode,  0 callback
+                 accu: 334 var,  0 idcode,  0 callback
+            accu incr: 334 var,  0 idcode,  0 callback
+329 Elapsed time:    0:00:01    Mon Dec 22 13:30:02 2025
+330 User CPU time used: 0 seconds
+331 System CPU time used: 0 seconds
+332 pliAppHDL_DumpVarComplete: profile - 
+          CPU/Mem usage: 0.030 sys,  0.150 user,  413.21M mem
+                   incr: 0.000 sys,  0.000 user,  0.00M mem
+                   accu: 0.000 sys,  0.000 user,  0.00M mem
+              accu incr: 0.000 sys,  0.000 user,  0.00M mem
 
-          Count usage: 66681 var,  65968 idcode,  138 callback
-                 incr: 65959 var,  65568 idcode,  3 callback
-                 accu: 65959 var,  65568 idcode,  3 callback
-            accu incr: 65959 var,  65568 idcode,  3 callback
-334 Elapsed time:    0:00:02    Sun Dec 21 05:00:57 2025
-335 User CPU time used: 0 seconds
-336 System CPU time used: 0 seconds
-337 pliAppHDL_DumpVarComplete: profile - 
-          CPU/Mem usage: 0.040 sys,  0.170 user,  417.80M mem
-                   incr: 0.000 sys,  0.000 user,  3.13M mem
+          Count usage: 731 var,  405 idcode,  142 callback
+                 incr: 0 var,  0 idcode,  0 callback
+                 accu: 334 var,  0 idcode,  0 callback
+            accu incr: 0 var,  0 idcode,  0 callback
+333 Elapsed time:    0:00:01    Mon Dec 22 13:30:02 2025
+334 User CPU time used: 0 seconds
+335 System CPU time used: 0 seconds
+336 sps_call_fsdbDumpvars_vd_main at 0 : controller_tb.sv(235)
+337 argv[0]: (0)
+338 argv[1]: (+all)
+339 *Verdi* : Begin traversing the scopes, layer (0).
+340 *Verdi* : Enable +all dumping.
+341 *Verdi* : End of traversing.
+342 pliAppHDL_DumpVarComplete traverse var: profile - 
+          CPU/Mem usage: 0.030 sys,  0.160 user,  416.79M mem
+                   incr: 0.000 sys,  0.010 user,  3.58M mem
+                   accu: 0.000 sys,  0.010 user,  3.58M mem
+              accu incr: 0.000 sys,  0.010 user,  3.58M mem
+
+          Count usage: 66696 var,  65973 idcode,  145 callback
+                 incr: 65965 var,  65568 idcode,  3 callback
+                 accu: 65965 var,  65568 idcode,  3 callback
+            accu incr: 65965 var,  65568 idcode,  3 callback
+343 Elapsed time:    0:00:01    Mon Dec 22 13:30:02 2025
+344 User CPU time used: 0 seconds
+345 System CPU time used: 0 seconds
+346 pliAppHDL_DumpVarComplete: profile - 
+          CPU/Mem usage: 0.030 sys,  0.170 user,  419.93M mem
+                   incr: 0.000 sys,  0.010 user,  3.13M mem
                    accu: 0.000 sys,  0.020 user,  6.71M mem
-              accu incr: 0.000 sys,  0.000 user,  3.13M mem
+              accu incr: 0.000 sys,  0.010 user,  3.13M mem
 
-          Count usage: 66681 var,  65968 idcode,  138 callback
+          Count usage: 66696 var,  65973 idcode,  145 callback
                  incr: 0 var,  0 idcode,  0 callback
-                 accu: 65959 var,  65568 idcode,  3 callback
+                 accu: 65965 var,  65568 idcode,  3 callback
             accu incr: 0 var,  0 idcode,  0 callback
-338 Elapsed time:    0:00:02    Sun Dec 21 05:00:57 2025
-339 User CPU time used: 0 seconds
-340 System CPU time used: 0 seconds
-341 End of simulation at 345990000
-342 Memory usage: 487.154 M
-343 Maximum resident set size: 136 MB
-344 Hard page faults: 0
-345 Soft page faults: 15238
-346 Elapsed time:    0:00:03    Sun Dec 21 05:00:58 2025
-347 User CPU time used: 0 seconds
-348 System CPU time used: 0 seconds
-349 Begin FSDB profile info:
-350 FSDB Writer : bc1(69430) bcn(66238) mtf/stf(0/0)
-FSDB Writer elapsed time : flush(0.015522) io wait(0.000000) theadpool wait(0.000000)
+347 Elapsed time:    0:00:01    Mon Dec 22 13:30:02 2025
+348 User CPU time used: 0 seconds
+349 System CPU time used: 0 seconds
+350 sps_call_fsdbDumpflush_vd_main at 892105000 : controller_tb.sv(354)
+351 *Verdi* : Flush all FSDB Files at 892,105,000 ps.
+352 End of simulation at 892105000
+353 Memory usage: 498.495 M
+354 Maximum resident set size: 142 MB
+355 Hard page faults: 0
+356 Soft page faults: 16527
+357 Elapsed time:    0:00:05    Mon Dec 22 13:30:06 2025
+358 User CPU time used: 0 seconds
+359 System CPU time used: 0 seconds
+360 Begin FSDB profile info:
+361 FSDB Writer : bc1(180991) bcn(156089) mtf/stf(0/1)
+FSDB Writer elapsed time : flush(0.022782) io wait(0.000000) theadpool wait(0.000000)
 FSDB Writer cpu time : MT Compression : 0
-351 End FSDB profile info
-352 FSDB closed. Name: wave.fsdb Size: 28950
-353 Parallel profile     - ProducerThread:1 ConsumerThread:1 Buffer:64MB
-354                      - BlockUsed:1 Acquire:0 BufferUsed:1875557
-355                      - Flush:5 Expand:0 ProducerWait:0 ConsumerWait:0
-356                      - MainProducerTime:0.337611752 TotalConsumerTime:0.000000000
-357                      - ElapsedTime:2.035594000
-358 Producer   0 profile - BlockUsed:2 Acquire:0 BufferUsed:1875557
-359 Consumer   0 profile - Affinity:-1 CPUTime:0.000000000 LifeTime:0.000000000 (-nan%)
-360                      - BlockUsed:2 Acquire:0 BufferUsed:1875557
-361 SimExit
-362 Elapsed time:    0:00:04    Sun Dec 21 05:00:59 2025
-363 User CPU time used: 0 seconds
-364 System CPU time used: 0 seconds
-365 Sim process exit
+362 End FSDB profile info
+363 FSDB closed. Name: wave.fsdb Size: 35112
+364 Parallel profile     - ProducerThread:1 ConsumerThread:1 Buffer:64MB
+365                      - BlockUsed:5 Acquire:0 BufferUsed:6020893
+366                      - Flush:6 Expand:0 ProducerWait:0 ConsumerWait:3
+367                      - MainProducerTime:0.531171104 TotalConsumerTime:0.015918776
+368                      - ElapsedTime:3.459094000
+369 Producer   0 profile - BlockUsed:5 Acquire:0 BufferUsed:6020893
+370 Consumer   0 profile - Affinity:-1 CPUTime:0.015918776 LifeTime:2.266431599 (0.01%)
+371                      - BlockUsed:5 Acquire:0 BufferUsed:6020893
+372 SimExit
+373 Elapsed time:    0:00:05    Mon Dec 22 13:30:06 2025
+374 User CPU time used: 0 seconds
+375 System CPU time used: 0 seconds
+376 Sim process exit
