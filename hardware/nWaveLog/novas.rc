@@ -202,7 +202,8 @@ StickSet-TextColor = ID_BLACK
 [FSM_Dlg-Print]
 Orientation = Landscape
 [FileBrowser]
-nWaveOpenFsdbDirHistory = "\"/home/users/yves6512/aoc2025-lab3/wave/PE_wave.vcd\"" "\"/home/users/yves6512/aoc2025-lab3/wave/PE_wave.vcd.fsdb\"" "\"/home/users/yves6512/aoc2025-lab3/wave/PE_array_wave.vcd\"" "\"/home/users/yves6512/Project/hardware/wave.fsdb\""
+nWaveOpenFsdbDirHistory = "\"/home/users/yves6512/aoc2025-lab3/wave/PE_wave.vcd\"" "\"/home/users/yves6512/aoc2025-lab3/wave/PE_wave.vcd.fsdb\"" "\"/home/users/yves6512/aoc2025-lab3/wave/PE_array_wave.vcd\"" "\"/home/users/yves6512/Project/hardware/novas.fsdb\"" "\"/home/users/yves\
+6512/Project/hardware/wave.fsdb\""
 [Form]
 version = Verdi_V-2023.12
 [General]
@@ -318,13 +319,15 @@ FileName = test.ps
 PaperSize = A4 - 210x297 (mm)
 ColorPrint = FALSE
 [QtDialog]
-ActiveFileDialog = 588,270,360,299
+QwUserAskDlg = 188,26,512,123
 QwInfoMsgDlg = 575,375,750,250
-QwUserAskDlg = 640,385,620,103
-qWaveSignalDialog = 494,288,931,479
+unknownSave_SaveSignal(s)NotFound = 654,329,590,340
+unknownSave = 729,417,461,245
+QwQuestionMsgDlg = 596,332,324,103
 QwWarnMsgDlg = 650,375,600,250
-openFileDlg = 659,286,602,483
-restoreSigDlg = 684,308,551,438
+ActiveFileDialog = 576,270,384,299
+openFileDlg = 659,311,602,433
+qWaveSignalDialog = 504,287,911,481
 [Session Cache]
 1 = string (session file name)
 2 = string (session file name)
@@ -595,7 +598,7 @@ AutoApplySeverityColor = TRUE
 scope_to_save_with_macro
 open_file_dir
 open_rc_file_dir
-getSignalForm = 494 288 931 479 271 381 394 183
+getSignalForm = 504 287 911 481 263 383 382 184
 viewPort = 0 23 1920 1009 287 65
 legendBackground = -c ID_BLACK
 valueBackground = -c ID_BLACK
@@ -763,10 +766,10 @@ printDest = -printer {}
 printSignature = {%f %h %t} {}
 curveWindow_Drag&Drop_Mode = TRUE
 RecentFile1 = "\"/home/users/yves6512/Project/hardware/wave.fsdb\""
-RecentFile2 = "\"/home/users/yves6512/aoc2025-lab3/wave/PE_wave.vcd\""
-RecentFile3 = "\"/home/users/yves6512/aoc2025-lab3/wave/PE_wave.vcd.fsdb\""
-RecentFile4 = "\"/home/users/yves6512/aoc2025-lab3/wave/PE_array_wave.vcd\""
-RecentFile5 = "\"/home/users/yves6512/aoc2025-lab3/wave/PE_array_wave.vcd.fsdb\""
+RecentFile2 = "\"/home/users/yves6512/Project/hardware/novas.fsdb\""
+RecentFile3 = "\"/home/users/yves6512/aoc2025-lab3/wave/PE_wave.vcd\""
+RecentFile4 = "\"/home/users/yves6512/aoc2025-lab3/wave/PE_wave.vcd.fsdb\""
+RecentFile5 = "\"/home/users/yves6512/aoc2025-lab3/wave/PE_array_wave.vcd\""
 open_file_time_range = FALSE
 legend_window_font = -f COURIER12 -c ID_CYAN5
 value_window_font = -f COURIER12 -c ID_CYAN5

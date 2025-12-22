@@ -1,0 +1,9 @@
+{"vcs1":{"timestamp_begin":1765865221.847852375, "rt":1.00, "ut":0.19, "st":0.06}}
+{"vcselab":{"timestamp_begin":1765865222.894954952, "rt":0.89, "ut":0.12, "st":0.03}}
+{"link":{"timestamp_begin":1765865223.819566642, "rt":0.11, "ut":0.06, "st":0.05}}
+{"SNPS_VCS_INTERNAL_ROOT_START_TIME": 1765865221.525506821}
+{"VCS_COMP_START_TIME": 1765865221.525506821}
+{"VCS_COMP_END_TIME": 1765865224.008834400}
+{"VCS_USER_OPTIONS": "-full64 -sverilog +incdir+../include -debug_access+all -timescale=1ns/1ps -l compile.log -top controller_tb controller_tb.sv controller_top.sv ALU.sv decoder.sv regfile.sv SRAM.sv pc_counter.sv pc_adder.sv mux.sv signal_controller.sv ID_SENDER.sv glb_addr_generator.sv -o simv"}
+{"vcs1": {"peak_mem": 402004}}
+{"vcselab": {"peak_mem": 264600}}

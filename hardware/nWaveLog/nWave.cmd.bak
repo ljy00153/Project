@@ -1,3 +1,5 @@
+verdiSetActWin -win $_nWave1
+wvResizeWindow -win $_nWave1 8 31 892 139
 wvResizeWindow -win $_nWave1 0 23 1920 1009
 wvSetPosition -win $_nWave1 {("G1" 0)}
 wvResizeWindow -win $_nWave1 0 23 1920 1009
@@ -5,102 +7,1055 @@ wvOpenFile -win $_nWave1 {/home/users/yves6512/Project/hardware/wave.fsdb}
 wvGetSignalOpen -win $_nWave1
 wvGetSignalSetScope -win $_nWave1 "/controller_tb"
 wvGetSignalSetScope -win $_nWave1 "/controller_tb/dut"
-wvSetPosition -win $_nWave1 {("G1" 65)}
-wvSetPosition -win $_nWave1 {("G1" 65)}
+wvGetSignalSetScope -win $_nWave1 "/controller_tb/dut/DMA_Loop"
+wvGetSignalSetScope -win $_nWave1 "/controller_tb/dut/alu"
+wvGetSignalSetScope -win $_nWave1 "/controller_tb/dut/DMA_Loop"
+wvGetSignalSetScope -win $_nWave1 "/controller_tb/dut/ctrl"
+wvGetSignalSetScope -win $_nWave1 "/controller_tb/dut/im"
+wvGetSignalSetScope -win $_nWave1 "/controller_tb/dut/glb_addr_generator"
+wvGetSignalSetScope -win $_nWave1 "/controller_tb/dut/pc_adder"
+wvGetSignalSetScope -win $_nWave1 "/controller_tb/dut/im"
+wvGetSignalSetScope -win $_nWave1 "/controller_tb/dut/rf"
+wvGetSignalSetScope -win $_nWave1 "/controller_tb/dut/dec"
+wvSetPosition -win $_nWave1 {("G1" 3)}
+wvSetPosition -win $_nWave1 {("G1" 3)}
 wvAddSignal -win $_nWave1 -clear
 wvAddSignal -win $_nWave1 -group {"G1" \
-{/controller_tb/dut/B_SIZE\[31:0\]} \
-{/controller_tb/dut/CSR_output\[31:0\]} \
-{/controller_tb/dut/DATAFLOW\[31:0\]} \
-{/controller_tb/dut/DRAM_ifmap_base\[31:0\]} \
-{/controller_tb/dut/DRAM_ofmap_base\[31:0\]} \
-{/controller_tb/dut/DRAM_weight_base\[31:0\]} \
-{/controller_tb/dut/GLB_DI_select} \
-{/controller_tb/dut/GLB_DO_select} \
-{/controller_tb/dut/GLB_EN} \
-{/controller_tb/dut/GLB_MODE} \
-{/controller_tb/dut/GLB_WEB} \
-{/controller_tb/dut/GLB_ifmap_base\[31:0\]} \
-{/controller_tb/dut/GLB_opsum_base\[31:0\]} \
-{/controller_tb/dut/GLB_weight_base\[31:0\]} \
-{/controller_tb/dut/IF_SIZE\[31:0\]} \
-{/controller_tb/dut/K_SIZE\[31:0\]} \
-{/controller_tb/dut/K_bytes\[31:0\]} \
-{/controller_tb/dut/M_SIZE\[31:0\]} \
-{/controller_tb/dut/Maxpool_en} \
-{/controller_tb/dut/Maxpool_init} \
-{/controller_tb/dut/N_SIZE\[31:0\]} \
-{/controller_tb/dut/OF_SIZE\[31:0\]} \
-{/controller_tb/dut/alu_op1\[31:0\]} \
-{/controller_tb/dut/alu_op1_sel} \
-{/controller_tb/dut/alu_op2\[31:0\]} \
-{/controller_tb/dut/alu_op2_sel} \
-{/controller_tb/dut/alu_result\[31:0\]} \
-{/controller_tb/dut/asic_done} \
-{/controller_tb/dut/asic_en} \
-{/controller_tb/dut/branch_result} \
-{/controller_tb/dut/cfg_type\[3:0\]} \
-{/controller_tb/dut/clk} \
-{/controller_tb/dut/csr_index\[3:0\]} \
-{/controller_tb/dut/csr_wen} \
-{/controller_tb/dut/glb_addr_base\[31:0\]} \
-{/controller_tb/dut/glb_addr_gen_en} \
-{/controller_tb/dut/glb_done} \
-{/controller_tb/dut/glb_type\[1:0\]} \
-{/controller_tb/dut/im_addr\[15:0\]} \
-{/controller_tb/dut/im_init_addr\[15:0\]} \
-{/controller_tb/dut/im_init_en} \
-{/controller_tb/dut/im_init_wdata\[31:0\]} \
-{/controller_tb/dut/im_wdata\[31:0\]} \
-{/controller_tb/dut/im_wen} \
-{/controller_tb/dut/imm\[31:0\]} \
-{/controller_tb/dut/instr\[31:0\]} \
-{/controller_tb/dut/loop_reg\[31:0\]} \
-{/controller_tb/dut/mmio_sel\[3:0\]} \
-{/controller_tb/dut/next_pc\[15:0\]} \
-{/controller_tb/dut/next_pc_sel} \
-{/controller_tb/dut/opcode\[5:0\]} \
-{/controller_tb/dut/pc\[15:0\]} \
-{/controller_tb/dut/pc_hold} \
-{/controller_tb/dut/pc_plus_4\[15:0\]} \
-{/controller_tb/dut/rd_index\[3:0\]} \
-{/controller_tb/dut/reg_wb_data\[31:0\]} \
-{/controller_tb/dut/reg_wb_en} \
-{/controller_tb/dut/relu_sel} \
-{/controller_tb/dut/rs1_data\[31:0\]} \
-{/controller_tb/dut/rs2_data\[31:0\]} \
-{/controller_tb/dut/rs_index1\[3:0\]} \
-{/controller_tb/dut/rs_index2\[3:0\]} \
-{/controller_tb/dut/rst} \
-{/controller_tb/dut/target_or_jump\[15:0\]} \
-{/controller_tb/dut/type_wire\[1:0\]} \
+{/controller_tb/dut/pc_adder/pc\[15:0\]} \
+{/controller_tb/dut/im/r_data\[31:0\]} \
+{/controller_tb/dut/dec/opcode\[5:0\]} \
 }
 wvAddSignal -win $_nWave1 -group {"G2" \
 }
-wvResizeWindow -win $_nWave1 0 23 1920 1009
-wvSelectSignal -win $_nWave1 {( "G1" 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 \
-           18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 \
-           40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 \
-           62 63 64 65 )} 
-wvSetPosition -win $_nWave1 {("G1" 65)}
+wvSelectSignal -win $_nWave1 {( "G1" 3 )} 
+wvSetPosition -win $_nWave1 {("G1" 3)}
+wvSetPosition -win $_nWave1 {("G1" 3)}
+wvSetPosition -win $_nWave1 {("G1" 3)}
+wvAddSignal -win $_nWave1 -clear
+wvAddSignal -win $_nWave1 -group {"G1" \
+{/controller_tb/dut/pc_adder/pc\[15:0\]} \
+{/controller_tb/dut/im/r_data\[31:0\]} \
+{/controller_tb/dut/dec/opcode\[5:0\]} \
+}
+wvAddSignal -win $_nWave1 -group {"G2" \
+}
+wvSelectSignal -win $_nWave1 {( "G1" 3 )} 
+wvSetPosition -win $_nWave1 {("G1" 3)}
+wvGetSignalClose -win $_nWave1
+wvZoom -win $_nWave1 0.000000 940564.137484
+wvGetSignalOpen -win $_nWave1
+wvGetSignalSetScope -win $_nWave1 "/controller_tb"
+wvGetSignalSetScope -win $_nWave1 "/controller_tb/dut"
+wvGetSignalSetScope -win $_nWave1 "/controller_tb/dut/rf"
+wvGetSignalSetScope -win $_nWave1 "/controller_tb/dut/dec"
+wvGetSignalSetScope -win $_nWave1 "/controller_tb/dut/ctrl"
+wvGetSignalSetScope -win $_nWave1 "/controller_tb/dut/alu"
+wvGetSignalSetScope -win $_nWave1 "/controller_tb/dut/ctrl"
+wvGetSignalSetScope -win $_nWave1 "/controller_tb/dut/rf"
+wvSetPosition -win $_nWave1 {("G1" 4)}
+wvSetPosition -win $_nWave1 {("G1" 4)}
+wvAddSignal -win $_nWave1 -clear
+wvAddSignal -win $_nWave1 -group {"G1" \
+{/controller_tb/dut/pc_adder/pc\[15:0\]} \
+{/controller_tb/dut/im/r_data\[31:0\]} \
+{/controller_tb/dut/dec/opcode\[5:0\]} \
+{/controller_tb/dut/rf/rst} \
+}
+wvAddSignal -win $_nWave1 -group {"G2" \
+}
+wvSelectSignal -win $_nWave1 {( "G1" 4 )} 
+wvSetPosition -win $_nWave1 {("G1" 4)}
+wvZoom -win $_nWave1 103969.814683 201894.872699
+wvZoomOut -win $_nWave1
+wvGetSignalSetScope -win $_nWave1 "/controller_tb/dut"
+wvGetSignalSetScope -win $_nWave1 "/controller_tb/dut/DMA_Loop"
+wvSetPosition -win $_nWave1 {("G1" 6)}
+wvSetPosition -win $_nWave1 {("G1" 6)}
+wvAddSignal -win $_nWave1 -clear
+wvAddSignal -win $_nWave1 -group {"G1" \
+{/controller_tb/dut/pc_adder/pc\[15:0\]} \
+{/controller_tb/dut/im/r_data\[31:0\]} \
+{/controller_tb/dut/dec/opcode\[5:0\]} \
+{/controller_tb/dut/rf/rst} \
+{/controller_tb/dut/DMA_Loop/glb_addr\[15:0\]} \
+{/controller_tb/dut/DMA_Loop/dram_addr\[31:0\]} \
+}
+wvAddSignal -win $_nWave1 -group {"G2" \
+}
+wvSelectSignal -win $_nWave1 {( "G1" 6 )} 
+wvSetPosition -win $_nWave1 {("G1" 6)}
+wvSetPosition -win $_nWave1 {("G1" 7)}
+wvSetPosition -win $_nWave1 {("G1" 7)}
+wvAddSignal -win $_nWave1 -clear
+wvAddSignal -win $_nWave1 -group {"G1" \
+{/controller_tb/dut/pc_adder/pc\[15:0\]} \
+{/controller_tb/dut/im/r_data\[31:0\]} \
+{/controller_tb/dut/dec/opcode\[5:0\]} \
+{/controller_tb/dut/rf/rst} \
+{/controller_tb/dut/DMA_Loop/glb_addr\[15:0\]} \
+{/controller_tb/dut/DMA_Loop/dram_addr\[31:0\]} \
+{/controller_tb/dut/DMA_Loop/cs\[1:0\]} \
+}
+wvAddSignal -win $_nWave1 -group {"G2" \
+}
+wvSelectSignal -win $_nWave1 {( "G1" 7 )} 
+wvSetPosition -win $_nWave1 {("G1" 7)}
+wvSetCursor -win $_nWave1 175840.262147 -snap {("G1" 7)}
+wvSetCursor -win $_nWave1 165267.376706 -snap {("G1" 2)}
+wvSetCursor -win $_nWave1 176847.203618 -snap {("G1" 1)}
+wvSelectSignal -win $_nWave1 {( "G1" 2 )} 
+wvDisplayGridCount -win $_nWave1 -off
+wvCloseGetStreamsDialog -win $_nWave1
+wvGetSignalClose -win $_nWave1
+wvReloadFile -win $_nWave1
+wvZoomOut -win $_nWave1
+wvZoomOut -win $_nWave1
+wvZoomOut -win $_nWave1
+wvZoomIn -win $_nWave1
+wvZoomOut -win $_nWave1
+wvZoomOut -win $_nWave1
+wvZoom -win $_nWave1 128888.508237 430970.949417
+wvGetSignalOpen -win $_nWave1
+wvGetSignalSetScope -win $_nWave1 "/controller_tb/dut/glb_addr_generator"
+wvGetSignalSetScope -win $_nWave1 "/controller_tb/dut/u_id_sender"
+wvGetSignalSetScope -win $_nWave1 "/controller_tb/dut/alu"
+wvGetSignalSetScope -win $_nWave1 "/controller_tb/dut/DMA_Loop"
+wvSetPosition -win $_nWave1 {("G1" 13)}
+wvSetPosition -win $_nWave1 {("G1" 13)}
+wvAddSignal -win $_nWave1 -clear
+wvAddSignal -win $_nWave1 -group {"G1" \
+{/controller_tb/dut/pc_adder/pc\[15:0\]} \
+{/controller_tb/dut/im/r_data\[31:0\]} \
+{/controller_tb/dut/dec/opcode\[5:0\]} \
+{/controller_tb/dut/rf/rst} \
+{/controller_tb/dut/DMA_Loop/glb_addr\[15:0\]} \
+{/controller_tb/dut/DMA_Loop/dram_addr\[31:0\]} \
+{/controller_tb/dut/DMA_Loop/cs\[1:0\]} \
+{/controller_tb/dut/DMA_Loop/K\[31:0\]} \
+{/controller_tb/dut/DMA_Loop/M\[31:0\]} \
+{/controller_tb/dut/DMA_Loop/N\[31:0\]} \
+{/controller_tb/dut/DMA_Loop/clk} \
+{/controller_tb/dut/DMA_Loop/out_features\[31:0\]} \
+{/controller_tb/dut/DMA_Loop/in_features\[31:0\]} \
+}
+wvAddSignal -win $_nWave1 -group {"G2" \
+}
+wvSelectSignal -win $_nWave1 {( "G1" 8 9 10 11 12 13 )} 
+wvSetPosition -win $_nWave1 {("G1" 13)}
+wvSetPosition -win $_nWave1 {("G1" 14)}
+wvSetPosition -win $_nWave1 {("G1" 14)}
+wvAddSignal -win $_nWave1 -clear
+wvAddSignal -win $_nWave1 -group {"G1" \
+{/controller_tb/dut/pc_adder/pc\[15:0\]} \
+{/controller_tb/dut/im/r_data\[31:0\]} \
+{/controller_tb/dut/dec/opcode\[5:0\]} \
+{/controller_tb/dut/rf/rst} \
+{/controller_tb/dut/DMA_Loop/glb_addr\[15:0\]} \
+{/controller_tb/dut/DMA_Loop/dram_addr\[31:0\]} \
+{/controller_tb/dut/DMA_Loop/cs\[1:0\]} \
+{/controller_tb/dut/DMA_Loop/K\[31:0\]} \
+{/controller_tb/dut/DMA_Loop/M\[31:0\]} \
+{/controller_tb/dut/DMA_Loop/N\[31:0\]} \
+{/controller_tb/dut/DMA_Loop/clk} \
+{/controller_tb/dut/DMA_Loop/out_features\[31:0\]} \
+{/controller_tb/dut/DMA_Loop/in_features\[31:0\]} \
+{/controller_tb/dut/DMA_Loop/B\[31:0\]} \
+}
+wvAddSignal -win $_nWave1 -group {"G2" \
+}
+wvSelectSignal -win $_nWave1 {( "G1" 14 )} 
+wvSetPosition -win $_nWave1 {("G1" 14)}
+wvZoomOut -win $_nWave1
+wvZoomIn -win $_nWave1
+wvSetCursor -win $_nWave1 373720.243748 -snap {("G1" 8)}
+wvSetCursor -win $_nWave1 386921.790021 -snap {("G1" 8)}
+wvZoomOut -win $_nWave1
+wvZoomOut -win $_nWave1
+wvZoomOut -win $_nWave1
+wvZoomOut -win $_nWave1
+wvZoomIn -win $_nWave1
+wvZoomOut -win $_nWave1
+wvZoom -win $_nWave1 155312.309090 475255.665816
+wvSetCursor -win $_nWave1 374296.676001 -snap {("G1" 2)}
+wvZoomIn -win $_nWave1
+wvZoomOut -win $_nWave1
+wvSelectSignal -win $_nWave1 {( "G1" 3 )} 
+wvSetCursor -win $_nWave1 364632.577179 -snap {("G1" 2)}
+wvGetSignalOpen -win $_nWave1
+wvSetPosition -win $_nWave1 {("G1" 26)}
+wvSetPosition -win $_nWave1 {("G1" 26)}
+wvAddSignal -win $_nWave1 -clear
+wvAddSignal -win $_nWave1 -group {"G1" \
+{/controller_tb/dut/pc_adder/pc\[15:0\]} \
+{/controller_tb/dut/im/r_data\[31:0\]} \
+{/controller_tb/dut/dec/opcode\[5:0\]} \
+{/controller_tb/dut/rf/rst} \
+{/controller_tb/dut/DMA_Loop/glb_addr\[15:0\]} \
+{/controller_tb/dut/DMA_Loop/dram_addr\[31:0\]} \
+{/controller_tb/dut/DMA_Loop/cs\[1:0\]} \
+{/controller_tb/dut/DMA_Loop/K\[31:0\]} \
+{/controller_tb/dut/DMA_Loop/M\[31:0\]} \
+{/controller_tb/dut/DMA_Loop/N\[31:0\]} \
+{/controller_tb/dut/DMA_Loop/clk} \
+{/controller_tb/dut/DMA_Loop/out_features\[31:0\]} \
+{/controller_tb/dut/DMA_Loop/in_features\[31:0\]} \
+{/controller_tb/dut/DMA_Loop/B\[31:0\]} \
+{/controller_tb/dut/DMA_Loop/CTRL_DMA_DRAM_ADDR\[31:0\]} \
+{/controller_tb/dut/DMA_Loop/CTRL_DMA_GLB_ADDR\[15:0\]} \
+{/controller_tb/dut/DMA_Loop/CTRL_DMA_done} \
+{/controller_tb/dut/DMA_Loop/CTRL_DMA_en} \
+{/controller_tb/dut/DMA_Loop/CTRL_DMA_len\[15:0\]} \
+{/controller_tb/dut/DMA_Loop/CTRL_DMA_mode\[1:0\]} \
+{/controller_tb/dut/DMA_Loop/DMA_DRAM_ADDR\[31:0\]} \
+{/controller_tb/dut/DMA_Loop/DMA_GLB_ADDR\[15:0\]} \
+{/controller_tb/dut/DMA_Loop/DMA_done} \
+{/controller_tb/dut/DMA_Loop/DMA_en} \
+{/controller_tb/dut/DMA_Loop/DMA_len\[15:0\]} \
+{/controller_tb/dut/DMA_Loop/DMA_mode\[1:0\]} \
+}
+wvAddSignal -win $_nWave1 -group {"G2" \
+}
+wvSelectSignal -win $_nWave1 {( "G1" 15 16 17 18 19 20 21 22 23 24 25 26 )} 
+wvSetPosition -win $_nWave1 {("G1" 26)}
+wvSetPosition -win $_nWave1 {("G1" 27)}
+wvSetPosition -win $_nWave1 {("G1" 27)}
+wvAddSignal -win $_nWave1 -clear
+wvAddSignal -win $_nWave1 -group {"G1" \
+{/controller_tb/dut/pc_adder/pc\[15:0\]} \
+{/controller_tb/dut/im/r_data\[31:0\]} \
+{/controller_tb/dut/dec/opcode\[5:0\]} \
+{/controller_tb/dut/rf/rst} \
+{/controller_tb/dut/DMA_Loop/glb_addr\[15:0\]} \
+{/controller_tb/dut/DMA_Loop/dram_addr\[31:0\]} \
+{/controller_tb/dut/DMA_Loop/cs\[1:0\]} \
+{/controller_tb/dut/DMA_Loop/K\[31:0\]} \
+{/controller_tb/dut/DMA_Loop/M\[31:0\]} \
+{/controller_tb/dut/DMA_Loop/N\[31:0\]} \
+{/controller_tb/dut/DMA_Loop/clk} \
+{/controller_tb/dut/DMA_Loop/out_features\[31:0\]} \
+{/controller_tb/dut/DMA_Loop/in_features\[31:0\]} \
+{/controller_tb/dut/DMA_Loop/B\[31:0\]} \
+{/controller_tb/dut/DMA_Loop/CTRL_DMA_DRAM_ADDR\[31:0\]} \
+{/controller_tb/dut/DMA_Loop/CTRL_DMA_GLB_ADDR\[15:0\]} \
+{/controller_tb/dut/DMA_Loop/CTRL_DMA_done} \
+{/controller_tb/dut/DMA_Loop/CTRL_DMA_en} \
+{/controller_tb/dut/DMA_Loop/CTRL_DMA_len\[15:0\]} \
+{/controller_tb/dut/DMA_Loop/CTRL_DMA_mode\[1:0\]} \
+{/controller_tb/dut/DMA_Loop/DMA_DRAM_ADDR\[31:0\]} \
+{/controller_tb/dut/DMA_Loop/DMA_GLB_ADDR\[15:0\]} \
+{/controller_tb/dut/DMA_Loop/DMA_done} \
+{/controller_tb/dut/DMA_Loop/DMA_en} \
+{/controller_tb/dut/DMA_Loop/DMA_len\[15:0\]} \
+{/controller_tb/dut/DMA_Loop/DMA_mode\[1:0\]} \
+{/controller_tb/dut/DMA_Loop/loop_cnt\[31:0\]} \
+}
+wvAddSignal -win $_nWave1 -group {"G2" \
+}
+wvSelectSignal -win $_nWave1 {( "G1" 27 )} 
+wvSetPosition -win $_nWave1 {("G1" 27)}
+wvSetPosition -win $_nWave1 {("G1" 28)}
+wvSetPosition -win $_nWave1 {("G1" 28)}
+wvAddSignal -win $_nWave1 -clear
+wvAddSignal -win $_nWave1 -group {"G1" \
+{/controller_tb/dut/pc_adder/pc\[15:0\]} \
+{/controller_tb/dut/im/r_data\[31:0\]} \
+{/controller_tb/dut/dec/opcode\[5:0\]} \
+{/controller_tb/dut/rf/rst} \
+{/controller_tb/dut/DMA_Loop/glb_addr\[15:0\]} \
+{/controller_tb/dut/DMA_Loop/dram_addr\[31:0\]} \
+{/controller_tb/dut/DMA_Loop/cs\[1:0\]} \
+{/controller_tb/dut/DMA_Loop/K\[31:0\]} \
+{/controller_tb/dut/DMA_Loop/M\[31:0\]} \
+{/controller_tb/dut/DMA_Loop/N\[31:0\]} \
+{/controller_tb/dut/DMA_Loop/clk} \
+{/controller_tb/dut/DMA_Loop/out_features\[31:0\]} \
+{/controller_tb/dut/DMA_Loop/in_features\[31:0\]} \
+{/controller_tb/dut/DMA_Loop/B\[31:0\]} \
+{/controller_tb/dut/DMA_Loop/CTRL_DMA_DRAM_ADDR\[31:0\]} \
+{/controller_tb/dut/DMA_Loop/CTRL_DMA_GLB_ADDR\[15:0\]} \
+{/controller_tb/dut/DMA_Loop/CTRL_DMA_done} \
+{/controller_tb/dut/DMA_Loop/CTRL_DMA_en} \
+{/controller_tb/dut/DMA_Loop/CTRL_DMA_len\[15:0\]} \
+{/controller_tb/dut/DMA_Loop/CTRL_DMA_mode\[1:0\]} \
+{/controller_tb/dut/DMA_Loop/DMA_DRAM_ADDR\[31:0\]} \
+{/controller_tb/dut/DMA_Loop/DMA_GLB_ADDR\[15:0\]} \
+{/controller_tb/dut/DMA_Loop/DMA_done} \
+{/controller_tb/dut/DMA_Loop/DMA_en} \
+{/controller_tb/dut/DMA_Loop/DMA_len\[15:0\]} \
+{/controller_tb/dut/DMA_Loop/DMA_mode\[1:0\]} \
+{/controller_tb/dut/DMA_Loop/loop_cnt\[31:0\]} \
+{/controller_tb/dut/DMA_Loop/loop_max\[31:0\]} \
+}
+wvAddSignal -win $_nWave1 -group {"G2" \
+}
+wvSelectSignal -win $_nWave1 {( "G1" 28 )} 
+wvSetPosition -win $_nWave1 {("G1" 28)}
 wvScrollDown -win $_nWave1 0
+wvScrollDown -win $_nWave1 0
+wvScrollDown -win $_nWave1 0
+wvSelectSignal -win $_nWave1 {( "G1" 20 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 21 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 19 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 20 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 22 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 20 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 19 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 20 )} 
 wvZoomOut -win $_nWave1
-wvZoomOut -win $_nWave1
-wvZoomOut -win $_nWave1
-wvZoomOut -win $_nWave1
-wvZoomOut -win $_nWave1
-wvSelectSignal -win $_nWave1 {( "G1" 50 )} 
-wvSelectSignal -win $_nWave1 {( "G1" 48 )} 
-wvSelectSignal -win $_nWave1 {( "G1" 39 )} 
+wvZoomIn -win $_nWave1
+wvSetCursor -win $_nWave1 376077.377540 -snap {("G1" 7)}
+wvSetCursor -win $_nWave1 366824.516966 -snap {("G1" 8)}
+wvSelectSignal -win $_nWave1 {( "G1" 8 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 12 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 13 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 14 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 16 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 16 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 15 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 17 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 17 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 16 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 15 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 14 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 14 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 16 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 19 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 18 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 19 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 18 )} 
+wvSetCursor -win $_nWave1 376488.615787 -snap {("G1" 7)}
+wvSetCursor -win $_nWave1 365385.183099 -snap {("G1" 2)}
+wvSetCursor -win $_nWave1 375666.139292 -snap {("G1" 2)}
+wvSetCursor -win $_nWave1 364973.944851 -snap {("G1" 2)}
+wvSelectSignal -win $_nWave1 {( "G1" 3 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 3 )} 
+wvSetRadix -win $_nWave1 -format UDec
+wvSelectSignal -win $_nWave1 {( "G1" 3 )} 
+wvSetRadix -win $_nWave1 -format Bin
+wvSetCursor -win $_nWave1 375254.901044 -snap {("G1" 3)}
+wvSetCursor -win $_nWave1 365385.183099 -snap {("G1" 3)}
+wvSetCursor -win $_nWave1 375254.901044 -snap {("G1" 3)}
+wvSetCursor -win $_nWave1 365385.183099 -snap {("G1" 8)}
+wvSelectSignal -win $_nWave1 {( "G1" 18 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 19 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 18 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 19 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 19 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 19 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 18 )} 
 wvDisplayGridCount -win $_nWave1 -off
-wvResizeWindow -win $_nWave1 0 23 1920 1009
 wvCloseGetStreamsDialog -win $_nWave1
 wvGetSignalClose -win $_nWave1
-wvResizeWindow -win $_nWave1 0 23 1920 1009
 wvReloadFile -win $_nWave1
+wvSelectSignal -win $_nWave1 {( "G1" 16 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 14 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 12 )} 
+wvGetSignalOpen -win $_nWave1
+wvGetSignalSetScope -win $_nWave1 "/controller_tb/dut/rf"
+wvGetSignalSetScope -win $_nWave1 "/controller_tb/dut/ctrl"
+wvGetSignalSetScope -win $_nWave1 "/controller_tb/dut/DMA_Loop"
+wvSetPosition -win $_nWave1 {("G1" 34)}
+wvSetPosition -win $_nWave1 {("G1" 34)}
+wvAddSignal -win $_nWave1 -clear
+wvAddSignal -win $_nWave1 -group {"G1" \
+{/controller_tb/dut/pc_adder/pc\[15:0\]} \
+{/controller_tb/dut/im/r_data\[31:0\]} \
+{/controller_tb/dut/dec/opcode\[5:0\]} \
+{/controller_tb/dut/rf/rst} \
+{/controller_tb/dut/DMA_Loop/glb_addr\[15:0\]} \
+{/controller_tb/dut/DMA_Loop/dram_addr\[31:0\]} \
+{/controller_tb/dut/DMA_Loop/cs\[1:0\]} \
+{/controller_tb/dut/DMA_Loop/K\[31:0\]} \
+{/controller_tb/dut/DMA_Loop/M\[31:0\]} \
+{/controller_tb/dut/DMA_Loop/N\[31:0\]} \
+{/controller_tb/dut/DMA_Loop/clk} \
+{/controller_tb/dut/DMA_Loop/out_features\[31:0\]} \
+{/controller_tb/dut/DMA_Loop/in_features\[31:0\]} \
+{/controller_tb/dut/DMA_Loop/B\[31:0\]} \
+{/controller_tb/dut/DMA_Loop/CTRL_DMA_DRAM_ADDR\[31:0\]} \
+{/controller_tb/dut/DMA_Loop/CTRL_DMA_GLB_ADDR\[15:0\]} \
+{/controller_tb/dut/DMA_Loop/CTRL_DMA_done} \
+{/controller_tb/dut/DMA_Loop/CTRL_DMA_en} \
+{/controller_tb/dut/DMA_Loop/CTRL_DMA_len\[15:0\]} \
+{/controller_tb/dut/DMA_Loop/CTRL_DMA_mode\[1:0\]} \
+{/controller_tb/dut/DMA_Loop/DMA_DRAM_ADDR\[31:0\]} \
+{/controller_tb/dut/DMA_Loop/DMA_GLB_ADDR\[15:0\]} \
+{/controller_tb/dut/DMA_Loop/DMA_done} \
+{/controller_tb/dut/DMA_Loop/DMA_en} \
+{/controller_tb/dut/DMA_Loop/DMA_len\[15:0\]} \
+{/controller_tb/dut/DMA_Loop/DMA_mode\[1:0\]} \
+{/controller_tb/dut/DMA_Loop/loop_cnt\[31:0\]} \
+{/controller_tb/dut/DMA_Loop/loop_max\[31:0\]} \
+{/controller_tb/dut/DMA_Loop/K_reg\[31:0\]} \
+{/controller_tb/dut/DMA_Loop/M_reg\[31:0\]} \
+{/controller_tb/dut/DMA_Loop/N_reg\[31:0\]} \
+{/controller_tb/dut/DMA_Loop/B_reg\[31:0\]} \
+{/controller_tb/dut/DMA_Loop/out_features_reg\[31:0\]} \
+{/controller_tb/dut/DMA_Loop/in_features_reg\[31:0\]} \
+}
+wvAddSignal -win $_nWave1 -group {"G2" \
+}
+wvSelectSignal -win $_nWave1 {( "G1" 29 30 31 32 33 34 )} 
+wvSetPosition -win $_nWave1 {("G1" 34)}
+wvSetCursor -win $_nWave1 376488.615787 -snap {("G1" 12)}
+wvSetCursor -win $_nWave1 383685.285123 -snap {("G1" 7)}
+wvScrollDown -win $_nWave1 0
+wvGetSignalOpen -win $_nWave1
+wvSelectSignal -win $_nWave1 {( "G1" 20 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 19 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 20 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 22 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 21 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 22 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 21 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 22 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 21 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 22 )} 
 wvDisplayGridCount -win $_nWave1 -off
-wvResizeWindow -win $_nWave1 0 23 1920 1009
 wvCloseGetStreamsDialog -win $_nWave1
 wvGetSignalClose -win $_nWave1
 wvReloadFile -win $_nWave1
-wvExit
+wvSelectSignal -win $_nWave1 {( "G1" 10 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 8 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 9 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 10 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 11 )} 
+wvSetPosition -win $_nWave1 {("G1" 11)}
+wvSetPosition -win $_nWave1 {("G1" 10)}
+wvSetPosition -win $_nWave1 {("G1" 8)}
+wvSetPosition -win $_nWave1 {("G1" 7)}
+wvSetPosition -win $_nWave1 {("G1" 6)}
+wvSetPosition -win $_nWave1 {("G1" 5)}
+wvSetPosition -win $_nWave1 {("G1" 4)}
+wvSetPosition -win $_nWave1 {("G1" 2)}
+wvSetPosition -win $_nWave1 {("G1" 1)}
+wvSetPosition -win $_nWave1 {("G1" 0)}
+wvMoveSelected -win $_nWave1
+wvSetPosition -win $_nWave1 {("G1" 0)}
+wvSetPosition -win $_nWave1 {("G1" 1)}
+wvSelectSignal -win $_nWave1 {( "G1" 14 )} 
+wvSetPosition -win $_nWave1 {("G1" 14)}
+wvExpandBus -win $_nWave1
+wvSelectSignal -win $_nWave1 {( "G1" 15 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 15 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 15 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 15 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 15 )} 
+wvScrollUp -win $_nWave1 2
+wvSelectSignal -win $_nWave1 {( "G1" 15 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 15 )} 
+wvSetPosition -win $_nWave1 {("G1" 16)}
+wvSelectSignal -win $_nWave1 {( "G1" 16 )} 
+wvSetPosition -win $_nWave1 {("G1" 17)}
+wvSetPosition -win $_nWave1 {("G1" 16)}
+wvSetPosition -win $_nWave1 {("G1" 15)}
+wvMoveSelected -win $_nWave1
+wvSetPosition -win $_nWave1 {("G1" 15)}
+wvSetPosition -win $_nWave1 {("G1" 16)}
+wvSelectSignal -win $_nWave1 {( "G1" 14 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 14 )} 
+wvSetPosition -win $_nWave1 {("G1" 14)}
+wvCollapseBus -win $_nWave1
+wvSetPosition -win $_nWave1 {("G1" 14)}
+wvResizeWindow -win $_nWave1 0 23 1920 1009
+wvSelectSignal -win $_nWave1 {( "G1" 12 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 14 )} 
+wvSetPosition -win $_nWave1 {("G1" 13)}
+wvSetPosition -win $_nWave1 {("G1" 12)}
+wvSetPosition -win $_nWave1 {("G1" 11)}
+wvMoveSelected -win $_nWave1
+wvSetPosition -win $_nWave1 {("G1" 11)}
+wvSetPosition -win $_nWave1 {("G1" 12)}
+wvSetCursor -win $_nWave1 355721.084278 -snap {("G1" 10)}
+wvSetCursor -win $_nWave1 373815.567177 -snap {("G1" 18)}
+wvSetCursor -win $_nWave1 385535.857237 -snap {("G1" 18)}
+wvSelectSignal -win $_nWave1 {( "G1" 18 )} 
+wvSetCursor -win $_nWave1 374432.424549 -snap {("G1" 4)}
+wvSetCursor -win $_nWave1 384918.999866 -snap {("G1" 4)}
+wvSetCursor -win $_nWave1 374021.186301 -snap {("G1" 4)}
+wvSelectSignal -win $_nWave1 {( "G1" 3 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 4 )} 
+wvDisplayGridCount -win $_nWave1 -off
+wvCloseGetStreamsDialog -win $_nWave1
+wvGetSignalClose -win $_nWave1
+wvReloadFile -win $_nWave1
+wvZoomOut -win $_nWave1
+wvZoomOut -win $_nWave1
+wvZoomIn -win $_nWave1
+wvScrollDown -win $_nWave1 0
+wvSelectSignal -win $_nWave1 {( "G1" 26 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 22 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 21 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 20 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 19 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 20 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 19 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 21 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 22 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 21 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 22 )} 
+wvDisplayGridCount -win $_nWave1 -off
+wvCloseGetStreamsDialog -win $_nWave1
+wvGetSignalClose -win $_nWave1
+wvReloadFile -win $_nWave1
+wvSetCursor -win $_nWave1 398489.862040 -snap {("G1" 15)}
+wvSetCursor -win $_nWave1 403013.482765 -snap {("G1" 15)}
+wvSetCursor -win $_nWave1 417406.821436 -snap {("G1" 15)}
+wvZoomOut -win $_nWave1
+wvZoom -win $_nWave1 315830.974249 495953.326750
+wvSelectSignal -win $_nWave1 {( "G1" 16 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 15 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 16 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 15 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 16 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 8 )} 
+wvDisplayGridCount -win $_nWave1 -off
+wvCloseGetStreamsDialog -win $_nWave1
+wvGetSignalClose -win $_nWave1
+wvReloadFile -win $_nWave1
+wvSelectSignal -win $_nWave1 {( "G1" 18 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 17 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 18 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 17 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 18 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 17 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 18 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 23 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 25 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 24 )} 
+wvZoomOut -win $_nWave1
+wvDisplayGridCount -win $_nWave1 -off
+wvCloseGetStreamsDialog -win $_nWave1
+wvGetSignalClose -win $_nWave1
+wvReloadFile -win $_nWave1
+wvSetCursor -win $_nWave1 404271.512366 -snap {("G1" 19)}
+wvSetCursor -win $_nWave1 414689.900364 -snap {("G1" 19)}
+wvSelectSignal -win $_nWave1 {( "G1" 17 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 19 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 17 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 18 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 17 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 18 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 17 )} 
+wvZoomOut -win $_nWave1
+wvSelectSignal -win $_nWave1 {( "G1" 18 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 17 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 18 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 17 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 18 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 17 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 18 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 17 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 18 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 17 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 18 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 17 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 18 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 17 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 18 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 17 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 18 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 17 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 18 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 17 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 19 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 17 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 18 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 17 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 18 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 17 )} 
+wvDisplayGridCount -win $_nWave1 -off
+wvCloseGetStreamsDialog -win $_nWave1
+wvGetSignalClose -win $_nWave1
+wvReloadFile -win $_nWave1
+wvZoomOut -win $_nWave1
+wvZoomOut -win $_nWave1
+wvZoom -win $_nWave1 353762.152470 574168.938564
+wvZoomOut -win $_nWave1
+wvSelectSignal -win $_nWave1 {( "G1" 21 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 22 )} 
+wvDisplayGridCount -win $_nWave1 -off
+wvCloseGetStreamsDialog -win $_nWave1
+wvGetSignalClose -win $_nWave1
+wvReloadFile -win $_nWave1
+wvZoomOut -win $_nWave1
+wvZoomOut -win $_nWave1
+wvSelectSignal -win $_nWave1 {( "G1" 23 )} 
+wvZoomOut -win $_nWave1
+wvSetCursor -win $_nWave1 1275979.645971 -snap {("G1" 21)}
+wvSetCursor -win $_nWave1 1266914.071221 -snap {("G1" 22)}
+wvSelectSignal -win $_nWave1 {( "G1" 21 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 21 )} 
+wvSetRadix -win $_nWave1 -format UDec
+wvSelectSignal -win $_nWave1 {( "G1" 22 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 22 )} 
+wvSetRadix -win $_nWave1 -format UDec
+wvSelectSignal -win $_nWave1 {( "G1" 24 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 23 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 24 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 23 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 24 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 23 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 24 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 23 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 21 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 9 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 9 )} 
+wvSetRadix -win $_nWave1 -format UDec
+wvSelectSignal -win $_nWave1 {( "G1" 10 )} 
+wvGetSignalOpen -win $_nWave1
+wvGetSignalSetScope -win $_nWave1 "/controller_tb/dut/pc_adder"
+wvGetSignalSetScope -win $_nWave1 "/controller_tb/dut/pc_counter"
+wvGetSignalSetScope -win $_nWave1 "/controller_tb/dut/rf"
+wvGetSignalSetScope -win $_nWave1 "/controller_tb/dut/ctrl"
+wvGetSignalSetScope -win $_nWave1 "/controller_tb/dut/DMA_Loop"
+wvSetPosition -win $_nWave1 {("G1" 14)}
+wvSetPosition -win $_nWave1 {("G1" 14)}
+wvAddSignal -win $_nWave1 -clear
+wvAddSignal -win $_nWave1 -group {"G1" \
+{/controller_tb/dut/DMA_Loop/clk} \
+{/controller_tb/dut/pc_adder/pc\[15:0\]} \
+{/controller_tb/dut/im/r_data\[31:0\]} \
+{/controller_tb/dut/dec/opcode\[5:0\]} \
+{/controller_tb/dut/rf/rst} \
+{/controller_tb/dut/DMA_Loop/glb_addr\[15:0\]} \
+{/controller_tb/dut/DMA_Loop/dram_addr\[31:0\]} \
+{/controller_tb/dut/DMA_Loop/cs\[1:0\]} \
+{/controller_tb/dut/DMA_Loop/K\[31:0\]} \
+{/controller_tb/dut/DMA_Loop/M\[31:0\]} \
+{/controller_tb/dut/DMA_Loop/N\[31:0\]} \
+{/controller_tb/dut/DMA_Loop/B\[31:0\]} \
+{/controller_tb/dut/DMA_Loop/glb_stride\[15:0\]} \
+{/controller_tb/dut/DMA_Loop/dram_stride\[31:0\]} \
+{/controller_tb/dut/DMA_Loop/out_features\[31:0\]} \
+{/controller_tb/dut/DMA_Loop/in_features\[31:0\]} \
+{/controller_tb/dut/DMA_Loop/CTRL_DMA_DRAM_ADDR\[31:0\]} \
+{/controller_tb/dut/DMA_Loop/CTRL_DMA_GLB_ADDR\[15:0\]} \
+{/controller_tb/dut/DMA_Loop/CTRL_DMA_done} \
+{/controller_tb/dut/DMA_Loop/CTRL_DMA_en} \
+{/controller_tb/dut/DMA_Loop/CTRL_DMA_len\[15:0\]} \
+{/controller_tb/dut/DMA_Loop/CTRL_DMA_mode\[1:0\]} \
+{/controller_tb/dut/DMA_Loop/DMA_DRAM_ADDR\[31:0\]} \
+{/controller_tb/dut/DMA_Loop/DMA_GLB_ADDR\[15:0\]} \
+{/controller_tb/dut/DMA_Loop/DMA_done} \
+{/controller_tb/dut/DMA_Loop/DMA_en} \
+{/controller_tb/dut/DMA_Loop/DMA_len\[15:0\]} \
+{/controller_tb/dut/DMA_Loop/DMA_mode\[1:0\]} \
+{/controller_tb/dut/DMA_Loop/loop_cnt\[31:0\]} \
+{/controller_tb/dut/DMA_Loop/loop_max\[31:0\]} \
+}
+wvAddSignal -win $_nWave1 -group {"G2" \
+}
+wvSelectSignal -win $_nWave1 {( "G1" 14 )} 
+wvSetPosition -win $_nWave1 {("G1" 14)}
+wvSetPosition -win $_nWave1 {("G1" 14)}
+wvSetPosition -win $_nWave1 {("G1" 14)}
+wvAddSignal -win $_nWave1 -clear
+wvAddSignal -win $_nWave1 -group {"G1" \
+{/controller_tb/dut/DMA_Loop/clk} \
+{/controller_tb/dut/pc_adder/pc\[15:0\]} \
+{/controller_tb/dut/im/r_data\[31:0\]} \
+{/controller_tb/dut/dec/opcode\[5:0\]} \
+{/controller_tb/dut/rf/rst} \
+{/controller_tb/dut/DMA_Loop/glb_addr\[15:0\]} \
+{/controller_tb/dut/DMA_Loop/dram_addr\[31:0\]} \
+{/controller_tb/dut/DMA_Loop/cs\[1:0\]} \
+{/controller_tb/dut/DMA_Loop/K\[31:0\]} \
+{/controller_tb/dut/DMA_Loop/M\[31:0\]} \
+{/controller_tb/dut/DMA_Loop/N\[31:0\]} \
+{/controller_tb/dut/DMA_Loop/B\[31:0\]} \
+{/controller_tb/dut/DMA_Loop/glb_stride\[15:0\]} \
+{/controller_tb/dut/DMA_Loop/dram_stride\[31:0\]} \
+{/controller_tb/dut/DMA_Loop/out_features\[31:0\]} \
+{/controller_tb/dut/DMA_Loop/in_features\[31:0\]} \
+{/controller_tb/dut/DMA_Loop/CTRL_DMA_DRAM_ADDR\[31:0\]} \
+{/controller_tb/dut/DMA_Loop/CTRL_DMA_GLB_ADDR\[15:0\]} \
+{/controller_tb/dut/DMA_Loop/CTRL_DMA_done} \
+{/controller_tb/dut/DMA_Loop/CTRL_DMA_en} \
+{/controller_tb/dut/DMA_Loop/CTRL_DMA_len\[15:0\]} \
+{/controller_tb/dut/DMA_Loop/CTRL_DMA_mode\[1:0\]} \
+{/controller_tb/dut/DMA_Loop/DMA_DRAM_ADDR\[31:0\]} \
+{/controller_tb/dut/DMA_Loop/DMA_GLB_ADDR\[15:0\]} \
+{/controller_tb/dut/DMA_Loop/DMA_done} \
+{/controller_tb/dut/DMA_Loop/DMA_en} \
+{/controller_tb/dut/DMA_Loop/DMA_len\[15:0\]} \
+{/controller_tb/dut/DMA_Loop/DMA_mode\[1:0\]} \
+{/controller_tb/dut/DMA_Loop/loop_cnt\[31:0\]} \
+{/controller_tb/dut/DMA_Loop/loop_max\[31:0\]} \
+}
+wvAddSignal -win $_nWave1 -group {"G2" \
+}
+wvSelectSignal -win $_nWave1 {( "G1" 14 )} 
+wvSetPosition -win $_nWave1 {("G1" 14)}
+wvGetSignalClose -win $_nWave1
+wvSelectSignal -win $_nWave1 {( "G1" 13 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 14 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 13 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 13 )} 
+wvSetRadix -win $_nWave1 -format UDec
+wvSelectSignal -win $_nWave1 {( "G1" 14 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 14 )} 
+wvSetRadix -win $_nWave1 -format UDec
+wvSelectSignal -win $_nWave1 {( "G1" 16 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 16 )} 
+wvSetRadix -win $_nWave1 -format UDec
+wvSelectSignal -win $_nWave1 {( "G1" 15 )} 
+wvDisplayGridCount -win $_nWave1 -off
+wvCloseGetStreamsDialog -win $_nWave1
+wvGetSignalClose -win $_nWave1
+wvReloadFile -win $_nWave1
+wvSelectSignal -win $_nWave1 {( "G1" 23 )} 
+wvSetCursor -win $_nWave1 407950.863721 -snap {("G1" 23)}
+wvGetSignalOpen -win $_nWave1
+wvSelectSignal -win $_nWave1 {( "G1" 18 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 17 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 18 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 17 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 23 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 24 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 23 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 24 )} 
+wvZoom -win $_nWave1 353557.415225 564332.028147
+wvSelectSignal -win $_nWave1 {( "G1" 20 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 19 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 20 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 19 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 27 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 26 )} 
+wvScrollDown -win $_nWave1 0
+wvScrollDown -win $_nWave1 0
+wvGetSignalOpen -win $_nWave1
+wvGetSignalSetScope -win $_nWave1 "/controller_tb/dut/DMA_Loop"
+wvGetSignalSetScope -win $_nWave1 "/controller_tb/dut"
+wvSetPosition -win $_nWave1 {("G1" 21)}
+wvSetPosition -win $_nWave1 {("G1" 21)}
+wvAddSignal -win $_nWave1 -clear
+wvAddSignal -win $_nWave1 -group {"G1" \
+{/controller_tb/dut/DMA_Loop/clk} \
+{/controller_tb/dut/pc_adder/pc\[15:0\]} \
+{/controller_tb/dut/im/r_data\[31:0\]} \
+{/controller_tb/dut/dec/opcode\[5:0\]} \
+{/controller_tb/dut/rf/rst} \
+{/controller_tb/dut/DMA_Loop/glb_addr\[15:0\]} \
+{/controller_tb/dut/DMA_Loop/dram_addr\[31:0\]} \
+{/controller_tb/dut/DMA_Loop/cs\[1:0\]} \
+{/controller_tb/dut/DMA_Loop/K\[31:0\]} \
+{/controller_tb/dut/DMA_Loop/M\[31:0\]} \
+{/controller_tb/dut/DMA_Loop/N\[31:0\]} \
+{/controller_tb/dut/DMA_Loop/B\[31:0\]} \
+{/controller_tb/dut/DMA_Loop/glb_stride\[15:0\]} \
+{/controller_tb/dut/DMA_Loop/dram_stride\[31:0\]} \
+{/controller_tb/dut/DMA_BYTE_BIAS\[1:0\]} \
+{/controller_tb/dut/DMA_DRAM_ADDR\[31:0\]} \
+{/controller_tb/dut/DMA_GLB_ADDR\[15:0\]} \
+{/controller_tb/dut/DMA_done} \
+{/controller_tb/dut/DMA_en} \
+{/controller_tb/dut/DMA_len\[15:0\]} \
+{/controller_tb/dut/DMA_mode\[1:0\]} \
+{/controller_tb/dut/DMA_Loop/out_features\[31:0\]} \
+{/controller_tb/dut/DMA_Loop/in_features\[31:0\]} \
+{/controller_tb/dut/DMA_Loop/CTRL_DMA_DRAM_ADDR\[31:0\]} \
+{/controller_tb/dut/DMA_Loop/CTRL_DMA_GLB_ADDR\[15:0\]} \
+{/controller_tb/dut/DMA_Loop/CTRL_DMA_done} \
+{/controller_tb/dut/DMA_Loop/CTRL_DMA_en} \
+{/controller_tb/dut/DMA_Loop/CTRL_DMA_len\[15:0\]} \
+{/controller_tb/dut/DMA_Loop/CTRL_DMA_mode\[1:0\]} \
+{/controller_tb/dut/DMA_Loop/DMA_DRAM_ADDR\[31:0\]} \
+{/controller_tb/dut/DMA_Loop/DMA_GLB_ADDR\[15:0\]} \
+{/controller_tb/dut/DMA_Loop/DMA_done} \
+{/controller_tb/dut/DMA_Loop/DMA_en} \
+{/controller_tb/dut/DMA_Loop/DMA_len\[15:0\]} \
+{/controller_tb/dut/DMA_Loop/DMA_mode\[1:0\]} \
+{/controller_tb/dut/DMA_Loop/loop_cnt\[31:0\]} \
+{/controller_tb/dut/DMA_Loop/loop_max\[31:0\]} \
+}
+wvAddSignal -win $_nWave1 -group {"G2" \
+}
+wvSelectSignal -win $_nWave1 {( "G1" 15 16 17 18 19 20 21 )} 
+wvSetPosition -win $_nWave1 {("G1" 21)}
+wvSetPosition -win $_nWave1 {("G1" 21)}
+wvSetPosition -win $_nWave1 {("G1" 21)}
+wvAddSignal -win $_nWave1 -clear
+wvAddSignal -win $_nWave1 -group {"G1" \
+{/controller_tb/dut/DMA_Loop/clk} \
+{/controller_tb/dut/pc_adder/pc\[15:0\]} \
+{/controller_tb/dut/im/r_data\[31:0\]} \
+{/controller_tb/dut/dec/opcode\[5:0\]} \
+{/controller_tb/dut/rf/rst} \
+{/controller_tb/dut/DMA_Loop/glb_addr\[15:0\]} \
+{/controller_tb/dut/DMA_Loop/dram_addr\[31:0\]} \
+{/controller_tb/dut/DMA_Loop/cs\[1:0\]} \
+{/controller_tb/dut/DMA_Loop/K\[31:0\]} \
+{/controller_tb/dut/DMA_Loop/M\[31:0\]} \
+{/controller_tb/dut/DMA_Loop/N\[31:0\]} \
+{/controller_tb/dut/DMA_Loop/B\[31:0\]} \
+{/controller_tb/dut/DMA_Loop/glb_stride\[15:0\]} \
+{/controller_tb/dut/DMA_Loop/dram_stride\[31:0\]} \
+{/controller_tb/dut/DMA_BYTE_BIAS\[1:0\]} \
+{/controller_tb/dut/DMA_DRAM_ADDR\[31:0\]} \
+{/controller_tb/dut/DMA_GLB_ADDR\[15:0\]} \
+{/controller_tb/dut/DMA_done} \
+{/controller_tb/dut/DMA_en} \
+{/controller_tb/dut/DMA_len\[15:0\]} \
+{/controller_tb/dut/DMA_mode\[1:0\]} \
+{/controller_tb/dut/DMA_Loop/out_features\[31:0\]} \
+{/controller_tb/dut/DMA_Loop/in_features\[31:0\]} \
+{/controller_tb/dut/DMA_Loop/CTRL_DMA_DRAM_ADDR\[31:0\]} \
+{/controller_tb/dut/DMA_Loop/CTRL_DMA_GLB_ADDR\[15:0\]} \
+{/controller_tb/dut/DMA_Loop/CTRL_DMA_done} \
+{/controller_tb/dut/DMA_Loop/CTRL_DMA_en} \
+{/controller_tb/dut/DMA_Loop/CTRL_DMA_len\[15:0\]} \
+{/controller_tb/dut/DMA_Loop/CTRL_DMA_mode\[1:0\]} \
+{/controller_tb/dut/DMA_Loop/DMA_DRAM_ADDR\[31:0\]} \
+{/controller_tb/dut/DMA_Loop/DMA_GLB_ADDR\[15:0\]} \
+{/controller_tb/dut/DMA_Loop/DMA_done} \
+{/controller_tb/dut/DMA_Loop/DMA_en} \
+{/controller_tb/dut/DMA_Loop/DMA_len\[15:0\]} \
+{/controller_tb/dut/DMA_Loop/DMA_mode\[1:0\]} \
+{/controller_tb/dut/DMA_Loop/loop_cnt\[31:0\]} \
+{/controller_tb/dut/DMA_Loop/loop_max\[31:0\]} \
+}
+wvAddSignal -win $_nWave1 -group {"G2" \
+}
+wvSelectSignal -win $_nWave1 {( "G1" 15 16 17 18 19 20 21 )} 
+wvSetPosition -win $_nWave1 {("G1" 21)}
+wvGetSignalClose -win $_nWave1
+wvSelectSignal -win $_nWave1 {( "G1" 16 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 17 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 18 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 19 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 18 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 19 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 20 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 19 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 20 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 21 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 20 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 16 17 18 19 20 21 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 15 16 17 18 19 20 21 )} 
+wvSetPosition -win $_nWave1 {("G1" 17)}
+wvSetPosition -win $_nWave1 {("G1" 19)}
+wvSetPosition -win $_nWave1 {("G1" 21)}
+wvSetPosition -win $_nWave1 {("G1" 24)}
+wvSetPosition -win $_nWave1 {("G1" 26)}
+wvSetPosition -win $_nWave1 {("G1" 33)}
+wvSetPosition -win $_nWave1 {("G1" 37)}
+wvSetPosition -win $_nWave1 {("G2" 0)}
+wvSetPosition -win $_nWave1 {("G1" 37)}
+wvSetPosition -win $_nWave1 {("G2" 0)}
+wvMoveSelected -win $_nWave1
+wvSetPosition -win $_nWave1 {("G2" 7)}
+wvSetPosition -win $_nWave1 {("G2" 7)}
+wvSelectSignal -win $_nWave1 {( "G1" 24 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 22 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 24 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 26 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 28 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 28 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 28 )} 
+wvSelectSignal -win $_nWave1 {( "G2" 6 )} 
+wvSelectSignal -win $_nWave1 {( "G2" 7 )} 
+wvSelectSignal -win $_nWave1 {( "G2" 5 )} 
+wvSelectSignal -win $_nWave1 {( "G2" 6 )} 
+wvSelectSignal -win $_nWave1 {( "G2" 7 )} 
+wvSelectSignal -win $_nWave1 {( "G2" 6 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 18 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 20 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 18 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 19 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 20 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 20 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 18 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 17 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 18 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 20 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 23 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 22 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 21 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 21 )} 
+wvSetRadix -win $_nWave1 -format UDec
+wvSelectSignal -win $_nWave1 {( "G1" 27 )} 
+wvSetRadix -win $_nWave1 -1Com
+wvSelectSignal -win $_nWave1 {( "G1" 27 )} 
+wvSetRadix -win $_nWave1 -format UDec
+wvSelectSignal -win $_nWave1 {( "G2" 3 )} 
+wvSelectSignal -win $_nWave1 {( "G2" 2 )} 
+wvSelectSignal -win $_nWave1 {( "G2" 3 )} 
+wvSelectSignal -win $_nWave1 {( "G2" 2 )} 
+wvSelectSignal -win $_nWave1 {( "G2" 3 )} 
+wvSelectSignal -win $_nWave1 {( "G2" 2 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 29 )} 
+wvSelectSignal -win $_nWave1 {( "G2" 2 )} 
+wvSelectSignal -win $_nWave1 {( "G2" 4 )} 
+wvSelectSignal -win $_nWave1 {( "G2" 2 )} 
+wvSelectSignal -win $_nWave1 {( "G2" 3 )} 
+wvSelectSignal -win $_nWave1 {( "G2" 2 )} 
+wvSelectSignal -win $_nWave1 {( "G2" 3 )} 
+wvSelectSignal -win $_nWave1 {( "G2" 2 )} 
+wvSelectSignal -win $_nWave1 {( "G2" 3 )} 
+wvSelectSignal -win $_nWave1 {( "G2" 2 )} 
+wvSelectSignal -win $_nWave1 {( "G2" 3 )} 
+wvSelectSignal -win $_nWave1 {( "G2" 2 )} 
+wvSelectSignal -win $_nWave1 {( "G2" 3 )} 
+wvSelectSignal -win $_nWave1 {( "G2" 2 )} 
+wvSelectSignal -win $_nWave1 {( "G2" 3 )} 
+wvSelectSignal -win $_nWave1 {( "G2" 2 )} 
+wvScrollDown -win $_nWave1 0
+wvScrollDown -win $_nWave1 0
+wvScrollDown -win $_nWave1 0
+wvScrollDown -win $_nWave1 0
+wvSelectSignal -win $_nWave1 {( "G1" 26 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 25 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 26 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 25 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 26 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 9 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 8 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 10 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 12 )} 
+wvCut -win $_nWave1
+wvSetPosition -win $_nWave1 {("G3" 0)}
+wvSetPosition -win $_nWave1 {("G2" 7)}
+wvSelectSignal -win $_nWave1 {( "G1" 11 )} 
+wvCut -win $_nWave1
+wvSetPosition -win $_nWave1 {("G3" 0)}
+wvSetPosition -win $_nWave1 {("G2" 7)}
+wvSelectSignal -win $_nWave1 {( "G1" 10 )} 
+wvCut -win $_nWave1
+wvSetPosition -win $_nWave1 {("G3" 0)}
+wvSetPosition -win $_nWave1 {("G2" 7)}
+wvSelectSignal -win $_nWave1 {( "G1" 9 )} 
+wvCut -win $_nWave1
+wvSetPosition -win $_nWave1 {("G3" 0)}
+wvSetPosition -win $_nWave1 {("G2" 7)}
+wvSelectSignal -win $_nWave1 {( "G1" 9 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 8 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 10 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 12 )} 
+wvCut -win $_nWave1
+wvSetPosition -win $_nWave1 {("G3" 0)}
+wvSetPosition -win $_nWave1 {("G2" 7)}
+wvSelectSignal -win $_nWave1 {( "G1" 11 )} 
+wvCut -win $_nWave1
+wvSetPosition -win $_nWave1 {("G3" 0)}
+wvSetPosition -win $_nWave1 {("G2" 7)}
+wvSelectSignal -win $_nWave1 {( "G1" 10 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 9 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 10 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 9 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 10 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 9 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 9 )} 
+wvSetRadix -win $_nWave1 -format UDec
+wvSelectSignal -win $_nWave1 {( "G1" 9 )} 
+wvSetRadix -win $_nWave1 -format Bin
+wvGetSignalOpen -win $_nWave1
+wvGetSignalSetScope -win $_nWave1 "/controller_tb"
+wvGetSignalSetScope -win $_nWave1 "/controller_tb/dut"
+wvGetSignalSetScope -win $_nWave1 "/controller_tb/dut/dec"
+wvGetSignalSetScope -win $_nWave1 "/controller_tb/dut/rf"
+wvGetSignalSetScope -win $_nWave1 "/controller_tb/dut"
+wvGetSignalSetScope -win $_nWave1 "/controller_tb/dut/DMA_Loop"
+wvSetPosition -win $_nWave1 {("G2" 8)}
+wvSetPosition -win $_nWave1 {("G2" 8)}
+wvAddSignal -win $_nWave1 -clear
+wvAddSignal -win $_nWave1 -group {"G1" \
+{/controller_tb/dut/DMA_Loop/clk} \
+{/controller_tb/dut/pc_adder/pc\[15:0\]} \
+{/controller_tb/dut/im/r_data\[31:0\]} \
+{/controller_tb/dut/dec/opcode\[5:0\]} \
+{/controller_tb/dut/rf/rst} \
+{/controller_tb/dut/DMA_Loop/glb_addr\[15:0\]} \
+{/controller_tb/dut/DMA_Loop/dram_addr\[31:0\]} \
+{/controller_tb/dut/DMA_Loop/cs\[1:0\]} \
+{/controller_tb/dut/DMA_Loop/glb_stride\[15:0\]} \
+{/controller_tb/dut/DMA_Loop/dram_stride\[31:0\]} \
+{/controller_tb/dut/DMA_Loop/CTRL_DMA_DRAM_ADDR\[31:0\]} \
+{/controller_tb/dut/DMA_Loop/CTRL_DMA_GLB_ADDR\[15:0\]} \
+{/controller_tb/dut/DMA_Loop/CTRL_DMA_done} \
+{/controller_tb/dut/DMA_Loop/CTRL_DMA_en} \
+{/controller_tb/dut/DMA_Loop/CTRL_DMA_len\[15:0\]} \
+{/controller_tb/dut/DMA_Loop/CTRL_DMA_mode\[1:0\]} \
+{/controller_tb/dut/DMA_Loop/DMA_DRAM_ADDR\[31:0\]} \
+{/controller_tb/dut/DMA_Loop/DMA_GLB_ADDR\[15:0\]} \
+{/controller_tb/dut/DMA_Loop/DMA_done} \
+{/controller_tb/dut/DMA_Loop/DMA_en} \
+{/controller_tb/dut/DMA_Loop/DMA_len\[15:0\]} \
+{/controller_tb/dut/DMA_Loop/DMA_mode\[1:0\]} \
+{/controller_tb/dut/DMA_Loop/loop_cnt\[31:0\]} \
+{/controller_tb/dut/DMA_Loop/loop_max\[31:0\]} \
+}
+wvAddSignal -win $_nWave1 -group {"G2" \
+{/controller_tb/dut/DMA_BYTE_BIAS\[1:0\]} \
+{/controller_tb/dut/DMA_DRAM_ADDR\[31:0\]} \
+{/controller_tb/dut/DMA_GLB_ADDR\[15:0\]} \
+{/controller_tb/dut/DMA_done} \
+{/controller_tb/dut/DMA_en} \
+{/controller_tb/dut/DMA_len\[15:0\]} \
+{/controller_tb/dut/DMA_mode\[1:0\]} \
+{/controller_tb/dut/DMA_Loop/K\[31:0\]} \
+}
+wvAddSignal -win $_nWave1 -group {"G3" \
+}
+wvSelectSignal -win $_nWave1 {( "G2" 8 )} 
+wvSetPosition -win $_nWave1 {("G2" 8)}
+wvSetRadix -win $_nWave1 -1Com
+wvSelectSignal -win $_nWave1 {( "G2" 8 )} 
+wvSetRadix -win $_nWave1 -format UDec
+wvDisplayGridCount -win $_nWave1 -off
+wvCloseGetStreamsDialog -win $_nWave1
+wvGetSignalClose -win $_nWave1
+wvReloadFile -win $_nWave1
+wvSelectSignal -win $_nWave1 {( "G1" 7 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 10 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 9 )} 
+wvSetRadix -win $_nWave1 -1Com
+wvSelectSignal -win $_nWave1 {( "G1" 9 )} 
+wvSetRadix -win $_nWave1 -format UDec
+wvSelectGroup -win $_nWave1 {G3}
+wvSelectGroup -win $_nWave1 {G3}
+wvSelectSignal -win $_nWave1 {( "G2" 8 )} 
+wvDisplayGridCount -win $_nWave1 -off
+wvCloseGetStreamsDialog -win $_nWave1
+wvGetSignalClose -win $_nWave1
+wvReloadFile -win $_nWave1
+wvSelectSignal -win $_nWave1 {( "G1" 9 )} 
+wvCut -win $_nWave1
+wvSetPosition -win $_nWave1 {("G3" 0)}
+wvSetPosition -win $_nWave1 {("G2" 8)}
+wvSelectSignal -win $_nWave1 {( "G1" 9 )} 
+wvCut -win $_nWave1
+wvSetPosition -win $_nWave1 {("G3" 0)}
+wvSetPosition -win $_nWave1 {("G2" 8)}
+wvSelectSignal -win $_nWave1 {( "G1" 9 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 10 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 11 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 17 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 18 )} 
+wvZoomOut -win $_nWave1
+wvZoomOut -win $_nWave1
+wvZoomOut -win $_nWave1
+wvZoomOut -win $_nWave1
+wvZoomIn -win $_nWave1
+wvZoomOut -win $_nWave1
+wvZoom -win $_nWave1 357612.453801 1454290.645457
+wvZoomIn -win $_nWave1
+wvZoomOut -win $_nWave1
+wvZoomIn -win $_nWave1
+wvZoom -win $_nWave1 388700.528726 421474.009390
+wvZoomOut -win $_nWave1
+wvSelectSignal -win $_nWave1 {( "G1" 19 )} 
+wvSelectSignal -win $_nWave1 {( "G2" 4 )} 
+wvSelectSignal -win $_nWave1 {( "G2" 6 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 21 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 20 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 19 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 14 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 13 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 19 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 12 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 13 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 18 )} 
+wvSelectSignal -win $_nWave1 {( "G1" 19 )} 
+wvScrollDown -win $_nWave1 0
+wvScrollDown -win $_nWave1 0

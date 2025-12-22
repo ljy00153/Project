@@ -406,7 +406,7 @@ def encode(program, labels):
             if label not in labels:
                 raise Exception(f"Unknown label {label}")
             target_pc = labels[label]
-            imm = target_pc & 0x3FFFFFF
+            imm = (target_pc*4) & 0x3FFFFFF
             instr = enc32(
                 opcode=(0, OPC['JUMP']),
                 imm=(6, imm),

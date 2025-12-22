@@ -1,7 +1,7 @@
 #######################################################################################
 # fsdb.xxxxx.log : log primitive debug message of FSDB Reader
 # This is for R&D to analyze when there are issues happening when FSDB reading
-# The corresponding FSDB file is /home/users/yves6512/Project/hardware/novas.fsdb
+# The corresponding FSDB file is /home/users/yves6512/Project/hardware/wave.fsdb
 #######################################################################################
 [BASIC]Reader version : Chronologic Simulation VCS Release V-2023.12_Full64
 [BASIC]simulator version : Chronologic Simulation VCS Release V-2023.12_Full64
@@ -9,21 +9,21 @@
 [THREAD]The MTR thread count is 9
 [THREAD]Secondary thread count: 4
 [PERF]VC decompress count : 1
-[PERF]VCChain decompress count : 2
+[PERF]VCChain decompress count : 1
 [PERF]VC decompress count : 1
-[PERF]VCChain decompress count : 2
-[PERF]VC decompress count : 0
-[PERF]VCChain decompress count : 2
-[PERF]VC decompress count : 0
-[PERF]VCChain decompress count : 2
-[PERF]VC decompress count : 0
-[PERF]VCChain decompress count : 2
-[PERF]VC decompress count : 0
-[PERF]VCChain decompress count : 2
+[PERF]VCChain decompress count : 1
 [PERF]VC decompress count : 1
-[PERF]VCChain decompress count : 2
+[PERF]VCChain decompress count : 1
 [PERF]VC decompress count : 1
-[PERF]VCChain decompress count : 2
+[PERF]VCChain decompress count : 1
+[PERF]VC decompress count : 0
+[PERF]VCChain decompress count : 1
+[PERF]VC decompress count : 1
+[PERF]VCChain decompress count : 1
+[PERF]VC decompress count : 1
+[PERF]VCChain decompress count : 1
+[PERF]VC decompress count : 1
+[PERF]VCChain decompress count : 1
 [READSCOPE]ReadScopeTree calling time is 1
 [READSCOPE]ReadScope_PartialLoad calling time is 0
 [READSCOPE]Scope read by partial load count is 0
@@ -31,7 +31,7 @@
 [READSCOPE]Decompressed blk is 3
 [MAXCHAIN]Decompressed cnt 14
 [PERF]VC decompress count : 1
-[PERF]VCChain decompress count : 2
+[PERF]VCChain decompress count : 1
 [FSDBGate Info] start
-[FSDBGate Info] Total fhdb_compute_count = 287
+[FSDBGate Info] Total fhdb_compute_count = 2494
 [FSDBGate Info] end

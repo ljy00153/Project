@@ -16,8 +16,7 @@
         CSR[10]: N_SIZE
         CSR[11]: M_SIZE
 
-        CSR[12]: MODE
-        CSR[13]: DATA_FLOW
+        CSR[12]: DATA_FLOW
     Register 32bit
         REG[0]: 0
         loop:

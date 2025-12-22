@@ -1,0 +1,3 @@
+Command Line: /usr/cad/synopsys/verdi/2023.12/platform/LINUXAMD64/bin/Novas -nWave
+uname(Linux aislab-eda-server 4.18.0-553.64.1.el8_10.x86_64 #1 SMP Wed Jul 23 16:42:14 EDT 2025 x86_64)
+au time 15282.307304 93.340405 172.339906 delta 318775296 318775296 total 976498688 976498688

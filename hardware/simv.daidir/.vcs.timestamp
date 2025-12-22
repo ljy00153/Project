@@ -5,7 +5,7 @@
 0 /usr/cad/synopsys/vcs/2023.12/etc/systemverilog/ASIC.svh
 0 ISA.svh
 0 /usr/cad/synopsys/vcs/2023.12/etc/systemverilog/ISA.svh
-49
+50
 +incdir+../include
 +itf+/usr/cad/synopsys/vcs/2023.12/linux64/lib/vcsdp_lite.tab
 +vcsd1
@@ -55,17 +55,18 @@ mux.sv
 signal_controller.sv
 ID_SENDER.sv
 glb_addr_generator.sv
+dma_loop_unit.sv
 91
 which_declare=declare -f
 __ETC_PROFILE_NIX_SOURCED=1
 _CONDA_ROOT=/home/users/yves6512/miniconda3
 _CONDA_EXE=/home/users/yves6512/miniconda3/bin/conda
 XLOCALEDIR=/usr/cad/synopsys/icc2/2024.09/etc/locale
-XDG_SESSION_ID=579
+XDG_SESSION_ID=1495
 XDG_RUNTIME_DIR=/run/user/1033
 XDG_DATA_DIRS=/home/users/yves6512/.local/share/flatpak/exports/share:/var/lib/flatpak/exports/share:/usr/local/share:/usr/share:/home/users/yves6512/.nix-profile/share:/nix/var/nix/profiles/default/share:/var/lib/snapd/desktop
-VSCODE_NONCE=1e7f2224-77e7-4f8d-9e1e-8783bbca8c53
-VSCODE_IPC_HOOK_CLI=/run/user/1033/vscode-ipc-b2a7f587-f753-461a-8526-914b6c6cac4f.sock
+VSCODE_NONCE=c517d0e8-1020-46e9-b32b-7891740c4a47
+VSCODE_IPC_HOOK_CLI=/run/user/1033/vscode-ipc-91e528a8-4f8c-4ec5-8184-2c68b29b59bd.sock
 VSCODE_GIT_IPC_HANDLE=/run/user/1033/vscode-git-1fc8b60cf2.sock
 VSCODE_GIT_ASKPASS_NODE=/home/users/yves6512/.vscode-server/cli/servers/Stable-618725e67565b290ba4da6fe2d29f8fa1d4e3622/server/node
 VSCODE_GIT_ASKPASS_MAIN=/home/users/yves6512/.vscode-server/cli/servers/Stable-618725e67565b290ba4da6fe2d29f8fa1d4e3622/server/extensions/git/dist/askpass-main.js
@@ -96,8 +97,8 @@ SYNOPSYS_LC_ROOT=/usr/cad/synopsys/lc/cur
 SYNOPSYS=/usr/cad/synopsys/formality/cur
 SSL_CERT_FILE=/etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem
 SSL_CERT_DIR=/etc/pki/tls/certs
-SSH_CONNECTION=140.116.178.165 14123 140.116.178.186 3175
-SSH_CLIENT=140.116.178.165 14123 3175
+SSH_CONNECTION=140.116.178.165 9895 140.116.178.186 3175
+SSH_CLIENT=140.116.178.165 9895 3175
 SSH_ASKPASS=/usr/libexec/openssh/gnome-ssh-askpass
 SNPS_VCS_PYTHON3=/usr/cad/synopsys/vcs/2023.12/linux64/bin/Python-3.6.1/bin/python3
 SNPS_VCS_CLANG_PATH=/usr/cad/synopsys/vcs/2023.12/linux64/clang
@@ -149,22 +150,23 @@ BASH_FUNC_module%%=() {  unset _mlshdbg;_ if [ "${MODULES_SILENT_SHELL_DEBUG:-0}
 BASH_FUNC_ml%%=() {  module ml "$@"_}
 0
 0
-17
+18
 1765182664 ../include/AXI_define.svh
-1765182672 ../include/ASIC.svh
+1765956308 ../include/ASIC.svh
 1765613911 ../include/ISA.svh
-1765821351 glb_addr_generator.sv
-1765614210 ID_SENDER.sv
-1765821136 signal_controller.sv
+1766136232 dma_loop_unit.sv
+1765977980 glb_addr_generator.sv
+1765980203 ID_SENDER.sv
+1766136460 signal_controller.sv
 1765612918 mux.sv
 1763806884 pc_adder.sv
-1765702510 pc_counter.sv
-1765704382 SRAM.sv
+1765866536 pc_counter.sv
+1765981438 SRAM.sv
 1765611925 regfile.sv
-1765736068 decoder.sv
+1765960733 decoder.sv
 1765737688 ALU.sv
-1765821448 controller_top.sv
-1765820991 controller_tb.sv
+1766135445 controller_top.sv
+1766049936 controller_tb.sv
 1700048491 /usr/cad/synopsys/verdi/2023.12/share/PLI/VCS/LINUX64/verdi.tab
 1701102734 /usr/cad/synopsys/vcs/2023.12/linux64/lib/vcsdp_lite.tab
 4
@@ -172,5 +174,5 @@ BASH_FUNC_ml%%=() {  module ml "$@"_}
 1701103518 /usr/cad/synopsys/vcs/2023.12/linux64/lib/liberrorinf.so
 1701103440 /usr/cad/synopsys/vcs/2023.12/linux64/lib/libsnpsmalloc.so
 1701103511 /usr/cad/synopsys/vcs/2023.12/linux64/lib/libvfs.so
-1765821452 simv.daidir
+1766136463 simv.daidir
 -1 partitionlib

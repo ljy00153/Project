@@ -1,0 +1,216 @@
+14       
+0 ../include/ISA.svh
+0 /usr/cad/synopsys/vcs/2023.12/etc/systemverilog/../include/ISA.svh
+0 ../include/ASIC.svh
+0 /usr/cad/synopsys/vcs/2023.12/etc/systemverilog/../include/ASIC.svh
+0 ../include/AXI_define.svh
+0 /usr/cad/synopsys/vcs/2023.12/etc/systemverilog/../include/AXI_define.svh
+0 AXI_define.svh
+0 /usr/cad/synopsys/vcs/2023.12/etc/systemverilog/AXI_define.svh
+0 ASIC.svh
+0 /usr/cad/synopsys/vcs/2023.12/etc/systemverilog/ASIC.svh
+0 ISA.svh
+0 /usr/cad/synopsys/vcs/2023.12/etc/systemverilog/ISA.svh
+0 define.svh
+0 /usr/cad/synopsys/vcs/2023.12/etc/systemverilog/define.svh
+62
++incdir+../../include
++itf+/usr/cad/synopsys/vcs/2023.12/linux64/lib/vcsdp_lite.tab
++vcsd1
++vpi
+-Mamsrun=
+-Masflags=
+-Mcc=gcc
+-Mcfl= -pipe -fPIC -O -I/usr/cad/synopsys/vcs/2023.12/include
+-Mcplusplus=g++
+-Mcrt0=
+-Mcrtn=
+-Mcsrc=
+-Mexternalobj=
+-Mldflags= -rdynamic
+-Mobjects= /usr/cad/synopsys/vcs/2023.12/linux64/lib/libvirsim.so /usr/cad/synopsys/vcs/2023.12/linux64/lib/liberrorinf.so /usr/cad/synopsys/vcs/2023.12/linux64/lib/libsnpsmalloc.so /usr/cad/synopsys/vcs/2023.12/linux64/lib/libvfs.so
+-Mout=simv
+-Msaverestoreobj=/usr/cad/synopsys/vcs/2023.12/linux64/lib/vcs_save_restore_new.o
+-Msyslibs=/usr/cad/synopsys/verdi/2023.12/share/PLI/VCS/LINUX64/pli.a -ldl
+-Mvcsaceobjs=
+-Mxcflags= -pipe -fPIC -I/usr/cad/synopsys/vcs/2023.12/include
+-Mxllcflags=
+-P
+-debug_access+all
+-fsdb
+-full64
+-gen_obj
+-l
+-o simv
+-picarchive
+-sverilog
+-timescale=1ns/1ps
+-top
+/usr/cad/synopsys/vcs/2023.12/linux64/bin/vcs1
+compile.log
+controller_tb
+simv
+/usr/cad/synopsys/verdi/2023.12/share/PLI/VCS/LINUX64/verdi.tab
+controller_tb.sv
+../../src/ASIC.sv
+../../src/top.sv
+../../src/controller/ALU.sv
+../../src/controller/controller_top.sv
+../../src/controller/decoder.sv
+../../src/controller/dma_loop_unit.sv
+../../src/controller/glb_addr_generator.sv
+../../src/controller/ID_SENDER.sv
+../../src/controller/mux.sv
+../../src/controller/pc_adder.sv
+../../src/controller/pc_counter.sv
+../../src/controller/regfile.sv
+../../src/controller/signal_controller.sv
+../../src/controller/SRAM.sv
+../../src/GLB/GLB.sv
+../../src/GLB/SRAM_rtl.sv
+../../src/PE_array/PE_array.sv
+../../src/PE_array/PE.sv
+../../src/PE_array/GIN/GIN_Bus.sv
+../../src/PE_array/GIN/GIN_MulticastController.sv
+../../src/PE_array/GIN/GIN.sv
+../../src/PE_array/GON/GON_Bus.sv
+../../src/PE_array/GON/GON_MulticastController.sv
+../../src/PE_array/GON/GON.sv
+93
+which_declare=declare -f
+__ETC_PROFILE_NIX_SOURCED=1
+_CONDA_ROOT=/home/users/yves6512/miniconda3
+_CONDA_EXE=/home/users/yves6512/miniconda3/bin/conda
+XLOCALEDIR=/usr/cad/synopsys/icc2/2024.09/etc/locale
+XDG_SESSION_ID=1867
+XDG_RUNTIME_DIR=/run/user/1033
+XDG_DATA_DIRS=/home/users/yves6512/.local/share/flatpak/exports/share:/var/lib/flatpak/exports/share:/usr/local/share:/usr/share:/home/users/yves6512/.nix-profile/share:/nix/var/nix/profiles/default/share:/var/lib/snapd/desktop
+VSCODE_NONCE=76a68183-51c5-46ea-9994-931bf28ddbe8
+VSCODE_IPC_HOOK_CLI=/run/user/1033/vscode-ipc-fd44afb8-9993-4b9f-baea-166b306e653c.sock
+VSCODE_GIT_IPC_HANDLE=/run/user/1033/vscode-git-1fc8b60cf2.sock
+VSCODE_GIT_ASKPASS_NODE=/home/users/yves6512/.vscode-server/cli/servers/Stable-994fd12f8d3a5aa16f17d42c041e5809167e845a/server/node
+VSCODE_GIT_ASKPASS_MAIN=/home/users/yves6512/.vscode-server/cli/servers/Stable-994fd12f8d3a5aa16f17d42c041e5809167e845a/server/extensions/git/dist/askpass-main.js
+VSCODE_GIT_ASKPASS_EXTRA_ARGS=
+VMR_MODE_FLAG=64
+VERDI_HOME=/usr/cad/synopsys/verdi/2023.12
+VENDOR=unknown
+VC_STATIC_HOME=/usr/cad/synopsys/vc_formal/cur/
+VCS_STATIC_HOME=/usr/cad/synopsys/vcs/2023.12/vcfca
+VCS_PYTHON3=/usr/cad/synopsys/vcs/2023.12/linux64/bin/Python-3.6.1/bin/python3
+VCS_PATHMAP_PRELOAD_DONE=1
+VCS_MX_HOME_INTERNAL=1
+VCS_MODE_FLAG=64
+VCS_LOG_FILE=compile.log
+VCS_HOME=/usr/cad/synopsys/vcs/2023.12
+VCS_EXEC_DONE=1
+VCS_DEPTH=0
+VCS_CC=gcc
+VCS_ARG_ADDED_FOR_TMP=1
+VCS_ARCH=linux64
+UNAME=/bin/uname
+TOOL_HOME=/usr/cad/synopsys/vcs/2023.12/linux64
+TERM_PROGRAM_VERSION=1.107.1
+TERM_PROGRAM=vscode
+S_COLORS=auto
+SYN_MAN_DIR=/usr/cad/synopsys/synthesis/2024.09/doc/syn/man
+SYNOPSYS_LC_ROOT=/usr/cad/synopsys/lc/cur
+SYNOPSYS=/usr/cad/synopsys/formality/cur
+SSL_CERT_FILE=/etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem
+SSL_CERT_DIR=/etc/pki/tls/certs
+SSH_CONNECTION=140.116.178.165 14393 140.116.178.186 3175
+SSH_CLIENT=140.116.178.165 14393 3175
+SSH_ASKPASS=/usr/libexec/openssh/gnome-ssh-askpass
+SNPS_VCS_PYTHON3=/usr/cad/synopsys/vcs/2023.12/linux64/bin/Python-3.6.1/bin/python3
+SNPS_VCS_CLANG_PATH=/usr/cad/synopsys/vcs/2023.12/linux64/clang
+SNPS_INTERNAL_VCS_LINUX_OS=linux
+SHLIB_PATH=/usr/cad/synopsys/verdi/2023.12/etc/lib/libstdc++/LINUX64/:/usr/cad/synopsys/verdi/2023.12/share/PLI/lib/LINUX64/:/usr/cad/synopsys/verdi/2023.12/share/PLI/VCS/LINUX64/::/usr/cad/synopsys/verdi/cur/etc/lib/libstdc++/LINUX64/:/usr/cad/synopsys/verdi/2023.12/etc/lib/libstdc++/LINUX64/:/usr/cad/synopsys/verdi/2023.12/share/PLI/lib/LINUX64/:/usr/cad/synopsys/verdi/2023.12/share/PLI/VCS/LINUX64/::/usr/cad/synopsys/verdi/cur/etc/lib/libstdc++/LINUX64/:/usr/cad/synopsys/verdi/2023.12/etc/lib/libstdc++/LINUX64/:/usr/cad/synopsys/verdi/2023.12/share/PLI/lib/LINUX64/:/usr/cad/synopsys/verdi/2023.12/share/PLI/VCS/LINUX64/::/usr/cad/synopsys/verdi/2023.12/etc/lib/libstdc++/LINUX64/:/usr/cad/synopsys/verdi/2023.12/share/PLI/lib/LINUX64/:/usr/cad/synopsys/verdi/2023.12/share/PLI/VCS/LINUX64/:
+SELINUX_USE_CURRENT_RANGE=
+SELINUX_ROLE_REQUESTED=
+SELINUX_LEVEL_REQUESTED=
+SCRNAME=vcs
+SCRIPT_NAME=vcs
+OVA_UUM=0
+OSTYPE=linux
+NIX_SSL_CERT_FILE=/etc/ssl/certs/ca-bundle.crt
+NIX_PROFILES=/nix/var/nix/profiles/default /home/users/yves6512/.nix-profile
+MODULES_USE_COMPAT_VERSION=0
+MODULES_RUN_QUARANTINE=LD_LIBRARY_PATH LD_PRELOAD
+MODULES_CMD=/usr/share/Modules/libexec/modulecmd.tcl
+MODULESHOME=/usr/share/Modules
+MODULEPATH_modshare=/usr/share/Modules/modulefiles:2:/etc/modulefiles:2:/usr/share/modulefiles:2
+MODULEPATH=/etc/scl/modulefiles:/etc/scl/modulefiles:/usr/share/Modules/modulefiles:/etc/modulefiles:/usr/share/modulefiles
+MGC_TMPDIR=/tmp
+MGC_LOCATION_MAP=NO_MAP
+MGC_HOME=/usr/cad/mentor/calibre/aok_cal_2022.1_36.16
+MFLAGS=
+MAKE_TERMOUT=/dev/pts/41
+MAKE_TERMERR=/dev/pts/41
+MAKEOVERRIDES=${-*-command-variables-*-}
+MAKELEVEL=1
+MAKEFLAGS= -- HEX=tb6.hex
+Laker_TCL_ToolBox=1
+Laker_TCL_L3=1
+LOADEDMODULES=
+LESSOPEN=||/usr/bin/lesspipe.sh %s
+LC_ALL=C
+KDEDIRS=/usr
+HOSTTYPE=x86_64-linux
+HISTCONTROL=ignoredups
+HEX=tb6.hex
+GROUP=intern
+GIT_ASKPASS=/home/users/yves6512/.vscode-server/cli/servers/Stable-994fd12f8d3a5aa16f17d42c041e5809167e845a/server/extensions/git/dist/askpass.sh
+FORMALITY=/usr/cad/synopsys/formality/cur
+DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1033/bus
+CONDA_SHLVL=0
+CONDA_PYTHON_EXE=/home/users/yves6512/miniconda3/bin/python
+CONDA_EXE=/home/users/yves6512/miniconda3/bin/conda
+COLORTERM=truecolor
+CALIBRE_HOME=/usr/cad/mentor/calibre/aok_cal_2022.1_36.16
+BASH_FUNC_which%%=() {  ( alias;_ eval ${which_declare} ) | /usr/bin/which --tty-only --read-alias --read-functions --show-tilde --show-dot $@_}
+BASH_FUNC_switchml%%=() {  swfound=1;_ if [ "${MODULES_USE_COMPAT_VERSION:-0}" = '1' ]; then_ swname='main';_ if [ -e /usr/share/Modules/libexec/modulecmd.tcl ]; then_ swfound=0;_ unset MODULES_USE_COMPAT_VERSION;_ fi;_ else_ swname='compatibility';_ if [ -e /usr/share/Modules/libexec/modulecmd-compat ]; then_ swfound=0;_ MODULES_USE_COMPAT_VERSION=1;_ export MODULES_USE_COMPAT_VERSION;_ fi;_ fi;_ if [ $swfound -eq 0 ]; then_ echo "Switching to Modules $swname version";_ . /usr/share/Modules/init/sh;_ else_ echo "Cannot switch to Modules $swname version, command not found";_ return 1;_ fi_}
+BASH_FUNC_module%%=() {  unset _mlshdbg;_ if [ "${MODULES_SILENT_SHELL_DEBUG:-0}" = '1' ]; then_ case "$-" in _ *v*x*)_ set +vx;_ _mlshdbg='vx'_ ;;_ *v*)_ set +v;_ _mlshdbg='v'_ ;;_ *x*)_ set +x;_ _mlshdbg='x'_ ;;_ *)_ _mlshdbg=''_ ;;_ esac;_ fi;_ unset _mlre _mlIFS;_ if [ -n "${IFS+x}" ]; then_ _mlIFS=$IFS;_ fi;_ IFS=' ';_ for _mlv in ${MODULES_RUN_QUARANTINE:-};_ do_ if [ "${_mlv}" = "${_mlv##*[!A-Za-z0-9_]}" -a "${_mlv}" = "${_mlv#[0-9]}" ]; then_ if [ -n "`eval 'echo ${'$_mlv'+x}'`" ]; then_ _mlre="${_mlre:-}${_mlv}_modquar='`eval 'echo ${'$_mlv'}'`' ";_ fi;_ _mlrv="MODULES_RUNENV_${_mlv}";_ _mlre="${_mlre:-}${_mlv}='`eval 'echo ${'$_mlrv':-}'`' ";_ fi;_ done;_ if [ -n "${_mlre:-}" ]; then_ eval `eval ${_mlre} /usr/bin/tclsh /usr/share/Modules/libexec/modulecmd.tcl sh '"$@"'`;_ else_ eval `/usr/bin/tclsh /usr/share/Modules/libexec/modulecmd.tcl sh "$@"`;_ fi;_ _mlstatus=$?;_ if [ -n "${_mlIFS+x}" ]; then_ IFS=$_mlIFS;_ else_ unset IFS;_ fi;_ unset _mlre _mlv _mlrv _mlIFS;_ if [ -n "${_mlshdbg:-}" ]; then_ set -$_mlshdbg;_ fi;_ unset _mlshdbg;_ return $_mlstatus_}
+BASH_FUNC_ml%%=() {  module ml "$@"_}
+0
+0
+34
+1766254832 ../../include/define.svh
+1765613911 ../../include/ISA.svh
+1766254787 ../../include/ASIC.svh
+1765182664 ../../include/AXI_define.svh
+1765182664 ../../include/../include/AXI_define.svh
+1766254787 ../../include/../include/ASIC.svh
+1765613911 ../../include/../include/ISA.svh
+1766256064 ../../src/PE_array/GON/GON.sv
+1763807095 ../../src/PE_array/GON/GON_MulticastController.sv
+1763807095 ../../src/PE_array/GON/GON_Bus.sv
+1766256060 ../../src/PE_array/GIN/GIN.sv
+1763807095 ../../src/PE_array/GIN/GIN_MulticastController.sv
+1763807095 ../../src/PE_array/GIN/GIN_Bus.sv
+1765390878 ../../src/PE_array/PE.sv
+1766256046 ../../src/PE_array/PE_array.sv
+1765606823 ../../src/GLB/SRAM_rtl.sv
+1765606822 ../../src/GLB/GLB.sv
+1766256302 ../../src/controller/SRAM.sv
+1766251998 ../../src/controller/signal_controller.sv
+1765611925 ../../src/controller/regfile.sv
+1765866536 ../../src/controller/pc_counter.sv
+1763806884 ../../src/controller/pc_adder.sv
+1765612918 ../../src/controller/mux.sv
+1765980203 ../../src/controller/ID_SENDER.sv
+1765977980 ../../src/controller/glb_addr_generator.sv
+1766136849 ../../src/controller/dma_loop_unit.sv
+1765960733 ../../src/controller/decoder.sv
+1766256337 ../../src/controller/controller_top.sv
+1765737688 ../../src/controller/ALU.sv
+1766254577 ../../src/top.sv
+1766136964 ../../src/ASIC.sv
+1766049936 controller_tb.sv
+1700048491 /usr/cad/synopsys/verdi/2023.12/share/PLI/VCS/LINUX64/verdi.tab
+1701102734 /usr/cad/synopsys/vcs/2023.12/linux64/lib/vcsdp_lite.tab
+4
+1701104330 /usr/cad/synopsys/vcs/2023.12/linux64/lib/libvirsim.so
+1701103518 /usr/cad/synopsys/vcs/2023.12/linux64/lib/liberrorinf.so
+1701103440 /usr/cad/synopsys/vcs/2023.12/linux64/lib/libsnpsmalloc.so
+1701103511 /usr/cad/synopsys/vcs/2023.12/linux64/lib/libvfs.so
+1766256341 simv.daidir
+-1 partitionlib

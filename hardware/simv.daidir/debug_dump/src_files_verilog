@@ -4,6 +4,7 @@
 /home/users/yves6512/Project/hardware/controller_tb.sv
 /home/users/yves6512/Project/hardware/controller_top.sv
 /home/users/yves6512/Project/hardware/decoder.sv
+/home/users/yves6512/Project/hardware/dma_loop_unit.sv
 /home/users/yves6512/Project/hardware/glb_addr_generator.sv
 /home/users/yves6512/Project/hardware/mux.sv
 /home/users/yves6512/Project/hardware/pc_adder.sv
