@@ -1,9 +1,4 @@
-`define XID_BITS 32
-`define YID_BITS 32
-`define DEFAULT_XID 0
-`define DEFAULT_YID 0
-`define PE_ARRAY_W 8 
-`define PE_ARRAY_H 6
+
 module ID_SENDER(
     input  clk,
     input  rst,

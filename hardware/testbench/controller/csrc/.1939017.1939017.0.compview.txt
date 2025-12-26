@@ -1,0 +1,9 @@
+{"vcs1":{"timestamp_begin":1766477422.496537524, "rt":1.28, "ut":0.23, "st":0.06}}
+{"vcselab":{"timestamp_begin":1766477423.832467548, "rt":0.94, "ut":0.14, "st":0.04}}
+{"link":{"timestamp_begin":1766477424.808811982, "rt":0.12, "ut":0.07, "st":0.04}}
+{"SNPS_VCS_INTERNAL_ROOT_START_TIME": 1766477422.065518715}
+{"VCS_COMP_START_TIME": 1766477422.065518715}
+{"VCS_COMP_END_TIME": 1766477425.006882434}
+{"VCS_USER_OPTIONS": "-full64 -sverilog +incdir+../../include -debug_access+all -timescale=1ns/1ps -l compile.log -top controller_tb controller_tb.sv ../../src/ASIC.sv ../../src/top.sv ../../src/controller/ALU.sv ../../src/controller/controller_top.sv ../../src/controller/decoder.sv ../../src/controller/dma_loop_unit.sv ../../src/controller/glb_addr_generator.sv ../../src/controller/ID_SENDER.sv ../../src/controller/mux.sv ../../src/controller/pc_adder.sv ../../src/controller/pc_counter.sv ../../src/controller/regfile.sv ../../src/controller/signal_controller.sv ../../src/controller/SRAM.sv ../../src/GLB/GLB.sv ../../src/GLB/SRAM_rtl.sv ../../src/PE_array/PE_array.sv ../../src/PE_array/PE.sv ../../src/PE_array/GIN/GIN_Bus.sv ../../src/PE_array/GIN/GIN_MulticastController.sv ../../src/PE_array/GIN/GIN.sv ../../src/PE_array/GON/GON_Bus.sv ../../src/PE_array/GON/GON_MulticastController.sv ../../src/PE_array/GON/GON.sv -o simv"}
+{"vcs1": {"peak_mem": 402544}}
+{"vcselab": {"peak_mem": 264600}}

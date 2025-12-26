@@ -408,7 +408,7 @@ typedef enum logic [2:0] {
               GLB_A_bias_next = DMABYTE_BIAS;
             end
             `MODE_FILTER:begin // read, byte, bias
-              cs_glb_next =   ;
+              cs_glb_next = WRITE_FILTER_GLB  ;
               GLB_A_bias_next = 2'd0;
             end
             `MODE_BIAS:begin // read, word

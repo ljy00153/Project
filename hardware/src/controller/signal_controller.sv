@@ -60,7 +60,6 @@ module signal_controller#(
     output logic GLB_DO_select,
 
     //------------GLB_addr------------------
-    output logic glb_addr_gen_en,
     output logic [31:0]glb_addr_base,
     output logic [1:0]glb_type,
     input logic glb_done,
@@ -298,7 +297,6 @@ module signal_controller#(
                         GLB_EN= 1'b1;
                         GLB_WEB= 1'b0;
                         GLB_MODE=`WORD_MODE;
-                        glb_addr_gen_en=1'b1;
                         glb_addr_base=ALU_result;
                         glb_type=glb_type_reg;
                         GLB_mux=`ASIC;                        
@@ -308,7 +306,6 @@ module signal_controller#(
                         GLB_EN= 1'b1;
                         GLB_WEB= 1'b1;
                         GLB_MODE=`WORD_MODE;
-                        glb_addr_gen_en=1'b1;
                         glb_addr_base=ALU_result;
                         glb_type=glb_type_reg;
                         GLB_mux=`ASIC;                        

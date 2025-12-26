@@ -32,8 +32,11 @@ module controller_top #(
     output logic GLB_EN, 
     output logic GLB_WEB, 
     output logic GLB_MODE, 
-    output logic GLB_ADDR,
+    output logic [`GLB_ADDR_BITS-1:0]GLB_ADDR,
     //PEA
+
+    output logic [`PE_ARRAY_H*`PE_ARRAY_W-1:0] PE_en,
+    output logic [10:0]                        PE_config,
     output logic                        set_XID,
     output logic [`XID_BITS-1:0]        ifmap_XID_scan_in,
     output logic [`XID_BITS-1:0]        weight_XID_scan_in,
@@ -80,7 +83,8 @@ module controller_top #(
     input logic  DMA_done,
 
     output logic GLB_DI_select,
-    output logic GLB_DO_select
+    output logic GLB_DO_select,
+    output logic GLB_mux
 
 );
 
@@ -208,7 +212,6 @@ module controller_top #(
     logic [31:0] CSR_output;
 
     // 這些 GLB 控制線你後面要接 GLB / DMA 再拉出去
-    logic GLB_DI_select, GLB_DO_select;
     logic [31:0] glb_addr_base;
     logic [1:0]  glb_type;
     logic GLB_EN_wire, GLB_WEB_wire, GLB_MODE_wire;
@@ -221,6 +224,7 @@ module controller_top #(
     logic [`GLB_ADDR_BITS-1:0] CTRL_DMA_GLB_ADDR;
     logic [`GLB_ADDR_BITS-1:0] CTRL_DMA_len;
     logic CTRL_DMA_done;
+    logic [1:0] CTRL_DMA_byte_bias;
     logic [31:0] OF_BYTE,IF_BYTE,B_BYTE,K_BYTE,N_BYTE,M_BYTE;
  
     signal_controller ctrl (
@@ -252,7 +256,7 @@ module controller_top #(
         .DMA_DRAM_ADDR   (CTRL_DMA_DRAM_ADDR),
         .DMA_GLB_ADDR    (CTRL_DMA_GLB_ADDR),
         .DMA_done        (CTRL_DMA_done), // 目前沒 DMA，先綁 0（你之後要改）
-
+        .DMA_byte_bias   (CTRL_DMA_byte_bias),
 
         .OF_BYTE(OF_BYTE),
         .IF_BYTE(IF_BYTE),
@@ -268,9 +272,11 @@ module controller_top #(
         .PEA_opsum_valid(),
     
         .PE_finish (),
-        //.GLB_DI_select   (GLB_DI_select),
-        //.GLB_DO_select   (GLB_DO_select),
-        .glb_addr_gen_en (),
+        .PE_en(PE_en),
+        .PE_config(PE_config),
+        .GLB_mux (GLB_mux),
+        .GLB_DI_select (GLB_DI_select),
+        .GLB_DO_select (GLB_DO_select),
         .glb_addr_base   (glb_addr_base),
         .glb_type        (glb_type),
         .glb_done        (glb_done),
@@ -297,9 +303,8 @@ module controller_top #(
         .next_pc_sel     (next_pc_sel),
         .alu_op1_sel     (alu_op1_sel),
         .alu_op2_sel     (alu_op2_sel),
-        .reg_wb_en       (reg_wb_en),
-        .GLB_DI_select (GLB_DI_select),
-        .GLB_DO_select (GLB_DO_select)
+        .reg_wb_en       (reg_wb_en)
+ 
     );
     
     assign alu_op1 = (alu_op1_sel) ? rs1_data : CSR_output ;

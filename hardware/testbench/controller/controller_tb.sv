@@ -39,7 +39,19 @@ module controller_tb;
   logic GLB_EN;
   logic GLB_WEB;
   logic GLB_MODE;
+  // ============================================================
+  // GLB addr / mux selects (missing declarations!)
+  // ============================================================
+  logic [`GLB_ADDR_BITS-1:0] GLB_ADDR;
+  logic GLB_DI_select;
+  logic GLB_DO_select;
+  logic GLB_mux;
 
+  // ============================================================
+  // PEA enables/config (missing declarations!)
+  // ============================================================
+  logic [`PE_ARRAY_H*`PE_ARRAY_W-1:0] PE_en;
+  logic [10:0]                        PE_config;
   // ============================================================
   // PEA XID scan
   // ============================================================
@@ -140,7 +152,10 @@ module controller_tb;
     .GLB_EN                (GLB_EN),
     .GLB_WEB               (GLB_WEB),
     .GLB_MODE              (GLB_MODE),
+    .GLB_ADDR              (GLB_ADDR),
 
+    .PE_en (PE_en),
+    .PE_config(PE_config),
     // PEA XID scan
     .set_XID               (set_XID),
     .ifmap_XID_scan_in     (ifmap_XID_scan_in),
@@ -190,7 +205,11 @@ module controller_tb;
     .DMA_GLB_ADDR(DMA_GLB_ADDR),
     .DMA_BYTE_BIAS(DMA_BYTE_BIAS),
     .DMA_len(DMA_len),
-    .DMA_done(DMA_done)
+    .DMA_done(DMA_done),
+
+    .GLB_DI_select(GLB_DI_select),
+    .GLB_DO_select(GLB_DO_select),
+    .GLB_mux(GLB_mux)
   );
 
   // ---------------------------------------------------------

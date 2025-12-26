@@ -10,7 +10,7 @@ Command: vcs -full64 -sverilog +incdir+../../include -debug_access+all -timescal
 ../../src/PE_array/GON/GON.sv -o simv
 *** Using c compiler gcc instead of cc ...
                          Chronologic VCS (TM)
-         Version V-2023.12_Full64 -- Mon Dec 22 13:29:59 2025
+         Version V-2023.12_Full64 -- Tue Dec 23 03:44:34 2025
 
                     Copyright (c) 1991 - 2023 Synopsys, Inc.
    This software and the associated documentation are proprietary to Synopsys,
@@ -53,20 +53,6 @@ Back to file '../../src/controller/ALU.sv'.
 Parsing design file '../../src/controller/controller_top.sv'
 Parsing included file '../../include/../include/ISA.svh'.
 Back to file '../../src/controller/controller_top.sv'.
-
-Warning-[IPDW] Identifier previously declared
-../../src/controller/controller_top.sv, 211
-  Second declaration for identifier 'GLB_DI_select' ignored
-  Identifier 'GLB_DI_select' previously declared as output port. 
-  [../../src/controller/controller_top.sv, 82]
-
-
-Warning-[IPDW] Identifier previously declared
-../../src/controller/controller_top.sv, 211
-  Second declaration for identifier 'GLB_DO_select' ignored
-  Identifier 'GLB_DO_select' previously declared as output port. 
-  [../../src/controller/controller_top.sv, 83]
-
 Parsing design file '../../src/controller/decoder.sv'
 Parsing included file '../../include/../include/ISA.svh'.
 Back to file '../../src/controller/decoder.sv'.
@@ -85,38 +71,6 @@ Back to file '../../src/controller/glb_addr_generator.sv'.
 Parsing included file '../../include/../include/ISA.svh'.
 Back to file '../../src/controller/glb_addr_generator.sv'.
 Parsing design file '../../src/controller/ID_SENDER.sv'
-
-Warning-[TMR] Text macro redefined
-../../src/controller/ID_SENDER.sv, 1
-  Text macro (XID_BITS) is redefined. The last definition will override 
-  previous ones.
-  Location of previous definition: ../../include/../include/ASIC.svh, 7.
-  Previous value: 4
-
-
-Warning-[TMR] Text macro redefined
-../../src/controller/ID_SENDER.sv, 2
-  Text macro (YID_BITS) is redefined. The last definition will override 
-  previous ones.
-  Location of previous definition: ../../include/../include/ASIC.svh, 8.
-  Previous value: 3
-
-
-Warning-[TMR] Text macro redefined
-../../src/controller/ID_SENDER.sv, 3
-  Text macro (DEFAULT_XID) is redefined. The last definition will override 
-  previous ones.
-  Location of previous definition: ../../include/../include/ASIC.svh, 9.
-  Previous value: (2**`XID_BITS - 1)
-
-
-Warning-[TMR] Text macro redefined
-../../src/controller/ID_SENDER.sv, 4
-  Text macro (DEFAULT_YID) is redefined. The last definition will override 
-  previous ones.
-  Location of previous definition: ../../include/../include/ASIC.svh, 10.
-  Previous value: (2**`YID_BITS - 1)
-
 Parsing design file '../../src/controller/mux.sv'
 Parsing design file '../../src/controller/pc_adder.sv'
 Parsing design file '../../src/controller/pc_counter.sv'
@@ -137,38 +91,6 @@ Back to file '../../src/GLB/GLB.sv'.
 Parsing design file '../../src/GLB/SRAM_rtl.sv'
 Parsing design file '../../src/PE_array/PE_array.sv'
 Parsing included file '../../include/define.svh'.
-
-Warning-[TMR] Text macro redefined
-../../include/define.svh, 21
-  Text macro (XID_BITS) is redefined. The last definition will override 
-  previous ones.
-  Location of previous definition: ../../src/controller/ID_SENDER.sv, 1.
-  Previous value: 32
-
-
-Warning-[TMR] Text macro redefined
-../../include/define.svh, 22
-  Text macro (YID_BITS) is redefined. The last definition will override 
-  previous ones.
-  Location of previous definition: ../../src/controller/ID_SENDER.sv, 2.
-  Previous value: 32
-
-
-Warning-[TMR] Text macro redefined
-../../include/define.svh, 23
-  Text macro (DEFAULT_XID) is redefined. The last definition will override 
-  previous ones.
-  Location of previous definition: ../../src/controller/ID_SENDER.sv, 3.
-  Previous value: 0
-
-
-Warning-[TMR] Text macro redefined
-../../include/define.svh, 24
-  Text macro (DEFAULT_YID) is redefined. The last definition will override 
-  previous ones.
-  Location of previous definition: ../../src/controller/ID_SENDER.sv, 4.
-  Previous value: 0
-
 Back to file '../../src/PE_array/PE_array.sv'.
 Parsing design file '../../src/PE_array/PE.sv'
 Parsing included file '../../include/define.svh'.
@@ -182,194 +104,20 @@ Parsing design file '../../src/PE_array/GON/GON.sv'
 Top Level Modules:
        controller_tb
 TimeScale is 1 ns / 1 ps
-
-Warning-[TFIPC] Too few instance port connections
-../../src/controller/controller_top.sv, 226
-controller_top, "signal_controller ctrl( .clk (clk),  .rst (rst),  .asic_en (asic_en),  .asic_done (asic_done),  .mmio_sel (mmio_sel),  .csr_wen (csr_wen),  .DRAM_ifmap_base (DRAM_ifmap_base),  .DRAM_weight_base (DRAM_weight_base),  .DRAM_ofmap_base (DRAM_ofmap_base),  .GLB_ifmap_base (GLB_ifmap_base),  .GLB_weight_base (GLB_weight_base),  .GLB_opsum_base (GLB_opsum_base),  .OF_SIZE (OF_SIZE),  .IF_SIZE (IF_SIZE),  .B_SIZE (B_SIZE),  .K_SIZE (K_SIZE),  .N_SIZE (N_SIZE),  .M_SIZE (M_SIZE),  .DATAFLOW (DATAFLOW),  .DMA_en (CTRL_DMA_en),  .DMA_mode (CTRL_DMA_mode),  .DMA_len (CTRL_DMA_len),  .DMA_DRAM_ADDR (CTRL_DMA_DRAM_ADDR),  .DMA_GLB_ADDR (CTRL_DMA_GLB_ADDR),  .DMA_done (CTRL_DMA_done),  .OF_BYTE (OF_BYTE),  .IF_BYTE (IF_BYTE),  .B_BYTE (B_BYTE),  .K_BYTE (K_BYTE),  .N ... "
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[TFIPC] Too few instance port connections
-controller_tb.sv, 113
-controller_tb, "controller_top #(.PC_WIDTH(16)) dut( .clk (clk),  .rst (rst),  .asic_en (asic_en),  .asic_done (asic_done),  .im_init_en (im_init_en),  .im_init_addr (im_init_addr),  .im_init_wdata (im_init_wdata),  .DRAM_ifmap_base (DRAM_ifmap_base),  .DRAM_weight_base (DRAM_weight_base),  .DRAM_ofmap_base (DRAM_ofmap_base),  .GLB_ifmap_base (GLB_ifmap_base),  .GLB_weight_base (GLB_weight_base),  .GLB_opsum_base (GLB_opsum_base),  .OF_SIZE (OF_SIZE),  .IF_SIZE (IF_SIZE),  .B_SIZE (B_SIZE),  .K_SIZE (K_SIZE),  .N_SIZE (N_SIZE),  .M_SIZE (M_SIZE),  .DATAFLOW (DATAFLOW),  .GLB_EN (GLB_EN),  .GLB_WEB (GLB_WEB),  .GLB_MODE (GLB_MODE),  .set_XID (set_XID),  .ifmap_XID_scan_in (ifmap_XID_scan_in),  .weight_XID_scan_in (weight_XID_scan_in),  .ipsum_XID_scan_in (ipsum_XID_scan ... "
-  The above instance has fewer port connections than the module definition.
-  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
-  ports.
-
-
-Warning-[PCWM-W] Port connection width mismatch
-../../src/controller/controller_top.sv, 345
-"ID_SENDER u_id_sender( .clk (clk),  .rst (rst),  .en (id_en),  .tag_type (glb_type),  .set_XID (set_XID),  .ifmap_XID_scan_in (ifmap_XID_scan_in),  .weight_XID_scan_in (weight_XID_scan_in),  .ipsum_XID_scan_in (ipsum_XID_scan_in),  .opsum_XID_scan_in (opsum_XID_scan_in),  .set_YID (set_YID),  .ifmap_YID_scan_in (ifmap_YID_scan_in),  .weight_YID_scan_in (weight_YID_scan_in),  .ipsum_YID_scan_in (ipsum_YID_scan_in),  .opsum_YID_scan_in (opsum_YID_scan_in),  .set_LN (set_LN),  .LN_config_in (LN_config_in),  .PEA_ifmap_valid (PEA_ifmap_valid),  .PEA_ifmap_ready (PEA_ifmap_ready),  .ifmap_tag_X (ifmap_tag_X),  .ifmap_tag_Y (ifmap_tag_Y),  .PEA_weight_valid (PEA_weight_valid),  .PEA_weight_ready (PEA_weight_ready),  .weight_tag_X (weight_tag_X),  .weight_tag_ ... "
-  The following 4-bit expression is connected to 32-bit port 
-  "ifmap_XID_scan_in" of module "ID_SENDER", instance "u_id_sender".
-  Expression: ifmap_XID_scan_in
-  Instantiated module defined at: "../../src/controller/ID_SENDER.sv", 7
-  Use +lint=PCWM for more details.
-
-
-Warning-[PCWM-W] Port connection width mismatch
-../../src/controller/controller_top.sv, 345
-"ID_SENDER u_id_sender( .clk (clk),  .rst (rst),  .en (id_en),  .tag_type (glb_type),  .set_XID (set_XID),  .ifmap_XID_scan_in (ifmap_XID_scan_in),  .weight_XID_scan_in (weight_XID_scan_in),  .ipsum_XID_scan_in (ipsum_XID_scan_in),  .opsum_XID_scan_in (opsum_XID_scan_in),  .set_YID (set_YID),  .ifmap_YID_scan_in (ifmap_YID_scan_in),  .weight_YID_scan_in (weight_YID_scan_in),  .ipsum_YID_scan_in (ipsum_YID_scan_in),  .opsum_YID_scan_in (opsum_YID_scan_in),  .set_LN (set_LN),  .LN_config_in (LN_config_in),  .PEA_ifmap_valid (PEA_ifmap_valid),  .PEA_ifmap_ready (PEA_ifmap_ready),  .ifmap_tag_X (ifmap_tag_X),  .ifmap_tag_Y (ifmap_tag_Y),  .PEA_weight_valid (PEA_weight_valid),  .PEA_weight_ready (PEA_weight_ready),  .weight_tag_X (weight_tag_X),  .weight_tag_ ... "
-  The following 4-bit expression is connected to 32-bit port 
-  "weight_XID_scan_in" of module "ID_SENDER", instance "u_id_sender".
-  Expression: weight_XID_scan_in
-  Instantiated module defined at: "../../src/controller/ID_SENDER.sv", 7
-  Use +lint=PCWM for more details.
-
-
-Warning-[PCWM-W] Port connection width mismatch
-../../src/controller/controller_top.sv, 345
-"ID_SENDER u_id_sender( .clk (clk),  .rst (rst),  .en (id_en),  .tag_type (glb_type),  .set_XID (set_XID),  .ifmap_XID_scan_in (ifmap_XID_scan_in),  .weight_XID_scan_in (weight_XID_scan_in),  .ipsum_XID_scan_in (ipsum_XID_scan_in),  .opsum_XID_scan_in (opsum_XID_scan_in),  .set_YID (set_YID),  .ifmap_YID_scan_in (ifmap_YID_scan_in),  .weight_YID_scan_in (weight_YID_scan_in),  .ipsum_YID_scan_in (ipsum_YID_scan_in),  .opsum_YID_scan_in (opsum_YID_scan_in),  .set_LN (set_LN),  .LN_config_in (LN_config_in),  .PEA_ifmap_valid (PEA_ifmap_valid),  .PEA_ifmap_ready (PEA_ifmap_ready),  .ifmap_tag_X (ifmap_tag_X),  .ifmap_tag_Y (ifmap_tag_Y),  .PEA_weight_valid (PEA_weight_valid),  .PEA_weight_ready (PEA_weight_ready),  .weight_tag_X (weight_tag_X),  .weight_tag_ ... "
-  The following 4-bit expression is connected to 32-bit port 
-  "ipsum_XID_scan_in" of module "ID_SENDER", instance "u_id_sender".
-  Expression: ipsum_XID_scan_in
-  Instantiated module defined at: "../../src/controller/ID_SENDER.sv", 7
-  Use +lint=PCWM for more details.
-
-
-Warning-[PCWM-W] Port connection width mismatch
-../../src/controller/controller_top.sv, 345
-"ID_SENDER u_id_sender( .clk (clk),  .rst (rst),  .en (id_en),  .tag_type (glb_type),  .set_XID (set_XID),  .ifmap_XID_scan_in (ifmap_XID_scan_in),  .weight_XID_scan_in (weight_XID_scan_in),  .ipsum_XID_scan_in (ipsum_XID_scan_in),  .opsum_XID_scan_in (opsum_XID_scan_in),  .set_YID (set_YID),  .ifmap_YID_scan_in (ifmap_YID_scan_in),  .weight_YID_scan_in (weight_YID_scan_in),  .ipsum_YID_scan_in (ipsum_YID_scan_in),  .opsum_YID_scan_in (opsum_YID_scan_in),  .set_LN (set_LN),  .LN_config_in (LN_config_in),  .PEA_ifmap_valid (PEA_ifmap_valid),  .PEA_ifmap_ready (PEA_ifmap_ready),  .ifmap_tag_X (ifmap_tag_X),  .ifmap_tag_Y (ifmap_tag_Y),  .PEA_weight_valid (PEA_weight_valid),  .PEA_weight_ready (PEA_weight_ready),  .weight_tag_X (weight_tag_X),  .weight_tag_ ... "
-  The following 4-bit expression is connected to 32-bit port 
-  "opsum_XID_scan_in" of module "ID_SENDER", instance "u_id_sender".
-  Expression: opsum_XID_scan_in
-  Instantiated module defined at: "../../src/controller/ID_SENDER.sv", 7
-  Use +lint=PCWM for more details.
-
-
-Warning-[PCWM-W] Port connection width mismatch
-../../src/controller/controller_top.sv, 345
-"ID_SENDER u_id_sender( .clk (clk),  .rst (rst),  .en (id_en),  .tag_type (glb_type),  .set_XID (set_XID),  .ifmap_XID_scan_in (ifmap_XID_scan_in),  .weight_XID_scan_in (weight_XID_scan_in),  .ipsum_XID_scan_in (ipsum_XID_scan_in),  .opsum_XID_scan_in (opsum_XID_scan_in),  .set_YID (set_YID),  .ifmap_YID_scan_in (ifmap_YID_scan_in),  .weight_YID_scan_in (weight_YID_scan_in),  .ipsum_YID_scan_in (ipsum_YID_scan_in),  .opsum_YID_scan_in (opsum_YID_scan_in),  .set_LN (set_LN),  .LN_config_in (LN_config_in),  .PEA_ifmap_valid (PEA_ifmap_valid),  .PEA_ifmap_ready (PEA_ifmap_ready),  .ifmap_tag_X (ifmap_tag_X),  .ifmap_tag_Y (ifmap_tag_Y),  .PEA_weight_valid (PEA_weight_valid),  .PEA_weight_ready (PEA_weight_ready),  .weight_tag_X (weight_tag_X),  .weight_tag_ ... "
-  The following 3-bit expression is connected to 32-bit port 
-  "ifmap_YID_scan_in" of module "ID_SENDER", instance "u_id_sender".
-  Expression: ifmap_YID_scan_in
-  Instantiated module defined at: "../../src/controller/ID_SENDER.sv", 7
-  Use +lint=PCWM for more details.
-
-
-Warning-[PCWM-W] Port connection width mismatch
-../../src/controller/controller_top.sv, 345
-"ID_SENDER u_id_sender( .clk (clk),  .rst (rst),  .en (id_en),  .tag_type (glb_type),  .set_XID (set_XID),  .ifmap_XID_scan_in (ifmap_XID_scan_in),  .weight_XID_scan_in (weight_XID_scan_in),  .ipsum_XID_scan_in (ipsum_XID_scan_in),  .opsum_XID_scan_in (opsum_XID_scan_in),  .set_YID (set_YID),  .ifmap_YID_scan_in (ifmap_YID_scan_in),  .weight_YID_scan_in (weight_YID_scan_in),  .ipsum_YID_scan_in (ipsum_YID_scan_in),  .opsum_YID_scan_in (opsum_YID_scan_in),  .set_LN (set_LN),  .LN_config_in (LN_config_in),  .PEA_ifmap_valid (PEA_ifmap_valid),  .PEA_ifmap_ready (PEA_ifmap_ready),  .ifmap_tag_X (ifmap_tag_X),  .ifmap_tag_Y (ifmap_tag_Y),  .PEA_weight_valid (PEA_weight_valid),  .PEA_weight_ready (PEA_weight_ready),  .weight_tag_X (weight_tag_X),  .weight_tag_ ... "
-  The following 3-bit expression is connected to 32-bit port 
-  "weight_YID_scan_in" of module "ID_SENDER", instance "u_id_sender".
-  Expression: weight_YID_scan_in
-  Instantiated module defined at: "../../src/controller/ID_SENDER.sv", 7
-  Use +lint=PCWM for more details.
-
-
-Warning-[PCWM-W] Port connection width mismatch
-../../src/controller/controller_top.sv, 345
-"ID_SENDER u_id_sender( .clk (clk),  .rst (rst),  .en (id_en),  .tag_type (glb_type),  .set_XID (set_XID),  .ifmap_XID_scan_in (ifmap_XID_scan_in),  .weight_XID_scan_in (weight_XID_scan_in),  .ipsum_XID_scan_in (ipsum_XID_scan_in),  .opsum_XID_scan_in (opsum_XID_scan_in),  .set_YID (set_YID),  .ifmap_YID_scan_in (ifmap_YID_scan_in),  .weight_YID_scan_in (weight_YID_scan_in),  .ipsum_YID_scan_in (ipsum_YID_scan_in),  .opsum_YID_scan_in (opsum_YID_scan_in),  .set_LN (set_LN),  .LN_config_in (LN_config_in),  .PEA_ifmap_valid (PEA_ifmap_valid),  .PEA_ifmap_ready (PEA_ifmap_ready),  .ifmap_tag_X (ifmap_tag_X),  .ifmap_tag_Y (ifmap_tag_Y),  .PEA_weight_valid (PEA_weight_valid),  .PEA_weight_ready (PEA_weight_ready),  .weight_tag_X (weight_tag_X),  .weight_tag_ ... "
-  The following 3-bit expression is connected to 32-bit port 
-  "ipsum_YID_scan_in" of module "ID_SENDER", instance "u_id_sender".
-  Expression: ipsum_YID_scan_in
-  Instantiated module defined at: "../../src/controller/ID_SENDER.sv", 7
-  Use +lint=PCWM for more details.
-
-
-Warning-[PCWM-W] Port connection width mismatch
-../../src/controller/controller_top.sv, 345
-"ID_SENDER u_id_sender( .clk (clk),  .rst (rst),  .en (id_en),  .tag_type (glb_type),  .set_XID (set_XID),  .ifmap_XID_scan_in (ifmap_XID_scan_in),  .weight_XID_scan_in (weight_XID_scan_in),  .ipsum_XID_scan_in (ipsum_XID_scan_in),  .opsum_XID_scan_in (opsum_XID_scan_in),  .set_YID (set_YID),  .ifmap_YID_scan_in (ifmap_YID_scan_in),  .weight_YID_scan_in (weight_YID_scan_in),  .ipsum_YID_scan_in (ipsum_YID_scan_in),  .opsum_YID_scan_in (opsum_YID_scan_in),  .set_LN (set_LN),  .LN_config_in (LN_config_in),  .PEA_ifmap_valid (PEA_ifmap_valid),  .PEA_ifmap_ready (PEA_ifmap_ready),  .ifmap_tag_X (ifmap_tag_X),  .ifmap_tag_Y (ifmap_tag_Y),  .PEA_weight_valid (PEA_weight_valid),  .PEA_weight_ready (PEA_weight_ready),  .weight_tag_X (weight_tag_X),  .weight_tag_ ... "
-  The following 3-bit expression is connected to 32-bit port 
-  "opsum_YID_scan_in" of module "ID_SENDER", instance "u_id_sender".
-  Expression: opsum_YID_scan_in
-  Instantiated module defined at: "../../src/controller/ID_SENDER.sv", 7
-  Use +lint=PCWM for more details.
-
-
-Warning-[PCWM-W] Port connection width mismatch
-../../src/controller/controller_top.sv, 345
-"ID_SENDER u_id_sender( .clk (clk),  .rst (rst),  .en (id_en),  .tag_type (glb_type),  .set_XID (set_XID),  .ifmap_XID_scan_in (ifmap_XID_scan_in),  .weight_XID_scan_in (weight_XID_scan_in),  .ipsum_XID_scan_in (ipsum_XID_scan_in),  .opsum_XID_scan_in (opsum_XID_scan_in),  .set_YID (set_YID),  .ifmap_YID_scan_in (ifmap_YID_scan_in),  .weight_YID_scan_in (weight_YID_scan_in),  .ipsum_YID_scan_in (ipsum_YID_scan_in),  .opsum_YID_scan_in (opsum_YID_scan_in),  .set_LN (set_LN),  .LN_config_in (LN_config_in),  .PEA_ifmap_valid (PEA_ifmap_valid),  .PEA_ifmap_ready (PEA_ifmap_ready),  .ifmap_tag_X (ifmap_tag_X),  .ifmap_tag_Y (ifmap_tag_Y),  .PEA_weight_valid (PEA_weight_valid),  .PEA_weight_ready (PEA_weight_ready),  .weight_tag_X (weight_tag_X),  .weight_tag_ ... "
-  The following 4-bit expression is connected to 32-bit port "ifmap_tag_X" of 
-  module "ID_SENDER", instance "u_id_sender".
-  Expression: ifmap_tag_X
-  Instantiated module defined at: "../../src/controller/ID_SENDER.sv", 7
-  Use +lint=PCWM for more details.
-
-
-Warning-[PCWM-W] Port connection width mismatch
-../../src/controller/controller_top.sv, 345
-"ID_SENDER u_id_sender( .clk (clk),  .rst (rst),  .en (id_en),  .tag_type (glb_type),  .set_XID (set_XID),  .ifmap_XID_scan_in (ifmap_XID_scan_in),  .weight_XID_scan_in (weight_XID_scan_in),  .ipsum_XID_scan_in (ipsum_XID_scan_in),  .opsum_XID_scan_in (opsum_XID_scan_in),  .set_YID (set_YID),  .ifmap_YID_scan_in (ifmap_YID_scan_in),  .weight_YID_scan_in (weight_YID_scan_in),  .ipsum_YID_scan_in (ipsum_YID_scan_in),  .opsum_YID_scan_in (opsum_YID_scan_in),  .set_LN (set_LN),  .LN_config_in (LN_config_in),  .PEA_ifmap_valid (PEA_ifmap_valid),  .PEA_ifmap_ready (PEA_ifmap_ready),  .ifmap_tag_X (ifmap_tag_X),  .ifmap_tag_Y (ifmap_tag_Y),  .PEA_weight_valid (PEA_weight_valid),  .PEA_weight_ready (PEA_weight_ready),  .weight_tag_X (weight_tag_X),  .weight_tag_ ... "
-  The following 3-bit expression is connected to 32-bit port "ifmap_tag_Y" of 
-  module "ID_SENDER", instance "u_id_sender".
-  Expression: ifmap_tag_Y
-  Instantiated module defined at: "../../src/controller/ID_SENDER.sv", 7
-  Use +lint=PCWM for more details.
-
-
-Warning-[PCWM-W] Port connection width mismatch
-../../src/controller/controller_top.sv, 345
-"ID_SENDER u_id_sender( .clk (clk),  .rst (rst),  .en (id_en),  .tag_type (glb_type),  .set_XID (set_XID),  .ifmap_XID_scan_in (ifmap_XID_scan_in),  .weight_XID_scan_in (weight_XID_scan_in),  .ipsum_XID_scan_in (ipsum_XID_scan_in),  .opsum_XID_scan_in (opsum_XID_scan_in),  .set_YID (set_YID),  .ifmap_YID_scan_in (ifmap_YID_scan_in),  .weight_YID_scan_in (weight_YID_scan_in),  .ipsum_YID_scan_in (ipsum_YID_scan_in),  .opsum_YID_scan_in (opsum_YID_scan_in),  .set_LN (set_LN),  .LN_config_in (LN_config_in),  .PEA_ifmap_valid (PEA_ifmap_valid),  .PEA_ifmap_ready (PEA_ifmap_ready),  .ifmap_tag_X (ifmap_tag_X),  .ifmap_tag_Y (ifmap_tag_Y),  .PEA_weight_valid (PEA_weight_valid),  .PEA_weight_ready (PEA_weight_ready),  .weight_tag_X (weight_tag_X),  .weight_tag_ ... "
-  The following 4-bit expression is connected to 32-bit port "weight_tag_X" of
-  module "ID_SENDER", instance "u_id_sender".
-  Expression: weight_tag_X
-  Instantiated module defined at: "../../src/controller/ID_SENDER.sv", 7
-  Use +lint=PCWM for more details.
-
-
-Warning-[PCWM-W] Port connection width mismatch
-../../src/controller/controller_top.sv, 345
-"ID_SENDER u_id_sender( .clk (clk),  .rst (rst),  .en (id_en),  .tag_type (glb_type),  .set_XID (set_XID),  .ifmap_XID_scan_in (ifmap_XID_scan_in),  .weight_XID_scan_in (weight_XID_scan_in),  .ipsum_XID_scan_in (ipsum_XID_scan_in),  .opsum_XID_scan_in (opsum_XID_scan_in),  .set_YID (set_YID),  .ifmap_YID_scan_in (ifmap_YID_scan_in),  .weight_YID_scan_in (weight_YID_scan_in),  .ipsum_YID_scan_in (ipsum_YID_scan_in),  .opsum_YID_scan_in (opsum_YID_scan_in),  .set_LN (set_LN),  .LN_config_in (LN_config_in),  .PEA_ifmap_valid (PEA_ifmap_valid),  .PEA_ifmap_ready (PEA_ifmap_ready),  .ifmap_tag_X (ifmap_tag_X),  .ifmap_tag_Y (ifmap_tag_Y),  .PEA_weight_valid (PEA_weight_valid),  .PEA_weight_ready (PEA_weight_ready),  .weight_tag_X (weight_tag_X),  .weight_tag_ ... "
-  The following 3-bit expression is connected to 32-bit port "weight_tag_Y" of
-  module "ID_SENDER", instance "u_id_sender".
-  Expression: weight_tag_Y
-  Instantiated module defined at: "../../src/controller/ID_SENDER.sv", 7
-  Use +lint=PCWM for more details.
-
-
-Warning-[PCWM-W] Port connection width mismatch
-../../src/controller/controller_top.sv, 345
-"ID_SENDER u_id_sender( .clk (clk),  .rst (rst),  .en (id_en),  .tag_type (glb_type),  .set_XID (set_XID),  .ifmap_XID_scan_in (ifmap_XID_scan_in),  .weight_XID_scan_in (weight_XID_scan_in),  .ipsum_XID_scan_in (ipsum_XID_scan_in),  .opsum_XID_scan_in (opsum_XID_scan_in),  .set_YID (set_YID),  .ifmap_YID_scan_in (ifmap_YID_scan_in),  .weight_YID_scan_in (weight_YID_scan_in),  .ipsum_YID_scan_in (ipsum_YID_scan_in),  .opsum_YID_scan_in (opsum_YID_scan_in),  .set_LN (set_LN),  .LN_config_in (LN_config_in),  .PEA_ifmap_valid (PEA_ifmap_valid),  .PEA_ifmap_ready (PEA_ifmap_ready),  .ifmap_tag_X (ifmap_tag_X),  .ifmap_tag_Y (ifmap_tag_Y),  .PEA_weight_valid (PEA_weight_valid),  .PEA_weight_ready (PEA_weight_ready),  .weight_tag_X (weight_tag_X),  .weight_tag_ ... "
-  The following 4-bit expression is connected to 32-bit port "ipsum_tag_X" of 
-  module "ID_SENDER", instance "u_id_sender".
-  Expression: ipsum_tag_X
-  Instantiated module defined at: "../../src/controller/ID_SENDER.sv", 7
-  Use +lint=PCWM for more details.
-
-
-Warning-[PCWM-W] Port connection width mismatch
-../../src/controller/controller_top.sv, 345
-"ID_SENDER u_id_sender( .clk (clk),  .rst (rst),  .en (id_en),  .tag_type (glb_type),  .set_XID (set_XID),  .ifmap_XID_scan_in (ifmap_XID_scan_in),  .weight_XID_scan_in (weight_XID_scan_in),  .ipsum_XID_scan_in (ipsum_XID_scan_in),  .opsum_XID_scan_in (opsum_XID_scan_in),  .set_YID (set_YID),  .ifmap_YID_scan_in (ifmap_YID_scan_in),  .weight_YID_scan_in (weight_YID_scan_in),  .ipsum_YID_scan_in (ipsum_YID_scan_in),  .opsum_YID_scan_in (opsum_YID_scan_in),  .set_LN (set_LN),  .LN_config_in (LN_config_in),  .PEA_ifmap_valid (PEA_ifmap_valid),  .PEA_ifmap_ready (PEA_ifmap_ready),  .ifmap_tag_X (ifmap_tag_X),  .ifmap_tag_Y (ifmap_tag_Y),  .PEA_weight_valid (PEA_weight_valid),  .PEA_weight_ready (PEA_weight_ready),  .weight_tag_X (weight_tag_X),  .weight_tag_ ... "
-  The following 3-bit expression is connected to 32-bit port "ipsum_tag_Y" of 
-  module "ID_SENDER", instance "u_id_sender".
-  Expression: ipsum_tag_Y
-  Instantiated module defined at: "../../src/controller/ID_SENDER.sv", 7
-  Use +lint=PCWM for more details.
-
-
-Warning-[PCWM-W] Port connection width mismatch
-../../src/controller/controller_top.sv, 345
-"ID_SENDER u_id_sender( .clk (clk),  .rst (rst),  .en (id_en),  .tag_type (glb_type),  .set_XID (set_XID),  .ifmap_XID_scan_in (ifmap_XID_scan_in),  .weight_XID_scan_in (weight_XID_scan_in),  .ipsum_XID_scan_in (ipsum_XID_scan_in),  .opsum_XID_scan_in (opsum_XID_scan_in),  .set_YID (set_YID),  .ifmap_YID_scan_in (ifmap_YID_scan_in),  .weight_YID_scan_in (weight_YID_scan_in),  .ipsum_YID_scan_in (ipsum_YID_scan_in),  .opsum_YID_scan_in (opsum_YID_scan_in),  .set_LN (set_LN),  .LN_config_in (LN_config_in),  .PEA_ifmap_valid (PEA_ifmap_valid),  .PEA_ifmap_ready (PEA_ifmap_ready),  .ifmap_tag_X (ifmap_tag_X),  .ifmap_tag_Y (ifmap_tag_Y),  .PEA_weight_valid (PEA_weight_valid),  .PEA_weight_ready (PEA_weight_ready),  .weight_tag_X (weight_tag_X),  .weight_tag_ ... "
-  The following 4-bit expression is connected to 32-bit port "opsum_tag_X" of 
-  module "ID_SENDER", instance "u_id_sender".
-  Expression: opsum_tag_X
-  Instantiated module defined at: "../../src/controller/ID_SENDER.sv", 7
-  Use +lint=PCWM for more details.
-
-
-Warning-[PCWM-W] Port connection width mismatch
-../../src/controller/controller_top.sv, 345
-"ID_SENDER u_id_sender( .clk (clk),  .rst (rst),  .en (id_en),  .tag_type (glb_type),  .set_XID (set_XID),  .ifmap_XID_scan_in (ifmap_XID_scan_in),  .weight_XID_scan_in (weight_XID_scan_in),  .ipsum_XID_scan_in (ipsum_XID_scan_in),  .opsum_XID_scan_in (opsum_XID_scan_in),  .set_YID (set_YID),  .ifmap_YID_scan_in (ifmap_YID_scan_in),  .weight_YID_scan_in (weight_YID_scan_in),  .ipsum_YID_scan_in (ipsum_YID_scan_in),  .opsum_YID_scan_in (opsum_YID_scan_in),  .set_LN (set_LN),  .LN_config_in (LN_config_in),  .PEA_ifmap_valid (PEA_ifmap_valid),  .PEA_ifmap_ready (PEA_ifmap_ready),  .ifmap_tag_X (ifmap_tag_X),  .ifmap_tag_Y (ifmap_tag_Y),  .PEA_weight_valid (PEA_weight_valid),  .PEA_weight_ready (PEA_weight_ready),  .weight_tag_X (weight_tag_X),  .weight_tag_ ... "
-  The following 3-bit expression is connected to 32-bit port "opsum_tag_Y" of 
-  module "ID_SENDER", instance "u_id_sender".
-  Expression: opsum_tag_Y
-  Instantiated module defined at: "../../src/controller/ID_SENDER.sv", 7
-  Use +lint=PCWM for more details.
-
 Starting vcs inline pass...
 
 4 modules and 0 UDP read.
+recompiling module controller_tb
 recompiling module controller_top
-	However, due to incremental compilation, only 1 module needs to be compiled. 
+Both modules done.
+	However, due to incremental compilation, only 2 modules need to be compiled. 
 make[1]: Entering directory '/home/users/yves6512/Project/hardware/testbench/controller/csrc' \
 
 rm -f _cuarc*.so _csrc*.so pre_vcsobj_*.so share_vcsobj_*.so
 if [ -x ../simv ]; then chmod a-x ../simv; fi
 g++  -o ../simv      -rdynamic  -Wl,-rpath='$ORIGIN'/simv.daidir -Wl,-rpath=./simv.daidir \
 -Wl,-rpath=/usr/cad/synopsys/vcs/2023.12/linux64/lib -L/usr/cad/synopsys/vcs/2023.12/linux64/lib \
--Wl,-rpath-link=./  /usr/lib64/libnuma.so.1   objs/amcQw_d.o   _431794_archive_1.so \
+-Wl,-rpath-link=./  /usr/lib64/libnuma.so.1   objs/amcQw_d.o   _2029960_archive_1.so \
 _prev_archive_1.so   SIM_l.o      rmapats_mop.o rmapats.o rmar.o rmar_nd.o  rmar_llvm_0_1.o \
 rmar_llvm_0_0.o            -lvirsim -lerrorinf -lsnpsmalloc -lvfs    -lvcsnew -lsimprofile \
 -luclinative /usr/cad/synopsys/vcs/2023.12/linux64/lib/vcs_tls.o   -Wl,-whole-archive \
@@ -379,4 +127,4 @@ rmar_llvm_0_0.o            -lvirsim -lerrorinf -lsnpsmalloc -lvfs    -lvcsnew -l
 ../simv up to date
 make[1]: Leaving directory '/home/users/yves6512/Project/hardware/testbench/controller/csrc' \
 
-CPU time: .340 seconds to compile + .193 seconds to elab + .171 seconds to link
+CPU time: .347 seconds to compile + .195 seconds to elab + .173 seconds to link

@@ -82,11 +82,11 @@ __ETC_PROFILE_NIX_SOURCED=1
 _CONDA_ROOT=/home/users/yves6512/miniconda3
 _CONDA_EXE=/home/users/yves6512/miniconda3/bin/conda
 XLOCALEDIR=/usr/cad/synopsys/icc2/2024.09/etc/locale
-XDG_SESSION_ID=2413
+XDG_SESSION_ID=2638
 XDG_RUNTIME_DIR=/run/user/1033
 XDG_DATA_DIRS=/home/users/yves6512/.local/share/flatpak/exports/share:/var/lib/flatpak/exports/share:/usr/local/share:/usr/share:/home/users/yves6512/.nix-profile/share:/nix/var/nix/profiles/default/share:/var/lib/snapd/desktop
-VSCODE_NONCE=7daada33-8240-44a6-8dec-eef4ff6824bc
-VSCODE_IPC_HOOK_CLI=/run/user/1033/vscode-ipc-f4ed3141-d23d-4ca2-9da3-725f17fa5c4b.sock
+VSCODE_NONCE=752d866b-47b2-43d8-b3ce-603b4dbf2287
+VSCODE_IPC_HOOK_CLI=/run/user/1033/vscode-ipc-3b0ed635-a325-425f-954b-f2ce2947431b.sock
 VSCODE_GIT_IPC_HANDLE=/run/user/1033/vscode-git-1fc8b60cf2.sock
 VSCODE_GIT_ASKPASS_NODE=/home/users/yves6512/.vscode-server/cli/servers/Stable-994fd12f8d3a5aa16f17d42c041e5809167e845a/server/node
 VSCODE_GIT_ASKPASS_MAIN=/home/users/yves6512/.vscode-server/cli/servers/Stable-994fd12f8d3a5aa16f17d42c041e5809167e845a/server/extensions/git/dist/askpass-main.js
@@ -117,8 +117,8 @@ SYNOPSYS_LC_ROOT=/usr/cad/synopsys/lc/cur
 SYNOPSYS=/usr/cad/synopsys/formality/cur
 SSL_CERT_FILE=/etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem
 SSL_CERT_DIR=/etc/pki/tls/certs
-SSH_CONNECTION=140.116.178.165 11600 140.116.178.186 3175
-SSH_CLIENT=140.116.178.165 11600 3175
+SSH_CONNECTION=140.116.178.165 53120 140.116.178.186 3175
+SSH_CLIENT=140.116.178.165 53120 3175
 SSH_ASKPASS=/usr/libexec/openssh/gnome-ssh-askpass
 SNPS_VCS_PYTHON3=/usr/cad/synopsys/vcs/2023.12/linux64/bin/Python-3.6.1/bin/python3
 SNPS_VCS_CLANG_PATH=/usr/cad/synopsys/vcs/2023.12/linux64/clang
@@ -173,7 +173,7 @@ BASH_FUNC_ml%%=() {  module ml "$@"_}
 0
 0
 34
-1766254832 ../../include/define.svh
+1766477559 ../../include/define.svh
 1765613911 ../../include/ISA.svh
 1766254787 ../../include/ASIC.svh
 1765182664 ../../include/AXI_define.svh
@@ -191,20 +191,20 @@ BASH_FUNC_ml%%=() {  module ml "$@"_}
 1765606823 ../../src/GLB/SRAM_rtl.sv
 1765606822 ../../src/GLB/GLB.sv
 1766256302 ../../src/controller/SRAM.sv
-1766251998 ../../src/controller/signal_controller.sv
+1766478310 ../../src/controller/signal_controller.sv
 1765611925 ../../src/controller/regfile.sv
 1765866536 ../../src/controller/pc_counter.sv
 1763806884 ../../src/controller/pc_adder.sv
 1765612918 ../../src/controller/mux.sv
-1765980203 ../../src/controller/ID_SENDER.sv
+1766477472 ../../src/controller/ID_SENDER.sv
 1765977980 ../../src/controller/glb_addr_generator.sv
 1766428198 ../../src/controller/dma_loop_unit.sv
 1765960733 ../../src/controller/decoder.sv
-1766256337 ../../src/controller/controller_top.sv
+1766479471 ../../src/controller/controller_top.sv
 1765737688 ../../src/controller/ALU.sv
-1766312089 ../../src/top.sv
-1766136964 ../../src/ASIC.sv
-1766427953 controller_tb.sv
+1766476553 ../../src/top.sv
+1766477198 ../../src/ASIC.sv
+1766479295 controller_tb.sv
 1700048491 /usr/cad/synopsys/verdi/2023.12/share/PLI/VCS/LINUX64/verdi.tab
 1701102734 /usr/cad/synopsys/vcs/2023.12/linux64/lib/vcsdp_lite.tab
 4
@@ -212,5 +212,5 @@ BASH_FUNC_ml%%=() {  module ml "$@"_}
 1701103518 /usr/cad/synopsys/vcs/2023.12/linux64/lib/liberrorinf.so
 1701103440 /usr/cad/synopsys/vcs/2023.12/linux64/lib/libsnpsmalloc.so
 1701103511 /usr/cad/synopsys/vcs/2023.12/linux64/lib/libvfs.so
-1766428201 simv.daidir
+1766479476 simv.daidir
 -1 partitionlib

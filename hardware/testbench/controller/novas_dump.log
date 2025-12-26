@@ -188,7 +188,7 @@ VCS_STATIC_HOME=/usr/cad/synopsys/vcs/2023.12/vcfca
 LESSOPEN=||/usr/bin/lesspipe.sh %s
 MODULES_RUN_QUARANTINE=LD_LIBRARY_PATH LD_PRELOAD
 MGC_LOCATION_MAP=NO_MAP
-SSH_CONNECTION=140.116.178.165 11600 140.116.178.186 3175
+SSH_CONNECTION=140.116.178.165 53120 140.116.178.186 3175
 PATH=/usr/cad/cadence/XCELIUM/XCELIUM_24.03.002/tools/bin/64bit:/usr/cad/cadence/XCELIUM/XCELIUM_24.03.002/tools/bin:/usr/cad/synopsys/synthesis/2024.09/amd64/syn/bin:/usr/cad/synopsys/lc/cur/bin:/usr/cad/synopsys/lc/2024.09/bin:/usr/cad/synopsys/vcs/2023.12/bin:/usr/cad/synopsys/vcs/2023.12/vcfca/bin:/usr/cad/synopsys/vcs/2023.12/amd64/bin:/usr/cad/synopsys/verdi/2023.12/bin:/usr/cad/synopsys/verdi/cur/bin:/usr/cad/synopsys/verdi/cur/nLint/bin:/usr/cad/synopsys/verdi/2023.12/bin:/usr/cad/mentor/calibre/aok_cal_2022.1_36.16/bin:/usr/cad/synopsys/laker_oa/2024.09-1//bin:/usr/cad/synopsys/spyglass/2023.12/SPYGLASS_HOME/bin:/usr/cad/synopsys/formality/2024.09/amd64/fm/bin:/usr/cad/synopsys/vc_formal/cur/bin:/usr/cad/synopsys/primepower/2024.09/bin:/usr/cad/synopsys/primetime/2024.09/amd64/syn/bin:/usr/cad/synopsys/milkyway/2024.09/bin/linux64:/usr/cad/synopsys/icc2/2024.09/bin:/usr/cad/synopsys/icc/2023.12//amd64/syn/bin:/usr/cad/synopsys/dsoai/2024.09/bin:/usr/cad/synopsys/lc/2024.09/bin:/usr/cad/synopsys/synthesis/2024.09/amd64/syn/bin:/usr/cad/synopsys/lc/cur/bin:/usr/cad/synopsys/verdi/cur/bin:/usr/cad/synopsys/verdi/cur/nLint/bin:/usr/cad/synopsys/verdi/2023.12/bin:/usr/cad/synopsys/verdi/2023.12/bin:/usr/cad/synopsys/vcs/2023.12/bin:/usr/cad/synopsys/vcs/2023.12/vcfca/bin:/usr/cad/synopsys/vcs/2023.12/amd64/bin:/usr/cad/cadence/JASPER/jasper_2024.03p002/bin:/usr/cad/cadence/INNOVUS/INNOVUS_21.19.000/tools/bin/64bit:/usr/cad/cadence/INNOVUS/INNOVUS_21.19.000/tools/bin:/usr/cad/cadence/GENUS/GENUS_21.18.000/tools/bin/64bit:/usr/cad/cadence/GENUS/GENUS_21.18.000/tools/bin:/usr/cad/cadence/XCELIUM/XCELIUM_24.03.002/tools/bin/64bit:/usr/cad/cadence/XCELIUM/XCELIUM_24.03.002/tools/bin:/home/users/yves6512/.vscode-server/data/User/globalStorage/github.copilot-chat/debugCommand:/home/users/yves6512/.vscode-server/data/User/globalStorage/github.copilot-chat/copilotCli:/home/users/yves6512/.vscode-server/cli/servers/Stable-994fd12f8d3a5aa16f17d42c041e5809167e845a/server/bin/remote-cli:/home/users/yves6512/.nix-profile/bin:/nix/var/nix/profiles/default/bin:/usr/share/Modules/bin:/usr/lib64/ccache:/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/var/lib/snapd/snap/bin
 LM_LICENSE_FILE=5280@lstn:26585@lstn:1717@lstn:
 XDG_RUNTIME_DIR=/run/user/1033
@@ -207,8 +207,8 @@ SSL_CERT_FILE=/etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem
 HOME=/home/users/yves6512
 VCS_HOME=/usr/cad/synopsys/vcs/2023.12
 PWD=/home/users/yves6512/Project/hardware/testbench/controller
-VSCODE_IPC_HOOK_CLI=/run/user/1033/vscode-ipc-f4ed3141-d23d-4ca2-9da3-725f17fa5c4b.sock
-VSCODE_NONCE=7daada33-8240-44a6-8dec-eef4ff6824bc
+VSCODE_IPC_HOOK_CLI=/run/user/1033/vscode-ipc-3b0ed635-a325-425f-954b-f2ce2947431b.sock
+VSCODE_NONCE=752d866b-47b2-43d8-b3ce-603b4dbf2287
 CALIBRE_HOME=/usr/cad/mentor/calibre/aok_cal_2022.1_36.16
 VERDI_HOME=/usr/cad/synopsys/verdi/2023.12
 MANPATH=/usr/share/man::/usr/cad/synopsys/vcs/2023.12/doc/man:/usr/cad/synopsys/synthesis/2024.09/doc/syn/man:/usr/cad/synopsys/lc/2024.09/doc/lc/man:/usr/cad/synopsys/vcs/2023.12/doc/man:/usr/cad/synopsys/lc/2024.09/doc/lc/man:/usr/cad/synopsys/synthesis/2024.09/doc/syn/man
@@ -255,7 +255,7 @@ BASH_FUNC_switchml%%=() {  swfound=1;
  return 1;
  fi
 }
-XDG_SESSION_ID=2413
+XDG_SESSION_ID=2638
 USER=yves6512
 CONDA_SHLVL=0
 Laker_TCL_L3=1
@@ -323,7 +323,7 @@ BASH_FUNC_module%%=() {  unset _mlshdbg;
 }
 MAKEFLAGS= -- HEX=tb6.hex
 MFLAGS=
-SSH_CLIENT=140.116.178.165 11600 3175
+SSH_CLIENT=140.116.178.165 53120 3175
 TERM_PROGRAM_VERSION=1.107.1
 MAIL=/var/spool/mail/yves6512
 LOADEDMODULES=
@@ -360,8 +360,8 @@ argv[1]=+HEX=tb6.hex
 argv[2]=-l
 argv[3]=run.log
 284 profile - 100
-          CPU/Mem usage: 0.020 sys,  0.150 user,  312.55M mem
-285 Elapsed time:    0:00:01    Mon Dec 22 13:30:02 2025
+          CPU/Mem usage: 0.030 sys,  0.140 user,  312.54M mem
+285 Elapsed time:    0:00:01    Tue Dec 23 03:44:37 2025
 286 User CPU time used: 0 seconds
 287 System CPU time used: 0 seconds
 288 pliAppInit
@@ -377,7 +377,7 @@ argv[3]=run.log
 298 LIBSSCORE=found /usr/cad/synopsys/verdi/2023.12/share/PLI/lib/LINUXAMD64/libsscore_vcs202312.so through $NOVAS_HOME setting.
 299 FSDB Dumper for VCS, Release Verdi_V-2023.12, Linux x86_64/64bit, 11/15/2023
 300 (C) 1996 - 2023 by Synopsys, Inc.
-301 sps_call_fsdbDumpfile_main at 0 : controller_tb.sv(232)
+301 sps_call_fsdbDumpfile_main at 0 : controller_tb.sv(251)
 302 argv[0]: (wave.fsdb)
 303 *Verdi* FSDB WARNING: The FSDB file already exists. Overwriting the FSDB file may crash the programs that are using this file.
 304 *Verdi* : Create FSDB file 'wave.fsdb'
@@ -386,126 +386,126 @@ argv[3]=run.log
 307   "vcs '-full64' '-sverilog' '+incdir+../../include' '-debug_access+all' '-timescale=1ns/1ps' '-l' 'compile.log' '-top' 'controller_tb' 'controller_tb.sv' '../../src/ASIC.sv' '../../src/top.sv' '../../src/controller/ALU.sv' '../../src/controller/controller_top.sv' '../../src/controller/decoder.sv' '../../src/controller/dma_loop_unit.sv' '../../src/controller/glb_addr_generator.sv' '../../src/controller/ID_SENDER.sv' '../../src/controller/mux.sv' '../../src/controller/pc_adder.sv' '../../src/controller/pc_counter.sv' '../../src/controller/regfile.sv' '../../src/controller/signal_controller.sv' '../../src/controller/SRAM.sv' '../../src/GLB/GLB.sv' '../../src/GLB/SRAM_rtl.sv' '../../src/PE_array/PE_array.sv' '../../src/PE_array/PE.sv' '../../src/PE_array/GIN/GIN_Bus.sv' '../../src/PE_array/GIN/GIN_MulticastController.sv' '../../src/PE_array/GIN/GIN.sv' '../../src/PE_array/GON/GON_Bus.sv' '../../src/PE_array/GON/GON_MulticastController.sv' '../../src/PE_array/GON/GON.sv' '-o' 'simv' 2>&1"
 308 DVDI_is_vir_unload_enabled is enable
 309 FSDB_VCS_ENABLE_NATIVE_VC is enable
-310 sps_call_fsdbDumpvars_vd_main at 0 : controller_tb.sv(233)
+310 sps_call_fsdbDumpvars_vd_main at 0 : controller_tb.sv(252)
 311 argv[0]: (0)
 312 argv[1]: (handle) controller_tb
 313 *Verdi* : Begin traversing the scope (controller_tb), layer (0).
 314 *Verdi* : End of traversing.
 315 pliAppHDL_DumpVarComplete traverse var: profile - 
-          CPU/Mem usage: 0.030 sys,  0.150 user,  412.16M mem
-                   incr: 0.000 sys,  0.000 user,  7.35M mem
-                   accu: 0.000 sys,  0.000 user,  7.35M mem
-              accu incr: 0.000 sys,  0.000 user,  7.35M mem
+          CPU/Mem usage: 0.030 sys,  0.150 user,  411.96M mem
+                   incr: 0.000 sys,  0.010 user,  7.16M mem
+                   accu: 0.000 sys,  0.010 user,  7.16M mem
+              accu incr: 0.000 sys,  0.010 user,  7.16M mem
 
-          Count usage: 397 var,  405 idcode,  142 callback
-                 incr: 397 var,  405 idcode,  142 callback
-                 accu: 397 var,  405 idcode,  142 callback
-            accu incr: 397 var,  405 idcode,  142 callback
-316 Elapsed time:    0:00:01    Mon Dec 22 13:30:02 2025
+          Count usage: 406 var,  414 idcode,  125 callback
+                 incr: 406 var,  414 idcode,  125 callback
+                 accu: 406 var,  414 idcode,  125 callback
+            accu incr: 406 var,  414 idcode,  125 callback
+316 Elapsed time:    0:00:01    Tue Dec 23 03:44:37 2025
 317 User CPU time used: 0 seconds
 318 System CPU time used: 0 seconds
 319 pliAppHDL_DumpVarComplete: profile - 
-          CPU/Mem usage: 0.030 sys,  0.150 user,  413.21M mem
+          CPU/Mem usage: 0.030 sys,  0.150 user,  413.01M mem
                    incr: 0.000 sys,  0.000 user,  1.05M mem
-                   accu: 0.000 sys,  0.000 user,  8.40M mem
+                   accu: 0.000 sys,  0.010 user,  8.21M mem
               accu incr: 0.000 sys,  0.000 user,  1.05M mem
 
-          Count usage: 397 var,  405 idcode,  142 callback
+          Count usage: 406 var,  414 idcode,  125 callback
                  incr: 0 var,  0 idcode,  0 callback
-                 accu: 397 var,  405 idcode,  142 callback
+                 accu: 406 var,  414 idcode,  125 callback
             accu incr: 0 var,  0 idcode,  0 callback
-320 Elapsed time:    0:00:01    Mon Dec 22 13:30:02 2025
+320 Elapsed time:    0:00:01    Tue Dec 23 03:44:37 2025
 321 User CPU time used: 0 seconds
 322 System CPU time used: 0 seconds
-323 sps_call_fsdbDumpvars_vd_main at 0 : controller_tb.sv(234)
+323 sps_call_fsdbDumpvars_vd_main at 0 : controller_tb.sv(253)
 324 argv[0]: (0)
 325 argv[1]: (handle) controller_tb.dut
 326 *Verdi* : Begin traversing the scope (controller_tb.dut), layer (0).
 327 *Verdi* : End of traversing.
 328 pliAppHDL_DumpVarComplete traverse var: profile - 
-          CPU/Mem usage: 0.030 sys,  0.150 user,  413.21M mem
+          CPU/Mem usage: 0.030 sys,  0.150 user,  413.01M mem
                    incr: 0.000 sys,  0.000 user,  0.00M mem
                    accu: 0.000 sys,  0.000 user,  0.00M mem
               accu incr: 0.000 sys,  0.000 user,  0.00M mem
 
-          Count usage: 731 var,  405 idcode,  142 callback
-                 incr: 334 var,  0 idcode,  0 callback
-                 accu: 334 var,  0 idcode,  0 callback
-            accu incr: 334 var,  0 idcode,  0 callback
-329 Elapsed time:    0:00:01    Mon Dec 22 13:30:02 2025
+          Count usage: 743 var,  414 idcode,  125 callback
+                 incr: 337 var,  0 idcode,  0 callback
+                 accu: 337 var,  0 idcode,  0 callback
+            accu incr: 337 var,  0 idcode,  0 callback
+329 Elapsed time:    0:00:01    Tue Dec 23 03:44:37 2025
 330 User CPU time used: 0 seconds
 331 System CPU time used: 0 seconds
 332 pliAppHDL_DumpVarComplete: profile - 
-          CPU/Mem usage: 0.030 sys,  0.150 user,  413.21M mem
+          CPU/Mem usage: 0.030 sys,  0.150 user,  413.01M mem
                    incr: 0.000 sys,  0.000 user,  0.00M mem
                    accu: 0.000 sys,  0.000 user,  0.00M mem
               accu incr: 0.000 sys,  0.000 user,  0.00M mem
 
-          Count usage: 731 var,  405 idcode,  142 callback
+          Count usage: 743 var,  414 idcode,  125 callback
                  incr: 0 var,  0 idcode,  0 callback
-                 accu: 334 var,  0 idcode,  0 callback
+                 accu: 337 var,  0 idcode,  0 callback
             accu incr: 0 var,  0 idcode,  0 callback
-333 Elapsed time:    0:00:01    Mon Dec 22 13:30:02 2025
+333 Elapsed time:    0:00:01    Tue Dec 23 03:44:37 2025
 334 User CPU time used: 0 seconds
 335 System CPU time used: 0 seconds
-336 sps_call_fsdbDumpvars_vd_main at 0 : controller_tb.sv(235)
+336 sps_call_fsdbDumpvars_vd_main at 0 : controller_tb.sv(254)
 337 argv[0]: (0)
 338 argv[1]: (+all)
 339 *Verdi* : Begin traversing the scopes, layer (0).
 340 *Verdi* : Enable +all dumping.
 341 *Verdi* : End of traversing.
 342 pliAppHDL_DumpVarComplete traverse var: profile - 
-          CPU/Mem usage: 0.030 sys,  0.160 user,  416.79M mem
-                   incr: 0.000 sys,  0.010 user,  3.58M mem
-                   accu: 0.000 sys,  0.010 user,  3.58M mem
-              accu incr: 0.000 sys,  0.010 user,  3.58M mem
+          CPU/Mem usage: 0.040 sys,  0.160 user,  416.73M mem
+                   incr: 0.010 sys,  0.010 user,  3.72M mem
+                   accu: 0.010 sys,  0.010 user,  3.72M mem
+              accu incr: 0.010 sys,  0.010 user,  3.72M mem
 
-          Count usage: 66696 var,  65973 idcode,  145 callback
-                 incr: 65965 var,  65568 idcode,  3 callback
-                 accu: 65965 var,  65568 idcode,  3 callback
-            accu incr: 65965 var,  65568 idcode,  3 callback
-343 Elapsed time:    0:00:01    Mon Dec 22 13:30:02 2025
+          Count usage: 66717 var,  65982 idcode,  128 callback
+                 incr: 65974 var,  65568 idcode,  3 callback
+                 accu: 65974 var,  65568 idcode,  3 callback
+            accu incr: 65974 var,  65568 idcode,  3 callback
+343 Elapsed time:    0:00:01    Tue Dec 23 03:44:37 2025
 344 User CPU time used: 0 seconds
 345 System CPU time used: 0 seconds
 346 pliAppHDL_DumpVarComplete: profile - 
-          CPU/Mem usage: 0.030 sys,  0.170 user,  419.93M mem
-                   incr: 0.000 sys,  0.010 user,  3.13M mem
-                   accu: 0.000 sys,  0.020 user,  6.71M mem
-              accu incr: 0.000 sys,  0.010 user,  3.13M mem
+          CPU/Mem usage: 0.040 sys,  0.170 user,  419.86M mem
+                   incr: 0.000 sys,  0.010 user,  3.14M mem
+                   accu: 0.010 sys,  0.020 user,  6.85M mem
+              accu incr: 0.000 sys,  0.010 user,  3.14M mem
 
-          Count usage: 66696 var,  65973 idcode,  145 callback
+          Count usage: 66717 var,  65982 idcode,  128 callback
                  incr: 0 var,  0 idcode,  0 callback
-                 accu: 65965 var,  65568 idcode,  3 callback
+                 accu: 65974 var,  65568 idcode,  3 callback
             accu incr: 0 var,  0 idcode,  0 callback
-347 Elapsed time:    0:00:01    Mon Dec 22 13:30:02 2025
+347 Elapsed time:    0:00:01    Tue Dec 23 03:44:37 2025
 348 User CPU time used: 0 seconds
 349 System CPU time used: 0 seconds
-350 sps_call_fsdbDumpflush_vd_main at 892105000 : controller_tb.sv(354)
+350 sps_call_fsdbDumpflush_vd_main at 892105000 : controller_tb.sv(373)
 351 *Verdi* : Flush all FSDB Files at 892,105,000 ps.
 352 End of simulation at 892105000
-353 Memory usage: 498.495 M
-354 Maximum resident set size: 142 MB
+353 Memory usage: 498.426 M
+354 Maximum resident set size: 141 MB
 355 Hard page faults: 0
-356 Soft page faults: 16527
-357 Elapsed time:    0:00:05    Mon Dec 22 13:30:06 2025
+356 Soft page faults: 16562
+357 Elapsed time:    0:00:07    Tue Dec 23 03:44:43 2025
 358 User CPU time used: 0 seconds
 359 System CPU time used: 0 seconds
 360 Begin FSDB profile info:
-361 FSDB Writer : bc1(180991) bcn(156089) mtf/stf(0/1)
-FSDB Writer elapsed time : flush(0.022782) io wait(0.000000) theadpool wait(0.000000)
+361 FSDB Writer : bc1(180988) bcn(156025) mtf/stf(0/1)
+FSDB Writer elapsed time : flush(0.021934) io wait(0.000000) theadpool wait(0.000000)
 FSDB Writer cpu time : MT Compression : 0
 362 End FSDB profile info
-363 FSDB closed. Name: wave.fsdb Size: 35112
+363 FSDB closed. Name: wave.fsdb Size: 35651
 364 Parallel profile     - ProducerThread:1 ConsumerThread:1 Buffer:64MB
-365                      - BlockUsed:5 Acquire:0 BufferUsed:6020893
+365                      - BlockUsed:5 Acquire:0 BufferUsed:6020621
 366                      - Flush:6 Expand:0 ProducerWait:0 ConsumerWait:3
-367                      - MainProducerTime:0.531171104 TotalConsumerTime:0.015918776
-368                      - ElapsedTime:3.459094000
-369 Producer   0 profile - BlockUsed:5 Acquire:0 BufferUsed:6020893
-370 Consumer   0 profile - Affinity:-1 CPUTime:0.015918776 LifeTime:2.266431599 (0.01%)
-371                      - BlockUsed:5 Acquire:0 BufferUsed:6020893
+367                      - MainProducerTime:0.600967766 TotalConsumerTime:0.015747159
+368                      - ElapsedTime:6.231335000
+369 Producer   0 profile - BlockUsed:5 Acquire:0 BufferUsed:6020621
+370 Consumer   0 profile - Affinity:-1 CPUTime:0.015747159 LifeTime:4.214357299 (0.00%)
+371                      - BlockUsed:5 Acquire:0 BufferUsed:6020621
 372 SimExit
-373 Elapsed time:    0:00:05    Mon Dec 22 13:30:06 2025
+373 Elapsed time:    0:00:07    Tue Dec 23 03:44:43 2025
 374 User CPU time used: 0 seconds
 375 System CPU time used: 0 seconds
 376 Sim process exit

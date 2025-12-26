@@ -1,7 +1,7 @@
 Command: /home/users/yves6512/Project/hardware/testbench/controller/./simv +HEX=tb6.hex -l run.log
 Chronologic VCS simulator copyright 1991-2023
 Contains Synopsys proprietary information.
-Compiler version V-2023.12_Full64; Runtime version V-2023.12_Full64;  Dec 22 13:30 2025
+Compiler version V-2023.12_Full64; Runtime version V-2023.12_Full64;  Dec 23 03:44 2025
 *Verdi* Loading libsscore_vcs202312.so
 FSDB Dumper for VCS, Release Verdi_V-2023.12, Linux x86_64/64bit, 11/15/2023
 (C) 1996 - 2023 by Synopsys, Inc.
@@ -89202,9 +89202,9 @@ FSDB Dumper for VCS, Release Verdi_V-2023.12, Linux x86_64/64bit, 11/15/2023
 [892105000] PC=104  instr=0000003f  asic_done=0  DMA_EN=0 DMA_len=512 DMA_done=0
 [892105000] asic_done asserted! stop simulation.
 *Verdi* : Flush all FSDB Files at 892,105,000 ps.
-$finish called from file "controller_tb.sv", line 355.
+$finish called from file "controller_tb.sv", line 374.
 $finish at simulation time            892105000
            V C S   S i m u l a t i o n   R e p o r t 
 Time: 892105000 ps
-CPU Time:      0.540 seconds;       Data structure size:   0.0Mb
-Mon Dec 22 13:30:06 2025
+CPU Time:      0.610 seconds;       Data structure size:   0.0Mb
+Tue Dec 23 03:44:43 2025
