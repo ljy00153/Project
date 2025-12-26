@@ -33,21 +33,21 @@ LOADI REG[15], 0
 loop_outf:
     #load PSUM to GLB
     MULI REG[14], outf, 4 #REG[14] = outf * 4
-    DMA_LOAD_PSUM DRAM_OFMAP_BASE, REG[14], DRAM_OPSUM_SIZE
+    DMA_LOAD_PSUM DRAM_OFMAP_BASE, REG[14], GLB_OPSUM_SIZE
     WAIT DMA
     loop_inf:
         #load WEIGHT to GLB
         #compute index
         MULI REG[8], inf, OF
         ADD REG[8], REG[8], outf #REG[8] = (inf * out_features + outf);
-        DMA_LOAD_WEIGHT DRAM_WEIGHT_BASE, REG[8], DRAM_WEIGHT_SIZE
+        DMA_LOAD_WEIGHT DRAM_WEIGHT_BASE, REG[8], GLB_WEIGHT_SIZE
         WAIT DMA
         loop_b:
             #load IFMAP to GLB
             #compute index
             MULI REG[9], b, IF
             ADD REG[9], REG[9], inf #REG[9] = (b * in_feature + inf);
-            DMA_LOAD_IFMAP DRAM_IFMAP_BASE, REG[9], DRAM_IFMAP_SIZE
+            DMA_LOAD_IFMAP DRAM_IFMAP_BASE, REG[9], GLB_IFMAP_SIZE
             WAIT DMA
             loop_k:
                 loop_n:
@@ -103,7 +103,7 @@ loop_outf:
         NOP
     #write opsum to DRAM
     CPT_TAGXY OPSUM
-    DMA_STORE_OFMAP DRAM_OFMAP_BASE, outf, DRAM_OPSUM_SIZE
+    DMA_STORE_OFMAP DRAM_OFMAP_BASE, outf, GLB_OPSUM_SIZE
     WAIT DMA
     LOOP OF_SIZE, outf, loop_outf, outf_offest
     NOP
