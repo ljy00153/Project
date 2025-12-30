@@ -70,7 +70,7 @@ class GEMM_base
             if (glb_addr + size > GLB.size())
             {
                 cout << "glb_addr: " << glb_addr << ", size: " << size << ", GLB.size(): " << GLB.size() << endl;
-                throw runtime_error("GLB overflow!");
+                throw runtime_error("GLB load overflow!");
             }
                 
 
@@ -107,7 +107,7 @@ class GEMM_base
             if (glb_addr + size > GLB.size())
             {
                 cout << "glb_addr: " << glb_addr << ", size: " << size << ", GLB.size(): " << GLB.size() << endl;
-                throw runtime_error("GLB overflow!");
+                throw runtime_error("GLB write overflow!");
             }
 
             memcpy(&DRAM[dram_addr], &GLB[glb_addr], size * sizeof(int));

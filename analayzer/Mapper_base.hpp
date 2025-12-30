@@ -155,7 +155,7 @@ class EyerissMapper_base
                         for (int N = tn; N <= 1024; N++) 
                         {
                             int used_bytes =  M * K * IFMAP_PER_PE * 4 
-                                            + K * IFMAP_PER_PE * N * WEIGHT_PER_PE * 4 * 4
+                                            + K * IFMAP_PER_PE * N * WEIGHT_PER_PE * 4
                                             + analyzer->linear_shape.B * N * 4 * 4;
 
                             if (used_bytes < GLB_LIMIT) 
@@ -361,7 +361,7 @@ class EyerissMapper_base
             int pe_array_ifmap_size = tk * 12;
 
             int glb_ifmap_size  = best_mapping.M * best_mapping.K * 12;
-            int glb_weight_size = best_mapping.K * best_mapping.N * 192;
+            int glb_weight_size = best_mapping.K * best_mapping.N * 48;
             int glb_opsum_size  = B * best_mapping.N * 16;
 
             int dram_ifmap_size  = IF * B;
@@ -391,7 +391,7 @@ class EyerissMapper_base
             outfile << ".set PE_ARRAY_IPSUM_SIZE, " << pe_array_ipsum_size << "\t# 8 * 1 * 4 * 4" << endl;
             outfile << ".set PE_ARRAY_IFMAP_SIZE, " << pe_array_ifmap_size << "\t# 6 * 3 * 4" << endl;
             outfile << ".set GLB_IFMAP_SIZE, " << glb_ifmap_size << "\t# M * K * 12" << endl;
-            outfile << ".set GLB_WEIGHT_SIZE, " << glb_weight_size << "\t# K * 3 * N * 4 * 16" << endl;
+            outfile << ".set GLB_WEIGHT_SIZE, " << glb_weight_size << "\t# K * 3 * N * 4 * 4" << endl;
             outfile << ".set GLB_OPSUM_SIZE, " << glb_opsum_size << "\t# B * N * 16" << endl;
             outfile << ".set DRAM_IFMAP_SIZE, " << dram_ifmap_size << endl;
             outfile << ".set DRAM_WEIGHT_SIZE, " << dram_weight_size << endl;

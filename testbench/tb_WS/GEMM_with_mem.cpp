@@ -30,7 +30,7 @@ class WS_Based_with_mem_Simulator : public GEMM_base
 
             int GLB_ifmap_base = 0;
             int GLB_weight_base = GLB_ifmap_base + map.K * PE::IFMAP_SIZE * map.M * 4;
-            int GLB_psum_base = GLB_weight_base + map.K * PE::IFMAP_SIZE * map.N * PE::WEIGHT_H * 16;
+            int GLB_psum_base = GLB_weight_base + map.K * PE::IFMAP_SIZE * map.N * PE::WEIGHT_H * 4;
 
             reset_cycle();
             setup_pe_bases();
