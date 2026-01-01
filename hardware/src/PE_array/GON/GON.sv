@@ -1,5 +1,4 @@
-`include "PE_array/GON/GON_Bus.sv"
-`include "PE_array/GON/GON_MulticastController.sv"
+
 module GON (
     input clk,
     input rst,

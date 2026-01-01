@@ -1,4 +1,5 @@
-`include "GLB/SRAM_rtl.sv"
+`include "AXI_define.svh"
+`include "ASIC.svh"
 
 module GLB (
   input clk,

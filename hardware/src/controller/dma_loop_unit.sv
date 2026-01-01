@@ -1,3 +1,6 @@
+`include "AXI_define.svh"
+`include "ASIC.svh"
+`include "ISA.svh"
 
 module DMA_Loop_Unit(
     input  clk,
@@ -151,19 +154,13 @@ module DMA_Loop_Unit(
             default: ;
         endcase
     end
-    always_ff@(posedge clk)begin
-        if(rst)begin
-            DMA_mode<='0;
-        end else begin
-            if(cs==LOOP)begin
+    always_comb begin
                 case(DMA_mode_reg)
                     `MODE_IFMAP:DMA_mode<=2'b0;
                     `MODE_FILTER:DMA_mode<=2'b1;
                     `MODE_BIAS:DMA_mode<=2'b10;
                     `MODE_OFMAP:DMA_mode<=2'b11;
                 endcase
-            end
-        end
     end
 
     always_ff@(posedge clk)begin

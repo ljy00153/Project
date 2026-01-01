@@ -1,6 +1,5 @@
-`include "PE_array/PE_array.sv"
-`include "controller/controller_top.sv"
-`include "PPU/PPU.sv"
+`include "AXI_define.svh"
+`include "ASIC.svh"
 
 module asic(
     input clk,
@@ -11,6 +10,9 @@ module asic(
     input operation_mode_i,
     input [5:0] scaling_factor_i,
 
+    input  logic        im_init_en,
+    input  logic [15:0] im_init_addr,
+    input  logic [31:0] im_init_wdata,
     /* mapping parameters */
     input [9:0] m_i, // number of ofmap channels stored in GLB
     input [3:0] e_i, // width of the PE sets
@@ -190,11 +192,13 @@ controller_top #(.PC_WIDTH(16)) ctrl (
     .rst(rst),
     .asic_en(asic_en),
     .asic_done(asic_done),
-    //instruction write from tb
+
+    // instruction write from tb
     .im_init_en(im_init_en),
     .im_init_addr(im_init_addr),
     .im_init_wdata(im_init_wdata),
-    //MMIO
+
+    // MMIO
     .DRAM_ifmap_base(DRAM_ifmap_base),
     .DRAM_weight_base(DRAM_weight_base),
     .DRAM_ofmap_base(DRAM_ofmap_base),
@@ -208,81 +212,69 @@ controller_top #(.PC_WIDTH(16)) ctrl (
     .N_SIZE(N_SIZE),
     .M_SIZE(M_SIZE),
     .DATAFLOW(DATAFLOW),
-    // ----------------------------
+
     // GLB control
-    // ----------------------------
     .GLB_EN                (GLB_EN),
     .GLB_WEB               (GLB_WEB),
     .GLB_MODE              (GLB_MODE),
+    .GLB_ADDR              (GLB_ADDR),
 
-    // ----------------------------
+    .PE_en (PE_en),
+    .PE_config(PE_config),
     // PEA XID scan
-    // ----------------------------
     .set_XID               (set_XID),
     .ifmap_XID_scan_in     (ifmap_XID_scan_in),
     .weight_XID_scan_in    (weight_XID_scan_in),
     .ipsum_XID_scan_in     (ipsum_XID_scan_in),
     .opsum_XID_scan_in     (opsum_XID_scan_in),
 
-    // ----------------------------
     // PEA YID scan
-    // ----------------------------
     .set_YID               (set_YID),
     .ifmap_YID_scan_in     (ifmap_YID_scan_in),
     .weight_YID_scan_in    (weight_YID_scan_in),
     .ipsum_YID_scan_in     (ipsum_YID_scan_in),
     .opsum_YID_scan_in     (opsum_YID_scan_in),
 
-    // ----------------------------
     // PEA LN config
-    // ----------------------------
     .set_LN                (set_LN),
     .LN_config_in          (LN_config_in),
 
-    // ----------------------------
     // PEA ifmap handshake + tag
-    // ----------------------------
     .PEA_ifmap_valid       (PEA_ifmap_valid),
     .PEA_ifmap_ready       (PEA_ifmap_ready),
     .ifmap_tag_X           (ifmap_tag_X),
     .ifmap_tag_Y           (ifmap_tag_Y),
 
-    // ----------------------------
     // PEA weight handshake + tag
-    // ----------------------------
     .PEA_weight_valid      (PEA_weight_valid),
     .PEA_weight_ready      (PEA_weight_ready),
     .weight_tag_X          (weight_tag_X),
     .weight_tag_Y          (weight_tag_Y),
 
-    // ----------------------------
     // PEA ipsum handshake + tag
-    // ----------------------------
     .PEA_ipsum_valid       (PEA_ipsum_valid),
     .PEA_ipsum_ready       (PEA_ipsum_ready),
     .ipsum_tag_X           (ipsum_tag_X),
     .ipsum_tag_Y           (ipsum_tag_Y),
 
-    // ----------------------------
     // PEA opsum handshake + tag
-    // ----------------------------
     .PEA_opsum_valid       (PEA_opsum_valid),
     .PEA_opsum_ready       (PEA_opsum_ready),
     .opsum_tag_X           (opsum_tag_X),
     .opsum_tag_Y           (opsum_tag_Y),
 
-
-    .DMA_en(DMA_EN),
+    // DMA
+    .DMA_en(DMA_en),
     .DMA_mode(DMA_mode),
     .DMA_DRAM_ADDR(DMA_DRAM_ADDR),
     .DMA_GLB_ADDR(DMA_GLB_ADDR),
-    .DMA_BYTE_BIAS(DMA_BYTE_BIAS),
+    .DMA_BYTE_BIAS(DMA_byte_bias),
     .DMA_len(DMA_len),
     .DMA_done(DMA_done),
-    
-    .GLB_DI_select(GLB_DI_select),
-    .GLB_DO_select(GLB_DO_select)
-  );
 
+    .GLB_DI_select(GLB_DI_select),
+    .GLB_DO_select(GLB_DO_select),
+    .GLB_mux(GLB_mux)
+  );
 
 endmodule

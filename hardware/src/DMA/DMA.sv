@@ -1,5 +1,5 @@
-`include "DMA/DMA_FIFO.sv"
-`include "DMA/DMA_controller.sv"
+`include "AXI_define.svh"
+`include "ASIC.svh"
 
 module DMA (
     input clk,
@@ -408,7 +408,7 @@ typedef enum logic [2:0] {
               GLB_A_bias_next = DMABYTE_BIAS;
             end
             `MODE_FILTER:begin // read, byte, bias
-              cs_glb_next = WRITE_FILTER_GLB;
+              cs_glb_next = WRITE_FILTER_GLB  ;
               GLB_A_bias_next = 2'd0;
             end
             `MODE_BIAS:begin // read, word

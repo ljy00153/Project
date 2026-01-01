@@ -1,6 +1,6 @@
 `timescale 1ns/1ps
-`include "../include/ASIC.svh"
-`include "../include/AXI_define.svh"
+`include "ASIC.svh"
+`include "AXI_define.svh"
 module DRAM(
     input logic clk,
     input logic rst_n,
@@ -118,10 +118,10 @@ module DRAM(
                         // --- 寫入記憶體 (Byte Enable 處理) ---
                         // AXI 支援非對齊傳輸，但這是一個簡化的 32-bit width 範例
                         // 我們假設地址會對齊，並根據 WSTRB 寫入
-                        if (WSTRB_S[0]) mem[aw_addr_latch]     <= WDATA_S[7:0];
-                        if (WSTRB_S[1]) mem[aw_addr_latch + 1] <= WDATA_S[15:8];
-                        if (WSTRB_S[2]) mem[aw_addr_latch + 2] <= WDATA_S[23:16];
-                        if (WSTRB_S[3]) mem[aw_addr_latch + 3] <= WDATA_S[31:24];
+                        if (WSTRB_S[0]) mem[aw_addr_latch]     = WDATA_S[7:0];
+                        if (WSTRB_S[1]) mem[aw_addr_latch + 1] = WDATA_S[15:8];
+                        if (WSTRB_S[2]) mem[aw_addr_latch + 2] = WDATA_S[23:16];
+                        if (WSTRB_S[3]) mem[aw_addr_latch + 3] = WDATA_S[31:24];
 
                         // 計算下一個地址
                         aw_addr_latch <= get_next_addr(aw_addr_latch, aw_size_latch, aw_burst_latch);
@@ -167,7 +167,6 @@ module DRAM(
             r_state   <= R_IDLE;
             ARREADY_S <= 1'b0;
             RVALID_S  <= 1'b0;
-            RLAST_S   <= 1'b0;
             RID_S     <= '0;
             RDATA_S   <= '0;
             RRESP_S   <= '0;
@@ -175,7 +174,6 @@ module DRAM(
             case (r_state)
                 R_IDLE: begin
                     RVALID_S  <= 1'b0;
-                    RLAST_S   <= 1'b0;
                     ARREADY_S <= 1'b1; // 準備接收地址
 
                     if (ARVALID_S && ARREADY_S) begin
@@ -204,10 +202,6 @@ module DRAM(
                         RID_S    <= ar_id_latch;
                         RRESP_S  <= 2'b00; // OKAY
 
-                        // 2. 處理 LAST 信號
-                        if (ar_len_count == 0) RLAST_S <= 1'b1;
-                        else                   RLAST_S <= 1'b0;
-
                         // 3. 如果握手成功，推進計數器與地址
                         // 注意：這裡有一個 pipeline 行為。
                         // 我們假設這個 cycle 把資料推上去，如果 master 接受了(RREADY=1)，下個 cycle 更新地址
@@ -229,5 +223,7 @@ module DRAM(
             endcase
         end
     end
+
+    assign RLAST_S = (r_state == R_BURST)? (ar_len_count == 0)? 1'b1 : 1'b0 : 1'b0;
 
 endmodule

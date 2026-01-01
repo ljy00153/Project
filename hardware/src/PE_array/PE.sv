@@ -1,4 +1,5 @@
 //now PE can receive ipsum at anytime except ADD_IPSUM state
+`include "define.svh"
 module PE (
     input clk,
     input rst,

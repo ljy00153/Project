@@ -1,6 +1,4 @@
-`include "PE_array/PE.sv"
-`include "PE_array/GIN/GIN.sv"
-`include "PE_array/GON/GON.sv"
+`include "define.svh"
 
 module PE_array #(
     parameter NUMS_PE_ROW = `NUMS_PE_ROW,

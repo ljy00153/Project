@@ -1,5 +1,4 @@
-`include "PE_array/GIN/GIN_Bus.sv"
-`include "PE_array/GIN/GIN_MulticastController.sv"
+
 
 module GIN (
     input clk,
@@ -58,7 +57,11 @@ GIN_Bus #(
 );
 
 genvar i;
-// X BUS
+logic [`DATA_BITS-1:0] XBus_data;
+assign PE_data = XBus_data;  // ✅ 單一 driver，真正 broadcast
+
+logic [`DATA_BITS-1:0] pe_data_dummy [`NUMS_PE_ROW-1:0];
+
 generate
 for (i = 0; i < `NUMS_PE_ROW; i++) begin : GIN_XBUS
     GIN_Bus #(
@@ -68,21 +71,19 @@ for (i = 0; i < `NUMS_PE_ROW; i++) begin : GIN_XBUS
         .clk(clk),
         .rst(rst),
         .tag(tag_X),
-        // Bus
         .master_valid(XBus_valid[i]),
         .master_data(XBus_data),
         .master_ready(XBus_ready[i]),
-        // PE
         .slave_ready(PE_ready[(i+1)*`NUMS_PE_COL-1 : i*`NUMS_PE_COL]),
         .slave_valid(PE_valid[(i+1)*`NUMS_PE_COL-1 : i*`NUMS_PE_COL]),
-        .slave_data(PE_data),
-        // Config
+        .slave_data(pe_data_dummy[i]), // ✅ 不要再 drive PE_data
         .set_id(set_XID),
         .ID_scan_in(scan_chain[i+1]),
         .ID_scan_out(scan_chain[i])
     );
 end
 endgenerate
+
 
 /* TODO: End of implementation */
 endmodule

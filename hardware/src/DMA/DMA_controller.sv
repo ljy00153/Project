@@ -2,6 +2,8 @@
     DMA controller
     (without address alignment, ignore addr[1:0])
 */
+`include "AXI_define.svh"
+`include "ASIC.svh"
 `define MAX_BURST_LEN 64
 `define MAX_BURST_LEN_ 63
 

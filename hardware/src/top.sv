@@ -1,15 +1,15 @@
-`include "../include/AXI_define.svh"
-`include "../include/ASIC.svh"
-`include "../include/ISA.svh"
-`include "../include/define.svh"
-`include "GLB/GLB.sv"
-`include "DMA/DMA.sv"
-`include "ASIC.sv"
+`include "AXI_define.svh"
+`include "ASIC.svh"
+`include "ISA.svh"
 module asic_top (
     input ACLK,
     input ARESETn,
-
+    input  logic asic_en,
     output logic ASIC_interrupt,
+    
+    input  logic        im_init_en,
+    input  logic [15:0] im_init_addr,
+    input  logic [31:0] im_init_wdata,
     // MMIO from tb
     // --- CONV-style CSR ports ---
     input  logic [31:0] ASIC_ENABLE,
@@ -208,11 +208,16 @@ asic asic_0(
 
     .asic_interrupt(ASIC_interrupt),
 
-    .asic_en(ASIC_ENABLE[0]),
+    .asic_en(asic_en),
     .maxpool_i(ASIC_ENABLE[1]),
     .relu_i(ASIC_ENABLE[2]),
     .operation_mode_i(ASIC_ENABLE[3]),
     .scaling_factor_i(ASIC_ENABLE[9:4]),
+
+    .im_init_en(im_init_en),
+    .im_init_addr(im_init_addr),
+    .im_init_wdata(im_init_wdata),
+
 
     /* mapping parameters */
     .m_i(ASIC_MAPPING_PARAM[25:16]), // number of ofmap channels stored in GLB
@@ -240,19 +245,19 @@ asic asic_0(
     .GLB_opsum_addr_i(ASIC_GLB_OFMAP_ADDR[`GLB_ADDR_BITS-1:0]),
 
     //FC Layer
-    .DRAM_ifmap_base(FC_DRAM_IFMAP_BASE),
-    .DRAM_weight_base(FC_DRAM_WEIGHT_BASE),
-    .DRAM_ofmap_base(FC_DRAM_OFMAP_BASE),
-    .GLB_ifmap_base(FC_GLB_IFMAP_BASE),
-    .GLB_weight_base(FC_GLB_WEIGHT_BASE),
-    .GLB_opsum_base(FC_GLB_OPSUM_BASE),
-    .OF_SIZE(FC_OF_SIZE),
-    .IF_SIZE(FC_IF_SIZE),
-    .B_SIZE(FC_B_SIZE),
-    .K_SIZE(FC_K_SIZE),
-    .N_SIZE(FC_N_SIZE),
-    .M_SIZE(FC_M_SIZE),
-    .DATAFLOW(FC_DATA_FLOW),
+    .DRAM_ifmap_base(DRAM_ifmap_base),
+    .DRAM_weight_base(DRAM_weight_base),
+    .DRAM_ofmap_base(DRAM_ofmap_base),
+    .GLB_ifmap_base(GLB_ifmap_base),
+    .GLB_weight_base(GLB_weight_base),
+    .GLB_opsum_base(GLB_opsum_base),
+    .OF_SIZE(OF_SIZE),
+    .IF_SIZE(IF_SIZE),
+    .B_SIZE(B_SIZE),
+    .K_SIZE(K_SIZE),
+    .N_SIZE(N_SIZE),
+    .M_SIZE(M_SIZE),
+    .DATAFLOW(DATAFLOW),
     
     /* GLB */
     .GLB_EN(GLB_EN_asic),

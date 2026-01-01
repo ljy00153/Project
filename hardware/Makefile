@@ -21,17 +21,35 @@ $(syn_dir):
 	mkdir -p $(syn_dir)
 
 
-# RTL simulation (vcs)
+INCDIRS := \
+  $(root_dir)/$(inc_dir) \
+\
+
+# RTL sources (expand wildcards at make-time)
+RTL_SRCS := \
+  $(root_dir)/$(src_dir)/ASIC.sv \
+  $(root_dir)/$(src_dir)/top.sv \
+  $(root_dir)/$(src_dir)/DRAM.sv \
+  $(wildcard $(root_dir)/$(src_dir)/controller/*.sv) \
+  $(wildcard $(root_dir)/$(src_dir)/DMA/*.sv) \
+  $(wildcard $(root_dir)/$(src_dir)/PPU/*.sv) \
+  $(wildcard $(root_dir)/$(src_dir)/GLB/*.sv) \
+  $(wildcard $(root_dir)/$(src_dir)/PE_array/*.sv) \
+  $(wildcard $(root_dir)/$(src_dir)/PE_array/GIN/*.sv) \
+  $(wildcard $(root_dir)/$(src_dir)/PE_array/GON/*.sv)
+
+TB_SRCS := $(root_dir)/$(sim_dir)/Testbench.sv
 
 vcs: | $(bld_dir)
 	python3 $(sim_dir)/prog0/assembler.py $(sim_dir)/prog0/GEMM_assembly.txt
 	cd $(bld_dir); \
-	vcs -R -sverilog $(root_dir)/$(sim_dir)/Testbench.sv -debug_access+all -full64 -debug_region+cell +memcbk \
-	+incdir+$(root_dir)/$(src_dir)+$(root_dir)/$(sim_dir) \
-    +define+prog0$(FSDB_DEF) \
-	+prog_path=$(root_dir)/$(sim_dir)/prog0 \
-	+notimingcheck
-
+	vcs -full64 -R -sverilog \
+		$(foreach d,$(INCDIRS),+incdir+$(d)) \
+		$(TB_SRCS) $(RTL_SRCS) \
+		-debug_access+all -debug_region+cell +memcbk \
+		+define+prog0$(FSDB_DEF) \
+		+prog_path=$(root_dir)/$(sim_dir)/prog0 \
+		+notimingcheck
 # Utilities
 nWave: | $(bld_dir)
 	cd $(bld_dir); \

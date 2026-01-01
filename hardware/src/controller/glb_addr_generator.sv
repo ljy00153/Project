@@ -1,3 +1,6 @@
+`include "AXI_define.svh"
+`include "ASIC.svh"
+`include "../include/ISA.svh"
 
 module glb_addr_generator #(
     parameter int tk = 72,          // 

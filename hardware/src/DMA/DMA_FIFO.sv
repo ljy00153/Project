@@ -1,3 +1,5 @@
+`include "AXI_define.svh"
+`include "ASIC.svh"
 `define FIFO_WORDS_SIZE 64
 `define FIFO_ADDR_WIDTH 6
 `define FIFO_COUNT_WIDTH 7

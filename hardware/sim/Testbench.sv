@@ -1,9 +1,9 @@
 `timescale 1ns/10ps
-`include "DRAM.sv"
-`include "../src/top.sv"
+`include "AXI_define.svh"
+`include "ASIC.svh"
 
 `define CYCLE 10.0      // Cycle time
-`define MAX 10000    // Max cycle number
+`define MAX 1000000    // Max cycle number
 
 `define DRAM_ifmap_base 0
 `define DRAM_weight_base 524288
@@ -17,13 +17,18 @@ module test;
 // Combinational Logic  
 //***********************************************************************************
     logic [7:0] GOLDEN[`DRAM_ofmap_size];
+    integer err_cnt;
+    integer show_cnt;
+    int unsigned ofmap_base;
+
     integer num, gf, code;
     string prog_path;
+    string hexfile;
 
 //DRAM
     logic clk;
     logic rst_n;
-
+    
     //WRIRE ADDRESS CHANNEL
     logic [`AXI_ID_BITS-1:0]    AWID;
     logic [`AXI_ADDR_BITS-1:0]  AWADDR;
@@ -63,6 +68,40 @@ module test;
     logic                      RVALID;
     logic                      RREADY;
 
+    // DUT
+    logic asic_en;
+    logic ASIC_interrupt;
+
+    // IM init
+    logic        im_init_en;
+    logic [15:0] im_init_addr;
+    logic [31:0] im_init_wdata;
+
+    // ---- CONV-style CSR ----
+    logic [31:0] ASIC_ENABLE;
+    logic [31:0] ASIC_MAPPING_PARAM;
+    logic [31:0] ASIC_SHAPE_PARAM1;
+    logic [31:0] ASIC_SHAPE_PARAM2;
+    logic [31:0] ASIC_IFMAP_ADDR;
+    logic [31:0] ASIC_FILTER_ADDR;
+    logic [31:0] ASIC_BIAS_ADDR;
+    logic [31:0] ASIC_OPSUM_ADDR;
+    logic [31:0] ASIC_GLB_FILTER_ADDR;
+    logic [31:0] ASIC_GLB_OFMAP_ADDR;
+    logic [31:0] ASIC_GLB_BIAS_ADDR;
+    logic [31:0] ASIC_IFMAP_LEN;
+    logic [31:0] ASIC_OFMAP_LEN;
+
+    // ---- FC-style CSR ----
+    logic [31:0] DRAM_ifmap_base;
+    logic [31:0] DRAM_weight_base;
+    logic [31:0] DRAM_ofmap_base;
+    logic [31:0] GLB_ifmap_base;
+    logic [31:0] GLB_weight_base;
+    logic [31:0] GLB_opsum_base;
+    logic [31:0] OF_SIZE, IF_SIZE, B_SIZE, K_SIZE, N_SIZE, M_SIZE, DATAFLOW;   
+   
+    
 
 //***********************************************************************************
 // clock generate
@@ -115,9 +154,90 @@ module test;
     .RREADY_S(RREADY)
     );
 
-    asic_top DUT(
+    // -------------------------------------------------
+    // DUT instance: asic_top (AXI Master)
+    // -------------------------------------------------
+    asic_top DUT (
+        .ACLK        (clk),
+        .ARESETn     (rst_n),
+        .ASIC_interrupt (ASIC_interrupt),
+        .asic_en (asic_en),
+        // IM init
+        .im_init_en     (im_init_en),
+        .im_init_addr   (im_init_addr),
+        .im_init_wdata  (im_init_wdata),
 
+        // CONV-style CSR
+        .ASIC_ENABLE          (ASIC_ENABLE),
+        .ASIC_MAPPING_PARAM   (ASIC_MAPPING_PARAM),
+        .ASIC_SHAPE_PARAM1    (ASIC_SHAPE_PARAM1),
+        .ASIC_SHAPE_PARAM2    (ASIC_SHAPE_PARAM2),
+        .ASIC_IFMAP_ADDR      (ASIC_IFMAP_ADDR),
+        .ASIC_FILTER_ADDR     (ASIC_FILTER_ADDR),
+        .ASIC_BIAS_ADDR       (ASIC_BIAS_ADDR),
+        .ASIC_OPSUM_ADDR      (ASIC_OPSUM_ADDR),
+        .ASIC_GLB_FILTER_ADDR (ASIC_GLB_FILTER_ADDR),
+        .ASIC_GLB_OFMAP_ADDR  (ASIC_GLB_OFMAP_ADDR),
+        .ASIC_GLB_BIAS_ADDR   (ASIC_GLB_BIAS_ADDR),
+        .ASIC_IFMAP_LEN       (ASIC_IFMAP_LEN),
+        .ASIC_OFMAP_LEN       (ASIC_OFMAP_LEN),
+
+        // FC-style CSR
+        .DRAM_ifmap_base   (DRAM_ifmap_base),
+        .DRAM_weight_base  (DRAM_weight_base),
+        .DRAM_ofmap_base   (DRAM_ofmap_base),
+        .GLB_ifmap_base    (GLB_ifmap_base),
+        .GLB_weight_base   (GLB_weight_base),
+        .GLB_opsum_base    (GLB_opsum_base),
+        .OF_SIZE           (OF_SIZE),
+        .IF_SIZE           (IF_SIZE),
+        .B_SIZE            (B_SIZE),
+        .K_SIZE            (K_SIZE),
+        .N_SIZE            (N_SIZE),
+        .M_SIZE            (M_SIZE),
+        .DATAFLOW          (DATAFLOW),
+
+        // AXI Master <-> DRAM Slave wiring (share same TB signals)
+        // WRITE ADDRESS
+        .AWID_M      (AWID),
+        .AWADDR_M    (AWADDR),
+        .AWLEN_M     (AWLEN),
+        .AWSIZE_M    (AWSIZE),
+        .AWBURST_M   (AWBURST),
+        .AWVALID_M   (AWVALID),
+        .AWREADY_M   (AWREADY),
+
+        // WRITE DATA
+        .WDATA_M     (WDATA),
+        .WSTRB_M     (WSTRB),
+        .WLAST_M     (WLAST),
+        .WVALID_M    (WVALID),
+        .WREADY_M    (WREADY),
+
+        // WRITE RESPONSE
+        .BID_M       (BID),
+        .BRESP_M     (BRESP),
+        .BVALID_M    (BVALID),
+        .BREADY_M    (BREADY),
+
+        // READ ADDRESS
+        .ARID_M      (ARID),
+        .ARADDR_M    (ARADDR),
+        .ARLEN_M     (ARLEN),
+        .ARSIZE_M    (ARSIZE),
+        .ARBURST_M   (ARBURST),
+        .ARVALID_M   (ARVALID),
+        .ARREADY_M   (ARREADY),
+
+        // READ DATA
+        .RID_M       (RID),
+        .RDATA_M     (RDATA),
+        .RRESP_M     (RRESP),
+        .RLAST_M     (RLAST),
+        .RVALID_M    (RVALID),
+        .RREADY_M    (RREADY)
     );
+
 //***********************************************************************************
 // pattern generate
 //***********************************************************************************
@@ -128,9 +248,44 @@ module test;
     begin
         $value$plusargs("prog_path=%s", prog_path);
         clk = 0; 
-        rst_n = 0;
-        #(`CYCLE) rst_n = 1;
 
+        // default IM init idle
+        im_init_en    = 1'b0;
+        im_init_addr  = '0;
+        im_init_wdata = '0;
+
+        // ---- CSR init (先給保守值，不用的先清 0) ----
+        ASIC_ENABLE          = 32'd0;
+        ASIC_MAPPING_PARAM   = 32'd0;
+        ASIC_SHAPE_PARAM1    = 32'd0;
+        ASIC_SHAPE_PARAM2    = 32'd0;
+        ASIC_IFMAP_ADDR      = 32'd0;
+        ASIC_FILTER_ADDR     = 32'd0;
+        ASIC_BIAS_ADDR       = 32'd0;
+        ASIC_OPSUM_ADDR      = 32'd0;
+        ASIC_GLB_FILTER_ADDR = 32'd0;
+        ASIC_GLB_OFMAP_ADDR  = 32'd0;
+        ASIC_GLB_BIAS_ADDR   = 32'd0;
+        ASIC_IFMAP_LEN       = 32'd0;
+        ASIC_OFMAP_LEN       = 32'd0;
+
+        // FC/GEMM bases：用你上面 define 的 DRAM base
+        DRAM_ifmap_base   = `DRAM_ifmap_base;
+        DRAM_weight_base  = `DRAM_weight_base;
+        DRAM_ofmap_base   = `DRAM_ofmap_base;
+
+        // GLB bases / sizes / dataflow：依你 controller 的需求填
+        GLB_ifmap_base  = 32'd0;
+        GLB_weight_base = 32'd18432;
+        GLB_opsum_base  = 32'd18432 + 32'd32768;
+
+        OF_SIZE   = 32'd256;
+        IF_SIZE   = 32'd8192;
+        B_SIZE    = 32'd64;
+        K_SIZE    = 32'd12;
+        N_SIZE    = 32'd32;
+        M_SIZE    = 32'd64;
+        DATAFLOW  = 32'd0;
         //data
         load_hex_file({prog_path, "/A.txt"});
         load_hex_file({prog_path, "/B.txt"});
@@ -150,6 +305,52 @@ module test;
         end
         $fclose(gf);
         $display("Finished. Loaded %0d bytes.", num);
+
+        // 灌指令
+        // reset
+        rst_n = 1'b0;
+
+        // choose hex file
+        // default: use assembler output in prog_path
+        hexfile = {prog_path, "/GEMM_assembly.hex"};
+
+        // optional override: +hexfile=xxx.hex (absolute or relative)
+        if ($value$plusargs("hexfile=%s", hexfile)) begin
+            $display("[TB] hexfile override: %s", hexfile);
+        end else begin
+            $display("[TB] hexfile default : %s", hexfile);
+        end
+        
+
+        // load IM during reset
+        load_hex_instruction(hexfile);
+
+        // release reset
+        @(negedge clk);
+        rst_n = 1'b1;
+
+        $display("============asic start==============");
+
+        // start controller (1-cycle pulse)
+        @(posedge clk);
+        asic_en = 1'b1;
+        @(posedge clk);
+        asic_en = 1'b0;
+
+         // wait for done
+        wait (ASIC_interrupt === 1'b1);
+        $display("[%0t] asic_done asserted!", $time);
+
+        // compare result
+        compare_ofmap_with_golden();
+
+        $fsdbDumpflush;
+
+        // 如果想讓 regression 看 exit code：
+        if (err_cnt == 0) $finish;
+        else $fatal(1, "[TB] Result mismatch!");
+
+
     end
 
    
@@ -169,6 +370,7 @@ module test;
         #(`CYCLE*`MAX);
         $display("\n==========================================================================================\n");
         $display("SIMULATION TIMEOUT after %d cycles", `MAX);
+        $display("\n==========================================================================================\n");
         $finish;
     end
 
@@ -211,6 +413,75 @@ module test;
             $display("Finished. Loaded %0d bytes.", count);
             $display("Next file will start at address 0x%h", current_dram_addr);
             $display("---------------------------------------");
+        end
+    endtask
+
+
+    // ---------------------------------------------------------
+  // IM loader helpers
+  // ---------------------------------------------------------
+  task automatic im_write32_port(input int unsigned byte_addr, input logic [31:0] word);
+    begin
+      im_init_en    <= 1'b1;
+      im_init_addr  <= byte_addr[15:0];
+      im_init_wdata <= word;
+      @(negedge clk);
+      im_init_en    <= 1'b0;
+    end
+  endtask
+
+  task automatic load_hex_instruction(input logic [1023:0] filename);
+    int fd;
+    int word_idx;
+    logic [31:0] w;
+    begin
+      fd = $fopen(filename, "r");
+      if (fd == 0) $fatal(1, "[TB] Cannot open %s", filename);
+
+      word_idx = 0;
+      while ($fscanf(fd, "%h", w) == 1) begin
+        im_write32_port(word_idx*4, w);  // byte address = word_idx*4
+        word_idx++;
+      end
+
+      $fclose(fd);
+      $display("[TB] Loaded %0d words from %s", word_idx, filename);
+    end
+  endtask
+      task automatic compare_ofmap_with_golden;
+        int unsigned i;
+        logic [7:0] dut_b, ref_b;
+        begin
+            err_cnt  = 0;
+            show_cnt = 0;
+
+            // ofmap base 取你 define 的 DRAM_ofmap_base
+            ofmap_base = `DRAM_ofmap_base;
+
+            $display("--------------------------------------------------");
+            $display("[TB] Compare DRAM OFMAP vs GOLDEN");
+            $display("[TB] ofmap_base = 0x%08h, bytes = %0d", ofmap_base, num);
+
+            for (i = 0; i < num; i++) begin
+                dut_b = u_dram.mem[ofmap_base + i];
+                ref_b = GOLDEN[i];
+
+                if (dut_b !== ref_b) begin
+                    err_cnt++;
+                    if (show_cnt < 20) begin
+                        $display("[MIS] i=%0d addr=0x%08h dut=0x%02h ref=0x%02h",
+                                 i, (ofmap_base + i), dut_b, ref_b);
+                        show_cnt++;
+                    end
+                end
+            end
+
+            if (err_cnt == 0) begin
+                $display("[PASS] OFMAP matches GOLDEN! total_bytes=%0d", num);
+            end else begin
+                $display("[FAIL] OFMAP mismatch! errors=%0d / total_bytes=%0d", err_cnt, num);
+            end
+            $display("--------------------------------------------------");
         end
     endtask
 
