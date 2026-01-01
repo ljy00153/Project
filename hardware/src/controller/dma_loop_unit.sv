@@ -11,6 +11,7 @@ module DMA_Loop_Unit(
     input logic [`GLB_ADDR_BITS-1:0] CTRL_DMA_GLB_ADDR,
     input logic [`GLB_ADDR_BITS-1:0] CTRL_DMA_len,
     input logic [1:0] CTRL_DMA_mode,
+    input logic [1:0] CTRL_DMA_byte_bias,
     output logic CTRL_DMA_done,
     /* DMA */
     output logic DMA_en,
@@ -18,16 +19,18 @@ module DMA_Loop_Unit(
     output logic [`GLB_ADDR_BITS-1:0] DMA_GLB_ADDR,
     output logic [`GLB_ADDR_BITS-1:0] DMA_len,
     output logic [1:0]DMA_mode,
+    output logic [1:0]DMA_byte_bias,
     input DMA_done,
     /* CSR */
     input [31:0] B, N, M, K,
-    input [31:0] in_features, out_features
+    input [31:0] in_features, out_features,
+    input [31:0] DRAM_ifmap_base,DRAM_weight_base
 );
     
     localparam IFMAP_SIZE = 32'd3;
     localparam WEIGHT_H   = 32'd4;
     logic [`GLB_ADDR_BITS-1:0] CTRL_DMA_len_reg;
-    logic [1:0] DMA_mode_reg;
+    logic [1:0] DMA_mode_reg,DMA_byte_bias_reg;
     logic [`AXI_ADDR_BITS-1:0] dram_addr;
     logic [`GLB_ADDR_BITS-1:0] glb_addr;
     logic [`AXI_ADDR_BITS-1:0] dram_stride;
@@ -51,9 +54,10 @@ module DMA_Loop_Unit(
     //assign DMA_en = (cs==LOOP);
     assign DMA_DRAM_ADDR = dram_addr;
     assign DMA_GLB_ADDR = glb_addr;
-    assign DMA_len = glb_stride; 
+    assign DMA_len = ()glb_stride>>2; 
     assign CTRL_DMA_done = (cs == FINISH) ;
-
+    assign DMA_mode = DMA_mode_reg;
+    assign DMA_byte_bias = DMA_byte_bias_reg;
     /* last loop finish then jump to FINISH STATE */
     assign loop_finish = (count_length == CTRL_DMA_len_reg - glb_stride && DMA_done);
 
@@ -106,6 +110,7 @@ module DMA_Loop_Unit(
                         glb_addr  <= CTRL_DMA_GLB_ADDR;
                         DMA_mode_reg <= CTRL_DMA_mode;
                         CTRL_DMA_len_reg <=  CTRL_DMA_len;
+                        DMA_byte_bias_reg <= CTRL_DMA_byte_bias;
                     end
                 end
                 
@@ -154,20 +159,9 @@ module DMA_Loop_Unit(
             default: ;
         endcase
     end
-    always_ff@(posedge clk)begin
-        if(rst)begin
-            DMA_mode<='0;
-        end else begin
-            if(cs==LOOP)begin
-                case(DMA_mode_reg)
-                    `MODE_IFMAP:DMA_mode<=2'b0;
-                    `MODE_FILTER:DMA_mode<=2'b1;
-                    `MODE_BIAS:DMA_mode<=2'b10;
-                    `MODE_OFMAP:DMA_mode<=2'b11;
-                endcase
-            end
-        end
-    end
+
+    
+    
 
     always_ff@(posedge clk)begin
         if(rst) DMA_en <= 1'b0;

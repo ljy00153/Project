@@ -29,7 +29,7 @@
         compute:
             REG[7]: valid_e 
         General Register
-            REG[8] ~ REG[16]
+            REG[8] ~ REG[15]
     TAG 3bit
         TAG[0]: count_ifmap_y
         TAG[1]: count_ifmap_x

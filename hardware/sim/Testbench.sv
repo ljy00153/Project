@@ -3,7 +3,7 @@
 `include "ASIC.svh"
 
 `define CYCLE 10.0      // Cycle time
-`define MAX 100000000    // Max cycle number
+`define MAX 5000000    // Max cycle number
 
 `define DRAM_ifmap_base 0
 `define DRAM_weight_base 524288
@@ -275,17 +275,17 @@ module test;
         DRAM_ofmap_base   = `DRAM_ofmap_base;
 
         // GLB bases / sizes / dataflow：依你 controller 的需求填
-        GLB_ifmap_base  = 32'd0;
-        GLB_weight_base = 32'd0;
-        GLB_opsum_base  = 32'd0;
+        GLB_ifmap_base  = 0;
+        GLB_weight_base = 9216;
+        GLB_opsum_base  = 18432;
 
-        OF_SIZE   = 32'd0;
-        IF_SIZE   = 32'd0;
-        B_SIZE    = 32'd0;
-        K_SIZE    = 32'd0;
-        N_SIZE    = 32'd0;
-        M_SIZE    = 32'd0;
-        DATAFLOW  = 32'd0;
+        OF_SIZE   = 256;
+        IF_SIZE   = 8192;
+        B_SIZE    = 64;
+        K_SIZE    = 12;
+        N_SIZE    = 16;
+        M_SIZE    = 64;
+        DATAFLOW  = 0;
         //data
         load_hex_file({prog_path, "/A.txt"});
         load_hex_file({prog_path, "/B.txt"});
@@ -341,7 +341,7 @@ module test;
 
          // wait for done
         wait (ASIC_interrupt === 1'b1);
-        $display("[%0t] asic_done asserted!", $time);
+        $display("[%0t] a   sic_done asserted!", $time);
 
         // compare result
         compare_ofmap_with_golden();
@@ -408,6 +408,15 @@ module test;
                     count++;
                 end
             end
+            $display("0 element: 0x%0h", u_dram.mem[0]);
+            $display("1 element: 0x%0h", u_dram.mem[1]);
+            $display("2 element: 0x%0h", u_dram.mem[2]);
+            $display("3 element: 0x%0h", u_dram.mem[3]);
+            $display("4 element: 0x%0h", u_dram.mem[4]);
+            $display("5 element: 0x%0h", u_dram.mem[5]);
+            $display("6 element: 0x%0h", u_dram.mem[6]);
+            $display("7 element: 0x%0h", u_dram.mem[7]);
+             
             flag = 0;
             $display("Last element: 0x%0h\n", u_dram.mem[current_dram_addr-1]);
             $fclose(fd);

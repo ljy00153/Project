@@ -42,17 +42,20 @@ module signal_controller#(
     output logic [31:0] K_BYTE,
     output logic [31:0] N_BYTE,
     output logic [31:0] M_BYTE,
+    output logic [31:0] ifmap_base,
+    output logic [31:0] weight_base
     //-----------------PE ID config--------------------------------------------------
     output logic ID_sender_en,
     input logic PEA_ifmap_ready,
     input logic PEA_filter_ready,
     input logic PEA_ipsum_ready,
     input logic PEA_opsum_valid,
-    
     input logic [5:0]PE_finish,
     //------------PE Array----------------------
     output logic [`PE_ARRAY_H*`PE_ARRAY_W-1:0] PE_en,
     output logic [10:0]                        PE_config,
+    input logic GLB_opsum_valid, //for PE busy
+
     //------------GLB nux----------------------
 
     output logic GLB_mux,
@@ -64,9 +67,7 @@ module signal_controller#(
     output logic [1:0]glb_type,
     input logic glb_done,
     //-------------GLB----------------------
-    output logic GLB_EN,
-    output logic GLB_WEB,
-    output logic GLB_MODE,
+    output logic glb_addr_en,
     //------------PPU-----------------------
     output logic                  relu_sel,
     output logic                  Maxpool_en,
@@ -103,6 +104,9 @@ module signal_controller#(
     logic [`GLB_ADDR_BITS-1:0] glb_addr; //16 bits
     logic DMA_busy,GLB_busy,PE_busy;
     logic [2:0] valid_e ;
+    //glb type reg 因為OP_CPT_TAGXY傳進來type只有1 cycle 要存起來才能等到OP_G2P 傳出去
+    logic [1:0]glb_type_reg;
+    logic [1:0]wait_type_reg;
     localparam IDLE  = 3'b000,
                RUN = 3'b001,
                PC_HOLD = 3'b010,
@@ -116,9 +120,9 @@ module signal_controller#(
     assign csr_wen = (opcode==`OP_CFG_SET)? 1'b1 : 1'b0;
     assign mmio_sel = (opcode==`OP_CFG_SET)? CFG_TYPE : 4'b0000;
     assign reg_wb_en = (opcode==`OP_ADD||opcode==`OP_ADDI||opcode==`OP_MULI||opcode==`OP_MUL||opcode==`OP_LOOP)? 1'b1 : 1'b0;
-    assign GLB_DO_select = (opcode == `OP_P2G_OPSUM)? 1'b`GLB_DO_PSUM: 1'b`GLB_DO_OFMAP;
-    assign GLB_DI_select = `NO_PAD;
-
+    assign GLB_DO_select = `NO_PAD;
+    assign GLB_DI_select = `GLB_DO_PSUM;
+    assign GLB_mux = (opcode[5:2]==`DMA_type || wait_type_reg ==`WAIT_DMA)? 1'b`DMA : 1'b`ASIC;
 
     always_ff @( posedge clk ) begin
         if ( rst ) begin
@@ -201,11 +205,11 @@ module signal_controller#(
         K_BYTE = CSR[9];
         N_BYTE = CSR[10];
         M_BYTE = CSR[11];   
+        ifmap_base = CSR[0];
+        weight_base = CSR[1];
     end
     
-    //glb type reg 因為OP_CPT_TAGXY傳進來type只有1 cycle 要存起來才能等到OP_G2P 傳出去
-    logic [1:0]glb_type_reg;
-    logic [1:0]wait_type_reg;
+
     always_ff @( posedge clk ) begin
         if(rst) begin
             glb_type_reg <= 2'b0;
@@ -218,10 +222,12 @@ module signal_controller#(
             if(cs==RUN && opcode==`OP_WAIT)begin
                 wait_type_reg <= inst_type;
             end
+            else if (!pc_hold)begin
+                wait_type_reg <= 2'd3; 
+            end
         end
     end
-    
-
+   
     //combinational logic for output signals
     always_comb begin
         // Default values
@@ -232,10 +238,7 @@ module signal_controller#(
         DMA_GLB_ADDR = 32'b0;
         DMA_len = 32'b0;
         DMA_byte_bias = 2'b00;
-        GLB_EN = 1'b0;
-        GLB_WEB = 1'b0;
-        GLB_MODE = 1'b0;
-        GLB_mux=1'b0;
+        glb_addr_en = 1'b0;
         ID_sender_en = 1'b0;
         asic_done = 1'b0;
         relu_sel     = 1'b0;
@@ -258,7 +261,6 @@ module signal_controller#(
                         DMA_GLB_ADDR = CSR[3];  // GLB_IFMAP_BASE
                         DMA_len = imm[17:0];       // IF_SIZE
                         DMA_byte_bias = 2'b00;  // assuming 4 bytes per data
-                        GLB_mux=`DMA;                        
                     end
                     `OP_DMA_LOAD_WEIGHT: begin
                         DMA_en = 1'b1;
@@ -267,7 +269,6 @@ module signal_controller#(
                         DMA_GLB_ADDR = CSR[4];  // GLB_WEIGHT_BASE
                         DMA_len = imm[17:0];       // N_SIZE * CSR[8]; // K_SIZE
                         DMA_byte_bias = 2'b00;  // assuming 4 bytes per data
-                        GLB_mux=`DMA;                        
                       
               
                       end
@@ -278,7 +279,6 @@ module signal_controller#(
                         DMA_GLB_ADDR = CSR[5];  // GLB_OPSUM_BASE
                         DMA_len = imm[17:0];      // M_SIZE * CSR[8]; // K_SIZE
                         DMA_byte_bias = 2'b00;  // assuming 4 bytes per data
-                        GLB_mux=`DMA;                        
 
                                           
                     end
@@ -289,26 +289,19 @@ module signal_controller#(
                         DMA_GLB_ADDR = CSR[5];  // GLB_IFMAP_BASE
                         DMA_len = imm[17:0];       // OF_SIZE
                         DMA_byte_bias = 2'b00;  // assuming 4 bytes per data
-                        GLB_mux=`DMA;                        
 
                 
                     end
                     `OP_G2P: begin
-                        GLB_EN= 1'b1;
-                        GLB_WEB= 1'b0;
-                        GLB_MODE=`WORD_MODE;
+                        glb_addr_en=1'b1;
                         glb_addr_base=ALU_result;
                         glb_type=glb_type_reg;
-                        GLB_mux=`ASIC;                        
                         
                     end
                     `OP_P2G_OPSUM: begin
-                        GLB_EN= 1'b1;
-                        GLB_WEB= 1'b1;
-                        GLB_MODE=`WORD_MODE;
+                        glb_addr_en = 1'b1;
                         glb_addr_base=ALU_result;
                         glb_type=glb_type_reg;
-                        GLB_mux=`ASIC;                        
 
                     end
                     `OP_CPT_TAGXY: begin
@@ -325,7 +318,7 @@ module signal_controller#(
                             'd5: PE_en = {{5{8'b11111111}}, {1{8'b00000000}}};
                             'd6: PE_en = {6{8'b11111111}};
                         endcase
-                        PE_config = {1'b1,2'b11,CSR[11][5:0],2'b11};
+                        PE_config = {1'b1,2'b11,CSR[11][5:0]-1,2'b11};
                     end
                     `OP_WAIT: begin
                         
@@ -353,6 +346,7 @@ module signal_controller#(
 
    
     always_comb begin 
+        
         case (wait_type_reg)
             `WAIT_GLB:begin
                 if(GLB_busy)pc_hold=1;
@@ -385,16 +379,17 @@ module signal_controller#(
                 DMA_busy <= 1'b0;
             end
 
-            if ( GLB_EN ) begin
-                GLB_busy <= 1'b1;
-            end else if ( glb_done ) begin
+            if (glb_done ) begin
                 GLB_busy <= 1'b0;
+
+            end else if (glb_addr_en) begin
+                GLB_busy <= 1'b1;
             end
             
-            if (!GLB_busy && glb_type_reg == `MODE_IFMAP ) begin//讀完GLB ifmap 開始算
+            if (GLB_opsum_valid) begin//讀完GLB ifmap 開始算
                 PE_busy <= 1'b0;
-            end else if ( PE_finish==6'b111111 ) begin
-                PE_busy <= 1'b0;
+            end else if (!GLB_busy) begin
+                PE_busy <= 1'b1;
             end 
 
         end

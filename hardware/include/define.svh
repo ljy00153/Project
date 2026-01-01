@@ -16,7 +16,7 @@
 `define FILTER_INDEX_BIT 6
 `define OFMAP_INDEX_BIT 2
 `define OFMAP_COL_BIT 5
-`define BATCH_BIT 5
+`define BATCH_BIT 6
 /* PE Array Define*/
 
 `define DEFAULT_XID  (2**`XID_BITS - 1)
@@ -24,7 +24,7 @@
 `define NUMS_PE_ROW 6
 `define NUMS_PE_COL 8
 `define DATA_SIZE 32
-`define CONFIG_SIZE 10
+`define CONFIG_SIZE 11
 
 `endif
 

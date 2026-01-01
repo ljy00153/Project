@@ -191,7 +191,7 @@ controller_top #(.PC_WIDTH(16)) ctrl (
     .clk(clk),
     .rst(rst),
     .asic_en(asic_en),
-    .asic_done(asic_done),
+    .asic_done(asic_interrupt),
 
     // instruction write from tb
     .im_init_en(im_init_en),
@@ -217,21 +217,23 @@ controller_top #(.PC_WIDTH(16)) ctrl (
     .GLB_EN                (GLB_EN),
     .GLB_WEB               (GLB_WEB),
     .GLB_MODE              (GLB_MODE),
-    .GLB_ADDR              (GLB_ADDR),
+    .GLB_ADDR              (GLB_A),
 
     .PE_en (PE_en),
     .PE_config(PE_config),
+    .GLB_opsum_valid(PEA_opsum_valid), //for PE busy
+
     // PEA XID scan
     .set_XID               (set_XID),
     .ifmap_XID_scan_in     (ifmap_XID_scan_in),
-    .weight_XID_scan_in    (weight_XID_scan_in),
+    .weight_XID_scan_in    (filter_XID_scan_in),
     .ipsum_XID_scan_in     (ipsum_XID_scan_in),
     .opsum_XID_scan_in     (opsum_XID_scan_in),
 
     // PEA YID scan
     .set_YID               (set_YID),
     .ifmap_YID_scan_in     (ifmap_YID_scan_in),
-    .weight_YID_scan_in    (weight_YID_scan_in),
+    .weight_YID_scan_in    (filter_YID_scan_in),
     .ipsum_YID_scan_in     (ipsum_YID_scan_in),
     .opsum_YID_scan_in     (opsum_YID_scan_in),
 
@@ -246,10 +248,10 @@ controller_top #(.PC_WIDTH(16)) ctrl (
     .ifmap_tag_Y           (ifmap_tag_Y),
 
     // PEA weight handshake + tag
-    .PEA_weight_valid      (PEA_weight_valid),
-    .PEA_weight_ready      (PEA_weight_ready),
-    .weight_tag_X          (weight_tag_X),
-    .weight_tag_Y          (weight_tag_Y),
+    .PEA_weight_valid      (PEA_filter_valid),
+    .PEA_weight_ready      (PEA_filter_ready),
+    .weight_tag_X          (filter_tag_X),
+    .weight_tag_Y          (filter_tag_Y),
 
     // PEA ipsum handshake + tag
     .PEA_ipsum_valid       (PEA_ipsum_valid),
@@ -264,11 +266,11 @@ controller_top #(.PC_WIDTH(16)) ctrl (
     .opsum_tag_Y           (opsum_tag_Y),
 
     // DMA
-    .DMA_en(DMA_EN),
+    .DMA_en(DMA_en),
     .DMA_mode(DMA_mode),
     .DMA_DRAM_ADDR(DMA_DRAM_ADDR),
     .DMA_GLB_ADDR(DMA_GLB_ADDR),
-    .DMA_BYTE_BIAS(DMA_BYTE_BIAS),
+    .DMA_BYTE_BIAS(DMA_byte_bias),
     .DMA_len(DMA_len),
     .DMA_done(DMA_done),
 

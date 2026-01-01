@@ -55,7 +55,7 @@ logic [`OFMAP_COL_BIT-1:0]ofmap_col,count_ofmap_col ;
 logic [`OFMAP_INDEX_BIT-1:0]ofmap_ch,count_ofmap_ch;
 logic [1:0] input_ch,count_input_ch;
 logic [1:0] count_filter_col;
-logic [4:0] batch,count_batch;
+logic [`BATCH_BIT-1:0] batch,count_batch;
 logic layer; //0: conv 1: fc
 logic [1:0]ipsum_top;
 logic ipsum_full;
@@ -77,8 +77,7 @@ always_ff@(posedge clk or posedge rst)begin
         cs<=ns;
     end 
 end 
-logic test;
-assign test = ifmap_valid && (count_filter_col== FILTER_COL);
+
 always_comb begin
     case (cs)
         IDLE:begin
@@ -135,10 +134,10 @@ end
 always_ff @( posedge clk or posedge rst ) begin
     if(rst)begin
         input_ch <= 2'd0;
-        ofmap_col <= 5'd0;
+        ofmap_col <= `OFMAP_COL_BIT'd0;
         ofmap_ch <=2'd0;
         layer <= 1'b0;
-        batch<=5'd0;
+        batch<=`BATCH_BIT'd0;
     end 
     else begin
         if(cs==IDLE&&PE_en)begin

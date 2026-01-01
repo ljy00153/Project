@@ -99,8 +99,8 @@ always_comb begin
 
     // input (mux)
     if(glb_mux == `ASIC) begin
-        GLB_EN = GLB_EN_asic;
-        GLB_WEB = GLB_WEB_asic;
+        GLB_EN = ~GLB_EN_asic;
+        GLB_WEB = ~GLB_WEB_asic;
         GLB_MODE = GLB_MODE_asic;
         GLB_A = GLB_A_asic;
         GLB_DI = GLB_DI_asic;

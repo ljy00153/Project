@@ -422,6 +422,26 @@ typedef enum logic [2:0] {
           endcase
         end
       end
+      WRITE_FILTER_GLB: begin
+        GLB_EN = 1'b0;          // enable (Active Low)
+        GLB_MODE = `WORD_MODE;  // 改成 WORD_MODE [原本是 BYTE_MODE]
+
+        if(!FIFO_empty) begin
+          GLB_WEB = 1'b0;       // write (Active Low)
+          
+          // 直接 Pop FIFO，不需要等 counter_R 數到 3
+          FIFO_pop_i_G = 1'b1;  
+
+          // Write logic (標準 Word 計數)
+          if(counter_W + `GLB_ADDR_BITS'd1 == DMA_WORD_LEN) begin
+            cs_glb_next = DONE_S_GLB;
+          end else begin
+            counter_W_next = counter_W + `GLB_ADDR_BITS'd1;
+            GLB_A_word_next = GLB_A_word + `GLB_ADDR_BITS'd1;
+          end
+        end
+      end
+      /*
       WRITE_FILTER_GLB:begin
         GLB_EN = 1'b0; // enable
         GLB_MODE = `BYTE_MODE;
@@ -452,6 +472,7 @@ typedef enum logic [2:0] {
           end
         end
       end
+      /*
       WRITE_IFMAP_GLB:begin
         GLB_EN = 1'b0; // enable
         GLB_MODE = `BYTE_MODE;
@@ -468,6 +489,26 @@ typedef enum logic [2:0] {
 
           // write to global buffer
           if(counter_W + `GLB_ADDR_BITS'd1 == {DMA_WORD_LEN[`GLB_ADDR_BITS-3:0],2'b00}) begin
+            cs_glb_next = DONE_S_GLB;
+          end else begin
+            counter_W_next = counter_W + `GLB_ADDR_BITS'd1;
+            GLB_A_word_next = GLB_A_word + `GLB_ADDR_BITS'd1;
+          end
+        end
+      end
+      */
+      WRITE_IFMAP_GLB: begin
+        GLB_EN = 1'b0;          // enable (Active Low)
+        GLB_MODE = `WORD_MODE;  // 改成 WORD_MODE [原本是 BYTE_MODE]
+
+        if(!FIFO_empty) begin
+          GLB_WEB = 1'b0;       // write (Active Low)
+          
+          // 直接 Pop FIFO，不需要等 counter_R 數到 3
+          FIFO_pop_i_G = 1'b1;  
+
+          // Write logic (標準 Word 計數)
+          if(counter_W + `GLB_ADDR_BITS'd1 == DMA_WORD_LEN) begin
             cs_glb_next = DONE_S_GLB;
           end else begin
             counter_W_next = counter_W + `GLB_ADDR_BITS'd1;
