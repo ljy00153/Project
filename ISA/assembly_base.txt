@@ -38,8 +38,8 @@ loop_outf:
     loop_inf:
         #load WEIGHT to GLB
         #compute index
-        MULI REG[8], inf, OF
-        ADD REG[8], REG[8], outf #REG[8] = (inf * out_features + outf);
+        MULI REG[8], outf, IF
+        ADD REG[8], REG[8], inf #REG[8] = (inf + outf * in_features);
         DMA_LOAD_WEIGHT DRAM_WEIGHT_BASE, REG[8], GLB_WEIGHT_SIZE
         WAIT DMA
         loop_b:
@@ -51,11 +51,11 @@ loop_outf:
             WAIT DMA
             loop_k:
                 loop_n:
-                    #load weight to pe array
-                    CPT_TAGXY WEIGHT
                     #compute index
                     MULI REG[10], n, K
                     ADD REG[10], REG[10], k #REG[10] = k + n * map.K * 3 * 4
+                    #load weight to pe array
+                    CPT_TAGXY WEIGHT
                     G2P GLB_WEIGHT_BASE, REG[10], PE_ARRAY_WEIGHT_SIZE
                     WAIT GLB
                     loop_m:
