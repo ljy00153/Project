@@ -20,6 +20,7 @@ LOADI b,     0
 LOADI k,     0
 LOADI n,     0
 LOADI m,     0
+LOADI REG[7], 6
 LOADI REG[8], 0
 LOADI REG[9], 0
 LOADI REG[10], 0
@@ -35,6 +36,7 @@ loop_outf:
     MULI REG[14], outf, 4 #REG[14] = outf * 4
     DMA_LOAD_PSUM DRAM_OFMAP_BASE, REG[14], GLB_OPSUM_SIZE
     WAIT DMA
+    NOP
     loop_inf:
         #load WEIGHT to GLB
         #compute index
@@ -42,6 +44,7 @@ loop_outf:
         ADD REG[8], REG[8], inf #REG[8] = (inf + outf * in_features);
         DMA_LOAD_WEIGHT DRAM_WEIGHT_BASE, REG[8], GLB_WEIGHT_SIZE
         WAIT DMA
+        NOP
         loop_b:
             #load IFMAP to GLB
             #compute index
@@ -49,6 +52,7 @@ loop_outf:
             ADD REG[9], REG[9], inf #REG[9] = (b * in_feature + inf);
             DMA_LOAD_IFMAP DRAM_IFMAP_BASE, REG[9], GLB_IFMAP_SIZE
             WAIT DMA
+            NOP
             loop_k:
                 loop_n:
                     #start pe array
@@ -60,6 +64,7 @@ loop_outf:
                     CPT_TAGXY WEIGHT
                     G2P GLB_WEIGHT_BASE, REG[10], PE_ARRAY_WEIGHT_SIZE
                     WAIT GLB
+                    NOP
                     loop_m:
                         #compute index
                         MULI REG[11], b, N_times_4 #REG[11] = b * map.N * PE::WEIGHT_H * 4
@@ -73,6 +78,7 @@ loop_outf:
                         CPT_TAGXY IPSUM
                         G2P GLB_OPSUM_BASE, REG[11], PE_ARRAY_IPSUM_SIZE
                         WAIT GLB
+                        NOP
 
                         #compute index
                         MULI REG[13], m, K
@@ -82,14 +88,19 @@ loop_outf:
                         CPT_TAGXY IFMAP
                         G2P GLB_IFMAP_BASE, REG[13], PE_ARRAY_IFMAP_SIZE
                         WAIT GLB
+                        NOP
                         #------loop finish------#
 
                         WAIT PE_ARRAY
-                        
+                        NOP
+
                         #------loop------#
                         #write to GLB
                         CPT_TAGXY OPSUM
                         P2G_OPSUM GLB_OPSUM_BASE, REG[11], PE_ARRAY_IPSUM_SIZE
+                        WAIT GLB
+                        NOP
+                        NOP
                         #------loop finish------#
                         LOOP M_SIZE, m, loop_m, m_offest
                         NOP
@@ -105,6 +116,8 @@ loop_outf:
     CPT_TAGXY OPSUM
     DMA_STORE_OFMAP DRAM_OFMAP_BASE, outf, GLB_OPSUM_SIZE
     WAIT DMA
+    NOP
+    NOP
     LOOP OF_SIZE, outf, loop_outf, outf_offest
     NOP
 END
