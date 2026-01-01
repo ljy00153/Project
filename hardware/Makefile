@@ -29,7 +29,7 @@ INCDIRS := \
 RTL_SRCS := \
   $(root_dir)/$(src_dir)/ASIC.sv \
   $(root_dir)/$(src_dir)/top.sv \
-  $(root_dir)/$(src_dir)/DRAM.sv \
+  $(root_dir)/$(sim_dir)/DRAM.sv \
   $(wildcard $(root_dir)/$(src_dir)/controller/*.sv) \
   $(wildcard $(root_dir)/$(src_dir)/DMA/*.sv) \
   $(wildcard $(root_dir)/$(src_dir)/PPU/*.sv) \
