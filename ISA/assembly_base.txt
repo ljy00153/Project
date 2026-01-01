@@ -51,6 +51,8 @@ loop_outf:
             WAIT DMA
             loop_k:
                 loop_n:
+                    #start pe array
+                    COMPUTE
                     #compute index
                     MULI REG[10], n, K
                     ADD REG[10], REG[10], k #REG[10] = k + n * map.K * 3 * 4
@@ -82,8 +84,6 @@ loop_outf:
                         WAIT GLB
                         #------loop finish------#
 
-                        #start pe array
-                        COMPUTE
                         WAIT PE_ARRAY
                         
                         #------loop------#
