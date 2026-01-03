@@ -2,12 +2,12 @@
 # Batch = 64, In Feature = 8192, Out Feature = 256
 
 #set constant
-.set IF, 8192
-.set OF, 256
+.set IF, 72
+.set OF, 64
 .set B, 64
 #mapping parameter
 .set M, 64
-.set K, 12	 # 12 * 3 * 4
+.set K, 6	 # 12 * 3 * 4
 .set N, 16	 # 16 * 4
 .set N_times_4, 256	 # 16 * 4 * 4
 .set outf_offest, 64	 # 16 * 4
@@ -20,12 +20,12 @@
 .set PE_ARRAY_WEIGHT_SIZE, 2304	# 48 * 12 * 4
 .set PE_ARRAY_IPSUM_SIZE, 128	# 8 * 1 * 4 * 4
 .set PE_ARRAY_IFMAP_SIZE, 72	# 6 * 3 * 4
-.set GLB_IFMAP_SIZE, 9216	# M * K * 12   
-.set GLB_WEIGHT_SIZE, 9216	# K * 3 * 4 * N * 4 
+.set GLB_IFMAP_SIZE, 4608	# M * K * 12   
+.set GLB_WEIGHT_SIZE, 4608	# K * 3 * 4 * N * 4 
 .set GLB_OPSUM_SIZE, 16384	# B * N * 4  
-.set DRAM_IFMAP_SIZE, 524288
-.set DRAM_WEIGHT_SIZE, 2097152
-.set DRAM_OPSUM_SIZE, 65536
+.set DRAM_IFMAP_SIZE, 4608
+.set DRAM_WEIGHT_SIZE, 4608
+.set DRAM_OPSUM_SIZE, 16384
 
 SET_ID
 CFG_SET DRAM_IFMAP_BASE,     0
@@ -148,7 +148,7 @@ loop_outf:
         NOP
     #write opsum to DRAM
     CPT_TAGXY OPSUM
-    DMA_STORE_OFMAP DRAM_OFMAP_BASE, REG[14], GLB_OPSUM_SIZE #336
+    DMA_STORE_OFMAP DRAM_OFMAP_BASE, outf, GLB_OPSUM_SIZE #336
     WAIT DMA #340
     NOP #344
     NOP #348

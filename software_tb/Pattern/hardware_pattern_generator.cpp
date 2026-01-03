@@ -39,8 +39,8 @@ uniform_int_distribution<int32_t> dist_ipsum(-32, 32);//數字隨機範圍
 
 int main()
 {
-    int pattern_id = 5;//放在第幾個資料夾
-    int m = 32; //GEMM now
+    int pattern_id = 6;//放在第幾個資料夾
+    int m = 64; //GEMM now
     int n = 12;
     int p = 4;
     int n_div4 = n / 4;

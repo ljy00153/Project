@@ -39,11 +39,12 @@ module glb_addr_generator #(
     logic [1:0] cs,ns;
     logic [`GLB_ADDR_BITS-1:0]offset;
     localparam IDLE  = 2'b00,
-                RUN = 2'b01,
-                 DONE  = 2'b10;
-    assign glb_a = (base_reg [`GLB_ADDR_BITS-1:0] +offset);
+                WAIT=2'b01,
+                RUN = 2'b10,
+                 DONE  = 2'b11;
+    assign glb_a =(cs == RUN)? (base_reg [`GLB_ADDR_BITS-1:0] +offset):'0;
     assign GLB_EN = (cs == RUN);
-    assign GLB_WEB = (type_reg == `MODE_OFMAP);
+    assign GLB_WEB = (cs==RUN && type_reg == `MODE_OFMAP);
     assign GLB_MODE = 1'b`WORD_MODE ;
     always_ff@(posedge clk)begin
         if(rst)begin
@@ -55,11 +56,13 @@ module glb_addr_generator #(
         unique case(cs)
             IDLE: begin
                 if ( en ) begin
-                    ns = RUN;
+                    if(type_in  ==`MODE_OFMAP)ns=WAIT;
+                    else ns = RUN;
                 end else begin
                     ns = IDLE;
                 end
             end
+            WAIT:ns=RUN;
             RUN: begin
                 case(type_reg)
                     `MODE_IFMAP: begin
@@ -90,18 +93,18 @@ module glb_addr_generator #(
             id_en <= 1'b0;
         end
         else begin
-            if(cs==RUN||type_in == `MODE_OFMAP) begin
+            if(cs==WAIT||cs==RUN) begin
                 id_en <= 1'b1;
             end
+            
             else if(cs==DONE) begin
 
                 id_en <=1'b0;
             end
             
         end
-
-
     end
+    
     // latch base/type
     always_ff @(posedge clk) begin
         if (rst) begin

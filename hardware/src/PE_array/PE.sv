@@ -141,7 +141,7 @@ always_ff @( posedge clk or posedge rst ) begin
     end 
     else begin
         if(cs==IDLE&&PE_en)begin
-            case(i_config[9])
+            case(i_config[10])
                 CONV_LAYER: begin
                     input_ch <= i_config[1:0];
                     ofmap_col <= i_config[`OFMAP_COL_BIT+1:2];
@@ -400,9 +400,10 @@ always_ff @( posedge clk or posedge rst ) begin
         else if (cs==ADD_IPSUM  && ipsum_full)begin
             ofmap_spad[ofmap_count] <= ofmap_spad[ofmap_count] + ipsum_spad[ofmap_count];
         end
-        else if (cs == REUSE_IFMAP) begin
+        else if (cs == REUSE_IFMAP||cs==IDLE) begin
             for (i = 0; i < `OFMAP_SPAD_LEN; i++) ofmap_spad[i] <= 'd0;
         end
+
 
         else begin
             ofmap_spad[ofmap_count] <= ofmap_spad[ofmap_count];
