@@ -12,7 +12,8 @@ module DMA (
     input [`AXI_ADDR_BITS-1:0] DRAM_ADDR,
     input [`GLB_ADDR_BITS-1:0] GLB_ADDR,
     input [`GLB_ADDR_BITS-1:0] LEN, // len = 0 means real
-
+    input [`GLB_ADDR_BITS-1:0] TRUE_LEN,
+    output logic padding,
     /*************** AXI master ***************/
     //WRITE ADDRESS0
     output logic [`AXI_ID_BITS-1:0] AWID_M,
@@ -89,6 +90,7 @@ typedef enum logic [2:0] {
   logic [`GLB_ADDR_BITS-1:0] DMAGLB_ADDR;
   logic [`AXI_ADDR_BITS-1:0] DMADRAM_ADDR;
   logic [`GLB_ADDR_BITS-1:0] DMA_WORD_LEN;
+  logic [`GLB_ADDR_BITS-1:0] DMA_TRUE_WORD_LEN;
   logic [1:0]DMABYTE_BIAS;
   logic [1:0]DMAMODE;
   logic DMADIR;
@@ -113,6 +115,7 @@ typedef enum logic [2:0] {
       DMAGLB_ADDR <=`AXI_ADDR_BITS'd0;
       DMADRAM_ADDR <=`AXI_ADDR_BITS'd0;
       DMA_WORD_LEN <=`AXI_ADDR_BITS'd0;
+      DMA_TRUE_WORD_LEN <=`AXI_ADDR_BITS'd0;
       DMAMODE <= 2'd0;
       DMABYTE_BIAS <= 2'd0;
       DMADIR <= 1'b0;
@@ -121,6 +124,7 @@ typedef enum logic [2:0] {
       DMAGLB_ADDR <= (EN)?GLB_ADDR:DMAGLB_ADDR;
       DMADRAM_ADDR <= (EN)?DRAM_ADDR:DMADRAM_ADDR;
       DMA_WORD_LEN <= (EN)?LEN:DMA_WORD_LEN;
+      DMA_TRUE_WORD_LEN <= (EN)?TRUE_LEN:DMA_TRUE_WORD_LEN;
       DMAMODE <= (EN)?MODE:DMAMODE;
       DMABYTE_BIAS <= (EN)?BYTE_BIAS:DMABYTE_BIAS;
       DMADIR <= (EN)?DIR:DMADIR;
@@ -391,7 +395,7 @@ typedef enum logic [2:0] {
     counter_R_next = counter_R;
     counter_W_next = counter_W;
 
-
+    padding = 0;
     FIFO_pop_i_G = 1'b0;
     FIFO_push_i_G = 1'b0;
     FIFO_data_i_G = GLB_DO;
@@ -425,7 +429,8 @@ typedef enum logic [2:0] {
       WRITE_FILTER_GLB: begin
         GLB_EN = 1'b0;          // enable (Active Low)
         GLB_MODE = `WORD_MODE;  // 改成 WORD_MODE [原本是 BYTE_MODE]
-
+        if( counter_W < DMA_TRUE_WORD_LEN ) padding = 0;
+        else padding = 1;
         if(!FIFO_empty) begin
           GLB_WEB = 1'b0;       // write (Active Low)
           
@@ -500,6 +505,8 @@ typedef enum logic [2:0] {
       WRITE_IFMAP_GLB: begin
         GLB_EN = 1'b0;          // enable (Active Low)
         GLB_MODE = `WORD_MODE;  // 改成 WORD_MODE [原本是 BYTE_MODE]
+        if( counter_W < DMA_TRUE_WORD_LEN ) padding = 0;
+        else padding = 1;        
 
         if(!FIFO_empty) begin
           GLB_WEB = 1'b0;       // write (Active Low)

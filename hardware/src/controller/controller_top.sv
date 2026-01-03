@@ -81,6 +81,7 @@ module controller_top #(
     output logic  [`AXI_ADDR_BITS-1:0]DMA_DRAM_ADDR,
     output logic  [`GLB_ADDR_BITS-1:0]DMA_GLB_ADDR,
     output logic  [`GLB_ADDR_BITS-1:0]DMA_len,
+    output logic  [`GLB_ADDR_BITS-1:0]DMA_true_len,
     output logic  [1:0]DMA_BYTE_BIAS,
     input logic  DMA_done,
 
@@ -227,8 +228,9 @@ module controller_top #(
     logic [`GLB_ADDR_BITS-1:0] CTRL_DMA_len;
     logic CTRL_DMA_done;
     logic [1:0] CTRL_DMA_byte_bias;
-    logic [31:0] OF_BYTE,IF_BYTE,B_BYTE,K_BYTE,N_BYTE,M_BYTE;
+    logic [31:0] OF_BYTE,IF_BYTE,B_BYTE,K_BYTE,N_BYTE,M_BYTE,DRAM_in_features_addr_base,DRAM_weight_addr_base;
     logic GLB_opsum_valid;
+    logic [`AXI_ADDR_BITS-1:0] loop_start_point;
     signal_controller ctrl (
         .clk            (clk),
         .rst            (rst),
@@ -259,14 +261,15 @@ module controller_top #(
         .DMA_GLB_ADDR    (CTRL_DMA_GLB_ADDR),
         .DMA_done        (CTRL_DMA_done), // 目前沒 DMA，先綁 0（你之後要改）
         .DMA_byte_bias   (CTRL_DMA_byte_bias),
-
+        .loop_start_point (loop_start_point),
         .OF_BYTE(OF_BYTE),
         .IF_BYTE(IF_BYTE),
         .B_BYTE(B_BYTE),
         .K_BYTE(K_BYTE),
         .N_BYTE(N_BYTE),
         .M_BYTE(M_BYTE),            
-
+        .DRAM_in_features_addr_base(DRAM_in_features_addr_base),
+        .DRAM_weight_addr_base(DRAM_weight_addr_base),
         .glb_addr_en(glb_addr_en),
 
         .ID_sender_en (config_id_en),
@@ -401,12 +404,14 @@ module controller_top #(
         .CTRL_DMA_len(CTRL_DMA_len),
         .CTRL_DMA_byte_bias(CTRL_DMA_byte_bias),
         .CTRL_DMA_done(CTRL_DMA_done),
+        .loop_start_point(loop_start_point),
     /* DMA */
         .DMA_en(DMA_en),
         .DMA_mode(DMA_mode),
         .DMA_DRAM_ADDR(DMA_DRAM_ADDR),
         .DMA_GLB_ADDR(DMA_GLB_ADDR),
         .DMA_len(DMA_len),
+        .DMA_true_len(DMA_true_len),
         .DMA_byte_bias(DMA_BYTE_BIAS),
         .DMA_done(DMA_done),
     /* CSR */
@@ -415,7 +420,9 @@ module controller_top #(
         .M(M_BYTE), 
         .K(K_BYTE),
         .in_features(IF_BYTE), 
-        .out_features(OF_BYTE)
+        .out_features(OF_BYTE),
+        .DRAM_in_features_addr_base(DRAM_in_features_addr_base),
+        .DRAM_weight_addr_base(DRAM_weight_addr_base)
 );
 
 

@@ -67,9 +67,9 @@ module asic(
     output logic [`AXI_ADDR_BITS-1:0] DMA_DRAM_ADDR,
     output logic [`GLB_ADDR_BITS-1:0] DMA_GLB_ADDR,
     output logic [`GLB_ADDR_BITS-1:0] DMA_len,
+    output logic [`GLB_ADDR_BITS-1:0] DMA_true_len,
     output logic [1:0] DMA_byte_bias,
-    input DMA_done,
-
+    input  DMA_done,
     output logic asic_interrupt
 );
 
@@ -272,8 +272,8 @@ controller_top #(.PC_WIDTH(16)) ctrl (
     .DMA_GLB_ADDR(DMA_GLB_ADDR),
     .DMA_BYTE_BIAS(DMA_byte_bias),
     .DMA_len(DMA_len),
+    .DMA_true_len(DMA_true_len),
     .DMA_done(DMA_done),
-
     .GLB_DI_select(GLB_DI_select),
     .GLB_DO_select(GLB_DO_select),
     .GLB_mux(GLB_mux)

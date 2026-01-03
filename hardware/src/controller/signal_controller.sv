@@ -28,6 +28,7 @@ module signal_controller#(
     input logic [31:0] DATAFLOW,
     
     // ---------------- DMA LOOPER------------------------------
+    output logic [31:0] loop_start_point,
     output logic                    DMA_en,
     output logic [1:0]              DMA_mode,       // IFMAP:0, Filter:1, BIAS:2, OFMAP: 3
     output logic [`AXI_ADDR_BITS-1:0] DMA_DRAM_ADDR,
@@ -42,8 +43,9 @@ module signal_controller#(
     output logic [31:0] K_BYTE,
     output logic [31:0] N_BYTE,
     output logic [31:0] M_BYTE,
-    output logic [31:0] ifmap_base,
-    output logic [31:0] weight_base
+    output logic [31:0] DRAM_in_features_addr_base,
+    output logic [31:0] DRAM_weight_addr_base,
+
     //-----------------PE ID config--------------------------------------------------
     output logic ID_sender_en,
     input logic PEA_ifmap_ready,
@@ -199,23 +201,27 @@ module signal_controller#(
     assign CSR_output = CSR[CSR_index];
 
     always_comb begin
+        DRAM_in_features_addr_base=CSR[0];
+        DRAM_weight_addr_base=CSR[1];
         OF_BYTE = CSR[6];
         IF_BYTE = CSR[7];
         B_BYTE = CSR[8];
         K_BYTE = CSR[9];
         N_BYTE = CSR[10];
         M_BYTE = CSR[11];   
-        ifmap_base = CSR[0];
-        weight_base = CSR[1];
-    end
-    
 
+    end
+        
+    /* sequential logic */
     always_ff @( posedge clk ) begin
         if(rst) begin
             glb_type_reg <= 2'b0;
             wait_type_reg <= 2'b0;
+            loop_start_point<=2'b0;
+
         end
         else begin
+            
             if(cs==RUN && opcode==`OP_CPT_TAGXY) begin
                 glb_type_reg <= inst_type;
             end
@@ -225,6 +231,11 @@ module signal_controller#(
             else if (!pc_hold)begin
                 wait_type_reg <= 2'd3; 
             end
+            if(cs==RUN && opcode==`OP_MULI)begin
+                loop_start_point <= ALU_result;
+            end
+
+            
         end
     end
    

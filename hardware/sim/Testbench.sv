@@ -3,13 +3,17 @@
 `include "ASIC.svh"
 
 `define CYCLE 10.0      // Cycle time
-`define MAX 5000000    // Max cycle number
-
+`define MAX 20000000    // Max cycle number
+/*
 `define DRAM_ifmap_base 0
 `define DRAM_weight_base 524288
 `define DRAM_ofmap_base `DRAM_weight_base + 2097152
 `define DRAM_ofmap_size 65536
-
+*/
+`define DRAM_ifmap_base 0
+`define DRAM_weight_base 524288
+`define DRAM_ofmap_base `DRAM_weight_base + 2097152
+`define DRAM_ofmap_size 65536
 logic [31:0] current_dram_addr = 32'h0; 
 
 module test;
@@ -409,13 +413,7 @@ module test;
                 end
             end
             $display("0 element: 0x%0h", u_dram.mem[0]);
-            $display("1 element: 0x%0h", u_dram.mem[1]);
-            $display("2 element: 0x%0h", u_dram.mem[2]);
-            $display("3 element: 0x%0h", u_dram.mem[3]);
-            $display("4 element: 0x%0h", u_dram.mem[4]);
-            $display("5 element: 0x%0h", u_dram.mem[5]);
-            $display("6 element: 0x%0h", u_dram.mem[6]);
-            $display("7 element: 0x%0h", u_dram.mem[7]);
+        
              
             flag = 0;
             $display("Last element: 0x%0h\n", u_dram.mem[current_dram_addr-1]);
@@ -461,37 +459,74 @@ module test;
       task automatic compare_ofmap_with_golden;
         int unsigned i;
         logic [7:0] dut_b, ref_b;
+        integer log_fd;        // 檔案描述符
+        string log_filename;   // 檔案名稱
         begin
             err_cnt  = 0;
             show_cnt = 0;
-
-            // ofmap base 取你 define 的 DRAM_ofmap_base
             ofmap_base = `DRAM_ofmap_base;
 
+            // 設定 log 檔案路徑
+            log_filename = {prog_path, "/verification.log"};
+            log_fd = $fopen(log_filename, "w");
+
+            if (log_fd == 0) begin
+                $display("[TB] Error: Cannot open log file %s", log_filename);
+                $finish;
+            end
+
+            // Console 提示
             $display("--------------------------------------------------");
-            $display("[TB] Compare DRAM OFMAP vs GOLDEN");
-            $display("[TB] ofmap_base = 0x%08h, bytes = %0d", ofmap_base, num);
+            $display("[TB] Comparing... Full report (Pass & Fail) saved to: %s", log_filename);
+            
+            // 寫入 Log Header
+            $fdisplay(log_fd, "--------------------------------------------------");
+            $fdisplay(log_fd, "[TB] Compare DRAM OFMAP vs GOLDEN");
+            $fdisplay(log_fd, "[TB] ofmap_base = 0x%08h, bytes = %0d", ofmap_base, num);
+            $fdisplay(log_fd, "--------------------------------------------------");
+            $fdisplay(log_fd, "Result | Index | Address    | DUT  | Golden");
+            $fdisplay(log_fd, "-------|-------|------------|------|-------");
 
             for (i = 0; i < num; i++) begin
                 dut_b = u_dram.mem[ofmap_base + i];
                 ref_b = GOLDEN[i];
 
                 if (dut_b !== ref_b) begin
+                    // === 錯誤 (MISMATCH) ===
                     err_cnt++;
+                    
+                    // 1. 寫入 Log (標記為 [MIS])
+                    $fdisplay(log_fd, "[MIS]  | %5d | 0x%08h | 0x%02h | 0x%02h", 
+                              i, (ofmap_base + i), dut_b, ref_b);
+
+                    // 2. 顯示在 Console (只顯示前 20 筆錯誤，避免洗版)
                     if (show_cnt < 20) begin
                         $display("[MIS] i=%0d addr=0x%08h dut=0x%02h ref=0x%02h",
                                  i, (ofmap_base + i), dut_b, ref_b);
                         show_cnt++;
                     end
+
+                end else begin
+                    // === 正確 (MATCH) ===
+                    // 這裡只寫入 Log，不要 print 到 Console，不然跑 simulation 會很慢且畫面很亂
+                    $fdisplay(log_fd, "[OK ]  | %5d | 0x%08h | 0x%02h | 0x%02h", 
+                              i, (ofmap_base + i), dut_b, ref_b);
                 end
             end
 
+            // 寫入總結到 Log
+            $fdisplay(log_fd, "--------------------------------------------------");
             if (err_cnt == 0) begin
-                $display("[PASS] OFMAP matches GOLDEN! total_bytes=%0d", num);
+                $fdisplay(log_fd, "[PASS] All %0d bytes matched.", num);
+                $display("[PASS] OFMAP matches GOLDEN! (See %s)", log_filename);
             end else begin
-                $display("[FAIL] OFMAP mismatch! errors=%0d / total_bytes=%0d", err_cnt, num);
+                $fdisplay(log_fd, "[FAIL] Total errors: %0d / %0d", err_cnt, num);
+                $display("[FAIL] OFMAP mismatch! errors=%0d. Check %s for details.", err_cnt, log_filename);
             end
-            $display("--------------------------------------------------");
+            $fdisplay(log_fd, "--------------------------------------------------");
+
+            // 關閉檔案
+            $fclose(log_fd);
         end
     endtask
 

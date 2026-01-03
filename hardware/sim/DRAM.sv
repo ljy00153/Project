@@ -178,30 +178,46 @@ module DRAM(
     
     always_ff @(posedge clk or negedge rst_n) begin
        if(!rst_n) begin 
-           AWREADY_S <= 0; WREADY_S <= 0; BVALID_S <= 0; w_state <= W_IDLE; 
+            AWREADY_S <= 0; 
+            WREADY_S <= 0; 
+            BVALID_S <= 0; 
+            w_state <= W_IDLE;
+            BRESP_S   <= 0;
+ 
        end else begin
            case(w_state)
                W_IDLE: begin
-                   AWREADY_S <= 1; BVALID_S <= 0;
-                   if(AWVALID_S && AWREADY_S) begin
-                       aw_addr_latch <= AWADDR_S;
-                       AWREADY_S <= 0; WREADY_S <= 1; w_state <= W_BURST;
-                   end
+                    AWREADY_S <= 1;
+                    WREADY_S <= 0;
+                    BVALID_S <= 0;
+                    if(AWVALID_S && AWREADY_S) begin
+                        aw_addr_latch <= AWADDR_S;
+                        AWREADY_S <= 0;
+                        WREADY_S <= 1; 
+                        w_state <= W_BURST;
+                    end
                end
                W_BURST: begin
                    if(WVALID_S && WREADY_S) begin
-                       if(WSTRB_S[0]) mem[aw_addr_latch] = WDATA_S[7:0];
-                       if(WSTRB_S[1]) mem[aw_addr_latch+1] = WDATA_S[15:8];
-                       if(WSTRB_S[2]) mem[aw_addr_latch+2] = WDATA_S[23:16];
-                       if(WSTRB_S[3]) mem[aw_addr_latch+3] = WDATA_S[31:24];
+                       if(WSTRB_S[0]) mem[aw_addr_latch] <= WDATA_S[7:0];
+                       if(WSTRB_S[1]) mem[aw_addr_latch+1] <= WDATA_S[15:8];
+                       if(WSTRB_S[2]) mem[aw_addr_latch+2] <= WDATA_S[23:16];
+                       if(WSTRB_S[3]) mem[aw_addr_latch+3] <= WDATA_S[31:24];
                        // 簡化: 這裡省略了 Burst 計算，假設只寫一筆
-                       if(WLAST_S) begin WREADY_S <= 0; w_state <= W_RESP; end
+                       if(WLAST_S) begin 
+                        WREADY_S <= 0; 
+                        w_state <= W_RESP; 
+                        BRESP_S  <= 2'b00; // OKAY
+                        end
                        else aw_addr_latch <= aw_addr_latch + 4; // 簡化 INCR
                    end
                end
                W_RESP: begin
-                   BVALID_S <= 1; 
-                   if(BREADY_S && BVALID_S) begin BVALID_S <= 0; w_state <= W_IDLE; end
+                    BVALID_S <= 1; 
+                    if(BREADY_S && BVALID_S) begin 
+                        BVALID_S <= 0;
+                        w_state <= W_IDLE; 
+                    end
                end
            endcase
        end
