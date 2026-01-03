@@ -22,7 +22,7 @@ module test;
     int start_time,finish_time;
     integer status;
     string  key;
-    integer fs, num, gf, code;
+    integer fs, fc, num, gf, code;
     string prog_path;
     string hexfile;
 
@@ -365,6 +365,11 @@ module test;
         $display("===========================");
         $display("Cycle Count: %0d", (finish_time - start_time) / `CYCLE);
         $display("===========================\n");
+
+        fc = $fopen({prog_path, "/Cycle_count.txt"}, "w");
+        $fdisplay(fc, "Cycle count: %0d", (finish_time - start_time) / `CYCLE);
+        $fclose(fc);
+
         // compare result
         compare_ofmap_with_golden();
 

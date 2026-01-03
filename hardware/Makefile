@@ -41,7 +41,7 @@ RTL_SRCS := \
 TB_SRCS := $(root_dir)/$(sim_dir)/Testbench.sv
 
 vcs0: | $(bld_dir)
-	python3 $(sim_dir)/prog0/assembler.py $(sim_dir)/prog0/GEMM_assembly.txt
+	python3 $(sim_dir)/assembler.py $(sim_dir)/prog0/GEMM_assembly.txt
 	cd $(bld_dir); \
 	vcs -full64 -R -sverilog \
 		$(foreach d,$(INCDIRS),+incdir+$(d)) \
@@ -52,7 +52,7 @@ vcs0: | $(bld_dir)
 		+notimingcheck
 
 vcs1: | $(bld_dir)
-	python3 $(sim_dir)/prog1/assembler.py $(sim_dir)/prog1/GEMM_assembly.txt
+	python3 $(sim_dir)/assembler.py $(sim_dir)/prog1/GEMM_assembly.txt
 	cd $(bld_dir); \
 	vcs -full64 -R -sverilog \
 		$(foreach d,$(INCDIRS),+incdir+$(d)) \
@@ -63,7 +63,7 @@ vcs1: | $(bld_dir)
 		+notimingcheck
 
 vcs2: | $(bld_dir)
-	python3 $(sim_dir)/prog2/assembler.py $(sim_dir)/prog2/GEMM_assembly.txt
+	python3 $(sim_dir)/assembler.py $(sim_dir)/prog2/GEMM_assembly.txt
 	cd $(bld_dir); \
 	vcs -full64 -R -sverilog \
 		$(foreach d,$(INCDIRS),+incdir+$(d)) \
@@ -74,7 +74,7 @@ vcs2: | $(bld_dir)
 		+notimingcheck
 
 vcs3: | $(bld_dir)
-	python3 $(sim_dir)/prog3/assembler.py $(sim_dir)/prog3/GEMM_assembly.txt
+	python3 $(sim_dir)/assembler.py $(sim_dir)/prog3/GEMM_assembly.txt
 	cd $(bld_dir); \
 	vcs -full64 -R -sverilog \
 		$(foreach d,$(INCDIRS),+incdir+$(d)) \
