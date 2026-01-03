@@ -18,12 +18,17 @@ module glb_addr_generator #(
     output logic id_en,
     // output address to GLB
     output logic [`GLB_ADDR_BITS-1:0] glb_a,
-    output logic done
+    output logic done,
+    output logic GLB_EN,
+    output logic GLB_WEB,
+    output logic GLB_MODE
     // optional: export internal counters for debug
     //output logic [31:0] count_k_bytes,
     //output logic [31:0] count_n_bytes,
     //output logic [31:0] count_kk
 );
+    localparam IFMAP_SIZE = 32'd3;
+    localparam WEIGHT_H   = 32'd4;
     // determine GLB_Addr
     logic [31:0]count_k; 
     logic [31:0]count_kk;
@@ -32,10 +37,15 @@ module glb_addr_generator #(
     logic [31:0] base_reg;
     logic [1:0]  type_reg;
     logic [1:0] cs,ns;
+    logic [`GLB_ADDR_BITS-1:0]offset;
     localparam IDLE  = 2'b00,
-                RUN = 2'b01,
-                 DONE  = 2'b10;
-    
+                WAIT=2'b01,
+                RUN = 2'b10,
+                 DONE  = 2'b11;
+    assign glb_a =(cs == RUN)? (base_reg [`GLB_ADDR_BITS-1:0] +offset):'0;
+    assign GLB_EN = (cs == RUN);
+    assign GLB_WEB = (cs==RUN && type_reg == `MODE_OFMAP);
+    assign GLB_MODE = 1'b`WORD_MODE ;
     always_ff@(posedge clk)begin
         if(rst)begin
             cs<='0;
@@ -46,11 +56,13 @@ module glb_addr_generator #(
         unique case(cs)
             IDLE: begin
                 if ( en ) begin
-                    ns = RUN;
+                    if(type_in  ==`MODE_OFMAP)ns=WAIT;
+                    else ns = RUN;
                 end else begin
                     ns = IDLE;
                 end
             end
+            WAIT:ns=RUN;
             RUN: begin
                 case(type_reg)
                     `MODE_IFMAP: begin
@@ -81,18 +93,18 @@ module glb_addr_generator #(
             id_en <= 1'b0;
         end
         else begin
-            if(cs==RUN) begin
+            if(cs==WAIT||cs==RUN) begin
                 id_en <= 1'b1;
             end
+            
             else if(cs==DONE) begin
 
                 id_en <=1'b0;
             end
             
         end
-
-
     end
+    
     // latch base/type
     always_ff @(posedge clk) begin
         if (rst) begin
@@ -171,17 +183,29 @@ module glb_addr_generator #(
             end
         end
     end 
-    //glb_addr
+    //offset
     always_comb begin
         unique case ( type_reg )
-            `MODE_IFMAP: glb_a = base_reg [`GLB_ADDR_BITS-1:0]+ count_k; // IFMAP
-            `MODE_FILTER: glb_a = base_reg[`GLB_ADDR_BITS-1:0] + count_n * K_bytes + count_k  + count_kk * KK_STRIDE_BYTES; // FILTER
-            `MODE_BIAS: glb_a = base_reg[`GLB_ADDR_BITS-1:0] + (count_n <<2 ); // BIAS
-            `MODE_OFMAP: glb_a =  base_reg[`GLB_ADDR_BITS-1:0] + (count_n <<2);  // OFMAP
-            default:glb_a=base_reg[`GLB_ADDR_BITS-1:0];
+            `MODE_IFMAP: offset = count_k; // IFMAP
+            `MODE_FILTER: offset =  count_n * K_bytes * IFMAP_SIZE * WEIGHT_H + count_k  + count_kk * KK_STRIDE_BYTES; // FILTER
+            `MODE_BIAS: offset = (count_n <<2 ); // BIAS
+            `MODE_OFMAP: offset =  (count_n <<2);  // OFMAP
+            default:offset=0;
         endcase
 
     end 
+    //glb_addr
+    /*
+    always_comb begin
+        unique case ( type_reg )
+            `MODE_IFMAP: glb_a = base_reg [`GLB_ADDR_BITS-1:0]+ count_k; // IFMAP
+            `MODE_FILTER: glb_a = base_reg [`GLB_ADDR_BITS-1:0] + count_n * K_bytes + count_k  + count_kk * KK_STRIDE_BYTES; // FILTER
+            `MODE_BIAS: glb_a = base_reg [`GLB_ADDR_BITS-1:0] + (count_n <<2 ); // BIAS
+            `MODE_OFMAP: glb_a =  base_reg [`GLB_ADDR_BITS-1:0] + (count_n <<2);  // OFMAP
+            default:glb_a=base_reg[`GLB_ADDR_BITS-1:0];
+        endcase
+
+    end */
 
     always_comb begin
         if(cs==DONE) done=1'b1;

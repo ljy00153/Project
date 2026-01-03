@@ -123,7 +123,7 @@ module ID_SENDER(
 
 /* Config Scan Chain Setup */
     assign set_XID = (cs == SEND_CONFIG_SCAN);
-    assign ifmap_XID_scan_in    = `DEFAULT_XID;
+    assign ifmap_XID_scan_in    = 0;
     assign weight_XID_scan_in   = count_x;
     assign ipsum_XID_scan_in    = count_x;
     assign opsum_XID_scan_in    = count_x;
@@ -248,8 +248,8 @@ module ID_SENDER(
     assign opsum_tag_X = count_opsum_x;
     assign opsum_tag_Y = count_opsum_y;
 //tag valid
-    assign PEA_ifmap_valid  = (cs == SEND_TAG && PEA_ifmap_ready)?  1'b1 : 1'b0;
-    assign PEA_weight_valid = (cs == SEND_TAG && PEA_weight_ready)? 1'b1 : 1'b0;
-    assign PEA_ipsum_valid  = (cs == SEND_TAG && PEA_ipsum_ready)?  1'b1 : 1'b0;
-    assign PEA_opsum_ready  = (cs == SEND_TAG && PEA_opsum_valid)?  1'b1 : 1'b0;
+    assign PEA_ifmap_valid  = (cs == SEND_TAG && PEA_ifmap_ready && tag_type==2'd0 && en)?  1'b1 : 1'b0;
+    assign PEA_weight_valid = (cs == SEND_TAG && PEA_weight_ready && tag_type==2'd1 && en)? 1'b1 : 1'b0;
+    assign PEA_ipsum_valid  = (cs == SEND_TAG && PEA_ipsum_ready && tag_type==2'd2 && en)?  1'b1 : 1'b0;
+    assign PEA_opsum_ready  = (cs == SEND_TAG && PEA_opsum_valid && tag_type==2'd3 && en)?  1'b1 : 1'b0;
 endmodule

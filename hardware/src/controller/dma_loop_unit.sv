@@ -11,28 +11,36 @@ module DMA_Loop_Unit(
     input logic [`GLB_ADDR_BITS-1:0] CTRL_DMA_GLB_ADDR,
     input logic [`GLB_ADDR_BITS-1:0] CTRL_DMA_len,
     input logic [1:0] CTRL_DMA_mode,
+    input logic [1:0] CTRL_DMA_byte_bias,
     output logic CTRL_DMA_done,
+    input logic [`AXI_ADDR_BITS-1:0] loop_start_point,
     /* DMA */
     output logic DMA_en,
     output logic [`AXI_ADDR_BITS-1:0] DMA_DRAM_ADDR,
     output logic [`GLB_ADDR_BITS-1:0] DMA_GLB_ADDR,
     output logic [`GLB_ADDR_BITS-1:0] DMA_len,
+    output logic [`GLB_ADDR_BITS-1:0] DMA_true_len,
     output logic [1:0]DMA_mode,
+    output logic [1:0]DMA_byte_bias,
     input DMA_done,
     /* CSR */
     input [31:0] B, N, M, K,
-    input [31:0] in_features, out_features
+    input [31:0] in_features, out_features ,
+    input [31:0] DRAM_in_features_addr_base,DRAM_weight_addr_base
+   
 );
     
     localparam IFMAP_SIZE = 32'd3;
     localparam WEIGHT_H   = 32'd4;
     logic [`GLB_ADDR_BITS-1:0] CTRL_DMA_len_reg;
-    logic [1:0] DMA_mode_reg;
+    logic [1:0] DMA_mode_reg,DMA_byte_bias_reg;
     logic [`AXI_ADDR_BITS-1:0] dram_addr;
     logic [`GLB_ADDR_BITS-1:0] glb_addr;
     logic [`AXI_ADDR_BITS-1:0] dram_stride;
     logic [`GLB_ADDR_BITS-1:0] glb_stride;
-
+    logic [`AXI_ADDR_BITS-1:0] len_left;
+    logic [`AXI_ADDR_BITS-1:0] loop_start_point_reg;
+    logic [`AXI_ADDR_BITS-1:0] CTRL_DMA_DRAM_ADDR_reg;
     logic loop_finish;
     logic [31:0] loop_cnt;
     logic [31:0] loop_max;
@@ -51,8 +59,9 @@ module DMA_Loop_Unit(
     //assign DMA_en = (cs==LOOP);
     assign DMA_DRAM_ADDR = dram_addr;
     assign DMA_GLB_ADDR = glb_addr;
-    assign DMA_len = glb_stride; 
     assign CTRL_DMA_done = (cs == FINISH) ;
+    assign DMA_mode = DMA_mode_reg;
+    assign DMA_byte_bias = DMA_byte_bias_reg;
 
     /* last loop finish then jump to FINISH STATE */
     assign loop_finish = (count_length == CTRL_DMA_len_reg - glb_stride && DMA_done);
@@ -94,7 +103,7 @@ module DMA_Loop_Unit(
             glb_addr  <= '0;
             DMA_mode_reg <= '0;
             CTRL_DMA_len_reg <= '0;
-
+            loop_start_point_reg<='0;
         end 
         else begin
             case (cs)
@@ -106,6 +115,9 @@ module DMA_Loop_Unit(
                         glb_addr  <= CTRL_DMA_GLB_ADDR;
                         DMA_mode_reg <= CTRL_DMA_mode;
                         CTRL_DMA_len_reg <=  CTRL_DMA_len;
+                        DMA_byte_bias_reg <= CTRL_DMA_byte_bias;
+                        loop_start_point_reg<=loop_start_point;
+                        CTRL_DMA_DRAM_ADDR_reg<=CTRL_DMA_DRAM_ADDR;
                     end
                 end
                 
@@ -154,13 +166,30 @@ module DMA_Loop_Unit(
             default: ;
         endcase
     end
-    always_comb begin
-                case(DMA_mode_reg)
-                    `MODE_IFMAP:DMA_mode<=2'b0;
-                    `MODE_FILTER:DMA_mode<=2'b1;
-                    `MODE_BIAS:DMA_mode<=2'b10;
-                    `MODE_OFMAP:DMA_mode<=2'b11;
+    assign DMA_len = glb_stride>>2;
+    always_comb  begin
+            if( CTRL_DMA_en)begin
+                case (CTRL_DMA_mode)
+                    `MODE_IFMAP:
+                        len_left = loop_start_point_reg + in_features + DRAM_in_features_addr_base - CTRL_DMA_DRAM_ADDR_reg;
+                    `MODE_FILTER:
+                        len_left = loop_start_point_reg + in_features + DRAM_weight_addr_base - CTRL_DMA_DRAM_ADDR_reg;     
+                    default: len_left = len_left;
                 endcase
+            end
+        end
+    
+
+    always_comb begin
+        DMA_true_len = DMA_len;
+        if(cs==LOOP)begin
+            case (DMA_mode_reg)
+                `MODE_IFMAP,`MODE_FILTER:begin
+                    if( glb_stride > len_left)
+                        DMA_true_len = len_left>>2;
+                end
+            endcase
+        end
     end
 
     always_ff@(posedge clk)begin

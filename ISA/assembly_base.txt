@@ -59,7 +59,9 @@ loop_outf:
                     COMPUTE
                     #compute index
                     MULI REG[10], n, K
-                    ADD REG[10], REG[10], k #REG[10] = k + n * map.K * 3 * 4
+                    MULI REG[10], REG[10], 4
+                    ADD REG[10], REG[10], k 
+                    MULI REG[10],REG[10], 12 #REG[10] = k * 3 * 4 + n * 4 * map.K * 3 * 4
                     #load weight to pe array
                     CPT_TAGXY WEIGHT
                     G2P GLB_WEIGHT_BASE, REG[10], PE_ARRAY_WEIGHT_SIZE
@@ -67,9 +69,9 @@ loop_outf:
                     NOP
                     loop_m:
                         #compute index
-                        MULI REG[11], b, N_times_4 #REG[11] = b * map.N * PE::WEIGHT_H * 4
-                        MULI REG[12], m, N_times_4 #REG[12] = m * map.N * PE::WEIGHT_H * 4
-                        MULI REG[15], n, 4         #REG[15] = n * 4
+                        MULI REG[11], b, N_times_16 #REG[11] = b * map.N * PE::WEIGHT_H * 4
+                        MULI REG[12], m, N_times_16 #REG[12] = m * map.N * PE::WEIGHT_H * 4
+                        MULI REG[15], n, 16         #REG[15] = n * 4 * 4
                         ADD REG[11], REG[11], REG[12]
                         ADD REG[11], REG[11], REG[15] #REG[11] = (b * map.N * PE::WEIGHT_H * 4) 
                                                       #          + n * 4 + m * map.N * PE::WEIGHT_H * 4
@@ -82,7 +84,8 @@ loop_outf:
 
                         #compute index
                         MULI REG[13], m, K
-                        ADD REG[13], REG[13], k #REG[13] = m * map.K * PE::IFMAP_SIZE * 4 + k
+                        ADD REG[13], REG[13], k 
+                        MULI REG[13], REG[13], 12 #REG[13] = k * 3 * 4 + m * map.K * PE::IFMAP_SIZE * 4
                         #------loop------#
                         #load ifmap to pe array
                         CPT_TAGXY IFMAP
@@ -114,7 +117,7 @@ loop_outf:
         NOP
     #write opsum to DRAM
     CPT_TAGXY OPSUM
-    DMA_STORE_OFMAP DRAM_OFMAP_BASE, outf, GLB_OPSUM_SIZE
+    DMA_STORE_OFMAP DRAM_OFMAP_BASE, REG[14], GLB_OPSUM_SIZE
     WAIT DMA
     NOP
     NOP

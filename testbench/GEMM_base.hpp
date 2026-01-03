@@ -225,7 +225,7 @@ class GEMM_base
         }
 
 
-        virtual void run(const LinearShapeParam& linear, const string& pattern, string log_path = "") 
+        virtual void run(const LinearShapeParam& linear, const string& pattern, string log_path = "", string prog_path = "") 
         {
             create_mapper();
             shape = linear;
@@ -346,7 +346,7 @@ class GEMM_base
             {
                 mapper->best_result.cycles = total_cycles;
                 mapper->mapping_to_csv_with_cycle(log_path);
-                mapper->generate_assembly("../ISA", log_path);
+                mapper->generate_assembly("../ISA", "../hardware/sim" + prog_path);
             }
             cout << "=======================================\n" << endl;
         }

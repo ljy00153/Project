@@ -37,6 +37,8 @@ module controller_top #(
 
     output logic [`PE_ARRAY_H*`PE_ARRAY_W-1:0] PE_en,
     output logic [10:0]                        PE_config,
+    input logic GLB_opsum_valid, //for PE busy
+
     output logic                        set_XID,
     output logic [`XID_BITS-1:0]        ifmap_XID_scan_in,
     output logic [`XID_BITS-1:0]        weight_XID_scan_in,
@@ -79,6 +81,7 @@ module controller_top #(
     output logic  [`AXI_ADDR_BITS-1:0]DMA_DRAM_ADDR,
     output logic  [`GLB_ADDR_BITS-1:0]DMA_GLB_ADDR,
     output logic  [`GLB_ADDR_BITS-1:0]DMA_len,
+    output logic  [`GLB_ADDR_BITS-1:0]DMA_true_len,
     output logic  [1:0]DMA_BYTE_BIAS,
     input logic  DMA_done,
 
@@ -175,7 +178,7 @@ module controller_top #(
     assign target_or_jump = (opcode==`OP_LOOP)?{10'b0,target}:imm[15:0];
 
     // PC mux (drawio: PCmux)
-    assign next_pc = (next_pc_sel) ? {2'b0, target_or_jump[15:2]} : pc_plus_4 ; 
+    assign next_pc = (next_pc_sel) ? target_or_jump<<2 : pc_plus_4 ; 
 
     // mux.out 是 32-bit，取低 PC_WIDTH 當 next_pc
     //assign next_pc = reg_wb_data[PC_WIDTH-1:0];
@@ -219,14 +222,15 @@ module controller_top #(
     logic glb_done;
     logic config_id_en;
     logic CTRL_DMA_en;
-    logic [1:0]CTRL_DMA_mode;
+    logic [1:0]CTRL_DMA_mode,CTRL_DMA_BYTE_BIAS;
     logic [`AXI_ADDR_BITS-1:0] CTRL_DMA_DRAM_ADDR;
     logic [`GLB_ADDR_BITS-1:0] CTRL_DMA_GLB_ADDR;
     logic [`GLB_ADDR_BITS-1:0] CTRL_DMA_len;
     logic CTRL_DMA_done;
     logic [1:0] CTRL_DMA_byte_bias;
-    logic [31:0] OF_BYTE,IF_BYTE,B_BYTE,K_BYTE,N_BYTE,M_BYTE;
- 
+    logic [31:0] OF_BYTE,IF_BYTE,B_BYTE,K_BYTE,N_BYTE,M_BYTE,DRAM_in_features_addr_base,DRAM_weight_addr_base;
+    logic GLB_opsum_valid;
+    logic [`AXI_ADDR_BITS-1:0] loop_start_point;
     signal_controller ctrl (
         .clk            (clk),
         .rst            (rst),
@@ -256,34 +260,34 @@ module controller_top #(
         .DMA_DRAM_ADDR   (CTRL_DMA_DRAM_ADDR),
         .DMA_GLB_ADDR    (CTRL_DMA_GLB_ADDR),
         .DMA_done        (CTRL_DMA_done), // 目前沒 DMA，先綁 0（你之後要改）
-        .DMA_byte_bias   (DMA_BYTE_BIAS),
-
+        .DMA_byte_bias   (CTRL_DMA_byte_bias),
+        .loop_start_point (loop_start_point),
         .OF_BYTE(OF_BYTE),
         .IF_BYTE(IF_BYTE),
         .B_BYTE(B_BYTE),
         .K_BYTE(K_BYTE),
         .N_BYTE(N_BYTE),
         .M_BYTE(M_BYTE),            
+        .DRAM_in_features_addr_base(DRAM_in_features_addr_base),
+        .DRAM_weight_addr_base(DRAM_weight_addr_base),
+        .glb_addr_en(glb_addr_en),
 
         .ID_sender_en (config_id_en),
-        .PEA_ifmap_ready(),
-        .PEA_filter_ready(),
-        .PEA_ipsum_ready(),
-        .PEA_opsum_valid(),
+        .PEA_ifmap_ready(PEA_ifmap_ready),
+        .PEA_filter_ready(PEA_weight_ready),
+        .PEA_ipsum_ready(PEA_ipsum_ready),
+        .PEA_opsum_valid(PEA_opsum_valid),
     
         .PE_finish (),
         .PE_en(PE_en),
         .PE_config(PE_config),
+        .GLB_opsum_valid(GLB_opsum_valid),
         .GLB_mux (GLB_mux),
         .GLB_DI_select (GLB_DI_select),
         .GLB_DO_select (GLB_DO_select),
         .glb_addr_base   (glb_addr_base),
         .glb_type        (glb_type),
         .glb_done        (glb_done),
-
-        .GLB_EN          (GLB_EN_wire),
-        .GLB_WEB         (GLB_WEB_wire),
-        .GLB_MODE        (GLB_MODE_wire),
 
         .relu_sel        (relu_sel),
         .Maxpool_en      (Maxpool_en),
@@ -310,10 +314,7 @@ module controller_top #(
     assign alu_op1 = (alu_op1_sel) ? rs1_data : CSR_output ;
     assign alu_op2 = (alu_op2_sel) ? imm : rs2_data;
    
-    assign GLB_EN = GLB_EN_wire ;
-    assign GLB_WEB = GLB_WEB_wire ;
-    assign GLB_MODE = GLB_MODE_wire ;
-    
+
 
     // ----------------------------
     // glb_addr_generator signals
@@ -327,13 +328,16 @@ module controller_top #(
     ) glb_addr_generator (
         .clk      (clk),
         .rst      (rst),
-        .en       (GLB_EN_wire),
+        .en       (glb_addr_en),
         .base_in  (glb_addr_base),
         .type_in  (glb_type),
         .K_bytes  (K_BYTE),
         .id_en (tag_id_en),
         .glb_a    (glb_a),
-        .done     (glb_done)
+        .done     (glb_done),
+        .GLB_EN(GLB_EN),
+        .GLB_WEB(GLB_WEB),
+        .GLB_MODE(GLB_MODE)
     );
     assign GLB_ADDR = glb_a;
 
@@ -398,13 +402,17 @@ module controller_top #(
         .CTRL_DMA_DRAM_ADDR(CTRL_DMA_DRAM_ADDR),
         .CTRL_DMA_GLB_ADDR(CTRL_DMA_GLB_ADDR),
         .CTRL_DMA_len(CTRL_DMA_len),
+        .CTRL_DMA_byte_bias(CTRL_DMA_byte_bias),
         .CTRL_DMA_done(CTRL_DMA_done),
+        .loop_start_point(loop_start_point),
     /* DMA */
         .DMA_en(DMA_en),
         .DMA_mode(DMA_mode),
         .DMA_DRAM_ADDR(DMA_DRAM_ADDR),
         .DMA_GLB_ADDR(DMA_GLB_ADDR),
         .DMA_len(DMA_len),
+        .DMA_true_len(DMA_true_len),
+        .DMA_byte_bias(DMA_BYTE_BIAS),
         .DMA_done(DMA_done),
     /* CSR */
         .B(B_BYTE),
@@ -412,7 +420,9 @@ module controller_top #(
         .M(M_BYTE), 
         .K(K_BYTE),
         .in_features(IF_BYTE), 
-        .out_features(OF_BYTE)
+        .out_features(OF_BYTE),
+        .DRAM_in_features_addr_base(DRAM_in_features_addr_base),
+        .DRAM_weight_addr_base(DRAM_weight_addr_base)
 );
 
 

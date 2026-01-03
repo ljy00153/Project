@@ -9,13 +9,13 @@ class WS_Based_with_mem_Simulator : public GEMM_base
             mapper = make_unique<EyerissMapper_WS>();  // ✅ 改成 WS 版本
         }
         
-        void run(const LinearShapeParam& linear, const string& pattern, string log_path = "") override
+        void run(const LinearShapeParam& linear, const string& pattern, string log_path = "", string prog_path = "") override
         {
             cout << "\n=======================================" << endl;
             cout << "=Weight Stationary With Mem SIMULATION=" << endl;
             cout << "=======================================" << endl;
             cout << "\n[Testbench] Initializing DUT (PE_Array)..." << endl;
-            GEMM_base::run(linear, pattern, log_path);
+            GEMM_base::run(linear, pattern, log_path, prog_path);
         }
 
     protected:

@@ -40,7 +40,7 @@ RTL_SRCS := \
 
 TB_SRCS := $(root_dir)/$(sim_dir)/Testbench.sv
 
-vcs: | $(bld_dir)
+vcs0: | $(bld_dir)
 	python3 $(sim_dir)/prog0/assembler.py $(sim_dir)/prog0/GEMM_assembly.txt
 	cd $(bld_dir); \
 	vcs -full64 -R -sverilog \
@@ -49,6 +49,39 @@ vcs: | $(bld_dir)
 		-debug_access+all -debug_region+cell +memcbk \
 		+define+prog0$(FSDB_DEF) \
 		+prog_path=$(root_dir)/$(sim_dir)/prog0 \
+		+notimingcheck
+
+vcs1: | $(bld_dir)
+	python3 $(sim_dir)/prog1/assembler.py $(sim_dir)/prog1/GEMM_assembly.txt
+	cd $(bld_dir); \
+	vcs -full64 -R -sverilog \
+		$(foreach d,$(INCDIRS),+incdir+$(d)) \
+		$(TB_SRCS) $(RTL_SRCS) \
+		-debug_access+all -debug_region+cell +memcbk \
+		+define+prog1$(FSDB_DEF) \
+		+prog_path=$(root_dir)/$(sim_dir)/prog1 \
+		+notimingcheck
+
+vcs2: | $(bld_dir)
+	python3 $(sim_dir)/prog2/assembler.py $(sim_dir)/prog2/GEMM_assembly.txt
+	cd $(bld_dir); \
+	vcs -full64 -R -sverilog \
+		$(foreach d,$(INCDIRS),+incdir+$(d)) \
+		$(TB_SRCS) $(RTL_SRCS) \
+		-debug_access+all -debug_region+cell +memcbk \
+		+define+prog2$(FSDB_DEF) \
+		+prog_path=$(root_dir)/$(sim_dir)/prog2 \
+		+notimingcheck
+
+vcs3: | $(bld_dir)
+	python3 $(sim_dir)/prog3/assembler.py $(sim_dir)/prog3/GEMM_assembly.txt
+	cd $(bld_dir); \
+	vcs -full64 -R -sverilog \
+		$(foreach d,$(INCDIRS),+incdir+$(d)) \
+		$(TB_SRCS) $(RTL_SRCS) \
+		-debug_access+all -debug_region+cell +memcbk \
+		+define+prog3$(FSDB_DEF) \
+		+prog_path=$(root_dir)/$(sim_dir)/prog3 \
 		+notimingcheck
 # Utilities
 nWave: | $(bld_dir)

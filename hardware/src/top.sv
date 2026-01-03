@@ -91,7 +91,7 @@ logic [`GLB_ADDR_BITS-1:0] GLB_A, GLB_A_dma, GLB_A_asic;
 logic [`DATA_BITS-1:0] GLB_DI, GLB_DI_dma, GLB_DI_asic;
 logic [`DATA_BITS-1:0] GLB_DO, GLB_DO_dma, GLB_DO_asic;
 logic glb_mux;
-
+logic PADDING;
 always_comb begin
     // output (mux)
     GLB_DO_dma = (glb_mux == `DMA)?GLB_DO:`DATA_BITS'd0;
@@ -99,8 +99,8 @@ always_comb begin
 
     // input (mux)
     if(glb_mux == `ASIC) begin
-        GLB_EN = GLB_EN_asic;
-        GLB_WEB = GLB_WEB_asic;
+        GLB_EN = ~GLB_EN_asic;
+        GLB_WEB = ~GLB_WEB_asic;
         GLB_MODE = GLB_MODE_asic;
         GLB_A = GLB_A_asic;
         GLB_DI = GLB_DI_asic;
@@ -109,7 +109,7 @@ always_comb begin
         GLB_WEB = GLB_WEB_dma;
         GLB_MODE = GLB_MODE_dma;
         GLB_A = GLB_A_dma;
-        GLB_DI = GLB_DI_dma;
+        GLB_DI = (PADDING)?32'h80808080:GLB_DI_dma;
     end
 end
 /***********************************
@@ -134,7 +134,7 @@ logic [1:0] DMA_BYTE_BIAS;
 logic DMA_DONE;
 logic [`AXI_ADDR_BITS-1:0] DMA_DRAM_ADDR;
 logic [`GLB_ADDR_BITS-1:0] DMA_GLB_ADDR;
-logic [`GLB_ADDR_BITS-1:0] DMA_LEN;
+logic [`GLB_ADDR_BITS-1:0] DMA_LEN,DMA_TRUE_LEN;
 
 DMA DMA_0(
     .clk(ACLK),
@@ -148,7 +148,8 @@ DMA DMA_0(
     .DRAM_ADDR(DMA_DRAM_ADDR),
     .GLB_ADDR(DMA_GLB_ADDR),
     .LEN(DMA_LEN),
-
+    .TRUE_LEN(DMA_TRUE_LEN),
+    .padding(PADDING),
     /*************** AXI master ***************/
     //WRITE ADDRESS0
     .AWID_M(AWID_M),
@@ -274,6 +275,7 @@ asic asic_0(
     .DMA_byte_bias(DMA_BYTE_BIAS),
     .DMA_DRAM_ADDR(DMA_DRAM_ADDR),
     .DMA_GLB_ADDR(DMA_GLB_ADDR),
+    .DMA_true_len(DMA_TRUE_LEN),
     .DMA_len(DMA_LEN),
     .DMA_done(DMA_DONE)
 );

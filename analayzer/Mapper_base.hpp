@@ -324,13 +324,14 @@ class EyerissMapper_base
                 return;
             }
             string output_name = "/GEMM_assembly.txt";
+            string shape = "/shape.txt";
             ofstream outfile(output_file_path + output_name);
-            if (!outfile.is_open())
+            ofstream fs(output_file_path + shape);
+            if (!outfile.is_open() || !fs.is_open())
             {
                 cout << "❌ Unable to create output file: " << output_file_path << endl;
                 return;
             }
-
             // 1. 生成 Header (.set constants)
             // 根據 best_mapping 和 linear_shape 計算
             int B = analyzer->linear_shape.B;
@@ -344,6 +345,15 @@ class EyerissMapper_base
             int tn = best_mapping.tn;
             int mode = best_mapping.mode;
 
+            fs << "IF_SIZE: " << IF << endl;
+            fs << "OF_SIZE: " << OF << endl;
+            fs << "B_SIZE: " << B << endl;
+            fs << "K_SIZE: " << best_mapping.K << endl;
+            fs << "N_SIZE: " << best_mapping.N << endl;
+            fs << "M_SIZE: " << best_mapping.M << endl;
+
+            fs.close();
+
             // 根據 controller_assembly.txt 註解推導的計算邏輯
             int N_times_4 = N * 4;
             
@@ -351,8 +361,8 @@ class EyerissMapper_base
             int outf_offset = N;   
             int inf_offset  = K;   
             int b_offset    = M;   
-            int k_offset    = tk * 3 * 4; 
-            int n_offset    = tn * 4;     
+            int k_offset    = tk; 
+            int n_offset    = tn;     
             int m_offset    = mode;       
 
             // Sizes
@@ -377,14 +387,14 @@ class EyerissMapper_base
             outfile << ".set B, " << B << endl;
             outfile << "#mapping parameter" << endl;
             outfile << ".set M, " << M << endl;
-            outfile << ".set K, " << K << "\t # " << best_mapping.K << " * 3 * 4" << endl;
-            outfile << ".set N, " << N << "\t # " << best_mapping.N << " * 4" << endl;
-            outfile << ".set N_times_4, " << N_times_4 << "\t # " << best_mapping.N << " * 4 * 4" << endl;
+            outfile << ".set K, " << best_mapping.K << endl;
+            outfile << ".set N, " << best_mapping.N << endl;
+            outfile << ".set N_times_16, " << N_times_4 << "\t # " << best_mapping.N << " * 4 * 4" << endl;
             outfile << ".set outf_offest, " << outf_offset << "\t # " << best_mapping.N << " * 4" << endl;
             outfile << ".set inf_offest, " << inf_offset << "\t # " << best_mapping.K << " * 3 * 4" << endl;
             outfile << ".set b_offest, " << b_offset << "\t # M" << endl;
-            outfile << ".set k_offest, " << k_offset << "\t # tk * 3 * 4" << endl;
-            outfile << ".set n_offest, " << n_offset << "\t # tn * 4" << endl;
+            outfile << ".set k_offest, " << k_offset << "\t # tk" << endl;
+            outfile << ".set n_offest, " << n_offset << "\t # tn" << endl;
             outfile << ".set m_offest, " << m_offset << "\t # mode" << endl;
             outfile << endl;
             outfile << ".set PE_ARRAY_WEIGHT_SIZE, " << pe_array_weight_size << "\t# 48 * 12 * 4" << endl;
