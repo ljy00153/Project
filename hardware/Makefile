@@ -13,6 +13,7 @@ else ifeq ($(FSDB),2)
 	FSDB_DEF := +FSDB_ALL
 endif
 
+prog ?= 0
 
 $(bld_dir):
 	mkdir -p $(bld_dir)
@@ -40,49 +41,23 @@ RTL_SRCS := \
 
 TB_SRCS := $(root_dir)/$(sim_dir)/Testbench.sv
 
-vcs0: | $(bld_dir)
-	python3 $(sim_dir)/assembler.py $(sim_dir)/prog0/GEMM_assembly.txt
+vcs: | $(bld_dir)
+	@if [ ! -d "$(sim_dir)/prog$(prog)" ]; then \
+			echo "ERROR:Can't find the path $(sim_dir)/prog$(prog)"; \
+			exit 1; \
+	fi
+	g++ -std=c++17 ../testbench/tb_pe_array.cpp -o ./../testbench/tb_pe_array.exe
+	LD_LIBRARY_PATH=/usr/lib64 ./../testbench/tb_pe_array.exe
+	python3 $(sim_dir)/assembler.py $(sim_dir)/prog$(prog)/GEMM_assembly.txt
 	cd $(bld_dir); \
 	vcs -full64 -R -sverilog \
 		$(foreach d,$(INCDIRS),+incdir+$(d)) \
 		$(TB_SRCS) $(RTL_SRCS) \
 		-debug_access+all -debug_region+cell +memcbk \
-		+define+prog0$(FSDB_DEF) \
-		+prog_path=$(root_dir)/$(sim_dir)/prog0 \
+		+define+prog$(prog)$(FSDB_DEF) \
+		+prog_path=$(root_dir)/$(sim_dir)/prog$(prog) \
 		+notimingcheck
 
-vcs1: | $(bld_dir)
-	python3 $(sim_dir)/assembler.py $(sim_dir)/prog1/GEMM_assembly.txt
-	cd $(bld_dir); \
-	vcs -full64 -R -sverilog \
-		$(foreach d,$(INCDIRS),+incdir+$(d)) \
-		$(TB_SRCS) $(RTL_SRCS) \
-		-debug_access+all -debug_region+cell +memcbk \
-		+define+prog1$(FSDB_DEF) \
-		+prog_path=$(root_dir)/$(sim_dir)/prog1 \
-		+notimingcheck
-
-vcs2: | $(bld_dir)
-	python3 $(sim_dir)/assembler.py $(sim_dir)/prog2/GEMM_assembly.txt
-	cd $(bld_dir); \
-	vcs -full64 -R -sverilog \
-		$(foreach d,$(INCDIRS),+incdir+$(d)) \
-		$(TB_SRCS) $(RTL_SRCS) \
-		-debug_access+all -debug_region+cell +memcbk \
-		+define+prog2$(FSDB_DEF) \
-		+prog_path=$(root_dir)/$(sim_dir)/prog2 \
-		+notimingcheck
-
-vcs3: | $(bld_dir)
-	python3 $(sim_dir)/assembler.py $(sim_dir)/prog3/GEMM_assembly.txt
-	cd $(bld_dir); \
-	vcs -full64 -R -sverilog \
-		$(foreach d,$(INCDIRS),+incdir+$(d)) \
-		$(TB_SRCS) $(RTL_SRCS) \
-		-debug_access+all -debug_region+cell +memcbk \
-		+define+prog3$(FSDB_DEF) \
-		+prog_path=$(root_dir)/$(sim_dir)/prog3 \
-		+notimingcheck
 # Utilities
 nWave: | $(bld_dir)
 	cd $(bld_dir); \
@@ -102,78 +77,10 @@ synthesize: | $(bld_dir) $(syn_dir)
 	cd $(bld_dir); \
 	dc_shell -no_home_init -f ../script/synthesis.tcl
 
-# Check file structure
-BLUE=\033[1;34m
-RED=\033[1;31m
-NORMAL=\033[0m
-
-check: clean
-	@if [ -f StudentID ]; then \
-		STUDENTID=$$(grep -v '^$$' StudentID); \
-		if [ -z "$$STUDENTID" ]; then \
-			echo -e "$(RED)Student ID number is not provided$(NORMAL)"; \
-			exit 1; \
-		else \
-			ID_LEN=$$(expr length $$STUDENTID); \
-			if [ $$ID_LEN -eq 9 ]; then \
-				if [[ $$STUDENTID =~ ^[A-Z][A-Z0-9][0-9]+$$ ]]; then \
-					echo -e "$(BLUE)Student ID number pass$(NORMAL)"; \
-				else \
-					echo -e "$(RED)Student ID number should be one capital letter and 8 numbers (or 2 capital letters and 7 numbers)$(NORMAL)"; \
-					exit 1; \
-				fi \
-			else \
-				echo -e "$(RED)Student ID number length isn't 9$(NORMAL)"; \
-				exit 1; \
-			fi \
-		fi \
-	else \
-		echo -e "$(RED)StudentID file is not found$(NORMAL)"; \
-		exit 1; \
-	fi; \
-	if [ -f StudentID2 ]; then \
-		STUDENTID2=$$(grep -v '^$$' StudentID2); \
-		if [ -z "$$STUDENTID2" ]; then \
-			echo -e "$(RED)Second student ID number is not provided$(NORMAL)"; \
-			exit 1; \
-		else \
-			ID2_LEN=$$(expr length $$STUDENTID2); \
-			if [ $$ID2_LEN -eq 9 ]; then \
-				if [[ $$STUDENTID2 =~ ^[A-Z][A-Z0-9][0-9]+$$ ]]; then \
-					echo -e "$(BLUE)Second student ID number pass$(NORMAL)"; \
-				else \
-					echo -e "$(RED)Second student ID number should be one capital letter and 8 numbers (or 2 capital letters and 7 numbers)$(NORMAL)"; \
-					exit 1; \
-				fi \
-			else \
-				echo -e "$(RED)Second student ID number length isn't 9$(NORMAL)"; \
-				exit 1; \
-			fi \
-		fi \
-	fi; \
-	if [ $$(ls -1 *.docx 2>/dev/null | wc -l) -eq 0 ]; then \
-		echo -e "$(RED)Report file is not found$(NORMAL)"; \
-		exit 1; \
-	elif [ $$(ls -1 *.docx 2>/dev/null | wc -l) -gt 1 ]; then \
-		echo -e "$(RED)More than one docx file is found, please delete redundant file(s)$(NORMAL)"; \
-		exit 1; \
-	elif [ ! -f $${STUDENTID}.docx ]; then \
-		echo -e "$(RED)Report file name should be $$STUDENTID.docx$(NORMAL)"; \
-		exit 1; \
-	else \
-		echo -e "$(BLUE)Report file name pass$(NORMAL)"; \
-	fi; \
-	if [ $$(basename $(PWD)) != $$STUDENTID ]; then \
-		echo -e "$(RED)Main folder name should be \"$$STUDENTID\"$(NORMAL)"; \
-		exit 1; \
-	else \
-		echo -e "$(BLUE)Main folder name pass$(NORMAL)"; \
-	fi
-
 tar:
 	cd ..; \
 	tar cvf Project.tar Project
-
+	
 .PHONY: clean
 
 clean:

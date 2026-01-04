@@ -292,8 +292,9 @@ module test;
         $display("K_SIZE: %0d", K_SIZE);
         $display("N_SIZE: %0d", N_SIZE);
         $display("M_SIZE: %0d", M_SIZE);
-
+        DATAFLOW = 0;
         // GLB bases / sizes / dataflow：依你 controller 的需求填
+        
         GLB_ifmap_base  = 0;
         GLB_weight_base = B_SIZE * K_SIZE * 12;
         GLB_opsum_base  = GLB_weight_base + N_SIZE * K_SIZE * 48;

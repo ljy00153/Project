@@ -7,7 +7,7 @@
 #include <sstream>
 #include "../src/PE/pe_array.cpp"
 
-#include "../analayzer/mapper_base.hpp"
+#include "../analayzer/Mapper_base.hpp"
 
 using namespace std;
 using DataType = int32_t;
@@ -250,7 +250,7 @@ class GEMM_base
 
             cout << "[Testbench] Loading Test Data..." << endl;
             
-            string base_path = "Pattern/" + pattern + "/";
+            string base_path = pattern + "/";
             load_ifmap(in_features, base_path + "A.txt");
             load_weight(weights, base_path + "B.txt");
             load_ipsum_golden(ipsums, base_path + "ipsum.txt");
