@@ -103,8 +103,10 @@ class WS_Based_with_mem_Simulator : public GEMM_base
                                     //cout << ", depth offset: " << dec << n * map.K * PE::IFMAP_SIZE * 4 + ((l % PE::WEIGHT_H) % (map.tk * PE::IFMAP_SIZE)) * map.K * PE::IFMAP_SIZE * 4
                                     //                    + (l / PE::WEIGHT_SIZE / PE_Array::PE_V) * map.K * PE::IFMAP_SIZE * 4 * 4<<endl;
                                     int width_offset = k + (l / PE::WEIGHT_H) % (PE_Array::PE_V * 3) * 4;
+                                    int depth_offset = n * map.K * PE::IFMAP_SIZE * 4 + ((l % PE::WEIGHT_H) % (map.tk * PE::IFMAP_SIZE)) * map.K * PE::IFMAP_SIZE * 4
+                                                        + (l / PE::WEIGHT_SIZE / PE_Array::PE_V) * map.K * PE::IFMAP_SIZE * 4 * 4;
                                     int weight_data = 0;
-                                    if(width_offset >= map.K * PE::IFMAP_SIZE * 4 || width_offset >= shape.in_features - inf)
+                                    if(width_offset >= map.K * PE::IFMAP_SIZE * 4 || width_offset >= shape.in_features - inf || depth_offset >= map.N * 4 * map.K * PE::IFMAP_SIZE * 4)
                                     {
                                         weight_data = 0;
                                         //cout << width_offset << "  " << shape.in_features - inf << endl;

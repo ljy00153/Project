@@ -9,9 +9,9 @@ int main()
     WS_Based_with_mem_Simulator WS_mem_simulator;
     LinearShapeParam GEMM;
     PatternGenerator gen;
-    int Batch = 1;                  //調這些
-    int in_features = 8192;         //調這些
-    int out_features = 256;         //調這些
+    int Batch = 7;                  //調這些
+    int in_features = 810;         //調這些
+    int out_features = 893;         //調這些
     int prog_id = 4;                //調這些
 
     string GEMM_prog_path = "/prog" + to_string(prog_id);

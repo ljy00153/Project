@@ -99,18 +99,31 @@ class GEMM_base
                           size_t glb_addr,
                           size_t size)
         {
-            if (dram_addr + size > DRAM.size())
-            {
-                cout << "dram_addr: " << dram_addr << ", size: " << size << ", DRAM.size(): " << DRAM.size() << endl;
-                throw runtime_error("DRAM overflow!");
-            }
-            if (glb_addr + size > GLB.size())
-            {
-                cout << "glb_addr: " << glb_addr << ", size: " << size << ", GLB.size(): " << GLB.size() << endl;
-                throw runtime_error("GLB write overflow!");
+            // 1. 計算 DRAM (目的端) 剩餘空間
+            size_t dram_available = 0;
+            if (dram_addr < DRAM.size()) {
+                dram_available = DRAM.size() - dram_addr;
             }
 
-            memcpy(&DRAM[dram_addr], &GLB[glb_addr], size * sizeof(int));
+            // 2. 決定實際寫入長度
+            // 取 min：如果 size 超過剩餘空間，就只寫剩餘空間那麼多 (截斷)
+            size_t write_size = min(size, dram_available);
+
+            // 如果沒有空間可寫，直接結束
+            if (write_size == 0) return;
+
+            // 3. 安全檢查：確保來源端 (GLB) 有足夠的資料可以讀
+            // 雖然 DRAM 空間夠，但我們還是不能讀取 GLB 超出範圍的記憶體
+            if (glb_addr + write_size > GLB.size())
+            {
+                cout << "glb_addr: " << glb_addr << ", write_size: " << write_size 
+                     << ", GLB.size(): " << GLB.size() << endl;
+                throw runtime_error("GLB read overflow during DMA_write!");
+            }
+
+            // 4. 執行複製
+            // 只複製 write_size 的長度，超過 DRAM 範圍的部分自動被忽略
+            memcpy(&DRAM[dram_addr], &GLB[glb_addr], write_size * sizeof(int));
         }
 
         virtual void DMA_load_PSUM( vector<DataType>& GLB,
@@ -129,7 +142,7 @@ class GEMM_base
                           DRAM_PSUM_base + l * shape.out_features * 4 + DRAM_PSUM_idx,
                           size_min);
                 //cout << "glb_addr: " << glb_addr + l * map.N * PE::WEIGHT_H * 4;
-                //cout << "  dram_addr: " << DRAM_PSUM_base + l * shape.out_features + DRAM_PSUM_idx;
+                //cout << "  dram_addr: " << DRAM_PSUM_base + l * shape.out_features * 4 + DRAM_PSUM_idx;
                 //cout << "  size: " << size_min << endl;
             }
             //for(int i = 216 + 128 * 72; i < 216 + 128 * 72 + 3 * 12 * 4; i++)
@@ -193,17 +206,20 @@ class GEMM_base
                                      size_t glb_addr,
                                      size_t size)
         {
-            size_t size_min = min(size_t(size), size_t(shape.out_features * 4));
+            int offset = shape.out_features * 4 - DRAM_PSUM_idx % (shape.out_features * 4);
+            size_t size_min1 = min(size_t(size), size_t(offset));
+            size_t size_min2 = min(size_t(size_min1), size_t(shape.out_features * 4));
             for(int l = 0; l < shape.B; l++)
             {
                 DMA_write( DRAM,
                            DRAM_PSUM_base + l * shape.out_features * 4 + DRAM_PSUM_idx,
                            GLB,
                            glb_addr + l * map.N * PE::WEIGHT_H * 4,
-                           size_min);
+                           size_min2);
                 //cout << dec <<"glb_addr: " << glb_addr + l * map.N * PE::WEIGHT_H * 4;
                 //cout << "  dram_addr: " << DRAM_PSUM_base + l * shape.out_features * 4+ DRAM_PSUM_idx;
-                //cout << "  size: " << size_min << endl;
+                //cout << "  DRAM_PSUM_idx: " << DRAM_PSUM_idx;
+                //cout << "  size: " << offset << endl;
                 //for(int i = 0; i < size_min; i++)
                 //    cout << "  GLB[" << glb_addr + l * map.N * PE::WEIGHT_H * 4 + i << "] = " 
                 //         << GLB[glb_addr + l * map.N * PE::WEIGHT_H * 4 + i] << endl;
@@ -337,8 +353,8 @@ class GEMM_base
                 {
                     if (DRAM[i + in_features.size() + weights.size()] != golden[i]) 
                     {
-                        cout << "Mismatch at index " << i << ": DUT=" 
-                        << dec << DRAM[i + in_features.size() + weights.size()] << ", Golden=" << golden[i] << endl;
+                        cout << "Mismatch at index " << dec << i << ": DUT=" 
+                        << hex << DRAM[i + in_features.size() + weights.size()] << ", Golden=" << golden[i] << endl;
                     }
                 }
             }
