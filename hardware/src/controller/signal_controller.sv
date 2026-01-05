@@ -106,6 +106,7 @@ module signal_controller#(
     logic [`GLB_ADDR_BITS-1:0] glb_addr; //16 bits
     logic DMA_busy,GLB_busy,PE_busy;
     logic [2:0] valid_e ;
+    logic [5:0]batch_size_minus1;
     //glb type reg 因為OP_CPT_TAGXY傳進來type只有1 cycle 要存起來才能等到OP_G2P 傳出去
     logic [1:0]glb_type_reg;
     logic [1:0]wait_type_reg;
@@ -125,7 +126,7 @@ module signal_controller#(
     assign GLB_DO_select = `NO_PAD;
     assign GLB_DI_select = `GLB_DO_PSUM;
     assign GLB_mux = (opcode[5:2]==`DMA_type || wait_type_reg ==`WAIT_DMA)? 1'b`DMA : 1'b`ASIC;
-
+    
     always_ff @( posedge clk ) begin
         if ( rst ) begin
             cs <= IDLE;
@@ -329,7 +330,8 @@ module signal_controller#(
                             'd5: PE_en = {{5{8'b11111111}}, {1{8'b00000000}}};
                             'd6: PE_en = {6{8'b11111111}};
                         endcase
-                        PE_config = {1'b1,2'b11,CSR[11][5:0]-1,2'b11};
+                        batch_size_minus1 = CSR[11][5:0]-1;
+                        PE_config = {1'b1,2'b11,batch_size_minus1,2'b11};
                     end
                     `OP_WAIT: begin
                         

@@ -151,7 +151,7 @@ always_ff @( posedge clk or posedge rst ) begin
                 FC_LAYER: begin
                     input_ch <= i_config[1:0];
                     batch<= i_config[`BATCH_BIT+1:2]; 
-                    ofmap_ch <= i_config[`BATCH_BIT+`OFMAP_INDEX_BIT+1:`OFMAP_COL_BIT+2];
+                    ofmap_ch <= i_config[`BATCH_BIT+`OFMAP_INDEX_BIT+1:`BATCH_BIT+2];
                     layer <= 1'b1;
                 end
             endcase

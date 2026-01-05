@@ -89,8 +89,8 @@ ANF: vhdi_enc_def_get_handle_by_module_id('simv: undefined symbol: vhdi_enc_def_
 VCS compile option:
  option[0]: simv
  option[1]: +memcbk
- option[2]: +define+prog0+FSDB_ALL
- option[3]: +prog_path=/home/users/yves6512/Project/hardware/./sim/prog0
+ option[2]: +define+prog5+FSDB_ALL
+ option[3]: +prog_path=/home/users/yves6512/Project/hardware/./sim/prog5
  option[4]: +notimingcheck
  option[5]: /usr/cad/synopsys/vcs/2023.12/linux64/bin/vcs1
  option[6]: -Mcc=gcc
@@ -118,8 +118,8 @@ VCS compile option:
  option[28]: +itf+/usr/cad/synopsys/vcs/2023.12/linux64/lib/vcsdp_lite.tab
  option[29]: -debug_region+cell
  option[30]: +memcbk
- option[31]: +define+prog0+FSDB_ALL
- option[32]: +prog_path=/home/users/yves6512/Project/hardware/./sim/prog0
+ option[31]: +define+prog5+FSDB_ALL
+ option[32]: +prog_path=/home/users/yves6512/Project/hardware/./sim/prog5
  option[33]: +notimingcheck
  option[34]: -picarchive
  option[35]: -P
@@ -131,7 +131,7 @@ VCS compile option:
  option[41]: /home/users/yves6512/Project/hardware/./sim/Testbench.sv
  option[42]: /home/users/yves6512/Project/hardware/./src/ASIC.sv
  option[43]: /home/users/yves6512/Project/hardware/./src/top.sv
- option[44]: /home/users/yves6512/Project/hardware/./src/DRAM.sv
+ option[44]: /home/users/yves6512/Project/hardware/./sim/DRAM.sv
  option[45]: /home/users/yves6512/Project/hardware/./src/controller/pc_counter.sv
  option[46]: /home/users/yves6512/Project/hardware/./src/controller/regfile.sv
  option[47]: /home/users/yves6512/Project/hardware/./src/controller/dma_loop_unit.sv
@@ -147,9 +147,9 @@ VCS compile option:
  option[57]: /home/users/yves6512/Project/hardware/./src/DMA/DMA_controller.sv
  option[58]: /home/users/yves6512/Project/hardware/./src/DMA/DMA_FIFO.sv
  option[59]: /home/users/yves6512/Project/hardware/./src/DMA/DMA.sv
- option[60]: /home/users/yves6512/Project/hardware/./src/PPU/PPU.sv
+ option[60]: /home/users/yves6512/Project/hardware/./src/PPU/post_quant.sv
  option[61]: /home/users/yves6512/Project/hardware/./src/PPU/Comparator_Qint8.sv
- option[62]: /home/users/yves6512/Project/hardware/./src/PPU/post_quant.sv
+ option[62]: /home/users/yves6512/Project/hardware/./src/PPU/PPU.sv
  option[63]: /home/users/yves6512/Project/hardware/./src/PPU/ReLU_Qint8.sv
  option[64]: /home/users/yves6512/Project/hardware/./src/GLB/GLB.sv
  option[65]: /home/users/yves6512/Project/hardware/./src/GLB/SRAM_rtl.sv
@@ -171,7 +171,7 @@ Limit information:
 cputime		unlimited
 filesize		unlimited
 datasize		unlimited
-stacksize		8192 kbytes
+stacksize		unlimited
 coredumpsize		0 kbytes
 memoryuse		unlimited
 vmemoryuse		unlimited
@@ -186,12 +186,12 @@ UNAME=/bin/uname
 CONDA_SHLVL=0
 LC_ALL=C
 LS_COLORS=rs=0:di=38;5;33:ln=38;5;51:mh=00:pi=40;38;5;11:so=38;5;13:do=38;5;5:bd=48;5;232;38;5;11:cd=48;5;232;38;5;3:or=48;5;232;38;5;9:mi=01;05;37;41:su=48;5;196;38;5;15:sg=48;5;11;38;5;16:ca=48;5;196;38;5;226:tw=48;5;10;38;5;16:ow=48;5;10;38;5;21:st=48;5;21;38;5;15:ex=38;5;40:*.tar=38;5;9:*.tgz=38;5;9:*.arc=38;5;9:*.arj=38;5;9:*.taz=38;5;9:*.lha=38;5;9:*.lz4=38;5;9:*.lzh=38;5;9:*.lzma=38;5;9:*.tlz=38;5;9:*.txz=38;5;9:*.tzo=38;5;9:*.t7z=38;5;9:*.zip=38;5;9:*.z=38;5;9:*.dz=38;5;9:*.gz=38;5;9:*.lrz=38;5;9:*.lz=38;5;9:*.lzo=38;5;9:*.xz=38;5;9:*.zst=38;5;9:*.tzst=38;5;9:*.bz2=38;5;9:*.bz=38;5;9:*.tbz=38;5;9:*.tbz2=38;5;9:*.tz=38;5;9:*.deb=38;5;9:*.rpm=38;5;9:*.jar=38;5;9:*.war=38;5;9:*.ear=38;5;9:*.sar=38;5;9:*.rar=38;5;9:*.alz=38;5;9:*.ace=38;5;9:*.zoo=38;5;9:*.cpio=38;5;9:*.7z=38;5;9:*.rz=38;5;9:*.cab=38;5;9:*.wim=38;5;9:*.swm=38;5;9:*.dwm=38;5;9:*.esd=38;5;9:*.jpg=38;5;13:*.jpeg=38;5;13:*.mjpg=38;5;13:*.mjpeg=38;5;13:*.gif=38;5;13:*.bmp=38;5;13:*.pbm=38;5;13:*.pgm=38;5;13:*.ppm=38;5;13:*.tga=38;5;13:*.xbm=38;5;13:*.xpm=38;5;13:*.tif=38;5;13:*.tiff=38;5;13:*.png=38;5;13:*.svg=38;5;13:*.svgz=38;5;13:*.mng=38;5;13:*.pcx=38;5;13:*.mov=38;5;13:*.mpg=38;5;13:*.mpeg=38;5;13:*.m2v=38;5;13:*.mkv=38;5;13:*.webm=38;5;13:*.ogm=38;5;13:*.mp4=38;5;13:*.m4v=38;5;13:*.mp4v=38;5;13:*.vob=38;5;13:*.qt=38;5;13:*.nuv=38;5;13:*.wmv=38;5;13:*.asf=38;5;13:*.rm=38;5;13:*.rmvb=38;5;13:*.flc=38;5;13:*.avi=38;5;13:*.fli=38;5;13:*.flv=38;5;13:*.gl=38;5;13:*.dl=38;5;13:*.xcf=38;5;13:*.xwd=38;5;13:*.yuv=38;5;13:*.cgm=38;5;13:*.emf=38;5;13:*.ogv=38;5;13:*.ogx=38;5;13:*.aac=38;5;45:*.au=38;5;45:*.flac=38;5;45:*.m4a=38;5;45:*.mid=38;5;45:*.midi=38;5;45:*.mka=38;5;45:*.mp3=38;5;45:*.mpc=38;5;45:*.ogg=38;5;45:*.ra=38;5;45:*.wav=38;5;45:*.oga=38;5;45:*.opus=38;5;45:*.spx=38;5;45:*.xspf=38;5;45:
-LD_LIBRARY_PATH=/usr/cad/synopsys/vcs/2023.12/lib:/usr/cad/synopsys/vcs/2023.12/linux64/lib:/usr/cad/cadence/XCELIUM/XCELIUM_24.03.002/tools/lib/64bit:/usr/cad/cadence/XCELIUM/XCELIUM_24.03.002/tools/lib64:/usr/cad/cadence/XCELIUM/XCELIUM_24.03.002/tools/lib::::/usr/cad/synopsys/verdi/cur/share/PLI/VCS/LINUX64::/lib64:/usr/lib64:/usr/local/lib64:/usr/cad/synopsys/verdi/2023.12/etc/lib/libstdc++/LINUX64/:/usr/cad/synopsys/verdi/2023.12/share/PLI/lib/LINUX64/:/usr/cad/synopsys/verdi/2023.12/share/PLI/VCS/LINUX64/::/usr/cad/synopsys/verdi/cur/etc/lib/libstdc++/LINUX64/:/usr/cad/synopsys/verdi/cur/share/PLI/IUS/LINUX64/://usr/cad/synopsys/verdi/2023.12/etc/lib/libstdc++/LINUX64/:/usr/cad/synopsys/verdi/2023.12/share/PLI/lib/LINUX64/:/usr/cad/synopsys/verdi/2023.12/share/PLI/VCS/LINUX64/::::::::/usr/cad/synopsys/milkyway/2024.09/lib/linux64/:::::::/usr/cad/synopsys/verdi/cur/etc/lib/libstdc++/LINUX64/:/usr/cad/synopsys/verdi/cur/share/PLI/IUS/LINUX64/://usr/cad/synopsys/verdi/2023.12/etc/lib/libstdc++/LINUX64/:/usr/cad/synopsys/verdi/2023.12/share/PLI/lib/LINUX64/:/usr/cad/synopsys/verdi/2023.12/share/PLI/VCS/LINUX64/::/usr/cad/synopsys/verdi/2023.12/etc/lib/libstdc++/LINUX64/:/usr/cad/synopsys/verdi/2023.12/share/PLI/lib/LINUX64/:/usr/cad/synopsys/verdi/2023.12/share/PLI/VCS/LINUX64/::/usr/cad/synopsys/verdi/cur/share/PLI/VCS/LINUX64::/lib64:/usr/lib64:/usr/local/lib64::/usr/cad/cadence/INNOVUS/INNOVUS_21.19.000/tools/lib/64bit:/usr/cad/cadence/INNOVUS/INNOVUS_21.19.000/tools/lib64:/usr/cad/cadence/INNOVUS/INNOVUS_21.19.000/tools/lib::/usr/cad/cadence/GENUS/GENUS_21.18.000/tools/lib/64bit:/usr/cad/cadence/GENUS/GENUS_21.18.000/tools/lib64:/usr/cad/cadence/GENUS/GENUS_21.18.000/tools/lib::/usr/cad/cadence/XCELIUM/XCELIUM_24.03.002/tools/lib/64bit:/usr/cad/cadence/XCELIUM/XCELIUM_24.03.002/tools/lib64:/usr/cad/cadence/XCELIUM/XCELIUM_24.03.002/tools/lib::/usr/cad/cadence/XCELIUM/XCELIUM_24.03.002/tools/lib/64bit:/usr/cad/cadence/XCELIUM/XCELIUM_24.03.002/tools/lib64:/usr/cad/cadence/XCELIUM/XCELIUM_24.03.002/tools/lib::::/usr/cad/synopsys/verdi/cur/share/PLI/VCS/LINUX64::/lib64:/usr/lib64:/usr/local/lib64:/usr/cad/synopsys/verdi/2023.12/etc/lib/libstdc++/LINUX64/:/usr/cad/synopsys/verdi/2023.12/share/PLI/lib/LINUX64/:/usr/cad/synopsys/verdi/2023.12/share/PLI/VCS/LINUX64/::/usr/cad/synopsys/verdi/cur/etc/lib/libstdc++/LINUX64/:/usr/cad/synopsys/verdi/cur/share/PLI/IUS/LINUX64/://usr/cad/synopsys/verdi/2023.12/etc/lib/libstdc++/LINUX64/:/usr/cad/synopsys/verdi/2023.12/share/PLI/lib/LINUX64/:/usr/cad/synopsys/verdi/2023.12/share/PLI/VCS/LINUX64/::::::::/usr/cad/synopsys/milkyway/2024.09/lib/linux64/:::::::/usr/cad/synopsys/verdi/cur/etc/lib/libstdc++/LINUX64/:/usr/cad/synopsys/verdi/cur/share/PLI/IUS/LINUX64/://usr/cad/synopsys/verdi/2023.12/etc/lib/libstdc++/LINUX64/:/usr/cad/synopsys/verdi/2023.12/share/PLI/lib/LINUX64/:/usr/cad/synopsys/verdi/2023.12/share/PLI/VCS/LINUX64/::/usr/cad/synopsys/verdi/2023.12/etc/lib/libstdc++/LINUX64/:/usr/cad/synopsys/verdi/2023.12/share/PLI/lib/LINUX64/:/usr/cad/synopsys/verdi/2023.12/share/PLI/VCS/LINUX64/::/usr/cad/synopsys/verdi/cur/share/PLI/VCS/LINUX64::/lib64:/usr/lib64:/usr/local/lib64::/usr/cad/cadence/INNOVUS/INNOVUS_21.19.000/tools/lib/64bit:/usr/cad/cadence/INNOVUS/INNOVUS_21.19.000/tools/lib64:/usr/cad/cadence/INNOVUS/INNOVUS_21.19.000/tools/lib::/usr/cad/cadence/GENUS/GENUS_21.18.000/tools/lib/64bit:/usr/cad/cadence/GENUS/GENUS_21.18.000/tools/lib64:/usr/cad/cadence/GENUS/GENUS_21.18.000/tools/lib::/usr/cad/cadence/XCELIUM/XCELIUM_24.03.002/tools/lib/64bit:/usr/cad/cadence/XCELIUM/XCELIUM_24.03.002/tools/lib64:/usr/cad/cadence/XCELIUM/XCELIUM_24.03.002/tools/lib:
+LD_LIBRARY_PATH=/usr/cad/synopsys/vcs/2023.12/lib:/usr/cad/synopsys/vcs/2023.12/linux64/lib:/usr/cad/cadence/XCELIUM/XCELIUM_24.03.002/tools/lib/64bit:/usr/cad/cadence/XCELIUM/XCELIUM_24.03.002/tools/lib64:/usr/cad/cadence/XCELIUM/XCELIUM_24.03.002/tools/lib::::/usr/cad/synopsys/verdi/cur/share/PLI/VCS/LINUX64::/lib64:/usr/lib64:/usr/local/lib64:/usr/cad/synopsys/verdi/2023.12/etc/lib/libstdc++/LINUX64/:/usr/cad/synopsys/verdi/2023.12/share/PLI/lib/LINUX64/:/usr/cad/synopsys/verdi/2023.12/share/PLI/VCS/LINUX64/::/usr/cad/synopsys/verdi/cur/etc/lib/libstdc++/LINUX64/:/usr/cad/synopsys/verdi/cur/share/PLI/IUS/LINUX64/://usr/cad/synopsys/verdi/2023.12/etc/lib/libstdc++/LINUX64/:/usr/cad/synopsys/verdi/2023.12/share/PLI/lib/LINUX64/:/usr/cad/synopsys/verdi/2023.12/share/PLI/VCS/LINUX64/::::::::/usr/cad/synopsys/milkyway/2024.09/lib/linux64/:::::::/usr/cad/synopsys/verdi/cur/etc/lib/libstdc++/LINUX64/:/usr/cad/synopsys/verdi/cur/share/PLI/IUS/LINUX64/://usr/cad/synopsys/verdi/2023.12/etc/lib/libstdc++/LINUX64/:/usr/cad/synopsys/verdi/2023.12/share/PLI/lib/LINUX64/:/usr/cad/synopsys/verdi/2023.12/share/PLI/VCS/LINUX64/::/usr/cad/synopsys/verdi/2023.12/etc/lib/libstdc++/LINUX64/:/usr/cad/synopsys/verdi/2023.12/share/PLI/lib/LINUX64/:/usr/cad/synopsys/verdi/2023.12/share/PLI/VCS/LINUX64/::/usr/cad/synopsys/verdi/cur/share/PLI/VCS/LINUX64::/lib64:/usr/lib64:/usr/local/lib64::/usr/cad/cadence/INNOVUS/INNOVUS_21.19.000/tools/lib/64bit:/usr/cad/cadence/INNOVUS/INNOVUS_21.19.000/tools/lib64:/usr/cad/cadence/INNOVUS/INNOVUS_21.19.000/tools/lib::/usr/cad/cadence/GENUS/GENUS_21.18.000/tools/lib/64bit:/usr/cad/cadence/GENUS/GENUS_21.18.000/tools/lib64:/usr/cad/cadence/GENUS/GENUS_21.18.000/tools/lib::/usr/cad/cadence/XCELIUM/XCELIUM_24.03.002/tools/lib/64bit:/usr/cad/cadence/XCELIUM/XCELIUM_24.03.002/tools/lib64:/usr/cad/cadence/XCELIUM/XCELIUM_24.03.002/tools/lib:
 CONDA_EXE=/home/users/yves6512/miniconda3/bin/conda
 HOSTTYPE=x86_64-linux
 SNPS_INTERNAL_VCS_LINUX_OS=linux
-SNPS_VCS_INTERNAL_ROOT_START_TIME=1766753421.119679954
-SSH_CONNECTION=140.116.178.165 53273 140.116.178.186 3175
+SNPS_VCS_INTERNAL_ROOT_START_TIME=1767598647.214605220
+SSH_CONNECTION=140.116.178.165 14269 140.116.178.186 3175
 MODULES_RUN_QUARANTINE=LD_LIBRARY_PATH LD_PRELOAD
 LANG=en_US.UTF-8
 HISTCONTROL=ignoredups
@@ -199,11 +199,11 @@ SNPS_VCS_INTERNAL_MAKE=make
 HOSTNAME=aislab-eda-server
 SCRNAME=vcs
 OLDPWD=/home/users/yves6512/Project/hardware/build/simv.daidir/debug_dump/fsearch
-SNPS_VCS_INTERNAL_CURR_PID=902661
+SNPS_VCS_INTERNAL_CURR_PID=1325870
 TOOL_HOME=/usr/cad/synopsys/vcs/2023.12/linux64
 COLORTERM=truecolor
 SNPS_VCS_INTERNAL_MAKE_OPT=
-MAKE_TERMOUT=/dev/pts/8
+MAKE_TERMOUT=/dev/pts/83
 SNPS_VCS_CLANG_PATH=/usr/cad/synopsys/vcs/2023.12/linux64/clang
 OVA_UUM=0
 Laker_TCL_ToolBox=1
@@ -218,7 +218,7 @@ VCS_MODE_FLAG=64
 S_COLORS=auto
 which_declare=declare -f
 OSTYPE=linux
-XDG_SESSION_ID=3623
+XDG_SESSION_ID=5874
 SNPS_VCS_PYTHON3=/usr/cad/synopsys/vcs/2023.12/linux64/bin/Python-3.6.1/bin/python3
 MODULES_CMD=/usr/share/Modules/libexec/modulecmd.tcl
 USER=yves6512
@@ -230,6 +230,7 @@ GROUP=intern
 PWD=/home/users/yves6512/Project/hardware/build
 VMR_MODE_FLAG=64
 SSH_ASKPASS=/usr/libexec/openssh/gnome-ssh-askpass
+prog=5
 HOME=/home/users/yves6512
 Laker_TCL_L3=1
 CONDA_PYTHON_EXE=/home/users/yves6512/miniconda3/bin/python
@@ -238,7 +239,7 @@ VSCODE_GIT_ASKPASS_NODE=/home/users/yves6512/.vscode-server/cli/servers/Stable-9
 TERM_PROGRAM=vscode
 __ETC_PROFILE_NIX_SOURCED=1
 HOST=aislab-eda-server
-SSH_CLIENT=140.116.178.165 53273 3175
+SSH_CLIENT=140.116.178.165 14269 3175
 TERM_PROGRAM_VERSION=1.107.1
 MGC_LOCATION_MAP=NO_MAP
 SELINUX_LEVEL_REQUESTED=
@@ -247,10 +248,10 @@ VCS_ARG_ADDED_FOR_TMP=1
 MGC_HOME=/usr/cad/mentor/calibre/aok_cal_2022.1_36.16
 FORMALITY=/usr/cad/synopsys/formality/cur
 XDG_DATA_DIRS=/home/users/yves6512/.local/share/flatpak/exports/share:/var/lib/flatpak/exports/share:/usr/local/share:/usr/share:/home/users/yves6512/.nix-profile/share:/nix/var/nix/profiles/default/share:/var/lib/snapd/desktop
-SHLIB_PATH=/usr/cad/synopsys/verdi/2023.12/etc/lib/libstdc++/LINUX64/:/usr/cad/synopsys/verdi/2023.12/share/PLI/lib/LINUX64/:/usr/cad/synopsys/verdi/2023.12/share/PLI/VCS/LINUX64/::/usr/cad/synopsys/verdi/cur/etc/lib/libstdc++/LINUX64/:/usr/cad/synopsys/verdi/2023.12/etc/lib/libstdc++/LINUX64/:/usr/cad/synopsys/verdi/2023.12/share/PLI/lib/LINUX64/:/usr/cad/synopsys/verdi/2023.12/share/PLI/VCS/LINUX64/::/usr/cad/synopsys/verdi/cur/etc/lib/libstdc++/LINUX64/:/usr/cad/synopsys/verdi/2023.12/etc/lib/libstdc++/LINUX64/:/usr/cad/synopsys/verdi/2023.12/share/PLI/lib/LINUX64/:/usr/cad/synopsys/verdi/2023.12/share/PLI/VCS/LINUX64/::/usr/cad/synopsys/verdi/2023.12/etc/lib/libstdc++/LINUX64/:/usr/cad/synopsys/verdi/2023.12/share/PLI/lib/LINUX64/:/usr/cad/synopsys/verdi/2023.12/share/PLI/VCS/LINUX64/::/usr/cad/synopsys/verdi/2023.12/etc/lib/libstdc++/LINUX64/:/usr/cad/synopsys/verdi/2023.12/share/PLI/lib/LINUX64/:/usr/cad/synopsys/verdi/2023.12/share/PLI/VCS/LINUX64/::/usr/cad/synopsys/verdi/cur/etc/lib/libstdc++/LINUX64/:/usr/cad/synopsys/verdi/2023.12/etc/lib/libstdc++/LINUX64/:/usr/cad/synopsys/verdi/2023.12/share/PLI/lib/LINUX64/:/usr/cad/synopsys/verdi/2023.12/share/PLI/VCS/LINUX64/::/usr/cad/synopsys/verdi/cur/etc/lib/libstdc++/LINUX64/:/usr/cad/synopsys/verdi/2023.12/etc/lib/libstdc++/LINUX64/:/usr/cad/synopsys/verdi/2023.12/share/PLI/lib/LINUX64/:/usr/cad/synopsys/verdi/2023.12/share/PLI/VCS/LINUX64/::/usr/cad/synopsys/verdi/2023.12/etc/lib/libstdc++/LINUX64/:/usr/cad/synopsys/verdi/2023.12/share/PLI/lib/LINUX64/:/usr/cad/synopsys/verdi/2023.12/share/PLI/VCS/LINUX64/:
+SHLIB_PATH=/usr/cad/synopsys/verdi/2023.12/etc/lib/libstdc++/LINUX64/:/usr/cad/synopsys/verdi/2023.12/share/PLI/lib/LINUX64/:/usr/cad/synopsys/verdi/2023.12/share/PLI/VCS/LINUX64/::/usr/cad/synopsys/verdi/cur/etc/lib/libstdc++/LINUX64/:/usr/cad/synopsys/verdi/2023.12/etc/lib/libstdc++/LINUX64/:/usr/cad/synopsys/verdi/2023.12/share/PLI/lib/LINUX64/:/usr/cad/synopsys/verdi/2023.12/share/PLI/VCS/LINUX64/::/usr/cad/synopsys/verdi/cur/etc/lib/libstdc++/LINUX64/:/usr/cad/synopsys/verdi/2023.12/etc/lib/libstdc++/LINUX64/:/usr/cad/synopsys/verdi/2023.12/share/PLI/lib/LINUX64/:/usr/cad/synopsys/verdi/2023.12/share/PLI/VCS/LINUX64/::/usr/cad/synopsys/verdi/2023.12/etc/lib/libstdc++/LINUX64/:/usr/cad/synopsys/verdi/2023.12/share/PLI/lib/LINUX64/:/usr/cad/synopsys/verdi/2023.12/share/PLI/VCS/LINUX64/:
 SSL_CERT_FILE=/etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem
 MGC_TMPDIR=/tmp
-VSCODE_IPC_HOOK_CLI=/run/user/1033/vscode-ipc-8b5ba05a-e0d2-4cb2-958e-094b53853d81.sock
+VSCODE_IPC_HOOK_CLI=/run/user/1033/vscode-ipc-e50c6e11-5a8c-4c4c-9f22-85747dd1e390.sock
 LOADEDMODULES=
 FSDB=2
 VC_STATIC_HOME=/usr/cad/synopsys/vc_formal/cur/
@@ -260,38 +261,38 @@ _CONDA_ROOT=/home/users/yves6512/miniconda3
 VSCODE_GIT_ASKPASS_MAIN=/home/users/yves6512/.vscode-server/cli/servers/Stable-994fd12f8d3a5aa16f17d42c041e5809167e845a/server/extensions/git/dist/askpass-main.js
 SHELL=/bin/sh
 TERM=xterm-256color
-SNPS_VCS_INTERNAL_ROOT_PID=902661
+SNPS_VCS_INTERNAL_ROOT_PID=1325870
 MAKEOVERRIDES=${-*-command-variables-*-}
 SCRIPT_NAME=vcs
-VSCODE_NONCE=967ab4a2-f7c3-4598-9400-5dd6dd63bb11
+VSCODE_NONCE=a212439d-02bd-485e-b889-a56663b9a90f
 SNPS_VCS_INTERNAL_MEMPRELOAD_USE_LIBC=1
 LM_LICENSE_FILE=5280@lstn:26585@lstn:1717@lstn:
-SNPS_VCS_TMPDIR=/tmp/vcs_20251226125020_902661
+SNPS_VCS_TMPDIR=/tmp/vcs_20260105073727_1325870
 XLOCALEDIR=/usr/cad/synopsys/icc2/2024.09/etc/locale
 SELINUX_USE_CURRENT_RANGE=
 MAKELEVEL=1
 VERDI_HOME=/usr/cad/synopsys/verdi/2023.12
 NIX_SSL_CERT_FILE=/etc/ssl/certs/ca-bundle.crt
-SHLVL=9
+SHLVL=8
 VCS_COM=/usr/cad/synopsys/vcs/2023.12/linux64/bin/vcs1
-MAKE_TERMERR=/dev/pts/8
-VSCODE_GIT_IPC_HANDLE=/run/user/1033/vscode-git-2b8ab1bdc7.sock
+MAKE_TERMERR=/dev/pts/83
+VSCODE_GIT_IPC_HANDLE=/run/user/1033/vscode-git-1fc8b60cf2.sock
 VCS_ARCH=linux64
-MANPATH=/usr/share/man::/usr/cad/synopsys/vcs/2023.12/doc/man:/usr/cad/synopsys/synthesis/2024.09/doc/syn/man:/usr/cad/synopsys/lc/2024.09/doc/lc/man:/usr/cad/synopsys/vcs/2023.12/doc/man:/usr/cad/synopsys/lc/2024.09/doc/lc/man:/usr/cad/synopsys/synthesis/2024.09/doc/syn/man:/usr/cad/synopsys/vcs/2023.12/doc/man:/usr/cad/synopsys/synthesis/2024.09/doc/syn/man:/usr/cad/synopsys/lc/2024.09/doc/lc/man:/usr/cad/synopsys/vcs/2023.12/doc/man:/usr/cad/synopsys/lc/2024.09/doc/lc/man:/usr/cad/synopsys/synthesis/2024.09/doc/syn/man
+MANPATH=/usr/share/man::/usr/cad/synopsys/vcs/2023.12/doc/man:/usr/cad/synopsys/synthesis/2024.09/doc/syn/man:/usr/cad/synopsys/lc/2024.09/doc/lc/man:/usr/cad/synopsys/vcs/2023.12/doc/man:/usr/cad/synopsys/lc/2024.09/doc/lc/man:/usr/cad/synopsys/synthesis/2024.09/doc/syn/man
 VCS_DEPTH=0
-MODULEPATH=/etc/scl/modulefiles:/etc/scl/modulefiles:/etc/scl/modulefiles:/usr/share/Modules/modulefiles:/etc/modulefiles:/usr/share/modulefiles
+MODULEPATH=/etc/scl/modulefiles:/etc/scl/modulefiles:/usr/share/Modules/modulefiles:/etc/modulefiles:/usr/share/modulefiles
 SSL_CERT_DIR=/etc/pki/tls/certs
 LOGNAME=yves6512
 DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1033/bus
 GIT_ASKPASS=/home/users/yves6512/.vscode-server/cli/servers/Stable-994fd12f8d3a5aa16f17d42c041e5809167e845a/server/extensions/git/dist/askpass.sh
 XDG_RUNTIME_DIR=/run/user/1033
 MODULEPATH_modshare=/usr/share/Modules/modulefiles:2:/etc/modulefiles:2:/usr/share/modulefiles:2
-PATH=.:/usr/cad/cadence/XCELIUM/XCELIUM_24.03.002/tools/bin/64bit:/usr/cad/cadence/XCELIUM/XCELIUM_24.03.002/tools/bin:/usr/cad/synopsys/synthesis/2024.09/amd64/syn/bin:/usr/cad/synopsys/lc/cur/bin:/usr/cad/synopsys/lc/2024.09/bin:/usr/cad/synopsys/vcs/2023.12/bin:/usr/cad/synopsys/vcs/2023.12/vcfca/bin:/usr/cad/synopsys/vcs/2023.12/amd64/bin:/usr/cad/synopsys/verdi/2023.12/bin:/usr/cad/synopsys/verdi/cur/bin:/usr/cad/synopsys/verdi/cur/nLint/bin:/usr/cad/synopsys/verdi/2023.12/bin:/usr/cad/mentor/calibre/aok_cal_2022.1_36.16/bin:/usr/cad/synopsys/laker_oa/2024.09-1//bin:/usr/cad/synopsys/spyglass/2023.12/SPYGLASS_HOME/bin:/usr/cad/synopsys/formality/2024.09/amd64/fm/bin:/usr/cad/synopsys/vc_formal/cur/bin:/usr/cad/synopsys/primepower/2024.09/bin:/usr/cad/synopsys/primetime/2024.09/amd64/syn/bin:/usr/cad/synopsys/milkyway/2024.09/bin/linux64:/usr/cad/synopsys/icc2/2024.09/bin:/usr/cad/synopsys/icc/2023.12//amd64/syn/bin:/usr/cad/synopsys/dsoai/2024.09/bin:/usr/cad/synopsys/lc/2024.09/bin:/usr/cad/synopsys/synthesis/2024.09/amd64/syn/bin:/usr/cad/synopsys/lc/cur/bin:/usr/cad/synopsys/verdi/cur/bin:/usr/cad/synopsys/verdi/cur/nLint/bin:/usr/cad/synopsys/verdi/2023.12/bin:/usr/cad/synopsys/verdi/2023.12/bin:/usr/cad/synopsys/vcs/2023.12/bin:/usr/cad/synopsys/vcs/2023.12/vcfca/bin:/usr/cad/synopsys/vcs/2023.12/amd64/bin:/usr/cad/cadence/JASPER/jasper_2024.03p002/bin:/usr/cad/cadence/INNOVUS/INNOVUS_21.19.000/tools/bin/64bit:/usr/cad/cadence/INNOVUS/INNOVUS_21.19.000/tools/bin:/usr/cad/cadence/GENUS/GENUS_21.18.000/tools/bin/64bit:/usr/cad/cadence/GENUS/GENUS_21.18.000/tools/bin:/usr/cad/cadence/XCELIUM/XCELIUM_24.03.002/tools/bin/64bit:/usr/cad/cadence/XCELIUM/XCELIUM_24.03.002/tools/bin:/usr/cad/cadence/XCELIUM/XCELIUM_24.03.002/tools/bin/64bit:/usr/cad/cadence/XCELIUM/XCELIUM_24.03.002/tools/bin:/usr/cad/synopsys/synthesis/2024.09/amd64/syn/bin:/usr/cad/synopsys/lc/cur/bin:/usr/cad/synopsys/lc/2024.09/bin:/usr/cad/synopsys/vcs/2023.12/bin:/usr/cad/synopsys/vcs/2023.12/vcfca/bin:/usr/cad/synopsys/vcs/2023.12/amd64/bin:/usr/cad/synopsys/verdi/2023.12/bin:/usr/cad/synopsys/verdi/cur/bin:/usr/cad/synopsys/verdi/cur/nLint/bin:/usr/cad/synopsys/verdi/2023.12/bin:/usr/cad/mentor/calibre/aok_cal_2022.1_36.16/bin:/usr/cad/synopsys/laker_oa/2024.09-1//bin:/usr/cad/synopsys/spyglass/2023.12/SPYGLASS_HOME/bin:/usr/cad/synopsys/formality/2024.09/amd64/fm/bin:/usr/cad/synopsys/vc_formal/cur/bin:/usr/cad/synopsys/primepower/2024.09/bin:/usr/cad/synopsys/primetime/2024.09/amd64/syn/bin:/usr/cad/synopsys/milkyway/2024.09/bin/linux64:/usr/cad/synopsys/icc2/2024.09/bin:/usr/cad/synopsys/icc/2023.12//amd64/syn/bin:/usr/cad/synopsys/dsoai/2024.09/bin:/usr/cad/synopsys/lc/2024.09/bin:/usr/cad/synopsys/synthesis/2024.09/amd64/syn/bin:/usr/cad/synopsys/lc/cur/bin:/usr/cad/synopsys/verdi/cur/bin:/usr/cad/synopsys/verdi/cur/nLint/bin:/usr/cad/synopsys/verdi/2023.12/bin:/usr/cad/synopsys/verdi/2023.12/bin:/usr/cad/synopsys/vcs/2023.12/bin:/usr/cad/synopsys/vcs/2023.12/vcfca/bin:/usr/cad/synopsys/vcs/2023.12/amd64/bin:/usr/cad/cadence/JASPER/jasper_2024.03p002/bin:/usr/cad/cadence/INNOVUS/INNOVUS_21.19.000/tools/bin/64bit:/usr/cad/cadence/INNOVUS/INNOVUS_21.19.000/tools/bin:/usr/cad/cadence/GENUS/GENUS_21.18.000/tools/bin/64bit:/usr/cad/cadence/GENUS/GENUS_21.18.000/tools/bin:/usr/cad/cadence/XCELIUM/XCELIUM_24.03.002/tools/bin/64bit:/usr/cad/cadence/XCELIUM/XCELIUM_24.03.002/tools/bin:/home/users/yves6512/.vscode-server/data/User/globalStorage/github.copilot-chat/debugCommand:/home/users/yves6512/.vscode-server/data/User/globalStorage/github.copilot-chat/copilotCli:/home/users/yves6512/.vscode-server/cli/servers/Stable-994fd12f8d3a5aa16f17d42c041e5809167e845a/server/bin/remote-cli:/home/users/yves6512/.nix-profile/bin:/nix/var/nix/profiles/default/bin:/usr/share/Modules/bin:/usr/lib64/ccache:/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/var/lib/snapd/snap/bin
+PATH=.:/usr/cad/cadence/XCELIUM/XCELIUM_24.03.002/tools/bin/64bit:/usr/cad/cadence/XCELIUM/XCELIUM_24.03.002/tools/bin:/usr/cad/synopsys/synthesis/2024.09/amd64/syn/bin:/usr/cad/synopsys/lc/cur/bin:/usr/cad/synopsys/lc/2024.09/bin:/usr/cad/synopsys/vcs/2023.12/bin:/usr/cad/synopsys/vcs/2023.12/vcfca/bin:/usr/cad/synopsys/vcs/2023.12/amd64/bin:/usr/cad/synopsys/verdi/2023.12/bin:/usr/cad/synopsys/verdi/cur/bin:/usr/cad/synopsys/verdi/cur/nLint/bin:/usr/cad/synopsys/verdi/2023.12/bin:/usr/cad/mentor/calibre/aok_cal_2022.1_36.16/bin:/usr/cad/synopsys/laker_oa/2024.09-1//bin:/usr/cad/synopsys/spyglass/2023.12/SPYGLASS_HOME/bin:/usr/cad/synopsys/formality/2024.09/amd64/fm/bin:/usr/cad/synopsys/vc_formal/cur/bin:/usr/cad/synopsys/primepower/2024.09/bin:/usr/cad/synopsys/primetime/2024.09/amd64/syn/bin:/usr/cad/synopsys/milkyway/2024.09/bin/linux64:/usr/cad/synopsys/icc2/2024.09/bin:/usr/cad/synopsys/icc/2023.12//amd64/syn/bin:/usr/cad/synopsys/dsoai/2024.09/bin:/usr/cad/synopsys/lc/2024.09/bin:/usr/cad/synopsys/synthesis/2024.09/amd64/syn/bin:/usr/cad/synopsys/lc/cur/bin:/usr/cad/synopsys/verdi/cur/bin:/usr/cad/synopsys/verdi/cur/nLint/bin:/usr/cad/synopsys/verdi/2023.12/bin:/usr/cad/synopsys/verdi/2023.12/bin:/usr/cad/synopsys/vcs/2023.12/bin:/usr/cad/synopsys/vcs/2023.12/vcfca/bin:/usr/cad/synopsys/vcs/2023.12/amd64/bin:/usr/cad/cadence/JASPER/jasper_2024.03p002/bin:/usr/cad/cadence/INNOVUS/INNOVUS_21.19.000/tools/bin/64bit:/usr/cad/cadence/INNOVUS/INNOVUS_21.19.000/tools/bin:/usr/cad/cadence/GENUS/GENUS_21.18.000/tools/bin/64bit:/usr/cad/cadence/GENUS/GENUS_21.18.000/tools/bin:/usr/cad/cadence/XCELIUM/XCELIUM_24.03.002/tools/bin/64bit:/usr/cad/cadence/XCELIUM/XCELIUM_24.03.002/tools/bin:/home/users/yves6512/.vscode-server/data/User/globalStorage/github.copilot-chat/debugCommand:/home/users/yves6512/.vscode-server/data/User/globalStorage/github.copilot-chat/copilotCli:/home/users/yves6512/.vscode-server/cli/servers/Stable-994fd12f8d3a5aa16f17d42c041e5809167e845a/server/bin/remote-cli:/home/users/yves6512/.nix-profile/bin:/nix/var/nix/profiles/default/bin:/usr/share/Modules/bin:/usr/lib64/ccache:/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/var/lib/snapd/snap/bin
 CALIBRE_HOME=/usr/cad/mentor/calibre/aok_cal_2022.1_36.16
 VCS_HOME=/usr/cad/synopsys/vcs/2023.12
 MODULESHOME=/usr/share/Modules
 sysc_uni_pwd=/home/users/yves6512/Project/hardware/build
-MAKEFLAGS= -- FSDB=2
+MAKEFLAGS= -- prog=5 FSDB=2
 HISTSIZE=1000
 VCS_PYTHON3=/usr/cad/synopsys/vcs/2023.12/linux64/bin/Python-3.6.1/bin/python3
 VCS_STATIC_HOME=/usr/cad/synopsys/vcs/2023.12/vcfca
@@ -387,93 +388,96 @@ FLEXLM_BORROWFILE=/home/users/yves6512/.aislab-eda-server-borrow.txt
 Runtime command line arguments:
 argv[0]=simv
 argv[1]=+memcbk
-argv[2]=+define+prog0+FSDB_ALL
-argv[3]=+prog_path=/home/users/yves6512/Project/hardware/./sim/prog0
+argv[2]=+define+prog5+FSDB_ALL
+argv[3]=+prog_path=/home/users/yves6512/Project/hardware/./sim/prog5
 argv[4]=+notimingcheck
-315 profile - 100
-          CPU/Mem usage: 0.040 sys,  2.200 user,  397.20M mem
-316 Elapsed time:    0:00:03    Fri Dec 26 07:50:27 2025
-317 User CPU time used: 2 seconds
-318 System CPU time used: 0 seconds
-319 pliAppInit
-320 [SC]Init: MemoryConsumed=0.00MB ElapsedTime=0hour 0min. 0sec.
-321 FSDB_GATE is set.
-322 FSDB_RTL is set.
-323 FSDB_PACKED_MODE is enabled.
-324 FSDB_GATE_PACKED is enabled.
-325 FSDB_ALIAS_ARRAY_ELEM is set to 4294967295.
-326 Enable Parallel Dumping.
-327 pliAppMiscSet: New Sim Round
-328 pliEntryInit
-329 LIBSSCORE=found /usr/cad/synopsys/verdi/2023.12/share/PLI/lib/LINUXAMD64/libsscore_vcs202312.so through $NOVAS_HOME setting.
-330 FSDB Dumper for VCS, Release Verdi_V-2023.12, Linux x86_64/64bit, 11/15/2023
-331 (C) 1996 - 2023 by Synopsys, Inc.
-332 sps_call_fsdbDumpfile_main at 0 : /home/users/yves6512/Project/hardware/./sim/Testbench.sv(368)
-333 argv[0]: (top.fsdb)
-334 *Verdi* FSDB WARNING: The FSDB file already exists. Overwriting the FSDB file may crash the programs that are using this file.
-335 *Verdi* : Create FSDB file 'top.fsdb'
-336 [spi_vcs_vd_ppi_create_root]: no upf option
-337 compile option from '/home/users/yves6512/Project/hardware/build/simv.daidir/vcs_rebuild'.
-338   "vcs '-full64' '-R' '-sverilog' '+incdir+/home/users/yves6512/Project/hardware/./include' '/home/users/yves6512/Project/hardware/./sim/Testbench.sv' '/home/users/yves6512/Project/hardware/./src/ASIC.sv' '/home/users/yves6512/Project/hardware/./src/top.sv' '/home/users/yves6512/Project/hardware/./src/DRAM.sv' '/home/users/yves6512/Project/hardware/./src/controller/pc_counter.sv' '/home/users/yves6512/Project/hardware/./src/controller/regfile.sv' '/home/users/yves6512/Project/hardware/./src/controller/dma_loop_unit.sv' '/home/users/yves6512/Project/hardware/./src/controller/glb_addr_generator.sv' '/home/users/yves6512/Project/hardware/./src/controller/decoder.sv' '/home/users/yves6512/Project/hardware/./src/controller/controller_top.sv' '/home/users/yves6512/Project/hardware/./src/controller/pc_adder.sv' '/home/users/yves6512/Project/hardware/./src/controller/mux.sv' '/home/users/yves6512/Project/hardware/./src/controller/signal_controller.sv' '/home/users/yves6512/Project/hardware/./src/controller/ALU.sv' '/home/users/yves6512/Project/hardware/./src/controller/SRAM.sv' '/home/users/yves6512/Project/hardware/./src/controller/ID_SENDER.sv' '/home/users/yves6512/Project/hardware/./src/DMA/DMA_controller.sv' '/home/users/yves6512/Project/hardware/./src/DMA/DMA_FIFO.sv' '/home/users/yves6512/Project/hardware/./src/DMA/DMA.sv' '/home/users/yves6512/Project/hardware/./src/PPU/PPU.sv' '/home/users/yves6512/Project/hardware/./src/PPU/Comparator_Qint8.sv' '/home/users/yves6512/Project/hardware/./src/PPU/post_quant.sv' '/home/users/yves6512/Project/hardware/./src/PPU/ReLU_Qint8.sv' '/home/users/yves6512/Project/hardware/./src/GLB/GLB.sv' '/home/users/yves6512/Project/hardware/./src/GLB/SRAM_rtl.sv' '/home/users/yves6512/Project/hardware/./src/PE_array/PE.sv' '/home/users/yves6512/Project/hardware/./src/PE_array/PE_array.sv' '/home/users/yves6512/Project/hardware/./src/PE_array/GIN/GIN_MulticastController.sv' '/home/users/yves6512/Project/hardware/./src/PE_array/GIN/GIN.sv' '/home/users/yves6512/Project/hardware/./src/PE_array/GIN/GIN_Bus.sv' '/home/users/yves6512/Project/hardware/./src/PE_array/GON/GON_MulticastController.sv' '/home/users/yves6512/Project/hardware/./src/PE_array/GON/GON.sv' '/home/users/yves6512/Project/hardware/./src/PE_array/GON/GON_Bus.sv' '-debug_access+all' '-debug_region+cell' '+memcbk' '+define+prog0+FSDB_ALL' '+prog_path=/home/users/yves6512/Project/hardware/./sim/prog0' '+notimingcheck' 2>&1"
-339 DVDI_is_vir_unload_enabled is enable
-340 FSDB_VCS_ENABLE_NATIVE_VC is enable
-341 sps_call_fsdbDumpvars_vd_main at 0 : /home/users/yves6512/Project/hardware/./sim/Testbench.sv(369)
-342 argv[0]: (+struct)
-343 argv[1]: (+mda)
-344 argv[2]: (handle) test
-345 *Verdi* : Begin traversing the scope (test), layer (0).
-346 *Verdi* : Enable +struct and +mda dumping.
-347 *Verdi* : End of traversing.
-348 pliAppHDL_DumpVarComplete traverse var: profile - 
-          CPU/Mem usage: 0.050 sys,  2.250 user,  521.54M mem
-                   incr: 0.010 sys,  0.050 user,  31.98M mem
-                   accu: 0.010 sys,  0.050 user,  31.98M mem
-              accu incr: 0.010 sys,  0.050 user,  31.98M mem
+316 profile - 100
+          CPU/Mem usage: 0.030 sys,  1.720 user,  380.51M mem
+317 Elapsed time:    0:00:02    Mon Jan  5 02:37:31 2026
+318 User CPU time used: 1 seconds
+319 System CPU time used: 0 seconds
+320 pliAppInit
+321 [SC]Init: MemoryConsumed=0.00MB ElapsedTime=0hour 0min. 0sec.
+322 FSDB_GATE is set.
+323 FSDB_RTL is set.
+324 FSDB_PACKED_MODE is enabled.
+325 FSDB_GATE_PACKED is enabled.
+326 FSDB_ALIAS_ARRAY_ELEM is set to 4294967295.
+327 Enable Parallel Dumping.
+328 pliAppMiscSet: New Sim Round
+329 pliEntryInit
+330 LIBSSCORE=found /usr/cad/synopsys/verdi/2023.12/share/PLI/lib/LINUXAMD64/libsscore_vcs202312.so through $NOVAS_HOME setting.
+331 FSDB Dumper for VCS, Release Verdi_V-2023.12, Linux x86_64/64bit, 11/15/2023
+332 (C) 1996 - 2023 by Synopsys, Inc.
+333 sps_call_fsdbDumpfile_main at 0 : /home/users/yves6512/Project/hardware/./sim/Testbench.sv(396)
+334 argv[0]: (top.fsdb)
+335 *Verdi* FSDB WARNING: The FSDB file already exists. Overwriting the FSDB file may crash the programs that are using this file.
+336 *Verdi* : Create FSDB file 'top.fsdb'
+337 [spi_vcs_vd_ppi_create_root]: no upf option
+338 compile option from '/home/users/yves6512/Project/hardware/build/simv.daidir/vcs_rebuild'.
+339   "vcs '-full64' '-R' '-sverilog' '+incdir+/home/users/yves6512/Project/hardware/./include' '/home/users/yves6512/Project/hardware/./sim/Testbench.sv' '/home/users/yves6512/Project/hardware/./src/ASIC.sv' '/home/users/yves6512/Project/hardware/./src/top.sv' '/home/users/yves6512/Project/hardware/./sim/DRAM.sv' '/home/users/yves6512/Project/hardware/./src/controller/pc_counter.sv' '/home/users/yves6512/Project/hardware/./src/controller/regfile.sv' '/home/users/yves6512/Project/hardware/./src/controller/dma_loop_unit.sv' '/home/users/yves6512/Project/hardware/./src/controller/glb_addr_generator.sv' '/home/users/yves6512/Project/hardware/./src/controller/decoder.sv' '/home/users/yves6512/Project/hardware/./src/controller/controller_top.sv' '/home/users/yves6512/Project/hardware/./src/controller/pc_adder.sv' '/home/users/yves6512/Project/hardware/./src/controller/mux.sv' '/home/users/yves6512/Project/hardware/./src/controller/signal_controller.sv' '/home/users/yves6512/Project/hardware/./src/controller/ALU.sv' '/home/users/yves6512/Project/hardware/./src/controller/SRAM.sv' '/home/users/yves6512/Project/hardware/./src/controller/ID_SENDER.sv' '/home/users/yves6512/Project/hardware/./src/DMA/DMA_controller.sv' '/home/users/yves6512/Project/hardware/./src/DMA/DMA_FIFO.sv' '/home/users/yves6512/Project/hardware/./src/DMA/DMA.sv' '/home/users/yves6512/Project/hardware/./src/PPU/post_quant.sv' '/home/users/yves6512/Project/hardware/./src/PPU/Comparator_Qint8.sv' '/home/users/yves6512/Project/hardware/./src/PPU/PPU.sv' '/home/users/yves6512/Project/hardware/./src/PPU/ReLU_Qint8.sv' '/home/users/yves6512/Project/hardware/./src/GLB/GLB.sv' '/home/users/yves6512/Project/hardware/./src/GLB/SRAM_rtl.sv' '/home/users/yves6512/Project/hardware/./src/PE_array/PE.sv' '/home/users/yves6512/Project/hardware/./src/PE_array/PE_array.sv' '/home/users/yves6512/Project/hardware/./src/PE_array/GIN/GIN_MulticastController.sv' '/home/users/yves6512/Project/hardware/./src/PE_array/GIN/GIN.sv' '/home/users/yves6512/Project/hardware/./src/PE_array/GIN/GIN_Bus.sv' '/home/users/yves6512/Project/hardware/./src/PE_array/GON/GON_MulticastController.sv' '/home/users/yves6512/Project/hardware/./src/PE_array/GON/GON.sv' '/home/users/yves6512/Project/hardware/./src/PE_array/GON/GON_Bus.sv' '-debug_access+all' '-debug_region+cell' '+memcbk' '+define+prog5+FSDB_ALL' '+prog_path=/home/users/yves6512/Project/hardware/./sim/prog5' '+notimingcheck' 2>&1"
+340 DVDI_is_vir_unload_enabled is enable
+341 FSDB_VCS_ENABLE_NATIVE_VC is enable
+342 sps_call_fsdbDumpvars_vd_main at 0 : /home/users/yves6512/Project/hardware/./sim/Testbench.sv(397)
+343 argv[0]: (+struct)
+344 argv[1]: (+mda)
+345 argv[2]: (handle) test
+346 *Verdi* : Begin traversing the scope (test), layer (0).
+347 *Verdi* : Enable +struct and +mda dumping.
+348 *Verdi* : End of traversing.
+349 pliAppHDL_DumpVarComplete traverse var: profile - 
+          CPU/Mem usage: 0.120 sys,  1.770 user,  504.98M mem
+                   incr: 0.000 sys,  0.050 user,  32.17M mem
+                   accu: 0.000 sys,  0.050 user,  32.17M mem
+              accu incr: 0.000 sys,  0.050 user,  32.17M mem
 
-          Count usage: 156618 var,  155203 idcode,  2058 callback
-                 incr: 156618 var,  155203 idcode,  2058 callback
-                 accu: 156618 var,  155203 idcode,  2058 callback
-            accu incr: 156618 var,  155203 idcode,  2058 callback
-349 Elapsed time:    0:00:03    Fri Dec 26 07:50:27 2025
-350 User CPU time used: 2 seconds
-351 System CPU time used: 0 seconds
-352 pliAppHDL_DumpVarComplete: profile - 
-          CPU/Mem usage: 0.050 sys,  2.260 user,  529.71M mem
-                   incr: 0.000 sys,  0.010 user,  8.16M mem
-                   accu: 0.010 sys,  0.060 user,  40.14M mem
-              accu incr: 0.000 sys,  0.010 user,  8.16M mem
+          Count usage: 156592 var,  155177 idcode,  2042 callback
+                 incr: 156592 var,  155177 idcode,  2042 callback
+                 accu: 156592 var,  155177 idcode,  2042 callback
+            accu incr: 156592 var,  155177 idcode,  2042 callback
+350 Elapsed time:    0:00:02    Mon Jan  5 02:37:31 2026
+351 User CPU time used: 1 seconds
+352 System CPU time used: 0 seconds
+353 pliAppHDL_DumpVarComplete: profile - 
+          CPU/Mem usage: 0.130 sys,  1.780 user,  513.00M mem
+                   incr: 0.010 sys,  0.010 user,  8.02M mem
+                   accu: 0.010 sys,  0.060 user,  40.19M mem
+              accu incr: 0.010 sys,  0.010 user,  8.02M mem
 
-          Count usage: 156618 var,  155203 idcode,  2058 callback
+          Count usage: 156592 var,  155177 idcode,  2042 callback
                  incr: 0 var,  0 idcode,  0 callback
-                 accu: 156618 var,  155203 idcode,  2058 callback
+                 accu: 156592 var,  155177 idcode,  2042 callback
             accu incr: 0 var,  0 idcode,  0 callback
-353 Elapsed time:    0:00:03    Fri Dec 26 07:50:27 2025
-354 User CPU time used: 2 seconds
-355 System CPU time used: 0 seconds
-356 End of simulation at 1000000000000
-357 Memory usage: 606.790 M
-358 Maximum resident set size: 252 MB
-359 Hard page faults: 1
-360 Soft page faults: 36553
-361 Elapsed time:    0:00:40    Fri Dec 26 07:51:04 2025
-362 User CPU time used: 49 seconds
-363 System CPU time used: 0 seconds
-364 Begin FSDB profile info:
-365 FSDB Writer : bc1(200000435) bcn(171042) mtf/stf(0/2)
-FSDB Writer elapsed time : flush(0.250335) io wait(0.000000) theadpool wait(0.000000)
+354 Elapsed time:    0:00:02    Mon Jan  5 02:37:31 2026
+355 User CPU time used: 1 seconds
+356 System CPU time used: 0 seconds
+357 *Verdi* FSDB: For performance reasons, the Memory Size Limit has been increased to 128M.
+358 sps_call_fsdbDumpflush_vd_main at 13005705000 : /home/users/yves6512/Project/hardware/./sim/Testbench.sv(377)
+359 *Verdi* : Flush all FSDB Files at 13,005,705,000 ps.
+360 End of simulation at 13005705000
+361 Memory usage: 823.775 M
+362 Maximum resident set size: 476 MB
+363 Hard page faults: 0
+364 Soft page faults: 402470
+365 Elapsed time:    0:00:33    Mon Jan  5 02:38:02 2026
+366 User CPU time used: 48 seconds
+367 System CPU time used: 0 seconds
+368 Begin FSDB profile info:
+369 FSDB Writer : bc1(3037048) bcn(176329676) mtf/stf(0/8)
+FSDB Writer elapsed time : flush(9.286532) io wait(0.000000) theadpool wait(0.000000)
 FSDB Writer cpu time : MT Compression : 0
-366 End FSDB profile info
-367 FSDB closed. Name: top.fsdb Size: 255505
-368 Parallel profile     - ProducerThread:1 ConsumerThread:1 Buffer:64MB
-369                      - BlockUsed:2577 Acquire:0 BufferUsed:5400261914
-370                      - Flush:3 Expand:0 ProducerWait:0 ConsumerWait:2558
-371                      - MainProducerTime:38.935582820 TotalConsumerTime:10.318589324
-372                      - ElapsedTime:37.023455000
-373 Producer   0 profile - BlockUsed:2577 Acquire:0 BufferUsed:5400261914
-374 Consumer   0 profile - Affinity:-1 CPUTime:10.318589324 LifeTime:36.629280463 (0.28%)
-375                      - BlockUsed:2577 Acquire:0 BufferUsed:5400261914
-376 SimExit
-377 Elapsed time:    0:00:40    Fri Dec 26 07:51:04 2025
-378 User CPU time used: 49 seconds
-379 System CPU time used: 0 seconds
-380 Sim process exit
+370 End FSDB profile info
+371 FSDB closed. Name: top.fsdb Size: 126660263
+372 Parallel profile     - ProducerThread:1 ConsumerThread:1 Buffer:160MB
+373                      - BlockUsed:1313 Acquire:0 BufferUsed:2747739760
+374                      - Flush:4 Expand:3 ProducerWait:0 ConsumerWait:827
+375                      - MainProducerTime:32.639075993 TotalConsumerTime:15.991125023
+376                      - ElapsedTime:30.949862000
+377 Producer   0 profile - BlockUsed:1313 Acquire:0 BufferUsed:2747739760
+378 Consumer   0 profile - Affinity:-1 CPUTime:15.991125023 LifeTime:30.717740624 (0.52%)
+379                      - BlockUsed:1313 Acquire:0 BufferUsed:2747739760
+380 SimExit
+381 Elapsed time:    0:00:33    Mon Jan  5 02:38:02 2026
+382 User CPU time used: 48 seconds
+383 System CPU time used: 0 seconds
+384 Sim process exit

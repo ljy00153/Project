@@ -1,0 +1,37 @@
+#######################################################################################
+# fsdb.xxxxx.log : log primitive debug message of FSDB Reader
+# This is for R&D to analyze when there are issues happening when FSDB reading
+# The corresponding FSDB file is /home/users/yves6512/Project/hardware/build/top.fsdb
+#######################################################################################
+[BASIC]Reader version : Chronologic Simulation VCS Release V-2023.12_Full64
+[BASIC]simulator version : Chronologic Simulation VCS Release V-2023.12_Full64
+[BASIC]dumper version : FSDB Dumper for VCS, Release Verdi_V-2023.12, Linux x86_64/64bit, 11/15/2023
+[THREAD]The MTR thread count is 9
+[THREAD]Secondary thread count: 4
+[PERF]VC decompress count : 127
+[PERF]VCChain decompress count : 2180
+[PERF]VC decompress count : 1
+[PERF]VCChain decompress count : 1816
+[PERF]VC decompress count : 59
+[PERF]VCChain decompress count : 2180
+[PERF]VC decompress count : 91
+[PERF]VCChain decompress count : 2198
+[PERF]VC decompress count : 109
+[PERF]VCChain decompress count : 1830
+[PERF]VC decompress count : 59
+[PERF]VCChain decompress count : 1824
+[PERF]VC decompress count : 96
+[PERF]VCChain decompress count : 2020
+[PERF]VC decompress count : 148
+[PERF]VCChain decompress count : 1839
+[READSCOPE]ReadScopeTree calling time is 1
+[READSCOPE]ReadScope_PartialLoad calling time is 0
+[READSCOPE]Scope read by partial load count is 0
+[READSCOPE]Scope read count is 2
+[READSCOPE]Decompressed blk is 1
+[MAXCHAIN]Decompressed cnt 38
+[PERF]VC decompress count : 2861
+[PERF]VCChain decompress count : 1803
+[FSDBGate Info] start
+[FSDBGate Info] Total fhdb_compute_count = 23249024
+[FSDBGate Info] end

@@ -1,0 +1,193 @@
+Thread 19 (Thread 0x7f9848a55700 (LWP 3513539) "Novas"):
+#0  0x00007f989789f371 in pthread_cond_wait@@GLIBC_2.3.2 () from /lib64/libpthread.so.0
+#1  0x000000000bef8168 in ffrSynchronizer::CondWait(int) ()
+#2  0x000000000c031e18 in ffrObject::StartSecondaryThread(void*) ()
+#3  0x000000000c454e19 in sdp_wrap_start_routine ()
+#4  0x00007f98978991ca in start_thread () from /lib64/libpthread.so.0
+#5  0x00007f98908888d3 in clone () from /lib64/libc.so.6
+Thread 18 (Thread 0x7f9849056700 (LWP 3513538) "Novas"):
+#0  0x00007f989789f371 in pthread_cond_wait@@GLIBC_2.3.2 () from /lib64/libpthread.so.0
+#1  0x000000000bef8168 in ffrSynchronizer::CondWait(int) ()
+#2  0x000000000c031e18 in ffrObject::StartSecondaryThread(void*) ()
+#3  0x000000000c454e19 in sdp_wrap_start_routine ()
+#4  0x00007f98978991ca in start_thread () from /lib64/libpthread.so.0
+#5  0x00007f98908888d3 in clone () from /lib64/libc.so.6
+Thread 17 (Thread 0x7f9849657700 (LWP 3513537) "Novas"):
+#0  0x00007f989789f371 in pthread_cond_wait@@GLIBC_2.3.2 () from /lib64/libpthread.so.0
+#1  0x000000000bef8168 in ffrSynchronizer::CondWait(int) ()
+#2  0x000000000c031e18 in ffrObject::StartSecondaryThread(void*) ()
+#3  0x000000000c454e19 in sdp_wrap_start_routine ()
+#4  0x00007f98978991ca in start_thread () from /lib64/libpthread.so.0
+#5  0x00007f98908888d3 in clone () from /lib64/libc.so.6
+Thread 16 (Thread 0x7f9849c58700 (LWP 3513536) "Novas"):
+#0  0x00007f989789f371 in pthread_cond_wait@@GLIBC_2.3.2 () from /lib64/libpthread.so.0
+#1  0x000000000bef8168 in ffrSynchronizer::CondWait(int) ()
+#2  0x000000000c031e18 in ffrObject::StartSecondaryThread(void*) ()
+#3  0x000000000c454e19 in sdp_wrap_start_routine ()
+#4  0x00007f98978991ca in start_thread () from /lib64/libpthread.so.0
+#5  0x00007f98908888d3 in clone () from /lib64/libc.so.6
+Thread 15 (Thread 0x7f98866f8700 (LWP 3513501) "Novas"):
+#0  0x00007f989789f371 in pthread_cond_wait@@GLIBC_2.3.2 () from /lib64/libpthread.so.0
+#1  0x000000000bef8168 in ffrSynchronizer::CondWait(int) ()
+#2  0x000000000c03f44b in ffrObject::LoadThread(void*) ()
+#3  0x000000000c454e19 in sdp_wrap_start_routine ()
+#4  0x00007f98978991ca in start_thread () from /lib64/libpthread.so.0
+#5  0x00007f98908888d3 in clone () from /lib64/libc.so.6
+Thread 14 (Thread 0x7f9886cf9700 (LWP 3513500) "Novas"):
+#0  0x00007f989789f371 in pthread_cond_wait@@GLIBC_2.3.2 () from /lib64/libpthread.so.0
+#1  0x000000000bef8168 in ffrSynchronizer::CondWait(int) ()
+#2  0x000000000c03f44b in ffrObject::LoadThread(void*) ()
+#3  0x000000000c454e19 in sdp_wrap_start_routine ()
+#4  0x00007f98978991ca in start_thread () from /lib64/libpthread.so.0
+#5  0x00007f98908888d3 in clone () from /lib64/libc.so.6
+Thread 13 (Thread 0x7f98860f7700 (LWP 3513499) "Novas"):
+#0  0x00007f989789f371 in pthread_cond_wait@@GLIBC_2.3.2 () from /lib64/libpthread.so.0
+#1  0x000000000bef8168 in ffrSynchronizer::CondWait(int) ()
+#2  0x000000000c03f44b in ffrObject::LoadThread(void*) ()
+#3  0x000000000c454e19 in sdp_wrap_start_routine ()
+#4  0x00007f98978991ca in start_thread () from /lib64/libpthread.so.0
+#5  0x00007f98908888d3 in clone () from /lib64/libc.so.6
+Thread 12 (Thread 0x7f9885af6700 (LWP 3513498) "Novas"):
+#0  0x00007f989789f371 in pthread_cond_wait@@GLIBC_2.3.2 () from /lib64/libpthread.so.0
+#1  0x000000000bef8168 in ffrSynchronizer::CondWait(int) ()
+#2  0x000000000c03f44b in ffrObject::LoadThread(void*) ()
+#3  0x000000000c454e19 in sdp_wrap_start_routine ()
+#4  0x00007f98978991ca in start_thread () from /lib64/libpthread.so.0
+#5  0x00007f98908888d3 in clone () from /lib64/libc.so.6
+Thread 11 (Thread 0x7f98854f5700 (LWP 3513497) "Novas"):
+#0  0x00007f989789f371 in pthread_cond_wait@@GLIBC_2.3.2 () from /lib64/libpthread.so.0
+#1  0x000000000bef8168 in ffrSynchronizer::CondWait(int) ()
+#2  0x000000000c03f44b in ffrObject::LoadThread(void*) ()
+#3  0x000000000c454e19 in sdp_wrap_start_routine ()
+#4  0x00007f98978991ca in start_thread () from /lib64/libpthread.so.0
+#5  0x00007f98908888d3 in clone () from /lib64/libc.so.6
+Thread 10 (Thread 0x7f9884ef4700 (LWP 3513496) "Novas"):
+#0  0x00007f989789f371 in pthread_cond_wait@@GLIBC_2.3.2 () from /lib64/libpthread.so.0
+#1  0x000000000bef8168 in ffrSynchronizer::CondWait(int) ()
+#2  0x000000000c03f44b in ffrObject::LoadThread(void*) ()
+#3  0x000000000c454e19 in sdp_wrap_start_routine ()
+#4  0x00007f98978991ca in start_thread () from /lib64/libpthread.so.0
+#5  0x00007f98908888d3 in clone () from /lib64/libc.so.6
+Thread 9 (Thread 0x7f98848f3700 (LWP 3513495) "Novas"):
+#0  0x00007f989789f371 in pthread_cond_wait@@GLIBC_2.3.2 () from /lib64/libpthread.so.0
+#1  0x000000000bef8168 in ffrSynchronizer::CondWait(int) ()
+#2  0x000000000c03f44b in ffrObject::LoadThread(void*) ()
+#3  0x000000000c454e19 in sdp_wrap_start_routine ()
+#4  0x00007f98978991ca in start_thread () from /lib64/libpthread.so.0
+#5  0x00007f98908888d3 in clone () from /lib64/libc.so.6
+Thread 8 (Thread 0x7f98842f2700 (LWP 3513494) "Novas"):
+#0  0x00007f989789f371 in pthread_cond_wait@@GLIBC_2.3.2 () from /lib64/libpthread.so.0
+#1  0x000000000bef8168 in ffrSynchronizer::CondWait(int) ()
+#2  0x000000000c03f44b in ffrObject::LoadThread(void*) ()
+#3  0x000000000c454e19 in sdp_wrap_start_routine ()
+#4  0x00007f98978991ca in start_thread () from /lib64/libpthread.so.0
+#5  0x00007f98908888d3 in clone () from /lib64/libc.so.6
+Thread 7 (Thread 0x7f987bcdd700 (LWP 1699697) "QInotifyFileSys"):
+#0  0x00007f98909842df in select () from /lib64/libc.so.6
+#1  0x00007f989623c133 in qt_safe_select(int, fd_set*, fd_set*, fd_set*, timeval const*) () from /usr/cad/synopsys/verdi/2023.12/platform/LINUXAMD64/lib/Qt/libQtCore.so.4
+#2  0x00007f989623effc in QEventDispatcherUNIXPrivate::doSelect(QFlags<QEventLoop::ProcessEventsFlag>, timeval*) () from /usr/cad/synopsys/verdi/2023.12/platform/LINUXAMD64/lib/Qt/libQtCore.so.4
+#3  0x00007f989623fb22 in QEventDispatcherUNIX::processEvents(QFlags<QEventLoop::ProcessEventsFlag>) () from /usr/cad/synopsys/verdi/2023.12/platform/LINUXAMD64/lib/Qt/libQtCore.so.4
+#4  0x00007f9896214e2f in QEventLoop::processEvents(QFlags<QEventLoop::ProcessEventsFlag>) () from /usr/cad/synopsys/verdi/2023.12/platform/LINUXAMD64/lib/Qt/libQtCore.so.4
+#5  0x00007f98962150c8 in QEventLoop::exec(QFlags<QEventLoop::ProcessEventsFlag>) () from /usr/cad/synopsys/verdi/2023.12/platform/LINUXAMD64/lib/Qt/libQtCore.so.4
+#6  0x00007f9896136e33 in QThread::exec() () from /usr/cad/synopsys/verdi/2023.12/platform/LINUXAMD64/lib/Qt/libQtCore.so.4
+#7  0x00007f98961fae3f in QInotifyFileSystemWatcherEngine::run() () from /usr/cad/synopsys/verdi/2023.12/platform/LINUXAMD64/lib/Qt/libQtCore.so.4
+#8  0x00007f9896139661 in QThreadPrivate::start(void*) () from /usr/cad/synopsys/verdi/2023.12/platform/LINUXAMD64/lib/Qt/libQtCore.so.4
+#9  0x000000000c454e19 in sdp_wrap_start_routine ()
+#10 0x00007f98978991ca in start_thread () from /lib64/libpthread.so.0
+#11 0x00007f98908888d3 in clone () from /lib64/libc.so.6
+Thread 6 (Thread 0x7f987c4de700 (LWP 1699696) "QInotifyFileSys"):
+#0  0x00007f98909842df in select () from /lib64/libc.so.6
+#1  0x00007f989623c133 in qt_safe_select(int, fd_set*, fd_set*, fd_set*, timeval const*) () from /usr/cad/synopsys/verdi/2023.12/platform/LINUXAMD64/lib/Qt/libQtCore.so.4
+#2  0x00007f989623effc in QEventDispatcherUNIXPrivate::doSelect(QFlags<QEventLoop::ProcessEventsFlag>, timeval*) () from /usr/cad/synopsys/verdi/2023.12/platform/LINUXAMD64/lib/Qt/libQtCore.so.4
+#3  0x00007f989623fb22 in QEventDispatcherUNIX::processEvents(QFlags<QEventLoop::ProcessEventsFlag>) () from /usr/cad/synopsys/verdi/2023.12/platform/LINUXAMD64/lib/Qt/libQtCore.so.4
+#4  0x00007f9896214e2f in QEventLoop::processEvents(QFlags<QEventLoop::ProcessEventsFlag>) () from /usr/cad/synopsys/verdi/2023.12/platform/LINUXAMD64/lib/Qt/libQtCore.so.4
+#5  0x00007f98962150c8 in QEventLoop::exec(QFlags<QEventLoop::ProcessEventsFlag>) () from /usr/cad/synopsys/verdi/2023.12/platform/LINUXAMD64/lib/Qt/libQtCore.so.4
+#6  0x00007f9896136e33 in QThread::exec() () from /usr/cad/synopsys/verdi/2023.12/platform/LINUXAMD64/lib/Qt/libQtCore.so.4
+#7  0x00007f98961fae3f in QInotifyFileSystemWatcherEngine::run() () from /usr/cad/synopsys/verdi/2023.12/platform/LINUXAMD64/lib/Qt/libQtCore.so.4
+#8  0x00007f9896139661 in QThreadPrivate::start(void*) () from /usr/cad/synopsys/verdi/2023.12/platform/LINUXAMD64/lib/Qt/libQtCore.so.4
+#9  0x000000000c454e19 in sdp_wrap_start_routine ()
+#10 0x00007f98978991ca in start_thread () from /lib64/libpthread.so.0
+#11 0x00007f98908888d3 in clone () from /lib64/libc.so.6
+Thread 5 (Thread 0x7f987ccdf700 (LWP 1699695) "QFileInfoGather"):
+#0  0x00007f989789f371 in pthread_cond_wait@@GLIBC_2.3.2 () from /lib64/libpthread.so.0
+#1  0x00007f9896139b7b in QWaitCondition::wait(QMutex*, unsigned long) () from /usr/cad/synopsys/verdi/2023.12/platform/LINUXAMD64/lib/Qt/libQtCore.so.4
+#2  0x00007f9896b9a6ce in QFileInfoGatherer::run() () from /usr/cad/synopsys/verdi/2023.12/platform/LINUXAMD64/lib/Qt/libQtGui.so.4
+#3  0x00007f9896139661 in QThreadPrivate::start(void*) () from /usr/cad/synopsys/verdi/2023.12/platform/LINUXAMD64/lib/Qt/libQtCore.so.4
+#4  0x000000000c454e19 in sdp_wrap_start_routine ()
+#5  0x00007f98978991ca in start_thread () from /lib64/libpthread.so.0
+#6  0x00007f98908888d3 in clone () from /lib64/libc.so.6
+Thread 4 (Thread 0x7f987d4e0700 (LWP 1699694) "QFileInfoGather"):
+#0  0x00007f989789f371 in pthread_cond_wait@@GLIBC_2.3.2 () from /lib64/libpthread.so.0
+#1  0x00007f9896139b7b in QWaitCondition::wait(QMutex*, unsigned long) () from /usr/cad/synopsys/verdi/2023.12/platform/LINUXAMD64/lib/Qt/libQtCore.so.4
+#2  0x00007f9896b9a6ce in QFileInfoGatherer::run() () from /usr/cad/synopsys/verdi/2023.12/platform/LINUXAMD64/lib/Qt/libQtGui.so.4
+#3  0x00007f9896139661 in QThreadPrivate::start(void*) () from /usr/cad/synopsys/verdi/2023.12/platform/LINUXAMD64/lib/Qt/libQtCore.so.4
+#4  0x000000000c454e19 in sdp_wrap_start_routine ()
+#5  0x00007f98978991ca in start_thread () from /lib64/libpthread.so.0
+#6  0x00007f98908888d3 in clone () from /lib64/libc.so.6
+Thread 3 (Thread 0x7f9883cf1700 (LWP 1623339) "Novas"):
+#0  0x00007f98909842df in select () from /lib64/libc.so.6
+#1  0x000000000c3f4aba in NotifierThreadProc ()
+#2  0x000000000c454e19 in sdp_wrap_start_routine ()
+#3  0x00007f98978991ca in start_thread () from /lib64/libpthread.so.0
+#4  0x00007f98908888d3 in clone () from /lib64/libc.so.6
+Thread 2 (Thread 0x7f988e125700 (LWP 1623049) "Novas"):
+#0  0x00007f9890957178 in nanosleep () from /lib64/libc.so.6
+#1  0x00007f989095707e in sleep () from /lib64/libc.so.6
+#2  0x0000000009786172 in LicenseCheckUtility ()
+#3  0x000000000c454e19 in sdp_wrap_start_routine ()
+#4  0x00007f98978991ca in start_thread () from /lib64/libpthread.so.0
+#5  0x00007f98908888d3 in clone () from /lib64/libc.so.6
+Thread 1 (Thread 0x7f9899a14ec0 (LWP 1622961) "Novas"):
+#0  0x00007f989097d614 in read () from /lib64/libc.so.6
+#1  0x00007f98908e1738 in __GI__IO_file_underflow () from /lib64/libc.so.6
+#2  0x00007f98908e2896 in _IO_default_uflow () from /lib64/libc.so.6
+#3  0x00007f98908d605a in _IO_getline_info () from /lib64/libc.so.6
+#4  0x00007f98908d505f in fgets () from /lib64/libc.so.6
+#5  0x000000000c52cde2 in _sys_fgets ()
+#6  0x000000000c4ba8b8 in sysGetCallStack ()
+#7  0x000000000bf14d45 in ErrorMessage(ffrErrorSeverity, char*, char*, char*, int) ()
+#8  0x000000000c02ec34 in ffrRealObject::LoadPrimarySignalArrayByTimeRange(unsigned int, long long*, fsdbXTag&, fsdbXTag&) ()
+#9  0x000000000c02fa5a in ffrRealObject::ffrLoadSecondaryVarVCOnDemand(ffrVar*, void*&, fsdbXTag*, fsdbXTag*, char, char, char) ()
+#10 0x000000000be554f4 in ffrRealObject::ReadOrComputeVCOnDemand(ffrVar*, void*&, fsdbXTag*, fsdbXTag*, char, char, char) ()
+#11 0x000000000be20c8e in ffrVCIterOne::GotoXTagLODThreadSafe(void*, int*) ()
+#12 0x000000000be20f2f in ffrVCIterOne::__GotoXTagLODThreadSafe(ffrVCIterOne*, void*, int*) ()
+#13 0x000000000be23afd in ffrVCIterOne::ffrGotoXTag(void*, int*) ()
+#14 0x000000000a642f89 in fsdbUI64DigitalAdapter_C::jump_at(HybridNumber_C const&) ()
+#15 0x000000000a6447c7 in fsdbUI64DigitalAdapter_C::jump_at(HybridTag_C const&) ()
+#16 0x000000000409d34d in fsdbUI64DigitalAdapter_C::jump_at_by_physical_vc(HybridTag_C const&) ()
+#17 0x0000000006528daf in waveValueChangeTemplate_C<daValueChangeHandle_C>::jump_at_by_physical_vc(HybridTag_C const&) ()
+#18 0x000000000662dc52 in dbLeafNode_C::current_value_of_signal(ulString&, char*) ()
+#19 0x00000000063d88c1 in twRedrawer_C::do_draw_value_window() ()
+#20 0x0000000006408c8d in EventStub_C<twRedrawer_C>::Forward() ()
+#21 0x000000000640c4df in twSubjectCenter_C::forward_events() ()
+#22 0x00000000064355c6 in twMainWindow_C::flush_events_to_observer() ()
+#23 0x00000000063c9ee4 in twDataViewer_C::LegendDrawEndHandleCB(CWaveListWnd*, _tagWScreenItem*, _tagWDRAWWNDREASON, int, void*) ()
+#24 0x0000000009654e37 in CWaveListWnd::ScrollLine(int, char) ()
+#25 0x0000000009654e58 in CWaveListWnd::ScrollLineDown(int, char) ()
+#26 0x00000000064e6432 in vcCurveWinScreenBox_C::CurveRedrawCB(_wtWindowRec*, char*, char*) ()
+#27 0x00000000096132f8 in QtScrollArea_C::runCallBack(int, qtCallDataStruct*) ()
+#28 0x0000000009614337 in QtScrollArea_C::_ScrollVDrawActSlot(int) ()
+#29 0x000000000961cdf3 in QtScrollArea_C::qt_static_metacall(QObject*, QMetaObject::Call, int, void**) ()
+#30 0x00007f989622901b in QMetaObject::activate(QObject*, QMetaObject const*, int, void**) () from /usr/cad/synopsys/verdi/2023.12/platform/LINUXAMD64/lib/Qt/libQtCore.so.4
+#31 0x00007f9896cf0751 in QAbstractSlider::actionTriggered(int) () from /usr/cad/synopsys/verdi/2023.12/platform/LINUXAMD64/lib/Qt/libQtGui.so.4
+#32 0x00007f9896a8db11 in QAbstractSlider::triggerAction(QAbstractSlider::SliderAction) () from /usr/cad/synopsys/verdi/2023.12/platform/LINUXAMD64/lib/Qt/libQtGui.so.4
+#33 0x0000000009617ec7 in QtDrawWidget_C::wheelEvent(QWheelEvent*) ()
+#34 0x00007f9896793c8e in QWidget::event(QEvent*) () from /usr/cad/synopsys/verdi/2023.12/platform/LINUXAMD64/lib/Qt/libQtGui.so.4
+#35 0x00000000096195ea in QtDrawWidget_C::event(QEvent*) ()
+#36 0x00007f989674c9fc in QApplicationPrivate::notify_helper(QObject*, QEvent*) () from /usr/cad/synopsys/verdi/2023.12/platform/LINUXAMD64/lib/Qt/libQtGui.so.4
+#37 0x00007f9896751b25 in QApplication::notify(QObject*, QEvent*) () from /usr/cad/synopsys/verdi/2023.12/platform/LINUXAMD64/lib/Qt/libQtGui.so.4
+#38 0x000000000956e267 in QwApplication::notify(QObject*, QEvent*) ()
+#39 0x00007f9896215f7e in QCoreApplication::notifyInternal(QObject*, QEvent*) () from /usr/cad/synopsys/verdi/2023.12/platform/LINUXAMD64/lib/Qt/libQtCore.so.4
+#40 0x00007f98967ab09d in QETWidget::translateWheelEvent(int, int, int, QFlags<Qt::MouseButton>, QFlags<Qt::KeyboardModifier>, Qt::Orientation) () from /usr/cad/synopsys/verdi/2023.12/platform/LINUXAMD64/lib/Qt/libQtGui.so.4
+#41 0x00007f98967b840e in QETWidget::translateMouseEvent(_XEvent const*) () from /usr/cad/synopsys/verdi/2023.12/platform/LINUXAMD64/lib/Qt/libQtGui.so.4
+#42 0x00007f98967b709d in QApplication::x11ProcessEvent(_XEvent*) () from /usr/cad/synopsys/verdi/2023.12/platform/LINUXAMD64/lib/Qt/libQtGui.so.4
+#43 0x00000000095904ba in qmotif_event_dispatcher(_XEvent*) ()
+#44 0x00007f9891c4c491 in XtDispatchEvent () from /lib64/libXt.so.6
+#45 0x00007f9891c58510 in XtAppProcessEvent () from /lib64/libXt.so.6
+#46 0x000000000958f7a7 in QtMotif::processEvents(QFlags<QEventLoop::ProcessEventsFlag>) ()
+#47 0x00007f9896214e2f in QEventLoop::processEvents(QFlags<QEventLoop::ProcessEventsFlag>) () from /usr/cad/synopsys/verdi/2023.12/platform/LINUXAMD64/lib/Qt/libQtCore.so.4
+#48 0x00007f98962150c8 in QEventLoop::exec(QFlags<QEventLoop::ProcessEventsFlag>) () from /usr/cad/synopsys/verdi/2023.12/platform/LINUXAMD64/lib/Qt/libQtCore.so.4
+#49 0x00007f9896218e3c in QCoreApplication::exec() () from /usr/cad/synopsys/verdi/2023.12/platform/LINUXAMD64/lib/Qt/libQtCore.so.4
+#50 0x00000000095628d1 in QwApplication::exec() ()
+#51 0x0000000003431c60 in FUNC_DEBMAIN_LOOP() ()
+#52 0x000000000343ad78 in main ()

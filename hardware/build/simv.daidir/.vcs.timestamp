@@ -8,12 +8,12 @@
 0 define.svh
 0 /usr/cad/synopsys/vcs/2023.12/etc/systemverilog/define.svh
 69
-+define+prog0+FSDB_ALL
++define+prog5+FSDB_ALL
 +incdir+/home/users/yves6512/Project/hardware/./include
 +itf+/usr/cad/synopsys/vcs/2023.12/linux64/lib/vcsdp_lite.tab
 +memcbk
 +notimingcheck
-+prog_path=/home/users/yves6512/Project/hardware/./sim/prog0
++prog_path=/home/users/yves6512/Project/hardware/./sim/prog5
 +vcsd1
 +vpi
 -Mamsrun=
@@ -47,7 +47,7 @@
 /home/users/yves6512/Project/hardware/./sim/Testbench.sv
 /home/users/yves6512/Project/hardware/./src/ASIC.sv
 /home/users/yves6512/Project/hardware/./src/top.sv
-/home/users/yves6512/Project/hardware/./src/DRAM.sv
+/home/users/yves6512/Project/hardware/./sim/DRAM.sv
 /home/users/yves6512/Project/hardware/./src/controller/pc_counter.sv
 /home/users/yves6512/Project/hardware/./src/controller/regfile.sv
 /home/users/yves6512/Project/hardware/./src/controller/dma_loop_unit.sv
@@ -63,9 +63,9 @@
 /home/users/yves6512/Project/hardware/./src/DMA/DMA_controller.sv
 /home/users/yves6512/Project/hardware/./src/DMA/DMA_FIFO.sv
 /home/users/yves6512/Project/hardware/./src/DMA/DMA.sv
-/home/users/yves6512/Project/hardware/./src/PPU/PPU.sv
-/home/users/yves6512/Project/hardware/./src/PPU/Comparator_Qint8.sv
 /home/users/yves6512/Project/hardware/./src/PPU/post_quant.sv
+/home/users/yves6512/Project/hardware/./src/PPU/Comparator_Qint8.sv
+/home/users/yves6512/Project/hardware/./src/PPU/PPU.sv
 /home/users/yves6512/Project/hardware/./src/PPU/ReLU_Qint8.sv
 /home/users/yves6512/Project/hardware/./src/GLB/GLB.sv
 /home/users/yves6512/Project/hardware/./src/GLB/SRAM_rtl.sv
@@ -77,18 +77,19 @@
 /home/users/yves6512/Project/hardware/./src/PE_array/GON/GON_MulticastController.sv
 /home/users/yves6512/Project/hardware/./src/PE_array/GON/GON.sv
 /home/users/yves6512/Project/hardware/./src/PE_array/GON/GON_Bus.sv
-92
+93
 which_declare=declare -f
+prog=5
 __ETC_PROFILE_NIX_SOURCED=1
 _CONDA_ROOT=/home/users/yves6512/miniconda3
 _CONDA_EXE=/home/users/yves6512/miniconda3/bin/conda
 XLOCALEDIR=/usr/cad/synopsys/icc2/2024.09/etc/locale
-XDG_SESSION_ID=3623
+XDG_SESSION_ID=5874
 XDG_RUNTIME_DIR=/run/user/1033
 XDG_DATA_DIRS=/home/users/yves6512/.local/share/flatpak/exports/share:/var/lib/flatpak/exports/share:/usr/local/share:/usr/share:/home/users/yves6512/.nix-profile/share:/nix/var/nix/profiles/default/share:/var/lib/snapd/desktop
-VSCODE_NONCE=967ab4a2-f7c3-4598-9400-5dd6dd63bb11
-VSCODE_IPC_HOOK_CLI=/run/user/1033/vscode-ipc-8b5ba05a-e0d2-4cb2-958e-094b53853d81.sock
-VSCODE_GIT_IPC_HANDLE=/run/user/1033/vscode-git-2b8ab1bdc7.sock
+VSCODE_NONCE=a212439d-02bd-485e-b889-a56663b9a90f
+VSCODE_IPC_HOOK_CLI=/run/user/1033/vscode-ipc-e50c6e11-5a8c-4c4c-9f22-85747dd1e390.sock
+VSCODE_GIT_IPC_HANDLE=/run/user/1033/vscode-git-1fc8b60cf2.sock
 VSCODE_GIT_ASKPASS_NODE=/home/users/yves6512/.vscode-server/cli/servers/Stable-994fd12f8d3a5aa16f17d42c041e5809167e845a/server/node
 VSCODE_GIT_ASKPASS_MAIN=/home/users/yves6512/.vscode-server/cli/servers/Stable-994fd12f8d3a5aa16f17d42c041e5809167e845a/server/extensions/git/dist/askpass-main.js
 VSCODE_GIT_ASKPASS_EXTRA_ARGS=
@@ -117,13 +118,13 @@ SYNOPSYS_LC_ROOT=/usr/cad/synopsys/lc/cur
 SYNOPSYS=/usr/cad/synopsys/formality/cur
 SSL_CERT_FILE=/etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem
 SSL_CERT_DIR=/etc/pki/tls/certs
-SSH_CONNECTION=140.116.178.165 53273 140.116.178.186 3175
-SSH_CLIENT=140.116.178.165 53273 3175
+SSH_CONNECTION=140.116.178.165 14269 140.116.178.186 3175
+SSH_CLIENT=140.116.178.165 14269 3175
 SSH_ASKPASS=/usr/libexec/openssh/gnome-ssh-askpass
 SNPS_VCS_PYTHON3=/usr/cad/synopsys/vcs/2023.12/linux64/bin/Python-3.6.1/bin/python3
 SNPS_VCS_CLANG_PATH=/usr/cad/synopsys/vcs/2023.12/linux64/clang
 SNPS_INTERNAL_VCS_LINUX_OS=linux
-SHLIB_PATH=/usr/cad/synopsys/verdi/2023.12/etc/lib/libstdc++/LINUX64/:/usr/cad/synopsys/verdi/2023.12/share/PLI/lib/LINUX64/:/usr/cad/synopsys/verdi/2023.12/share/PLI/VCS/LINUX64/::/usr/cad/synopsys/verdi/cur/etc/lib/libstdc++/LINUX64/:/usr/cad/synopsys/verdi/2023.12/etc/lib/libstdc++/LINUX64/:/usr/cad/synopsys/verdi/2023.12/share/PLI/lib/LINUX64/:/usr/cad/synopsys/verdi/2023.12/share/PLI/VCS/LINUX64/::/usr/cad/synopsys/verdi/cur/etc/lib/libstdc++/LINUX64/:/usr/cad/synopsys/verdi/2023.12/etc/lib/libstdc++/LINUX64/:/usr/cad/synopsys/verdi/2023.12/share/PLI/lib/LINUX64/:/usr/cad/synopsys/verdi/2023.12/share/PLI/VCS/LINUX64/::/usr/cad/synopsys/verdi/2023.12/etc/lib/libstdc++/LINUX64/:/usr/cad/synopsys/verdi/2023.12/share/PLI/lib/LINUX64/:/usr/cad/synopsys/verdi/2023.12/share/PLI/VCS/LINUX64/::/usr/cad/synopsys/verdi/2023.12/etc/lib/libstdc++/LINUX64/:/usr/cad/synopsys/verdi/2023.12/share/PLI/lib/LINUX64/:/usr/cad/synopsys/verdi/2023.12/share/PLI/VCS/LINUX64/::/usr/cad/synopsys/verdi/cur/etc/lib/libstdc++/LINUX64/:/usr/cad/synopsys/verdi/2023.12/etc/lib/libstdc++/LINUX64/:/usr/cad/synopsys/verdi/2023.12/share/PLI/lib/LINUX64/:/usr/cad/synopsys/verdi/2023.12/share/PLI/VCS/LINUX64/::/usr/cad/synopsys/verdi/cur/etc/lib/libstdc++/LINUX64/:/usr/cad/synopsys/verdi/2023.12/etc/lib/libstdc++/LINUX64/:/usr/cad/synopsys/verdi/2023.12/share/PLI/lib/LINUX64/:/usr/cad/synopsys/verdi/2023.12/share/PLI/VCS/LINUX64/::/usr/cad/synopsys/verdi/2023.12/etc/lib/libstdc++/LINUX64/:/usr/cad/synopsys/verdi/2023.12/share/PLI/lib/LINUX64/:/usr/cad/synopsys/verdi/2023.12/share/PLI/VCS/LINUX64/:
+SHLIB_PATH=/usr/cad/synopsys/verdi/2023.12/etc/lib/libstdc++/LINUX64/:/usr/cad/synopsys/verdi/2023.12/share/PLI/lib/LINUX64/:/usr/cad/synopsys/verdi/2023.12/share/PLI/VCS/LINUX64/::/usr/cad/synopsys/verdi/cur/etc/lib/libstdc++/LINUX64/:/usr/cad/synopsys/verdi/2023.12/etc/lib/libstdc++/LINUX64/:/usr/cad/synopsys/verdi/2023.12/share/PLI/lib/LINUX64/:/usr/cad/synopsys/verdi/2023.12/share/PLI/VCS/LINUX64/::/usr/cad/synopsys/verdi/cur/etc/lib/libstdc++/LINUX64/:/usr/cad/synopsys/verdi/2023.12/etc/lib/libstdc++/LINUX64/:/usr/cad/synopsys/verdi/2023.12/share/PLI/lib/LINUX64/:/usr/cad/synopsys/verdi/2023.12/share/PLI/VCS/LINUX64/::/usr/cad/synopsys/verdi/2023.12/etc/lib/libstdc++/LINUX64/:/usr/cad/synopsys/verdi/2023.12/share/PLI/lib/LINUX64/:/usr/cad/synopsys/verdi/2023.12/share/PLI/VCS/LINUX64/:
 SELINUX_USE_CURRENT_RANGE=
 SELINUX_ROLE_REQUESTED=
 SELINUX_LEVEL_REQUESTED=
@@ -138,16 +139,16 @@ MODULES_RUN_QUARANTINE=LD_LIBRARY_PATH LD_PRELOAD
 MODULES_CMD=/usr/share/Modules/libexec/modulecmd.tcl
 MODULESHOME=/usr/share/Modules
 MODULEPATH_modshare=/usr/share/Modules/modulefiles:2:/etc/modulefiles:2:/usr/share/modulefiles:2
-MODULEPATH=/etc/scl/modulefiles:/etc/scl/modulefiles:/etc/scl/modulefiles:/usr/share/Modules/modulefiles:/etc/modulefiles:/usr/share/modulefiles
+MODULEPATH=/etc/scl/modulefiles:/etc/scl/modulefiles:/usr/share/Modules/modulefiles:/etc/modulefiles:/usr/share/modulefiles
 MGC_TMPDIR=/tmp
 MGC_LOCATION_MAP=NO_MAP
 MGC_HOME=/usr/cad/mentor/calibre/aok_cal_2022.1_36.16
 MFLAGS=
-MAKE_TERMOUT=/dev/pts/8
-MAKE_TERMERR=/dev/pts/8
+MAKE_TERMOUT=/dev/pts/83
+MAKE_TERMERR=/dev/pts/83
 MAKEOVERRIDES=${-*-command-variables-*-}
 MAKELEVEL=1
-MAKEFLAGS= -- FSDB=2
+MAKEFLAGS= -- prog=5 FSDB=2
 Laker_TCL_ToolBox=1
 Laker_TCL_L3=1
 LOADEDMODULES=
@@ -173,44 +174,44 @@ BASH_FUNC_ml%%=() {  module ml "$@"_}
 0
 0
 40
-1766477559 /home/users/yves6512/Project/hardware/./include/define.svh
-1765613911 ../include/ISA.svh
-1765613911 /home/users/yves6512/Project/hardware/./include/ISA.svh
+1767185201 /home/users/yves6512/Project/hardware/./include/define.svh
+1767374973 ../include/ISA.svh
+1767374973 /home/users/yves6512/Project/hardware/./include/ISA.svh
 1766254787 /home/users/yves6512/Project/hardware/./include/ASIC.svh
 1765182664 /home/users/yves6512/Project/hardware/./include/AXI_define.svh
-1763807095 /home/users/yves6512/Project/hardware/./src/PE_array/GON/GON_Bus.sv
-1766256064 /home/users/yves6512/Project/hardware/./src/PE_array/GON/GON.sv
-1763807095 /home/users/yves6512/Project/hardware/./src/PE_array/GON/GON_MulticastController.sv
-1763807095 /home/users/yves6512/Project/hardware/./src/PE_array/GIN/GIN_Bus.sv
-1766750740 /home/users/yves6512/Project/hardware/./src/PE_array/GIN/GIN.sv
-1763807095 /home/users/yves6512/Project/hardware/./src/PE_array/GIN/GIN_MulticastController.sv
-1766256046 /home/users/yves6512/Project/hardware/./src/PE_array/PE_array.sv
-1765390878 /home/users/yves6512/Project/hardware/./src/PE_array/PE.sv
-1765606823 /home/users/yves6512/Project/hardware/./src/GLB/SRAM_rtl.sv
-1765606822 /home/users/yves6512/Project/hardware/./src/GLB/GLB.sv
-1766748204 /home/users/yves6512/Project/hardware/./src/PPU/ReLU_Qint8.sv
-1766748204 /home/users/yves6512/Project/hardware/./src/PPU/post_quant.sv
-1766748204 /home/users/yves6512/Project/hardware/./src/PPU/Comparator_Qint8.sv
-1766748320 /home/users/yves6512/Project/hardware/./src/PPU/PPU.sv
-1766748112 /home/users/yves6512/Project/hardware/./src/DMA/DMA.sv
-1766425731 /home/users/yves6512/Project/hardware/./src/DMA/DMA_FIFO.sv
-1766425731 /home/users/yves6512/Project/hardware/./src/DMA/DMA_controller.sv
-1766477472 /home/users/yves6512/Project/hardware/./src/controller/ID_SENDER.sv
-1766256302 /home/users/yves6512/Project/hardware/./src/controller/SRAM.sv
-1765737688 /home/users/yves6512/Project/hardware/./src/controller/ALU.sv
-1766478310 /home/users/yves6512/Project/hardware/./src/controller/signal_controller.sv
-1765612918 /home/users/yves6512/Project/hardware/./src/controller/mux.sv
-1763806884 /home/users/yves6512/Project/hardware/./src/controller/pc_adder.sv
-1766479471 /home/users/yves6512/Project/hardware/./src/controller/controller_top.sv
-1765960733 /home/users/yves6512/Project/hardware/./src/controller/decoder.sv
-1765977980 /home/users/yves6512/Project/hardware/./src/controller/glb_addr_generator.sv
-1766428198 /home/users/yves6512/Project/hardware/./src/controller/dma_loop_unit.sv
-1765611925 /home/users/yves6512/Project/hardware/./src/controller/regfile.sv
-1765866536 /home/users/yves6512/Project/hardware/./src/controller/pc_counter.sv
-1766748359 /home/users/yves6512/Project/hardware/./src/DRAM.sv
-1766752615 /home/users/yves6512/Project/hardware/./src/top.sv
-1766751673 /home/users/yves6512/Project/hardware/./src/ASIC.sv
-1766753416 /home/users/yves6512/Project/hardware/./sim/Testbench.sv
+1767594969 /home/users/yves6512/Project/hardware/./src/PE_array/GON/GON_Bus.sv
+1767594969 /home/users/yves6512/Project/hardware/./src/PE_array/GON/GON.sv
+1767594969 /home/users/yves6512/Project/hardware/./src/PE_array/GON/GON_MulticastController.sv
+1767594969 /home/users/yves6512/Project/hardware/./src/PE_array/GIN/GIN_Bus.sv
+1767594969 /home/users/yves6512/Project/hardware/./src/PE_array/GIN/GIN.sv
+1767594969 /home/users/yves6512/Project/hardware/./src/PE_array/GIN/GIN_MulticastController.sv
+1767594969 /home/users/yves6512/Project/hardware/./src/PE_array/PE_array.sv
+1767598212 /home/users/yves6512/Project/hardware/./src/PE_array/PE.sv
+1767594969 /home/users/yves6512/Project/hardware/./src/GLB/SRAM_rtl.sv
+1767594969 /home/users/yves6512/Project/hardware/./src/GLB/GLB.sv
+1767594969 /home/users/yves6512/Project/hardware/./src/PPU/ReLU_Qint8.sv
+1767594969 /home/users/yves6512/Project/hardware/./src/PPU/PPU.sv
+1767594969 /home/users/yves6512/Project/hardware/./src/PPU/Comparator_Qint8.sv
+1767594969 /home/users/yves6512/Project/hardware/./src/PPU/post_quant.sv
+1767594969 /home/users/yves6512/Project/hardware/./src/DMA/DMA.sv
+1767594969 /home/users/yves6512/Project/hardware/./src/DMA/DMA_FIFO.sv
+1767594969 /home/users/yves6512/Project/hardware/./src/DMA/DMA_controller.sv
+1767594969 /home/users/yves6512/Project/hardware/./src/controller/ID_SENDER.sv
+1767594969 /home/users/yves6512/Project/hardware/./src/controller/SRAM.sv
+1767594969 /home/users/yves6512/Project/hardware/./src/controller/ALU.sv
+1767597004 /home/users/yves6512/Project/hardware/./src/controller/signal_controller.sv
+1767594969 /home/users/yves6512/Project/hardware/./src/controller/mux.sv
+1767594969 /home/users/yves6512/Project/hardware/./src/controller/pc_adder.sv
+1767594969 /home/users/yves6512/Project/hardware/./src/controller/controller_top.sv
+1767594969 /home/users/yves6512/Project/hardware/./src/controller/decoder.sv
+1767594969 /home/users/yves6512/Project/hardware/./src/controller/glb_addr_generator.sv
+1767594969 /home/users/yves6512/Project/hardware/./src/controller/dma_loop_unit.sv
+1767594969 /home/users/yves6512/Project/hardware/./src/controller/regfile.sv
+1767594969 /home/users/yves6512/Project/hardware/./src/controller/pc_counter.sv
+1767338615 /home/users/yves6512/Project/hardware/./sim/DRAM.sv
+1767594969 /home/users/yves6512/Project/hardware/./src/top.sv
+1767594969 /home/users/yves6512/Project/hardware/./src/ASIC.sv
+1767593667 /home/users/yves6512/Project/hardware/./sim/Testbench.sv
 1700048491 /usr/cad/synopsys/verdi/2023.12/share/PLI/VCS/LINUX64/verdi.tab
 1701102734 /usr/cad/synopsys/vcs/2023.12/linux64/lib/vcsdp_lite.tab
 4
@@ -218,5 +219,5 @@ BASH_FUNC_ml%%=() {  module ml "$@"_}
 1701103518 /usr/cad/synopsys/vcs/2023.12/linux64/lib/liberrorinf.so
 1701103440 /usr/cad/synopsys/vcs/2023.12/linux64/lib/libsnpsmalloc.so
 1701103511 /usr/cad/synopsys/vcs/2023.12/linux64/lib/libvfs.so
-1766753464 simv.daidir
+1767598682 simv.daidir
 -1 partitionlib

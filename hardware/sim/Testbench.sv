@@ -4,12 +4,7 @@
 
 `define CYCLE 10.0      // Cycle time
 `define MAX 20000000    // Max cycle number
-/*
-`define DRAM_ifmap_base 0
-`define DRAM_weight_base 524288
-`define DRAM_ofmap_base `DRAM_weight_base + 2097152
-`define DRAM_ofmap_size 65536
-*/
+
 `define DRAM_ifmap_base 0
 `define DRAM_weight_base 524288
 `define DRAM_ofmap_base `DRAM_weight_base + 2097152
@@ -24,8 +19,10 @@ module test;
     integer err_cnt;
     integer show_cnt;
     int unsigned ofmap_base;
-
-    integer num, gf, code;
+    int start_time,finish_time;
+    integer status;
+    string  key;
+    integer fs, fc, num, gf, code;
     string prog_path;
     string hexfile;
 
@@ -273,26 +270,41 @@ module test;
         ASIC_IFMAP_LEN       = 32'd0;
         ASIC_OFMAP_LEN       = 32'd0;
 
-        // FC/GEMM bases：用你上面 define 的 DRAM base
-        DRAM_ifmap_base   = `DRAM_ifmap_base;
-        DRAM_weight_base  = `DRAM_weight_base;
-        DRAM_ofmap_base   = `DRAM_ofmap_base;
-
+        $display("Loading file: %s", {prog_path, "/shape.txt"});
+        fs = $fopen({prog_path, "/shape.txt"}, "r");
+        while (!$feof(fs)) 
+        begin
+            // 讀取格式為 "鍵: 值"
+            $fscanf(fs, "%s %d\n", key, status);
+            case (key)
+                "IF_SIZE:": IF_SIZE = status;
+                "OF_SIZE:": OF_SIZE = status;
+                "B_SIZE:":  B_SIZE  = status;
+                "K_SIZE:":  K_SIZE  = status;
+                "N_SIZE:":  N_SIZE  = status;
+                "M_SIZE:":  M_SIZE  = status;
+            endcase
+        end
+        $fclose(fs);
+        $display("IF_SIZE: %0d", IF_SIZE);
+        $display("OF_SIZE: %0d", OF_SIZE);
+        $display("B_SIZE: %0d", B_SIZE);
+        $display("K_SIZE: %0d", K_SIZE);
+        $display("N_SIZE: %0d", N_SIZE);
+        $display("M_SIZE: %0d", M_SIZE);
+        DATAFLOW = 0;
         // GLB bases / sizes / dataflow：依你 controller 的需求填
+        
         GLB_ifmap_base  = 0;
-        GLB_weight_base = 9216;
-        GLB_opsum_base  = 18432;
+        GLB_weight_base = B_SIZE * K_SIZE * 12;
+        GLB_opsum_base  = GLB_weight_base + N_SIZE * K_SIZE * 48;
 
-        OF_SIZE   = 256;
-        IF_SIZE   = 8192;
-        B_SIZE    = 64;
-        K_SIZE    = 12;
-        N_SIZE    = 16;
-        M_SIZE    = 64;
-        DATAFLOW  = 0;
         //data
+        DRAM_ifmap_base   = current_dram_addr;
         load_hex_file({prog_path, "/A.txt"});
+        DRAM_weight_base  = current_dram_addr;
         load_hex_file({prog_path, "/B.txt"});
+        DRAM_ofmap_base   = current_dram_addr;
         load_hex_file({prog_path, "/ipsum.txt"});
 
         //read golden
@@ -334,9 +346,10 @@ module test;
         // release reset
         @(negedge clk);
         rst_n = 1'b1;
-
-        $display("============asic start==============");
-
+        start_time = $realtime;
+        $display("===========================");
+        $display("[%0d] asic start!", start_time);
+        $display("===========================\n");
         // start controller (1-cycle pulse)
         @(posedge clk);
         asic_en = 1'b1;
@@ -345,7 +358,18 @@ module test;
 
          // wait for done
         wait (ASIC_interrupt === 1'b1);
-        $display("[%0t] a   sic_done asserted!", $time);
+        finish_time = $realtime;
+        $display("===========================");
+        $display("[%0d] asic_done asserted!", finish_time);
+        $display("===========================\n");
+
+        $display("===========================");
+        $display("Cycle Count: %0d", (finish_time - start_time) / `CYCLE);
+        $display("===========================\n");
+
+        fc = $fopen({prog_path, "/Cycle_count.txt"}, "w");
+        $fdisplay(fc, "Cycle count: %0d", (finish_time - start_time) / `CYCLE);
+        $fclose(fc);
 
         // compare result
         compare_ofmap_with_golden();
@@ -428,35 +452,35 @@ module test;
     // ---------------------------------------------------------
   // IM loader helpers
   // ---------------------------------------------------------
-  task automatic im_write32_port(input int unsigned byte_addr, input logic [31:0] word);
+    task automatic im_write32_port(input int unsigned byte_addr, input logic [31:0] word);
     begin
-      im_init_en    <= 1'b1;
-      im_init_addr  <= byte_addr[15:0];
-      im_init_wdata <= word;
-      @(negedge clk);
-      im_init_en    <= 1'b0;
+        im_init_en    <= 1'b1;
+        im_init_addr  <= byte_addr[15:0];
+        im_init_wdata <= word;
+        @(negedge clk);
+        im_init_en    <= 1'b0;
     end
-  endtask
+    endtask
 
-  task automatic load_hex_instruction(input logic [1023:0] filename);
-    int fd;
-    int word_idx;
-    logic [31:0] w;
-    begin
-      fd = $fopen(filename, "r");
-      if (fd == 0) $fatal(1, "[TB] Cannot open %s", filename);
+    task automatic load_hex_instruction(input logic [1023:0] filename);
+        int fd;
+        int word_idx;
+        logic [31:0] w;
+        begin
+        fd = $fopen(filename, "r");
+        if (fd == 0) $fatal(1, "[TB] Cannot open %s", filename);
 
-      word_idx = 0;
-      while ($fscanf(fd, "%h", w) == 1) begin
-        im_write32_port(word_idx*4, w);  // byte address = word_idx*4
-        word_idx++;
-      end
+        word_idx = 0;
+        while ($fscanf(fd, "%h", w) == 1) begin
+            im_write32_port(word_idx*4, w);  // byte address = word_idx*4
+            word_idx++;
+        end
 
-      $fclose(fd);
-      $display("[TB] Loaded %0d words from %s", word_idx, filename);
-    end
-  endtask
-      task automatic compare_ofmap_with_golden;
+        $fclose(fd);
+        $display("[TB] Loaded %0d words from %0s", word_idx, filename);
+        end
+    endtask
+    task automatic compare_ofmap_with_golden;
         int unsigned i;
         logic [7:0] dut_b, ref_b;
         integer log_fd;        // 檔案描述符
@@ -464,7 +488,7 @@ module test;
         begin
             err_cnt  = 0;
             show_cnt = 0;
-            ofmap_base = `DRAM_ofmap_base;
+            ofmap_base = DRAM_ofmap_base;
 
             // 設定 log 檔案路徑
             log_filename = {prog_path, "/verification.log"};
@@ -476,9 +500,9 @@ module test;
             end
 
             // Console 提示
-            $display("--------------------------------------------------");
-            $display("[TB] Comparing... Full report (Pass & Fail) saved to: %s", log_filename);
-            
+            $display("===========================");
+            $display("[TB] Checking Result... Full report (Pass & Fail) saved to: %s", log_filename);
+            $display("===========================");
             // 寫入 Log Header
             $fdisplay(log_fd, "--------------------------------------------------");
             $fdisplay(log_fd, "[TB] Compare DRAM OFMAP vs GOLDEN");
@@ -497,12 +521,12 @@ module test;
                     
                     // 1. 寫入 Log (標記為 [MIS])
                     $fdisplay(log_fd, "[MIS]  | %5d | 0x%08h | 0x%02h | 0x%02h", 
-                              i, (ofmap_base + i), dut_b, ref_b);
+                                i, (ofmap_base + i), dut_b, ref_b);
 
                     // 2. 顯示在 Console (只顯示前 20 筆錯誤，避免洗版)
                     if (show_cnt < 20) begin
                         $display("[MIS] i=%0d addr=0x%08h dut=0x%02h ref=0x%02h",
-                                 i, (ofmap_base + i), dut_b, ref_b);
+                                    i, (ofmap_base + i), dut_b, ref_b);
                         show_cnt++;
                     end
 
@@ -510,7 +534,7 @@ module test;
                     // === 正確 (MATCH) ===
                     // 這裡只寫入 Log，不要 print 到 Console，不然跑 simulation 會很慢且畫面很亂
                     $fdisplay(log_fd, "[OK ]  | %5d | 0x%08h | 0x%02h | 0x%02h", 
-                              i, (ofmap_base + i), dut_b, ref_b);
+                                i, (ofmap_base + i), dut_b, ref_b);
                 end
             end
 
@@ -518,15 +542,22 @@ module test;
             $fdisplay(log_fd, "--------------------------------------------------");
             if (err_cnt == 0) begin
                 $fdisplay(log_fd, "[PASS] All %0d bytes matched.", num);
+                $display("===========================");
                 $display("[PASS] OFMAP matches GOLDEN! (See %s)", log_filename);
+                $display("===========================");
             end else begin
                 $fdisplay(log_fd, "[FAIL] Total errors: %0d / %0d", err_cnt, num);
+                $display("===========================");
                 $display("[FAIL] OFMAP mismatch! errors=%0d. Check %s for details.", err_cnt, log_filename);
+                $display("===========================");
             end
             $fdisplay(log_fd, "--------------------------------------------------");
 
             // 關閉檔案
             $fclose(log_fd);
+            $display("===========================");
+            $display("[TB] Checking Result Finished");
+            $display("===========================");
         end
     endtask
 

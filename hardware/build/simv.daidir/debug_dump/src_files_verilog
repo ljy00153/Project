@@ -2,12 +2,12 @@
 /home/users/yves6512/Project/hardware/include/AXI_define.svh
 /home/users/yves6512/Project/hardware/include/ISA.svh
 /home/users/yves6512/Project/hardware/include/define.svh
+/home/users/yves6512/Project/hardware/sim/DRAM.sv
 /home/users/yves6512/Project/hardware/sim/Testbench.sv
 /home/users/yves6512/Project/hardware/src/ASIC.sv
 /home/users/yves6512/Project/hardware/src/DMA/DMA.sv
 /home/users/yves6512/Project/hardware/src/DMA/DMA_FIFO.sv
 /home/users/yves6512/Project/hardware/src/DMA/DMA_controller.sv
-/home/users/yves6512/Project/hardware/src/DRAM.sv
 /home/users/yves6512/Project/hardware/src/GLB/GLB.sv
 /home/users/yves6512/Project/hardware/src/GLB/SRAM_rtl.sv
 /home/users/yves6512/Project/hardware/src/PE_array/GIN/GIN.sv

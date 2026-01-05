@@ -101,7 +101,8 @@ class EyerissMapper_base
             {
                 // 取出 top 1
                 cout << "---------------------------------------" << endl;
-                cout << "Top-1 configuration details saved to "<< log_path << endl;
+                if(log_path != "")
+                    cout << "Top-1 configuration details saved to "<< log_path << endl;
                 auto &best = scored_results[0];
                 int idx = best.second;
                 best_result = results[idx];
@@ -185,8 +186,10 @@ class EyerissMapper_base
             analyzer->hardware_param = hardware;
         }
 
-        virtual void mapping_to_csv_no_cycle(AnalysisResult& results, const EyerissMappingParam mappings, const string& filename)
+        virtual void mapping_to_csv_no_cycle(AnalysisResult& results, const EyerissMappingParam mappings, const string& path)
         {
+            string output_name = "/GEMM.csv";
+            string filename = path + output_name;
             string batch = to_string(analyzer->linear_shape.B);
             string in_f = to_string(analyzer->linear_shape.in_features);
             string out_f = to_string(analyzer->linear_shape.out_features);
@@ -210,7 +213,7 @@ class EyerissMapper_base
                     csv << "layer,glb_usage,glb_read,glb_write,glb_access,dram_read,"
                         "dram_write,dram_access,"
                         "macs,intensity,peak_performance,peak_bandwidth,latency,energy_total,power_total,"
-                        "tk,tn,mode,M,N,K\n";    
+                        "tk,tn,mode,M,K,N\n";    
                 }
                 
 
@@ -234,8 +237,8 @@ class EyerissMapper_base
                     << mappings.tn << ","
                     << mappings.mode << ","
                     << mappings.M << ","
-                    << mappings.N << ","
-                    << mappings.K
+                    << mappings.K << ","
+                    << mappings.N
                     << "\n";
 
                 csv.close();
@@ -247,8 +250,10 @@ class EyerissMapper_base
             }
         }
 
-        virtual void mapping_to_csv_with_cycle(const string& filename)
+        virtual void mapping_to_csv_with_cycle(const string& path)
         {
+            string output_name = "/GEMM.csv";
+            string filename = path + output_name;
             string batch = to_string(analyzer->linear_shape.B);
             string in_f = to_string(analyzer->linear_shape.in_features);
             string out_f = to_string(analyzer->linear_shape.out_features);
@@ -257,7 +262,7 @@ class EyerissMapper_base
             bool is_empty = true;
             if (file_exists) 
             {
-                std::ifstream check(filename, ios::ate | ios::binary);
+                ifstream check(filename, ios::ate | ios::binary);
                 is_empty = (check.tellg() == 0);
                 check.close();
             }
@@ -272,7 +277,7 @@ class EyerissMapper_base
                     csv << "layer,glb_usage,glb_read,glb_write,glb_access,dram_read,"
                         "dram_write,dram_access,"
                         "macs,intensity,peak_performance,peak_bandwidth,cycles,latency,energy_total,power_total,"
-                        "tk,tn,mode,M,N,K\n";    
+                        "tk,tn,mode,M,K,N\n";    
                 }
                 
                 // 寫入資料
@@ -296,8 +301,8 @@ class EyerissMapper_base
                     << best_mapping.tn << ","
                     << best_mapping.mode << ","
                     << best_mapping.M << ","
-                    << best_mapping.N << ","
-                    << best_mapping.K
+                    << best_mapping.K << ","
+                    << best_mapping.N
                     << "\n";
 
                 csv.close();
@@ -307,6 +312,116 @@ class EyerissMapper_base
             {
                 cout << "❌ Unable to open file: " << filename << endl;
             }
+        }
+        // ... (在 mapping_to_csv_with_cycle 之後)
+
+        virtual void generate_assembly(const string& base_file_path, const string& output_file_path)
+        {
+            // 檢查是否已經有最佳結果
+            if (best_mapping.M == 0) 
+            { // 簡單檢查是否已執行過 run
+                cout << "❌ Warning: No best mapping found. Please run exploration first." << endl;
+                return;
+            }
+            string output_name = "/GEMM_assembly.txt";
+            string shape = "/shape.txt";
+            ofstream outfile(output_file_path + output_name);
+            ofstream fs(output_file_path + shape);
+            if (!outfile.is_open() || !fs.is_open())
+            {
+                cout << "❌ Unable to create output file: " << output_file_path << endl;
+                return;
+            }
+            // 1. 生成 Header (.set constants)
+            // 根據 best_mapping 和 linear_shape 計算
+            int B = analyzer->linear_shape.B;
+            int IF = analyzer->linear_shape.in_features; 
+            int OF = analyzer->linear_shape.out_features;
+
+            int M = best_mapping.M;
+            int K = best_mapping.K * 3 * 4;
+            int N = best_mapping.N * 4;
+            int tk = best_mapping.tk;
+            int tn = best_mapping.tn;
+            int mode = best_mapping.mode;
+
+            fs << "IF_SIZE: " << IF << endl;
+            fs << "OF_SIZE: " << OF << endl;
+            fs << "B_SIZE: " << B << endl;
+            fs << "K_SIZE: " << best_mapping.K << endl;
+            fs << "N_SIZE: " << best_mapping.N << endl;
+            fs << "M_SIZE: " << best_mapping.M << endl;
+
+            fs.close();
+
+            // 根據 controller_assembly.txt 註解推導的計算邏輯
+            int N_times_4 = N * 4;
+            
+            // Offsets
+            int outf_offset = N;   
+            int inf_offset  = K;   
+            int b_offset    = M;   
+            int k_offset    = tk; 
+            int n_offset    = tn;     
+            int m_offset    = mode;       
+
+            // Sizes
+            int pe_array_weight_size = 48 * 12 * 4; 
+            int pe_array_ipsum_size = tn * 16; 
+            int pe_array_ifmap_size = tk * 12;
+
+            int glb_ifmap_size  = best_mapping.M * best_mapping.K * 12;
+            int glb_weight_size = best_mapping.K * best_mapping.N * 48;
+            int glb_opsum_size  = B * best_mapping.N * 16;
+
+            int dram_ifmap_size  = IF * B;
+            int dram_weight_size = IF * OF;
+            int dram_opsum_size  = B * OF * 4;
+
+            outfile << "# Generated by EyerissMapper" << endl;
+            outfile << "# Batch = " << B << ", In Feature = " << IF << ", Out Feature = " << OF << endl;
+            outfile << endl;
+            outfile << "#set constant" << endl;
+            outfile << ".set IF, " << IF << endl;
+            outfile << ".set OF, " << OF << endl;
+            outfile << ".set B, " << B << endl;
+            outfile << "#mapping parameter" << endl;
+            outfile << ".set M, " << M << endl;
+            outfile << ".set K, " << best_mapping.K << endl;
+            outfile << ".set N, " << best_mapping.N << endl;
+            outfile << ".set N_times_16, " << N_times_4 << "\t # " << best_mapping.N << " * 4 * 4" << endl;
+            outfile << ".set outf_offest, " << outf_offset << "\t # " << best_mapping.N << " * 4" << endl;
+            outfile << ".set inf_offest, " << inf_offset << "\t # " << best_mapping.K << " * 3 * 4" << endl;
+            outfile << ".set b_offest, " << b_offset << "\t # M" << endl;
+            outfile << ".set k_offest, " << k_offset << "\t # tk" << endl;
+            outfile << ".set n_offest, " << n_offset << "\t # tn" << endl;
+            outfile << ".set m_offest, " << m_offset << "\t # mode" << endl;
+            outfile << endl;
+            outfile << ".set PE_ARRAY_WEIGHT_SIZE, " << pe_array_weight_size << "\t# 48 * 12 * 4" << endl;
+            outfile << ".set PE_ARRAY_IPSUM_SIZE, " << pe_array_ipsum_size << "\t# 8 * 1 * 4 * 4" << endl;
+            outfile << ".set PE_ARRAY_IFMAP_SIZE, " << pe_array_ifmap_size << "\t# 6 * 3 * 4" << endl;
+            outfile << ".set GLB_IFMAP_SIZE, " << glb_ifmap_size << "\t# M * K * 12" << endl;
+            outfile << ".set GLB_WEIGHT_SIZE, " << glb_weight_size << "\t# K * 3 * N * 4 * 4" << endl;
+            outfile << ".set GLB_OPSUM_SIZE, " << glb_opsum_size << "\t# B * N * 16" << endl;
+            outfile << ".set DRAM_IFMAP_SIZE, " << dram_ifmap_size << endl;
+            outfile << ".set DRAM_WEIGHT_SIZE, " << dram_weight_size << endl;
+            outfile << ".set DRAM_OPSUM_SIZE, " << dram_opsum_size << endl;
+            outfile << endl;
+
+            // 2. 讀取 Base File 並附加內容
+            string base_name = "/assembly_base.txt";
+            ifstream base_file(base_file_path + base_name);
+            if (base_file.is_open()) 
+            {
+                outfile << base_file.rdbuf(); // 快速複製整個檔案內容
+                base_file.close();
+                cout << "✅ Assembly generated: " << output_file_path + output_name << endl;
+            } else 
+            {
+                cout << "❌ Unable to open base file: " << base_file_path + base_name << endl;
+            }
+
+            outfile.close();
         }
 };
 

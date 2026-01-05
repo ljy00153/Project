@@ -1,0 +1,7 @@
+Command exited with non-zero status 255
+{"vcs1":{"timestamp_begin":1767594817.821059506, "rt":0.34, "ut":0.05, "st":0.02}}
+{"SNPS_VCS_INTERNAL_ROOT_START_TIME": 1767594817.498169885}
+{"VCS_COMP_START_TIME": 1767594817.498169885}
+{"VCS_COMP_END_TIME": 1767594818.211003692}
+{"VCS_USER_OPTIONS": "-full64 -R -sverilog +incdir+/home/users/yves6512/Project/hardware/./include /home/users/yves6512/Project/hardware/./sim/Testbench.sv /home/users/yves6512/Project/hardware/./src/ASIC.sv /home/users/yves6512/Project/hardware/./src/top.sv /home/users/yves6512/Project/hardware/./sim/DRAM.sv -debug_access+all -debug_region+cell +memcbk +define+prog0+FSDB_ALL +prog_path=/home/users/yves6512/Project/hardware/./sim/prog0 +notimingcheck"}
+{"vcs1": {"peak_mem": 383180}}
