@@ -390,12 +390,12 @@ class EyerissMapper_base
             outfile << ".set K, " << best_mapping.K << endl;
             outfile << ".set N, " << best_mapping.N << endl;
             outfile << ".set N_times_16, " << N_times_4 << "\t # " << best_mapping.N << " * 4 * 4" << endl;
-            outfile << ".set outf_offest, " << outf_offset << "\t # " << best_mapping.N << " * 4" << endl;
-            outfile << ".set inf_offest, " << inf_offset << "\t # " << best_mapping.K << " * 3 * 4" << endl;
-            outfile << ".set b_offest, " << b_offset << "\t # M" << endl;
-            outfile << ".set k_offest, " << k_offset << "\t # tk" << endl;
-            outfile << ".set n_offest, " << n_offset << "\t # tn" << endl;
-            outfile << ".set m_offest, " << m_offset << "\t # mode" << endl;
+            outfile << ".set outf_offset, " << outf_offset << "\t # " << best_mapping.N << " * 4" << endl;
+            outfile << ".set inf_offset, " << inf_offset << "\t # " << best_mapping.K << " * 3 * 4" << endl;
+            outfile << ".set b_offset, " << b_offset << "\t # M" << endl;
+            outfile << ".set k_offset, " << k_offset << "\t # tk" << endl;
+            outfile << ".set n_offset, " << n_offset << "\t # tn" << endl;
+            outfile << ".set m_offset, " << m_offset << "\t # mode" << endl;
             outfile << endl;
             outfile << ".set PE_ARRAY_WEIGHT_SIZE, " << pe_array_weight_size << "\t# 48 * 12 * 4" << endl;
             outfile << ".set PE_ARRAY_IPSUM_SIZE, " << pe_array_ipsum_size << "\t# 8 * 1 * 4 * 4" << endl;

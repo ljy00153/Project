@@ -105,15 +105,15 @@ loop_outf:
                         NOP
                         NOP
                         #------loop finish------#
-                        LOOP M_SIZE, m, loop_m, m_offest
+                        LOOP M_SIZE, m, loop_m, m_offset
                         NOP
-                    LOOP N_SIZE, n, loop_n, n_offest
+                    LOOP N_SIZE, n, loop_n, n_offset
                     NOP
-                LOOP K_SIZE, k, loop_k, k_offest
+                LOOP K_SIZE, k, loop_k, k_offset
                 NOP
-            LOOP B_SIZE, b, loop_b, b_offest
+            LOOP B_SIZE, b, loop_b, b_offset
             NOP
-        LOOP IF_SIZE, inf, loop_inf, inf_offest
+        LOOP IF_SIZE, inf, loop_inf, inf_offset
         NOP
     #write opsum to DRAM
     CPT_TAGXY OPSUM
@@ -121,6 +121,6 @@ loop_outf:
     WAIT DMA
     NOP
     NOP
-    LOOP OF_SIZE, outf, loop_outf, outf_offest
+    LOOP OF_SIZE, outf, loop_outf, outf_offset
     NOP
 END
